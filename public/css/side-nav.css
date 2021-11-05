@@ -1,0 +1,22 @@
+#sidenav {
+  background-color: white;
+  min-height: 93.8vh;
+}
+
+#sidenav-list {
+  background-color: white;
+}
+
+.sidenav-title {
+  font-weight: 700;
+  font-size: 2em;
+}
+
+.sidenav-link {
+  font-weight: 600;
+  font-size: 1.3em;
+}
+
+.sidenav-active > h2 {
+  font-weight: 800 !important;
+}

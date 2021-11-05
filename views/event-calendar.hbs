@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/material-icons.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/nav-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/side-nav.css">
+    <link rel="stylesheet" type="text/css" href="/css/event-tracker.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="/js/event-calendar.js"></script>
+</head>
+
+<body class="d-flex flex-column">
+    {{>navbar back='/'}}
+    <div class="d-flex flex-row justify-content-center">
+        {{>sidenav}}
+
+        <div class="col-10 d-flex flex-column p-4">
+
+            {{!-- TITLES --}}
+            <div class="d-flex flex-column">
+                <div class="shadow-sm bg-light rounded-sm d-flex flex-row align-self-center my-2 px-3 py-1">
+                    <span class="md-btn material-icons-two-tone mt-2 md-24"
+                        onclick="window.location.href='/event-tracker/calendar/{{getPrevMonth currMonthYear}}'">arrow_back_ios</span>
+                    <h2 class="calendar-monthyear mb-0 mx-4">{{currMonthName}} {{currYear}}</h2>
+                    <span class="md-btn material-icons-two-tone mt-2 md-24"
+                        onclick="window.location.href='/event-tracker/calendar/{{getNextMonth currMonthYear}}'">arrow_forward_ios</span>
+                </div>
+                <div class="row mb-1 px-2">
+                    <div class="col-sm">
+                        <h4 class="calendar-dayofweek mb-0 mt-1">SUN</h4>
+                    </div>
+                    <div class="col-sm">
+                        <h4 class="calendar-dayofweek mb-0 mt-1">MON</h4>
+                    </div>
+                    <div class="col-sm">
+                        <h4 class="calendar-dayofweek mb-0 mt-1">TUE</h4>
+                    </div>
+                    <div class="col-sm">
+                        <h4 class="calendar-dayofweek mb-0 mt-1">WED</h4>
+                    </div>
+                    <div class="col-sm">
+                        <h4 class="calendar-dayofweek mb-0 mt-1">THU</h4>
+                    </div>
+                    <div class="col-sm">
+                        <h4 class="calendar-dayofweek mb-0 mt-1">FRI</h4>
+                    </div>
+                    <div class="col-sm">
+                        <h4 class="calendar-dayofweek mb-0 mt-1">SAT</h4>
+                    </div>
+                </div>
+
+                {{!-- WITH EVENTS --}}
+                <div class="p-2" id="calendar">
+                    <div class="row my-2">
+                        {{#each eventArray.[0]}}
+                        {{#if day}}
+                        <div class="col-sm calendar-day shadow-sm bg-light rounded-sm mx-3 p-2">
+                            <h4 class="m-0">{{day}}</h4>
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col">
+                                    G
+                                </div>
+                                <div class="col">
+                                    S
+                                </div>
+                                <div class="col">
+                                    T
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="event-icon material-icons-two-tone md-24">light_mode</span>
+                                    <span class="event-icon material-icons-two-tone md-24">dark_mode</span>
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if garAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if garEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if sunAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if sunEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if terAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if terEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <div class="col-sm calendar-day mx-3 p-2"></div>
+                        {{/if}}
+                        {{/each}}
+                    </div>
+                    <div class="row my-2">
+                        {{#each eventArray.[1]}}
+                        {{#if day}}
+                        <div class="col-sm calendar-day shadow-sm bg-light rounded-sm mx-3 p-2">
+                            <h4 class="m-0">{{day}}</h4>
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col">
+                                    G
+                                </div>
+                                <div class="col">
+                                    S
+                                </div>
+                                <div class="col">
+                                    T
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="event-icon material-icons-two-tone md-24">light_mode</span>
+                                    <span class="event-icon material-icons-two-tone md-24">dark_mode</span>
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if garAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if garEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                        
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if sunAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if sunEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if terAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if terEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <div class="col-sm calendar-day mx-3"></div>
+                        {{/if}}
+                        {{/each}}
+                    </div>
+                    <div class="row my-2">
+                        {{#each eventArray.[2]}}
+                        {{#if day}}
+                        <div class="col-sm calendar-day shadow-sm bg-light rounded-sm mx-3 p-2">
+                            <h4 class="m-0">{{day}}</h4>
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col">
+                                    G
+                                </div>
+                                <div class="col">
+                                    S
+                                </div>
+                                <div class="col">
+                                    T
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="event-icon material-icons-two-tone md-24">light_mode</span>
+                                    <span class="event-icon material-icons-two-tone md-24">dark_mode</span>
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if garAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if garEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if sunAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if sunEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if terAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if terEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <div class="col-sm calendar-day mx-3"></div>
+                        {{/if}}
+                        {{/each}}
+                    </div>
+                    <div class="row my-2">
+                        {{#each eventArray.[3]}}
+                        {{#if day}}
+                        <div class="col-sm calendar-day shadow-sm bg-light rounded-sm mx-3 p-2">
+                            <h4 class="m-0">{{day}}</h4>
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col">
+                                    G
+                                </div>
+                                <div class="col">
+                                    S
+                                </div>
+                                <div class="col">
+                                    T
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="event-icon material-icons-two-tone md-24">light_mode</span>
+                                    <span class="event-icon material-icons-two-tone md-24">dark_mode</span>
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if garAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if garEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if sunAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if sunEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if terAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if terEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <div class="col-sm calendar-day mx-3"></div>
+                        {{/if}}
+                        {{/each}}
+                    </div>
+                    <div class="row my-2">
+                        {{#each eventArray.[4]}}
+                        {{#if day}}
+                        <div class="col-sm calendar-day shadow-sm bg-light rounded-sm mx-3 p-2">
+                            <h4 class="m-0">{{day}}</h4>
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col">
+                                    G
+                                </div>
+                                <div class="col">
+                                    S
+                                </div>
+                                <div class="col">
+                                    T
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="event-icon material-icons-two-tone md-24">light_mode</span>
+                                    <span class="event-icon material-icons-two-tone md-24">dark_mode</span>
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if garAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if garEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if sunAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if sunEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                <div class="col row">
+                                    <div class="col">
+                                        {{#if terAft}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col">
+                                        {{#if terEve}}
+                                        <span class="material-icons-two-tone">done</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <div class="col-sm calendar-day mx-3 p-2"></div>
+                        {{/if}}
+                        {{/each}}
+                    </div>
+                    <div class="row my-2">
+                        {{#each eventArray.[5]}}
+                            {{#if day}}
+                            <div class="col-sm calendar-day shadow-sm bg-light rounded-sm mx-3 p-2">
+                                <h4 class="m-0">{{day}}</h4>
+                                <div class="row">
+                                    <div class="col"></div>
+                                    <div class="col">
+                                        G
+                                    </div>
+                                    <div class="col">
+                                        S
+                                    </div>
+                                    <div class="col">
+                                        T
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="event-icon material-icons-two-tone md-24">light_mode</span>
+                                        <span class="event-icon material-icons-two-tone md-24">dark_mode</span>
+                                    </div>
+                                    <div class="col row">
+                                        <div class="col">
+                                            {{#if garAft}}
+                                            <span class="material-icons-two-tone">done</span>
+                                            {{/if}}
+                                        </div>
+                                        <div class="col">
+                                            {{#if garEve}}
+                                            <span class="material-icons-two-tone">done</span>
+                                            {{/if}}
+                                        </div>
+
+                                    </div>
+                                    <div class="col row">
+                                        <div class="col">
+                                            {{#if sunAft}}
+                                            <span class="material-icons-two-tone">done</span>
+                                            {{/if}}
+                                        </div>
+                                        <div class="col">
+                                            {{#if sunEve}}
+                                            <span class="material-icons-two-tone">done</span>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                    <div class="col row">
+                                        <div class="col">
+                                            {{#if terAft}}
+                                            <span class="material-icons-two-tone">done</span>
+                                            {{/if}}
+                                        </div>
+                                        <div class="col">
+                                            {{#if terEve}}
+                                            <span class="material-icons-two-tone">done</span>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{else}}
+                            <div class="col-sm calendar-day mx-3 p-2"></div>
+                            {{/if}}
+                        {{/each}}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

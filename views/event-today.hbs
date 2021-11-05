@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/material-icons.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/nav-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/side-nav.css">
+    <link rel="stylesheet" type="text/css" href="/css/event-tracker.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="/js/event-today.js"></script>
+</head>
+
+<body class="d-flex flex-column">
+    {{>navbar back='/'}}
+    <div class="d-flex flex-row justify-content-center">
+        {{>sidenav}}
+
+        <div class="col-10 d-flex flex-column p-5">
+
+            <div class="d-flex flex-row">
+                <div id="today-title" class="shadow-sm bg-light rounded-lg py-3 px-4 me-auto">
+                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">light_mode</span> TODAY</h1>
+                </div>
+                <div id="today-date" class="shadow-sm bg-light rounded-lg py-3 px-4 align-self-end">
+                    <h1 id="today-date-text" class="mb-0 mt-1"></h1>
+                </div>
+            </div>
+
+            <br>
+
+            {{!-- NO EVENTS --}}
+            <!-- 
+                <div id="today-main" class="container-fluid shadow-sm bg-light rounded-sm p-5 d-flex flex-column align-self-center justify-content-center">
+                    <h1 class="no-content text-center">No Events Today</h1>
+                </div> 
+                -->
+
+            {{!-- WITH EVENTS --}}
+            <div id="today-main"
+                class="container-fluid shadow-sm bg-light rounded-sm p-5 d-flex flex-column align-self-center">
+
+                <div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4">
+                    <h1 class="mb-0 mt-1">Afternoon - Package20</h1>
+                    <h1 class="mb-0 mt-1">Jhemerlyn Santos</h1>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

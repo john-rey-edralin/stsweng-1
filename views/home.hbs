@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/css/material-icons.css">
+  <link rel="stylesheet" type="text/css" href="/css/main.css">
+  <link rel="stylesheet" type="text/css" href="/css/nav-bar.css">
+  <link rel="stylesheet" type="text/css" href="/css/home.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
+
+  <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="/js/bootstrap.bundle.js"></script>
+</head>
+
+<body class="d-flex flex-column">
+  {{>navbar}}
+  <div class="flex-fill bg-light p-4 d-flex flex-column align-items-center" id="main">
+
+    <img src="/images/logo.png" width="20%" class="mt-5">
+    <div class="shadow-sm bg-light rounded-lg py-3 px-4 mb-5">
+      <h1 id="logo-name" class="text-center m-0">POINT OF SALE SYSTEM</h1>
+    </div>
+    
+
+    <div class="container justify-content-center">
+      <div class="row">
+
+        {{!-- ORDERING SYSTEM BUTTON --}}
+        <div class="home-btn col-sm d-flex flex-column ms-4 me-3 text-center rounded-lg border shadow"
+          onclick="window.location='/'">
+          <span class="material-icons-two-tone md-144">fastfood</span><br>
+          <h2 class="home-btn-label">ORDERING<br>SYSTEM</h2>
+        </div>
+
+        {{!-- INVENTORY MANAGEMENT BUTTON --}}
+        <div class="home-btn col-sm d-flex flex-column ms-4 me-3 text-center rounded-lg border shadow"
+          onclick="window.location='/'">
+          <span class="material-icons-two-tone md-144">inventory_2</span><br>
+          <h2 class="home-btn-label">INVENTORY<br>MANAGEMENT</h2>
+        </div>
+
+        {{!-- EVENT TRACKER BUTTON --}}
+        <div class="home-btn col-sm d-flex flex-column ms-4 me-3 text-center rounded-lg border shadow"
+          onclick="window.location='/event-tracker'">
+          <span class="material-icons-two-tone md-144">edit_calendar</span><br>
+          <h2 class="home-btn-label">EVENT<br>TRACKER</h2>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>

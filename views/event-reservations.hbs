@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/material-icons.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/nav-bar.css">
+    <link rel="stylesheet" type="text/css" href="/css/side-nav.css">
+    <link rel="stylesheet" type="text/css" href="/css/event-tracker.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="/js/event-reservations.js"></script>
+    <script type="text/javascript" src="/js/tips.js"></script>
+</head>
+
+<body class="d-flex flex-column">
+    {{>navbar back='/'}}
+    <div class="d-flex flex-row justify-content-center">
+        {{>sidenav}}
+
+        <div class="col-10 d-flex flex-column p-5">
+
+            {{!-- TITLES --}}
+            <div class="d-flex flex-row">
+                <div id="reservations-title" class="shadow-sm bg-light rounded-lg py-3 px-4 me-auto">
+                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">class</span> RESERVATIONS
+                    </h1>
+                </div>
+            </div>
+
+            <br>
+            {{#if reservations}}
+
+            {{!-- WITH EVENTS --}}
+            <div id="reservations-main"
+                class="container-fluid shadow-sm bg-light rounded-sm px-5 py-2 d-flex flex-column">
+                <div class="d-flex flex-row">
+                    <div id="reservations-sort" class="bg-light py-3 px-4 me-auto" hidden>
+                        <h4 class="reservations-options mb-0 mt-1"><span
+                                class="material-icons-two-tone mb-1 md-48">sort</span>  Sort by Date (Ascending)</h4>
+                    </div>
+
+                    <div id="reservations-history" class="bg-light py-3 px-4">
+                        <h4 class="reservations-options mb-0 mt-1"><span
+                                class="material-icons-two-tone mb-1 md-48">history</span>  Show Past Reservations</h4>
+                    </div>
+                </div>
+
+                {{#each reservations}}
+                    {{> event this}}
+                {{/each}}
+
+            </div>
+
+            {{else}}
+
+            {{!-- NO RESERVATIONS --}}
+            <div id="reservations-main"
+                class="container-fluid shadow-sm bg-light rounded-sm p-5 d-flex flex-column align-self-center justify-content-center">
+                <h1 class="no-content text-center">No Reservations</h1>
+            </div>
+
+            {{/if}}
+        </div>
+
+    </div>
+</body>
+
+</html>

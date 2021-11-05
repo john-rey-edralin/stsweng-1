@@ -1,0 +1,9 @@
+.navbar {
+	background-color: #2E2E2E !important;
+}
+
+.nav-link {
+	color: #FFFFFF !important;
+	font-size: 20px;
+	text-transform: uppercase;
+}
