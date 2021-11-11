@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap');
+
+html,
+body {
+    color: #0d1f2d;
+    min-height: 100vh;
+    background-color: #DBDBDB;
+}
+
+a,
+label,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    font-family: "Raleway";
+}
+
+button,
+.btn {
+    font-family: "Raleway";
+    font-style: normal;
+}
+
+input,
+option,
+select,
+textarea {
+    font-family: "Roboto Mono";
+}
+
+.number {
+    font-family: "Roboto Mono" !important;
+}
+
+/* BORDER RADIUS */
+.rounded-sm {
+    border-radius: 25px;
+}
+
+.rounded-lg {
+    border-radius: 75px;
+}
+
+/* TEXT STYLES */
+.no-content {
+    font-weight: 600;
+    color: #505050;
+}
+
+.tooltip {
+    font-family: "Raleway";
+    font-size: 20px;
+}
+
+.tooltip-inner {
+    max-width: 600px;
+    padding: 12px;
+    border-radius: 10px;
+}
