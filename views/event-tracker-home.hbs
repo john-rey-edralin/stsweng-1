@@ -19,18 +19,24 @@
     <div class="d-flex flex-row justify-content-center flex-fill">
         <div class="col-11 d-flex flex-column py-5">
             <div class="d-flex flex-row">
-                <div id="today-title" class="shadow-sm bg-light rounded-lg py-3 px-4 me-auto">
-                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">home</span> HOME</h1>
+                <div class="shadow-sm bg-light rounded-lg py-3 px-4 me-auto">
+                    <h1 class="mb-0 mt-1 fw-bold"><span class="material-icons-two-tone mb-1 md-48">home</span> HOME</h1>
                 </div>
-                <div id="today-date" class="shadow-sm bg-light rounded-lg py-3 px-4 align-self-end">
-                    <h1 class="mb-0 mt-1"><span
-                            class="material-icons-two-tone mb-1 md-48">add</span></h1>
-                </div>
+
+                <a href="/event-tracker/create" data-bs-toggle="tooltip" data-bs-placement="left"
+                    title="Create a new event!">
+                    <div class="shadow-sm bg-light rounded-lg py-3 px-4 align-self-end">
+                        <h1 class="mb-0 mt-1">
+                            <span class="material-icons-two-tone mb-1 md-48">add</span>
+                        </h1>
+                    </div>
+                </a>
+
             </div>
 
             <br>
             {{!-- WITH EVENT --}}
-            {{#if events}} 
+            {{#if events}}
             <div id="today-main"
                 class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
                 <div class="d-flex flex-row">
@@ -53,10 +59,11 @@
                     </div>
                 </div>
             </div>
-            
+
             {{!-- NO EVENTS --}}
             {{else}}
-            <div id="today-main" class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
+            <div id="today-main"
+                class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
                 <div class="d-flex flex-row">
                     <h4 class="fw-bolder mt-1 ms-2 text-black-50">Events for Today</h4>
                     <h4 id="today-date-text" class="fw-bolder mt-1 me-2 ms-auto text-black-50"></h4>

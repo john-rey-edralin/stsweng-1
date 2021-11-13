@@ -5,6 +5,10 @@ const eventController = {
         res.render('event-tracker-home');
     },
 
+    getCreateEvent: function (req, res) {
+        res.render('event-tracker-form');
+    },
+
     getPencilbookings: function (req, res) {
         res.render('event-tracker-pencilbookings');
     },
