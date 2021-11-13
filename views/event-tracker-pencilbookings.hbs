@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/material-icons.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css">
+    <link rel="stylesheet" type="text/css" href="/css/event-tracker.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="/js/event-pencilbookings.js"></script>
+</head>
+
+<body class="d-flex flex-column">
+    {{>navbar}}
+    <div class="d-flex flex-row justify-content-center flex-fill">
+        <div class="col-11 d-flex flex-column py-5">
+            <div class="d-flex flex-row">
+                <div id="today-title" class="shadow-sm bg-light rounded-lg py-3 px-4 me-auto">
+                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">edit</span> PENCILBOOKINGS
+                </div>
+                <div id="today-date" class="shadow-sm bg-light rounded-lg py-3 px-4 align-self-end">
+                    <h1 class="mb-0 mt-1">
+                        <a data-bs-toggle="offcanvas" href="#search-filter" role="button">
+                            <span class="material-icons-two-tone mb-1 md-48">filter_alt</span>
+                        </a>
+                    </h1>
+                </div>
+            </div>
+
+            <br>
+            {{!-- WITH EVENT --}}
+            {{!-- {{#if events}} --}}
+            <div id="today-main" class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
+                <div class="p-4">
+                    <div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4 mb-3">
+                        <h1 class="mb-0 mt-1">Afternoon - Package20</h1>
+                        <h1 class="mb-0 mt-1">Jhemerlyn Santos</h1>
+                    </div>
+                    <div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4 mb-3">
+                        <h1 class="mb-0 mt-1">Afternoon - Package20</h1>
+                        <h1 class="mb-0 mt-1">Jhemerlyn Santos</h1>
+                    </div>
+                    <div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4 mb-3">
+                        <h1 class="mb-0 mt-1">Afternoon - Package20</h1>
+                        <h1 class="mb-0 mt-1">Jhemerlyn Santos</h1>
+                    </div>
+                </div>
+            </div>
+            
+            {{!-- NO EVENTS --}}
+            {{!-- {{else}}
+            <div id="today-main" class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
+                <h1 class="no-content text-center p-5">No Events Today</h1>
+            </div>
+            {{/if}} --}}
+
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="search-filter">
+                <div class="offcanvas-header">
+                    <h5 class="fw-bold">FILTER</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+                </div>
+                <div class="offcanvas-body">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
