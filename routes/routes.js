@@ -10,5 +10,6 @@ app.get('/', controller.getIndex);
 
 // event-tracker
 app.get('/event-tracker/home', eventController.getHome);
+app.get('/event-tracker/reservations', eventController.getReservations);
 
 module.exports = app;
