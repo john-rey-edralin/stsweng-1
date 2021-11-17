@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const url = 'mongodb+srv://pia:balaiyllanagarden@balai-yllana.n8hr8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const url = process.env.DB_URL;
 
 const options = {
     useUnifiedTopology: true,
-    useNewUrlParser: true
+    useNewUrlParser: true,
 };
 
 const database = {
@@ -30,7 +30,6 @@ const database = {
             return callback(true);
         });
     },
-
 
     findOne: function (model, query, projection, callback) {
         model.findOne(query, projection, function (error, result) {
@@ -84,7 +83,7 @@ const database = {
             console.log('Documents: ' + result);
             return callback(result);
         });
-    }
-}
+    },
+};
 
 module.exports = database;
