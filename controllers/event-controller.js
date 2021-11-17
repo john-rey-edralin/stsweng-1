@@ -21,12 +21,31 @@ const eventController = {
         });
     },
 
-    getPencilbookings: function (req, res) {
-        res.render('event-tracker-pencilbookings');
+    getPencilBookings: function (req, res) {
+        let query = {
+            status: 'booked',
+        };
+
+        db.findMany(Event, query, '', function (results) {
+            console.log(results);
+            let data = {
+                bookings: results,
+            };
+            res.render('event-tracker-pencilbookings', data);
+        });
     },
 
     getReservations: function (req, res) {
-        res.render('event-tracker-reservations');
+        let query = {
+            status: 'reserved',
+        };
+
+        db.findMany(Event, query, '', function (results) {
+            let data = {
+                reservations: results,
+            };
+            res.render('event-reservations', data);
+        });
     },
 
     getFood: function (req, res) {
