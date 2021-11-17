@@ -1,7 +1,4 @@
-//set environment vairables
-process.env.HOSTNAME = "localhost"
-process.env.PORT = "3000"
-process.env.DB_URL = "mongodb+srv://pia:balaiyllanagarden@balai-yllana.n8hr8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+require('dotenv').config();
 
 //import the necessary modules
 const path = require('path');
