@@ -69,12 +69,12 @@ function retrieveInfoFromDB() {
         }
     });
 
-    $.get('/event-tracker/get/packages', function (result) {
-        for (let j = 0; j < result.length; j++) {
-            packageList.push(result[j]);
-            packageNameList.push(result[j].name);
-        }
-    });
+    // $.get('/event-tracker/get/packages', function (result) {
+    //     for (let j = 0; j < result.length; j++) {
+    //         packageList.push(result[j]);
+    //         packageNameList.push(result[j].name);
+    //     }
+    // });
 }
 
 function initializeTooltips() {
@@ -824,7 +824,7 @@ function checkEventAvailability() {
             eventVenues: eventVenues
         }
 
-        $.get('/event-tracker/pencilbookings/check/event-availability', data, function (result) {
+        $.get('/event-tracker/check/event-availability', data, function (result) {
             if (result)
                 displayError($('#event-time'), $('#event-time-error'), 'Date and time is unavailable.');
             else
