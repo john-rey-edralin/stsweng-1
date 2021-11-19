@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 
 const eventController = {
     getHome: function (req, res) {
+        let event = {};
         res.render('event-tracker-home');
     },
 
@@ -21,8 +22,18 @@ const eventController = {
         });
     },
 
-    getPencilbookings: function (req, res) {
-        res.render('event-tracker-pencilbookings');
+    getPencilBookings: function (req, res) {
+        let query = {
+            status: 'booked',
+        };
+
+        db.findMany(Event, query, '', function (results) {
+            console.log(results);
+            let data = {
+                bookings: results,
+            };
+            res.render('event-tracker-pencilbookings', data);
+        });
     },
 
     getReservations: async function (req, res) {

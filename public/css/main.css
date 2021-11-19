@@ -43,16 +43,6 @@ textarea {
     font-family: "Roboto Mono" !important;
 }
 
-/* BORDER RADIUS */
-.rounded-sm {
-    border-radius: 25px;
-}
-
-.rounded-lg {
-    border-radius: 75px;
-}
-
-/* TEXT STYLES */
 .no-content {
     font-weight: 600;
     color: #505050;
@@ -67,4 +57,22 @@ textarea {
     max-width: 600px;
     padding: 12px;
     border-radius: 10px;
+}
+
+/* BORDER RADIUS */
+.rounded-sm {
+    border-radius: 25px;
+}
+
+.rounded-lg {
+    border-radius: 75px;
+}
+
+/* COLORS */
+.bg-dark {
+    background-color: #2E2E2E !important;
+}
+
+.bg-gray {
+    background-color: #3b3b3b !important;
 }

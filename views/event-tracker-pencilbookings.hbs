@@ -33,30 +33,21 @@
 
             <br>
             {{!-- WITH EVENT --}}
-            {{!-- {{#if events}} --}}
+            {{#if bookings}}
             <div id="today-main" class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
                 <div class="p-4">
-                    <div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4 mb-3">
-                        <h1 class="mb-0 mt-1">Afternoon - Package20</h1>
-                        <h1 class="mb-0 mt-1">Jhemerlyn Santos</h1>
-                    </div>
-                    <div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4 mb-3">
-                        <h1 class="mb-0 mt-1">Afternoon - Package20</h1>
-                        <h1 class="mb-0 mt-1">Jhemerlyn Santos</h1>
-                    </div>
-                    <div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4 mb-3">
-                        <h1 class="mb-0 mt-1">Afternoon - Package20</h1>
-                        <h1 class="mb-0 mt-1">Jhemerlyn Santos</h1>
-                    </div>
+                    {{#each bookings}}
+                        {{>event}}
+                    {{/each}}
                 </div>
             </div>
             
             {{!-- NO EVENTS --}}
-            {{!-- {{else}}
+            {{else}}
             <div id="today-main" class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
                 <h1 class="no-content text-center p-5">No Events Today</h1>
             </div>
-            {{/if}} --}}
+            {{/if}}
 
             <div class="offcanvas offcanvas-end" tabindex="-1" id="search-filter">
                 <div class="offcanvas-header">
