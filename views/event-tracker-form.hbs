@@ -58,26 +58,26 @@
                         <div class="col px-4">
                             <div class="form-group my-3">
                                 <label for="client-name">Client Name</label>
-                                <input type="text" class="form-control" id="client-name" required>
+                                <input type="text" class="form-control" id="client-name" name="client-name" required>
                                 <div id="client-name-help" class="form-text">Can be the client's given name or Facebook
                                     name.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="client-mobile-number">Client Mobile Number</label>
-                                <input type="tel" class="form-control" id="client-mobile-number" required>
+                                <input type="tel" class="form-control" id="client-mobile-number" name="client-mobile-number" required>
                                 <div id="client-mobile-number-help" class="form-text">Country code can be changed if
                                     needed.
                                 </div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="representative-name">Representative Name</label>
-                                <input type="text" class="form-control" id="representative-name">
+                                <input type="text" class="form-control" id="representative-name" name="representative-name">
                                 <div id="representative-name-help" class="form-text">Authorized representative of the
                                     client.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="representative-contact-number">Representative Mobile Number</label>
-                                <input type="tel" class="form-control" id="representative-mobile-number">
+                                <input type="tel" class="form-control" id="representative-mobile-number" name="representative-mobile-number">
                                 <div id="representative-mobile-number-help" class="form-text">Country code can be
                                     changed if needed.
                                 </div>
@@ -88,18 +88,18 @@
                         <div class="col px-4">
                             <div class="form-group my-3">
                                 <label for="event-type">Type of Event</label>
-                                <input type="text" class="form-control autocomplete" id="event-type" required>
+                                <input type="text" class="form-control autocomplete" id="event-type" name="event-type" required>
                                 <div id="event-type-help" class="form-text">Start typing for suggestions or input a new
                                     type.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-date">Date of Event</label>
-                                <input type="date" class="form-control w-75" id="event-date" required>
+                                <input type="date" class="form-control w-75" id="event-date" name="event-date" required>
                                 <div id="event-date-help" class="form-text">Choose a date from the date picker.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-time">Time of Event</label>
-                                <select class="form-control form-select" id="event-time" required>
+                                <select class="form-control form-select" id="event-time" name="event-time" required>
                                     <option value="" selected value>Select an option...</option>
                                     <option value="Afternoon">Afternoon (11:00 AM - 02:00 PM)</option>
                                     <option value="Evening">Evening (04:00 PM - 07:00 PM)</option>
@@ -109,7 +109,7 @@
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-pax">Number of Pax</label>
-                                <input type="number" class="form-control w-50" id="event-pax" required>
+                                <input type="number" class="form-control w-50" id="event-pax" name="event-pax" required>
                                 <div id="event-pax-help" class="form-text">Input by typing or using the spinner.
                                 </div>
                             </div>
@@ -122,11 +122,11 @@
                             {{!-- GARDEN OPTIONS --}}
                             <div class="input-group mb-1">
                                 <div class="input-group-text">
-                                    <input class="form-check-input mt-0 venue-checkbox" id="venue-garden"
+                                    <input class="form-check-input mt-0 venue-checkbox" id="venue-garden" name="venue-garden"
                                         type="checkbox" value="Garden">
                                 </div>
                                 <label class="input-group-text" for="garden-options"><strong>Garden</strong></label>
-                                <select class="form-select package" id="garden-options" disabled>
+                                <select class="form-select package" id="garden-options" name="garden-options" disabled>
                                     <option value="" selected> No Package </option>
                                     <option value="gar10-4var-cov">Package Gar10Cov - 4 Variants (Php 10,000.00)
                                     </option>
@@ -150,11 +150,11 @@
                             {{!-- SUNROOM OPTIONS --}}
                             <div class="input-group mb-1">
                                 <div class="input-group-text">
-                                    <input class="form-check-input mt-0 venue-checkbox" id="venue-sunroom"
+                                    <input class="form-check-input mt-0 venue-checkbox" id="venue-sunroom" name="venue-sunroom"
                                         type="checkbox" value="Sunroom">
                                 </div>
                                 <label class="input-group-text" for="sunroom-options"><strong>Sunroom</strong></label>
-                                <select class="form-select package" id="sunroom-options" disabled>
+                                <select class="form-select package" id="sunroom-options" name="sunroom-options" disabled>
                                     <option value="" selected> No Package </option>
                                     <option value="sun20">Package Sun20 - 4 Variants (Php 9,000.00)</option>
                                 </select>
@@ -163,11 +163,11 @@
                             {{!-- TERRACE OPTIONS --}}
                             <div class="input-group mb-1">
                                 <div class="input-group-text">
-                                    <input class="form-check-input mt-0 venue-checkbox" id="venue-terrace"
+                                    <input class="form-check-input mt-0 venue-checkbox" id="venue-terrace" name="venue-terrace"
                                         type="checkbox" value="Terrace">
                                 </div>
                                 <label class="input-group-text" for="terrace-options"><strong>Terrace</strong></label>
-                                <select class="form-select package" id="terrace-options" disabled>
+                                <select class="form-select package" id="terrace-options" name="terrace-options" disabled>
                                     <option value="" selected> No Package </option>
                                     <option value="ter15">Package Ter15 - 4 Variants (Php 6,000.00)</option>
                                 </select>
@@ -175,7 +175,7 @@
 
                             {{!-- ADDITIONAL PAX OPTION --}}
                             <div class="form-check align-self-end">
-                                <input class="form-check-input" type="checkbox" id="additional-pax">
+                                <input class="form-check-input" type="checkbox" id="additional-pax" name="additional-pax"> 
                                 <label class="form-check-label number fs-6" for="additional-pax">Add Additional 5 Pax
                                     (Php
                                     2,000.00)</label>
@@ -186,8 +186,8 @@
 
                             <div class="form-group my-3">
                                 <label for="event-notes">Notes</label>
-                                <textarea class="form-control" id="event-notes" rows="4"></textarea>
-                                <div id="event-notes-help" class="form-text">Additional details about the event, if any.
+                                <textarea class="form-control" id="event-notes" name="event-notes" rows="4"></textarea>
+                                <div id="event-notes-help" name class="form-text">Additional details about the event, if any.
                                     The box can be resized by dragging the lower-right corner.
                                 </div>
                             </div>
@@ -397,7 +397,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="icedtea-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="icedtea-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="icedtea-quantity" name="icedtea-quantity" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -407,7 +407,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="rice-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="rice-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="rice-quantity" name="rice-quantity" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -443,15 +443,15 @@
                                             <div class="form-group my-3">
                                                 <label for="additional-name">Food Name</label>
                                                 <input type="text" class="form-control menu-item-autocomplete"
-                                                    id="additional-name">
+                                                    id="additional-name" name="additional-name">
                                             </div>
                                             <div class="form-group my-3">
                                                 <label for="additional-quantity">Quantity</label>
-                                                <input type="number" class="form-control" id="additional-quantity">
+                                                <input type="number" class="form-control" id="additional-quantity" name="additional-quantity">
                                             </div>
                                             <div class="form-group my-3">
                                                 <label for="additional-price">Price</label>
-                                                <input type="number" class="form-control" id="additional-price"
+                                                <input type="number" class="form-control" id="additional-price" name="additional-price"
                                                     disabled>
                                             </div>
                                             <strong>
@@ -519,15 +519,15 @@
                                         <div class="form-group my-3">
                                             <label for="extra-charges-name">Charge Name</label>
                                             <input type="text" class="form-control extra-charges-autocomplete"
-                                                id="extra-charges-name">
+                                                id="extra-charges-name" name="extra-charges-name">
                                         </div>
                                         <div class="form-group my-3">
                                             <label for="extra-charges-quantity">Quantity</label>
-                                            <input type="number" class="form-control" id="extra-charges-quantity">
+                                            <input type="number" class="form-control" id="extra-charges-quantity" name="extra-charges-quantity">
                                         </div>
                                         <div class="form-group my-3">
                                             <label for="extra-charges-price">Price</label>
-                                            <input type="number" class="form-control" id="extra-charges-price">
+                                            <input type="number" class="form-control" id="extra-charges-price" name="extra-charges-price">
                                         </div>
                                         <strong>
                                             <div class="mx-5 p-3 text-center text-danger error"
@@ -582,14 +582,14 @@
                                         </div>
                                         <div class="form-group my-3">
                                             <label for="discount-name">Discount Name</label>
-                                            <input type="text" class="form-control" id="discount-name">
+                                            <input type="text" class="form-control" id="discount-name" name="discount-name">
                                         </div>
                                         <div class="form-group my-3">
                                             <label for="discount-price">Price</label>
-                                            <input type="number" class="form-control" id="discount-price">
+                                            <input type="number" class="form-control" id="discount-price" name="discount-price">
                                         </div>
                                         <strong>
-                                            <div class="mx-5 p-3 text-center text-danger error" id="discount-error">
+                                            <div class="mx-5 p-3 text-center text-danger error" id="discount-error" name="discount-error">
                                             </div>
                                         </strong>
                                     </div>
@@ -647,19 +647,19 @@
                         {{!-- DOWNPAYMENT --}}
                         <div id="downpayment-contents">
                             <div class="form-check">
-                                <input class="form-check-input mt-2 payment-checkbox" type="checkbox" id="downpayment">
+                                <input class="form-check-input mt-2 payment-checkbox" type="checkbox" id="downpayment" name="downpayment">
                                 <label class="form-check-label number fs-4" for="downpayment">Downpayment</label>
                             </div>
                             <div class="row px-5">
                                 <div class="col form-group my-3">
                                     <label for="downpayment-date">Date of Payment</label>
-                                    <input type="date" class="form-control" id="downpayment-date" disabled>
+                                    <input type="date" class="form-control" id="downpayment-date" name="downpayment-date" disabled>
                                     <div id="downpayment-date-help" class="form-text">Choose a date from the date
                                         picker.</div>
                                 </div>
                                 <div class="col form-group my-3">
                                     <label for="downpayment-mode">Mode of Payment</label>
-                                    <select class="form-control form-select" id="downpayment-mode" disabled>
+                                    <select class="form-control form-select" id="downpayment-mode" name="downpayment-mode" disabled>
                                         <option value="" selected value>Select an option...</option>
                                         <option value="Cash">Cash</option>
                                         <option value="Credit Card">Credit Card</option>
@@ -672,7 +672,7 @@
                                 </div>
                                 <div class="col form-group my-3">
                                     <label for="downpayment-amount">Amount Paid</label>
-                                    <input type="number" class="form-control" id="downpayment-amount" disabled>
+                                    <input type="number" class="form-control" id="downpayment-amount" name="downpayment-amount" disabled>
                                     <div id="downpayment-amount-help" class="form-text">Input by typing or using the
                                         spinner.</div>
                                 </div>
@@ -690,13 +690,13 @@
                             <div class="row px-5">
                                 <div class="col form-group my-3">
                                     <label for="event-date">Date of Payment</label>
-                                    <input type="date" class="form-control" id="final-payment-date" disabled>
+                                    <input type="date" class="form-control" id="final-payment-date" name="final-payment-date" disabled>
                                     <div id="event-date-help" class="form-text">Choose a date from the date picker.
                                     </div>
                                 </div>
                                 <div class="col form-group my-3">
                                     <label for="final-payment-mode">Mode of Payment</label>
-                                    <select class="form-control form-select" id="final-payment-mode" disabled>
+                                    <select class="form-control form-select" id="final-payment-mode" name="final-payment-mode" disabled>
                                         <option value="" selected value>Select an option...</option>
                                         <option value="Cash">Cash</option>
                                         <option value="Credit Card">Credit Card</option>
@@ -709,7 +709,7 @@
                                 </div>
                                 <div class="col form-group my-3">
                                     <label for="final-payment-amount">Amount Paid</label>
-                                    <input type="number" class="form-control" id="final-payment-amount" disabled>
+                                    <input type="number" class="form-control" id="final-payment-amount" name="final-payment-amount" disabled>
                                     <div id="final-payment-amount-help" class="form-text">Input by typing or using the
                                         spinner.</div>
                                 </div>
@@ -722,13 +722,13 @@
                                 <div class="col-4"></div>
                                 <div class="col form-group my-3">
                                     <label for="payment-amount-total">Total Amount Paid</label>
-                                    <input type="number" class="form-control static" id="payment-amount-total" disabled>
+                                    <input type="number" class="form-control static" id="payment-amount-total" name="payment-amount-total" disabled>
                                     <div id="payment-amount-total-help" class="form-text">Total amount paid by the
                                         client.</div>
                                 </div>
                                 <div class="col form-group my-3">
                                     <label for="payment-balance">Balance</label>
-                                    <input type="number" class="form-control static" id="payment-balance" disabled>
+                                    <input type="number" class="form-control static" id="payment-balance" name="payment-balance" disabled>
                                     <div id="payment-balance-help" class="form-text">Amount owed by the client.</div>
                                 </div>
                             </div>
