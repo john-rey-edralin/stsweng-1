@@ -15,14 +15,13 @@ app.get('/event-tracker/pencilbookings', eventController.getPencilbookings);
 app.get('/event-tracker/reservations', eventController.getReservations);
 
 // temporary
-app.post(
-    '/event-tracker/submit',
-    eventController.postCreateEvent
-);
+app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get(
     '/event-tracker/check/event-availability',
     eventController.getCheckEventAvailability
 );
 app.get('/event-tracker/get/food', eventController.getFood);
 app.get('/event-tracker/get/charges', eventController.getCharges);
+app.get('/event-tracker/events', eventController.getEvent);
+
 module.exports = app;

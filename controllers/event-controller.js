@@ -2,6 +2,9 @@ const db = require('../models/db.js');
 const Food = require('../models/food.js');
 const Event = require('../models/event.js');
 const Charge = require('../models/charge.js');
+const fetchReservations = require('./fetchReservations.js');
+const mongoose = require('mongoose');
+
 const eventController = {
     getHome: function (req, res) {
         res.render('event-tracker-home');
@@ -22,8 +25,17 @@ const eventController = {
         res.render('event-tracker-pencilbookings');
     },
 
-    getReservations: function (req, res) {
-        res.render('event-tracker-reservations');
+    getReservations: async function (req, res) {
+        const reservations = await fetchReservations();
+
+        res.render('event-tracker-reservations', reservations);
+    },
+
+    getEvent: async function (req, res) {
+        const { id } = req.query;
+        const event = await Event.findOne({ _id: mongoose.Types.ObjectId(id) });
+
+        res.json(event);
     },
 
     getFood: function (req, res) {
@@ -50,7 +62,7 @@ const eventController = {
         db.findOne(Event, query, '', function (result) {
             res.send(result);
         });
-    }
-}
+    },
+};
 
 module.exports = eventController;

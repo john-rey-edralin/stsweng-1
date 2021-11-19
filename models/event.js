@@ -2,11 +2,12 @@ var mongoose = require('mongoose');
 
 var EventSchema = new mongoose.Schema({
     status: {
-        type: String
+        type: String,
+        enum: ['booked', 'reserved', 'finished', 'cancelled'],
     },
 
     clientName: {
-        type: String
+        type: String,
     },
 
     clientMobileNumber: {
@@ -22,35 +23,35 @@ var EventSchema = new mongoose.Schema({
     },
 
     eventType: {
-        type: String
+        type: String,
     },
 
     eventDate: {
-        type: Date
+        type: Date,
     },
 
     eventTime: {
-        type: String
+        type: String,
     },
-    
+
     numOfPax: {
-        type: Number
+        type: Number,
     },
 
     eventNotes: {
-        type: String
+        type: String,
     },
 
     eventVenues: {
-        type: [String]
+        type: [String],
     },
 
     eventPackages: {
-        type: [String]
+        type: [String],
     },
 
     packageAdditionalPax: {
-        type: Boolean
+        type: Boolean,
     },
 
     menuPackage: {
@@ -59,110 +60,116 @@ var EventSchema = new mongoose.Schema({
                 type: String,
             },
             saladQuantity: {
-                type: Number
+                type: Number,
             },
             pastaName: {
-                type: String
+                type: String,
             },
             pastaQuantity: {
-                type: Number
+                type: Number,
             },
             beefName: {
-                type: String
+                type: String,
             },
             beefQuantity: {
-                type: Number
+                type: Number,
             },
             porkName: {
-                type: String
+                type: String,
             },
             porkQuantity: {
-                type: Number
+                type: Number,
             },
             chickenName: {
-                type: String
+                type: String,
             },
             chickenQuantity: {
-                type: Number
+                type: Number,
             },
             fishName: {
-                type: String
+                type: String,
             },
             fishQuantity: {
-                type: Number
+                type: Number,
             },
             icedTeaQuantity: {
-                type: Number
+                type: Number,
             },
             riceQuantity: {
-                type: Number
+                type: Number,
             },
-        }
+        },
     },
 
     menuAdditional: {
-        type: [{
-            foodItem: {
-                type: String
+        type: [
+            {
+                foodItem: {
+                    type: String,
+                },
+                foodQuantity: {
+                    type: Number,
+                },
             },
-            foodQuantity: {
-                type: Number
-            }
-        }]
+        ],
     },
 
     transactionCharges: {
-        type: [{
-            chargeName: {
-                type: String
+        type: [
+            {
+                chargeName: {
+                    type: String,
+                },
+                chargeQuantity: {
+                    type: Number,
+                },
+                chargePrice: {
+                    type: Number,
+                },
             },
-            chargeQuantity: {
-                type: Number
-            },
-            chargePrice: {
-                type: Number
-            }
-        }]
+        ],
     },
 
     transactionDiscounts: {
-        type: [{
-            discountName: {
-                type: String
+        type: [
+            {
+                discountName: {
+                    type: String,
+                },
+                discountPrice: {
+                    type: Number,
+                },
             },
-            discountPrice: {
-                type: Number
-            }
-        }]
+        ],
     },
 
     downpaymentDate: {
-        type: Date
+        type: Date,
     },
 
     downpaymentMode: {
-        type: String
+        type: String,
     },
 
     downpaymentAmount: {
-        type: Number
+        type: Number,
     },
-    
+
     finalPaymentDate: {
-        type: Date
+        type: Date,
     },
 
     finalPaymentMode: {
-        type: String
+        type: String,
     },
 
     finalPaymentAmount: {
-        type: Number
+        type: Number,
     },
 
     cancelReason: {
-        type: String
-    }
+        type: String,
+    },
 });
 
 module.exports = mongoose.model('Event', EventSchema);
