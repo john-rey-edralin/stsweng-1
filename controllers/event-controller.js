@@ -44,7 +44,7 @@ const eventController = {
             let data = {
                 reservations: results,
             };
-            res.render('event-reservations', data);
+            res.render('event-tracker-reservations', data);
         });
     },
 
