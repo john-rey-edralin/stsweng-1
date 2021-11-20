@@ -41,7 +41,6 @@ $(document).ready(function () {
     initializeTransactionFields();
     initializePaymentFields();
 
-    initializeFormProgression();
     initializeRealTimeValidation();
 
     submitForm();
@@ -74,6 +73,7 @@ function retrieveInfoFromDB() {
                 additionalPackageList.push(result[j]);
             packageList.push(result[j]);
         }
+
         // initialize package options
         $.each(gardenPackageList, function (i, package) {
             $('#garden-options').append($('<option>', {
@@ -249,27 +249,6 @@ function initializePaymentFields() {
     $('#final-payment-amount').on('change', function () {
         $('#payment-amount-total').val(parseFloat($('#downpayment-amount').val()) + parseFloat($(this).val()));
         $('#payment-balance').val((calculateTotal() - $('#payment-amount-total').val()) * -1);
-    });
-}
-
-function initializeFormProgression() {
-    $('#client-name, ' +
-        '#client-mobile-number, ' +
-        '#event-type, ' +
-        '#event-date, ' +
-        '#event-time,  ' +
-        '#event-pax, ' +
-        '.package, ' +
-        '.venue-checkbox '
-    ).on('change', function () {
-        if (checkIfFilledEventFields()) {
-            $('#form-menu-info, ' +
-                '#form-transaction-info, ' +
-                '#form-breakdown-info, ' +
-                '#form-payment-info, ' +
-                '#submit-button'
-            ).prop('hidden', false);
-        }
     });
 }
 
