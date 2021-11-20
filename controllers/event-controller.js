@@ -2,16 +2,15 @@ const db = require('../models/db.js');
 const Food = require('../models/food.js');
 const Event = require('../models/event.js');
 const Charge = require('../models/charge.js');
+const Package = require('../models/package.js');
+
 const eventController = {
     getHome: function (req, res) {
-        let event = {
-
-        }
         res.render('event-tracker-home');
     },
 
     getCreateEvent: function (req, res) {
-        res.render('event-tracker-form');
+        res.render('event-tracker-createform');
     },
 
     postCreateEvent: function (req, res) {
@@ -21,31 +20,12 @@ const eventController = {
         });
     },
 
-    getPencilBookings: function (req, res) {
-        let query = {
-            status: 'booked',
-        };
-
-        db.findMany(Event, query, '', function (results) {
-            console.log(results);
-            let data = {
-                bookings: results,
-            };
-            res.render('event-tracker-pencilbookings', data);
-        });
+    getPencilbookings: function (req, res) {
+        res.render('event-tracker-pencilbookings');
     },
 
     getReservations: function (req, res) {
-        let query = {
-            status: 'reserved',
-        };
-
-        db.findMany(Event, query, '', function (results) {
-            let data = {
-                reservations: results,
-            };
-            res.render('event-tracker-reservations', data);
-        });
+        res.render('event-tracker-reservations');
     },
 
     getFood: function (req, res) {
@@ -58,6 +38,12 @@ const eventController = {
     getCharges: function (req, res) {
         let projection = 'name price';
         db.findMany(Charge, {}, projection, function (result) {
+            res.send(result);
+        });
+    },
+
+    getPackages: function (req, res) {
+        db.findMany(Package, {}, '', function (result) {
             res.send(result);
         });
     },

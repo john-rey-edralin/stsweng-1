@@ -1,17 +1,29 @@
 var mongoose = require('mongoose');
 
 var PackageSchema = new mongoose.Schema({
-    
-    name: {
+
+    packageCode: {
         type: String,
     },
 
-    price: {
+    packageName: {
+        type: String,
+    },
+
+    packagePrice: {
         type: Number
     },
 
-    venue: {
-        type: String
+    packageVenue: {
+        type: String,
+    },
+
+    variantCount: {
+        type: Number
+    },
+
+    foodQuantities: {
+        type: [Number]
     }
 });
 

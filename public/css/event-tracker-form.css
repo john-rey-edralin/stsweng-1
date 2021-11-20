@@ -55,6 +55,12 @@ label {
   font-weight: 600;
 }
 
+.nav-link.active {
+  background-color: #FFFFFF !important; 
+  color: #000000 !important;
+  font-weight: 700;
+}
+
 .menu-item-header,
 .transaction-item-header {
   font-weight: 600;
