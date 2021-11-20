@@ -19,13 +19,31 @@
     <script type="text/javascript" src="/js/event-tracker-editform.js"></script>
 </head>
 
-<body class="d-flex flex-column">
-    <nav class="navbar navbar-expand-xl sticky-top shadow-sm">
+<body class="d-flex flex-column position-relative" data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="50"
+    tabindex="0">
+    <nav class="navbar navbar-expand-xl bg-dark sticky-top shadow-sm" id="navbar">
         <div class="container-fluid">
             <div class="me-auto">
                 <span class="material-icons-two-tone md-light md-btn md-24" data-bs-toggle="modal"
                     data-bs-target="#confirm-exit-modal">arrow_back_ios</span>
             </div>
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="#form-event-info">Event Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#form-menu-info">Menu Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#form-transaction-info">Transaction Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#form-breakdown-info">Total Breakdown</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#form-payment-info">Payment Details</a>
+                </li>
+            </ul>
         </div>
     </nav>
     <div class="d-flex flex-row justify-content-center">
@@ -132,22 +150,6 @@
                                 <label class="input-group-text" for="garden-options"><strong>Garden</strong></label>
                                 <select class="form-select package" id="garden-options" name="garden-options" disabled>
                                     <option value="" selected> No Package </option>
-                                    <option value="gar10-4var-cov">Package Gar10Cov - 4 Variants (Php 10,000.00)
-                                    </option>
-                                    <option value="gar15-4var-cov">Package Gar15Cov - 4 Variants (Php 12,000.00)
-                                    </option>
-                                    <option value="gar20-4var-cov">Package Gar20Cov - 4 Variants (Php 14,000.00)
-                                    </option>
-                                    <option value="gar10-6var-cov">Package Gar10Cov - 6 Variants (Php 12,000.00)
-                                    </option>
-                                    <option value="gar15-6var-cov">Package Gar15Cov - 6 Variants (Php 14,000.00)
-                                    </option>
-                                    <option value="gar20">Package Gar20 - 6 Variants (Php 16,000.00)</option>
-                                    <option value="gar30">Package Gar30 - 6 Variants (Php 20,000.00)</option>
-                                    <option value="gar40">Package Gar40 - 6 Variants (Php 24,000.00)</option>
-                                    <option value="gar50">Package Gar50 - 6 Variants (Php 28,000.00)</option>
-                                    <option value="gar60">Package Gar60 - 6 Variants (Php 32,000.00)</option>
-                                    <option value="gar70">Package Gar70 - 6 Variants (Php 36,000.00)</option>
                                 </select>
                             </div>
 
@@ -161,7 +163,6 @@
                                 <select class="form-select package" id="sunroom-options" name="sunroom-options"
                                     disabled>
                                     <option value="" selected> No Package </option>
-                                    <option value="sun20">Package Sun20 - 4 Variants (Php 9,000.00)</option>
                                 </select>
                             </div>
 
@@ -175,7 +176,6 @@
                                 <select class="form-select package" id="terrace-options" name="terrace-options"
                                     disabled>
                                     <option value="" selected> No Package </option>
-                                    <option value="ter15">Package Ter15 - 4 Variants (Php 6,000.00)</option>
                                 </select>
                             </div>
 
@@ -217,7 +217,7 @@
 
                 <br>
                 {{!-- MENU DETAILS --}}
-                <div id="form-menu-info" class="container-fluid shadow-sm bg-light rounded-sm p-5" hidden>
+                <div id="form-menu-info" class="container-fluid shadow-sm bg-light rounded-sm p-5">
 
                     {{!-- MENU HEADER --}}
                     <div class="d-flex flex-row align-items-center">
@@ -437,8 +437,7 @@
                             </div>
 
                             {{!-- ADDITIONAL MENU MODAL --}}
-                            <div class="modal fade" id="additional-item-modal" tabindex="-1"
-                                aria-labelledby="additional-item-modal-header" aria-hidden="true">
+                            <div class="modal fade" id="additional-item-modal" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -493,7 +492,7 @@
 
                 <br>
                 {{!-- TRANSACTION DETAILS --}}
-                <div id="form-transaction-info" class="container-fluid shadow-sm bg-light rounded-sm p-5" hidden>
+                <div id="form-transaction-info" class="container-fluid shadow-sm bg-light rounded-sm p-5">
                     <div class="d-flex flex-row align-items-center">
                         <h1 class="form-type-header me-auto align-self-center"><span
                                 class="material-icons-two-tone mb-1 md-48">payments</span> Transaction Details</h1>
@@ -515,8 +514,7 @@
                         </div>
 
                         {{!-- EXTRA CHARGES MODAL --}}
-                        <div class="modal fade" id="extra-charges-modal" tabindex="-1"
-                            aria-labelledby="extra-charges-modal-header" aria-hidden="true">
+                        <div class="modal fade" id="extra-charges-modal" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -581,8 +579,7 @@
                         </div>
 
                         {{!-- DISCOUNT MODAL --}}
-                        <div class="modal fade" id="discounts-modal" tabindex="-1"
-                            aria-labelledby="discounts-modal-header" aria-hidden="true">
+                        <div class="modal fade" id="discounts-modal" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -631,7 +628,7 @@
 
                 <br>
                 {{!-- BREAKDOWN --}}
-                <div id="form-breakdown-info" class="container-fluid shadow-sm bg-light rounded-sm p-5" hidden>
+                <div id="form-breakdown-info" class="container-fluid shadow-sm bg-light rounded-sm p-5">
                     <div class="d-flex flex-row align-items-center">
                         <h1 class="form-type-header me-auto align-self-center"><span
                                 class="material-icons-two-tone mb-1 md-48">receipt_long</span> Total Breakdown
@@ -650,7 +647,7 @@
 
                 <br>
                 {{!-- PAYMENT DETAILS --}}
-                <div id="form-payment-info" class="container-fluid shadow-sm bg-light rounded-sm p-5" hidden>
+                <div id="form-payment-info" class="container-fluid shadow-sm bg-light rounded-sm p-5">
                     <div class="d-flex flex-row align-items-center">
                         <h1 class="form-type-header me-auto align-self-center"><span
                                 class="material-icons-two-tone mb-1 md-48">payment</span> Payment Details</h1>
@@ -765,7 +762,7 @@
                 <br>
                 {{!-- SUBMIT BUTTON --}}
                 <div class="d-flex flex-row">
-                    <div id="submit-button" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-auto" hidden>
+                    <div id="submit-button" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-auto">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-submit-modal"
                             class="btn btn-light" id="submit">Submit</button>
                     </div>
