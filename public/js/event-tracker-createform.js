@@ -3,7 +3,10 @@ let foodNameList = [];
 let chargeList = [];
 let chargeNameList = [];
 let packageList = [];
-let packageNameList = [];
+let gardenPackageList = [];
+let sunroomPackageList = [];
+let terracePackageList = [];
+let additionalPackageList = [];
 let variantCount = 0;
 
 let additionalFoodTableHeader =
@@ -30,7 +33,6 @@ let discountsTableHeader =
 $(document).ready(function () {
     retrieveInfoFromDB();
 
-    preventBackKey()
     setRequiredFields();
     initializeTooltips()
 
@@ -44,15 +46,6 @@ $(document).ready(function () {
 
     submitForm();
 });
-
-function preventBackKey() {
-    if (window.history && window.history.pushState) {
-        window.history.pushState('forward', null, './#forward');
-        $(window).on('popstate', function () {
-            window.history.pushState('forward', null, './#forward');
-        });
-    }
-}
 
 function retrieveInfoFromDB() {
     $.get('/event-tracker/get/food', function (result) {
@@ -69,12 +62,40 @@ function retrieveInfoFromDB() {
         }
     });
 
-    // $.get('/event-tracker/get/packages', function (result) {
-    //     for (let j = 0; j < result.length; j++) {
-    //         packageList.push(result[j]);
-    //         packageNameList.push(result[j].name);
-    //     }
-    // });
+    $.get('/event-tracker/get/packages', function (result) {
+        for (let j = 0; j < result.length; j++) {
+            if (result[j].packageVenue === "Garden")
+                gardenPackageList.push(result[j]);
+            else if (result[j].packageVenue === "Sunroom")
+                sunroomPackageList.push(result[j]);
+            else if (result[j].packageVenue === "Terrace")
+                terracePackageList.push(result[j]);
+            else
+                additionalPackageList.push(result[j]);
+            packageList.push(result[j]);
+        }
+        // initialize package options
+        $.each(gardenPackageList, function (i, package) {
+            $('#garden-options').append($('<option>', {
+                value: package.packageCode,
+                text: package.packageName + ' - ' + package.variantCount + ' Variants (Php ' + package.packagePrice + ')'
+            }));
+        });
+
+        $.each(sunroomPackageList, function (i, package) {
+            $('#sunroom-options').append($('<option>', {
+                value: package.packageCode,
+                text: package.packageName + ' - ' + package.variantCount + ' Variants (Php ' + package.packagePrice + ')'
+            }));
+        });
+
+        $.each(terracePackageList, function (i, package) {
+            $('#terrace-options').append($('<option>', {
+                value: package.packageCode,
+                text: package.packageName + ' - ' + package.variantCount + ' Variants (Php ' + package.packagePrice + ')'
+            }));
+        });
+    });
 }
 
 function initializeTooltips() {
@@ -142,11 +163,11 @@ function initializeMenuFields() {
 
     $('.menu-button').on('click', function () {
         if ($(this).hasClass('menu-button-active')) {
-            $(this).removeClass('menu-button-active')
+            $(this).removeClass('menu-button-active');
             variantCount--;
             $('.menu-button').prop('disabled', false);
         } else if (getVariantCount() > $('.menu-button-active').length) {
-            $(this).addClass('menu-button-active')
+            $(this).addClass('menu-button-active');
             variantCount++;
             if (getVariantCount() <= $('.menu-button-active').length) {
                 $('.menu-button:not(.menu-button-active)').prop('disabled', true);
@@ -269,14 +290,14 @@ function hideMenuItemInfo(div) {
 }
 
 function updateFoodQuantity() {
-    $('#salad-quantity').val(getFoodQuantity('salad'));
-    $('#pasta-quantity').val(getFoodQuantity('pasta'));
-    $('#beef-quantity').val(getFoodQuantity('beef'));
-    $('#pork-quantity').val(getFoodQuantity('pork'));
-    $('#chicken-quantity').val(getFoodQuantity('chicken'));
-    $('#fish-quantity').val(getFoodQuantity('fish'));
-    $('#icedtea-quantity').val(getFoodQuantity('iced-tea'));
-    $('#rice-quantity').val(getFoodQuantity('rice'));
+    $('#salad-quantity').val(getFoodQuantity(0));
+    $('#pasta-quantity').val(getFoodQuantity(1));
+    $('#beef-quantity').val(getFoodQuantity(2));
+    $('#pork-quantity').val(getFoodQuantity(3));
+    $('#chicken-quantity').val(getFoodQuantity(4));
+    $('#fish-quantity').val(getFoodQuantity(5));
+    $('#icedtea-quantity').val(getFoodQuantity(7));
+    $('#rice-quantity').val(getFoodQuantity(6));
 }
 
 function addAdditionalItem() {
@@ -321,7 +342,7 @@ function addAdditionalItem() {
 
         $('#additional-items-total').empty();
         $('#additional-items-total').append(
-            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' + formatAsDecimal(calculateAdditionalItemTotal()) + '</h4>'
+            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' + formatAsDecimal(calculateItemTotal($('.additional-item-amt'))) + '</h4>'
         );
         updateBreakdownTable();
     }
@@ -338,7 +359,7 @@ function removeAdditionalItem(elem) {
         );
     }
 
-    $('#additional-items-total').children('h4').text('Php ' + formatAsDecimal(calculateAdditionalItemTotal()));
+    $('#additional-items-total').children('h4').text('Php ' + formatAsDecimal(calculateItemTotal($('.additional-item-amt'))));
     updateBreakdownTable();
 }
 
@@ -384,7 +405,7 @@ function addExtraCharge() {
         }
         $('#extra-charges-total').empty();
         $('#extra-charges-total').append(
-            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' + formatAsDecimal(calculateExtraChargesTotal()) + '</h4>'
+            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' + formatAsDecimal(calculateItemTotal($('.extra-charges-item-amt'))) + '</h4>'
         );
         updateBreakdownTable();
     }
@@ -401,7 +422,7 @@ function removeExtraCharge(elem) {
         );
     }
 
-    $('#extra-charges-total').children('h4').text('Php ' + formatAsDecimal(calculateExtraChargesTotal()));
+    $('#extra-charges-total').children('h4').text('Php ' + formatAsDecimal(calculateItemTotal($('.extra-charges-item-amt'))));
     updateBreakdownTable();
 }
 
@@ -442,7 +463,7 @@ function addDiscount() {
 
         $('#discounts-total').empty();
         $('#discounts-total').append(
-            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' + formatAsDecimal(calculateDiscountTotal()) + '</h4>'
+            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' + formatAsDecimal(calculateItemTotal($('.discount-item-amt'))) + '</h4>'
         );
         updateBreakdownTable();
     }
@@ -458,15 +479,15 @@ function removeDiscount(elem) {
         );
     }
 
-    $('#discounts-total').children('h4').text('Php ' + formatAsDecimal(calculateDiscountTotal()));
+    $('#discounts-total').children('h4').text('Php ' + formatAsDecimal(calculateItemTotal($('.discount-item-amt'))));
     updateBreakdownTable();
 }
 
 function updateBreakdownTable() {
     let package = calculatePackageTotal();
-    let additional = calculateAdditionalItemTotal();
-    let charges = calculateExtraChargesTotal();
-    let discounts = calculateDiscountTotal();
+    let additional = calculateItemTotal($('.additional-item-amt'));
+    let charges = calculateItemTotal($('.extra-charges-item-amt'));
+    let discounts = calculateItemTotal($('.discount-item-amt'));
     let total = calculateTotal();
 
     $('#breakdown-list').empty();
@@ -844,47 +865,27 @@ function formatAsNumber(value) {
 }
 
 function calculatePackageTotal() {
+    let gardenIndex = getPackageIndex(gardenPackageList, $('#garden-options').val());
+    let sunroomIndex = getPackageIndex(sunroomPackageList, $('#sunroom-options').val());
+    let terraceIndex = getPackageIndex(terracePackageList, $('#terrace-options').val());
+    let add5paxIndex = getPackageIndex(additionalPackageList, 'add5');
+
     let sum = 0;
-
-    // computes the total charge for packages
-    $('.package').each(function () {
-        if ($(this).val())
-            sum += getPackagePrice($(this).val());
-    });
-
-    if ($('#additional-pax').is(':checked'))
-        sum += 2000;
-
+    if (gardenIndex != -1)
+        sum += gardenPackageList[gardenIndex].packagePrice;
+    if (sunroomIndex != -1)
+        sum += sunroomPackageList[sunroomIndex].packagePrice;
+    if (terraceIndex != -1)
+        sum += terracePackageList[terraceIndex].packagePrice;
+    if ($('#additional-pax').is(":checked"))
+        sum += additionalPackageList[add5paxIndex].packagePrice;
     return sum;
 }
 
-function calculateAdditionalItemTotal() {
+function calculateItemTotal(field) {
     let sum = 0;
 
-    // computes the total charge for additional orders
-    $('.additional-item-amt').each(function () {
-        sum += formatAsNumber($(this).text());
-    });
-
-    return sum;
-}
-
-function calculateExtraChargesTotal() {
-    let sum = 0;
-
-    // computes the total charge for additional orders
-    $('.extra-charges-item-amt').each(function () {
-        sum += formatAsNumber($(this).text());
-    });
-
-    return sum;
-}
-
-function calculateDiscountTotal() {
-    let sum = 0;
-
-    // computes the total charge for additional orders
-    $('.discount-item-amt').each(function () {
+    field.each(function () {
         sum += formatAsNumber($(this).text());
     });
 
@@ -893,258 +894,13 @@ function calculateDiscountTotal() {
 
 function calculateTotal() {
     return calculatePackageTotal() +
-        calculateAdditionalItemTotal() +
-        calculateExtraChargesTotal() -
-        calculateDiscountTotal();
+        calculateItemTotal($('.additional-item-amt')) +
+        calculateItemTotal($('.extra-charges-item-amt')) -
+        calculateItemTotal($('.discount-item-amt'));
 }
 
-function getFoodQuantity(variant) {
-    let garden = $('#garden-options').val();
-    let sunroom = $('#sunroom-options').val();
-    let terrace = $('#terrace-options').val();
-    let additional = ($('#additional-pax').is(":checked")) ? true : false;
-
-    let qty = 0;
-
-    switch (garden) {
-        case "gar10-4var-cov":
-            switch (variant) {
-                case "iced-tea":
-                    qty += 5; break;
-                case "rice":
-                    qty += 15; break;
-                default:
-                    qty += 4;
-            }
-            break;
-        case "gar15-4var-cov":
-            switch (variant) {
-                case "iced-tea":
-                    qty += 6; break;
-                case "rice":
-                    qty += 15; break;
-                default:
-                    qty += 5;
-            }
-            break;
-        case "gar20-4var-cov":
-            switch (variant) {
-                case "iced-tea":
-                    qty += 7; break;
-                case "rice":
-                    qty += 20; break;
-                default:
-                    qty += 6;
-            }
-            break;
-        case "gar10-6var-cov":
-            switch (variant) {
-                case "iced-tea":
-                    qty += 7; break;
-                case "rice":
-                    qty += 20; break;
-                default:
-                    qty += 6;
-            }
-            break;
-        case "gar15-6var-cov":
-            switch (variant) {
-                case "salad":
-                    qty += 4; break;
-                case "iced-tea":
-                    qty += 6; break;
-                case "rice":
-                    qty += 15; break;
-                default:
-                    qty += 5;
-            }
-            break;
-        case "gar20":
-            switch (variant) {
-                case "salad":
-                    qty += 4; break;
-                case "iced-tea":
-                    qty += 7; break;
-                case "rice":
-                    qty += 20; break;
-                default:
-                    qty += 6;
-            }
-            break;
-        case "gar30":
-            switch (variant) {
-                case "salad":
-                    qty += 6; break;
-                case "iced-tea":
-                    qty += 10; break;
-                case "rice":
-                    qty += 30; break;
-                default:
-                    qty += 8;
-            }
-            break;
-        case "gar40":
-            switch (variant) {
-                case "salad":
-                    qty += 8; break;
-                case "iced-tea":
-                    qty += 13; break;
-                case "rice":
-                    qty += 40; break;
-                default:
-                    qty += 10;
-            }
-            break;
-        case "gar50":
-            switch (variant) {
-                case "salad":
-                    qty += 10; break;
-                case "iced-tea":
-                    qty += 17; break;
-                case "rice":
-                    qty += 50; break;
-                default:
-                    qty += 12;
-            }
-            break;
-        case "gar60":
-            switch (variant) {
-                case "salad":
-                    qty += 12; break;
-                case "iced-tea":
-                    qty += 20; break;
-                case "rice":
-                    qty += 60; break;
-                default:
-                    qty += 14;
-            }
-            break;
-        case "gar70":
-            switch (variant) {
-                case "salad":
-                    qty += 14; break;
-                case "iced-tea":
-                    qty += 23; break;
-                case "rice":
-                    qty += 70; break;
-                default:
-                    qty += 16;
-            }
-            break;
-    }
-
-    if (sunroom)
-        switch (variant) {
-            case "iced-tea":
-                qty += 6; break;
-            case "rice":
-                qty += 20; break;
-            default:
-                qty += 5;
-        }
-
-    if (terrace)
-        switch (variant) {
-            case "iced-tea":
-                qty += 5; break;
-            case "rice":
-                qty += 15; break;
-            default:
-                qty += 3;
-        }
-
-    if (additional)
-        switch (variant) {
-            case "iced-tea":
-                qty += 2; break;
-            case "rice":
-                qty += 5; break;
-            default:
-                qty += 1;
-        }
-    return qty;
-}
-
-function getPackagePrice(name) {
-    switch (name) {
-        case "gar10-4var-cov":
-            return 10000;
-        case "gar15-4var-cov":
-            return 12000;
-        case "gar20-4var-cov":
-            return 14000;
-        case "gar10-6var-cov":
-            return 12000;
-        case "gar15-6var-cov":
-            return 14000;
-        case "gar20":
-            return 16000;
-        case "gar30":
-            return 20000;
-        case "gar40":
-            return 24000;
-        case "gar50":
-            return 28000;
-        case "gar60":
-            return 32000;
-        case "gar70":
-            return 36000;
-        case "sun20":
-            return 9000;
-        case "ter15":
-            return 6000;
-        case "5pax":
-            return 2000;
-    }
-}
-
-function getPackageName(name) {
-    switch (name) {
-        case "gar10-4var-cov":
-            return 'Package Gar10Cov - 4 Variants';
-        case "gar15-4var-cov":
-            return 'Package Gar15Cov - 4 Variants';
-        case "gar20-4var-cov":
-            return 'Package Gar20Cov - 4 Variants';
-        case "gar10-6var-cov":
-            return 'Package Gar10Cov - 6 Variants';
-        case "gar15-6var-cov":
-            return 'Package Gar15Cov - 6 Variants';
-        case "gar20":
-            return 'Package Gar20 - 6 Variants';
-        case "gar30":
-            return 'Package Gar30 - 6 Variants';
-        case "gar40":
-            return 'Package Gar40 - 6 Variants';
-        case "gar50":
-            return 'Package Gar50 - 6 Variants';
-        case "gar60":
-            return 'Package Gar60 - 6 Variants';
-        case "gar70":
-            return 'Package Gar70 - 6 Variants';
-        case "sun20":
-            return 'Package Sun20 - 4 Variants';
-        case "ter15":
-            return 'Package Ter15 - 4 Variants';
-    }
-}
-
-function getVariantCount() {
-    let count = 4;
-    $('.package').each(function () {
-        switch ($(this).val()) {
-            case "gar10-6var-cov":
-            case "gar15-6var-cov":
-            case "gar20":
-            case "gar30":
-            case "gar40":
-            case "gar50":
-            case "gar60":
-            case "gar70":
-                count = 6;
-        }
-    });
-    return count;
+function getPackageIndex(list, code) {
+    return list.map(e => e.packageCode).indexOf(code);
 }
 
 function getMenuItemPrice(name) {
@@ -1153,6 +909,47 @@ function getMenuItemPrice(name) {
 
 function getExtraChargePrice(name) {
     return chargeList[chargeNameList.indexOf($('#extra-charges-name').val())].price
+}
+
+function getPackageName(code) {
+    return packageList[packageList.map(e => e.packageCode).indexOf(code)].packageName;
+}
+
+function getPackagePrice(code) {
+    return packageList[packageList.map(e => e.packageCode).indexOf(code)].packagePrice;
+}
+
+function getVariantCount(code) {
+    let gardenIndex = getPackageIndex(gardenPackageList, $('#garden-options').val());
+    let sunroomIndex = getPackageIndex(sunroomPackageList, $('#sunroom-options').val());
+    let terraceIndex = getPackageIndex(terracePackageList, $('#terrace-options').val());
+
+    let count = 4;
+    if (gardenIndex != -1 && count == 4)
+        count = Math.max(count, gardenPackageList[gardenIndex].variantCount);
+    if (sunroomIndex != -1 && count == 4)
+        count = Math.max(count, sunroomPackageList[sunroomIndex].variantCount);
+    if (terraceIndex != -1 && count == 4)
+        count = Math.max(count, terracePackageList[terraceIndex].variantCount);
+    return count;
+}
+
+function getFoodQuantity(food) {
+    let gardenIndex = getPackageIndex(gardenPackageList, $('#garden-options').val());
+    let sunroomIndex = getPackageIndex(sunroomPackageList, $('#sunroom-options').val());
+    let terraceIndex = getPackageIndex(terracePackageList, $('#terrace-options').val());
+    let add5paxIndex = getPackageIndex(additionalPackageList, 'add5');
+
+    let sum = 0;
+    if (gardenIndex != -1)
+        sum += gardenPackageList[gardenIndex].foodQuantities[food]
+    if (sunroomIndex != -1)
+        sum += sunroomPackageList[sunroomIndex].foodQuantities[food]
+    if (terraceIndex != -1)
+        sum += terracePackageList[terraceIndex].foodQuantities[food]
+    if ($('#additional-pax').is(":checked"))
+        sum += additionalPackageList[add5paxIndex].foodQuantities[food]
+    return sum;
 }
 
 function getEventStatus() {
