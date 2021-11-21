@@ -136,6 +136,26 @@ var EventSchema = new mongoose.Schema({
         }]
     },
 
+    totalPrices: {
+        type: [{
+            packages: {
+                type: Number
+            },
+            food: {
+                type: Number
+            },
+            charges: {
+                type: Number
+            },
+            discounts: {
+                type: Number
+            },
+            all: {
+                type: Number
+            }
+        }]
+    },
+
     downpaymentDate: {
         type: Date
     },
