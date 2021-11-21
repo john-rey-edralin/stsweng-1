@@ -56,3 +56,8 @@ body > .d-flex.flex-row.justify-content-center {
 .with-event {
     background-color: #FCEEEE;
 }
+
+.button {
+  background-color: #2E2E2E !important;
+  color: #FFFFFF !important;
+}
