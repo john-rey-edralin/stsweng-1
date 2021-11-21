@@ -126,7 +126,12 @@
                                     <h6 class="number fw-bold fs-6">Rice</h6>
                                     <h6 class="number ms-auto fs-6">{{menuPackage.riceQuantity}}</h6>
                                 </div>
-                                
+                                {{#each menuAdditional}}
+                                <div class="d-flex">
+                                    <h6 class="number fw-bold fs-6">{{foodItem}}</h6>
+                                    <h6 class="number ms-auto fs-6">{{foodQuantity}}</h6>
+                                </div>
+                                {{/each}}
                             </div>
                         </div>
                     </div>
