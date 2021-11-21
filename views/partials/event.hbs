@@ -27,10 +27,10 @@
                     <div class="rounded-pill bg-gray p-2 me-2">
                         <h4 class="fw-bold text-white mx-2 mb-0 mt-1">
                             {{#ifEquals eventTime "Afternoon"}}
-                                <span class="event-icon material-icons-two-tone md-36 orange-icon">light_mode</span>
+                                <span class="event-icon material-icons-two-tone md-36 white-icon">light_mode</span>
                             {{/ifEquals}}
                             {{#ifEquals eventTime "Evening"}}
-                                <span class="event-icon material-icons-two-tone md-36 navy-icon">dark_mode</span>
+                                <span class="event-icon material-icons-two-tone md-36 white-icon">dark_mode</span>
                             {{/ifEquals}}
                             {{eventTime}}
                         </h4>
@@ -126,6 +126,12 @@
                                     <h6 class="number fw-bold fs-6">Rice</h6>
                                     <h6 class="number ms-auto fs-6">{{menuPackage.riceQuantity}}</h6>
                                 </div>
+                                {{#each menuAdditional}}
+                                <div class="d-flex">
+                                    <h6 class="number fw-bold fs-6">{{foodItem}}</h6>
+                                    <h6 class="number ms-auto fs-6">{{foodQuantity}}</h6>
+                                </div>
+                                {{/each}}
                             </div>
                         </div>
                     </div>
@@ -141,7 +147,7 @@
                             <div class="p-2">
                                 <div class="d-flex">
                                     <h6 class="number fw-bold fs-6">Packages</h6>
-                                    <h6 class="number ms-auto fs-6">0.00</h6>
+                                    <h6 class="number ms-auto fs-6">{{formatMoney total.packages}}</h6>
                                 </div>
                                 {{#each eventPackages}}
                                 <div class="d-flex">
@@ -158,7 +164,7 @@
                                 {{#if menuAdditional}}
                                 <div class="d-flex">
                                     <h6 class="number fw-bold fs-6">Additional Food</h6>
-                                    <h6 class="number ms-auto fs-6">0.00</h6>
+                                    <h6 class="number ms-auto fs-6">{{formatMoney total.food}}</h6>
                                 </div>
                                 {{#each menuAdditional}}
                                 <div class="d-flex">
@@ -170,7 +176,7 @@
                                 {{#if transactionCharges}}
                                 <div class="d-flex">
                                     <h6 class="number fw-bold fs-6">Additional Charges</h6>
-                                    <h6 class="number ms-auto fs-6">0.00</h6>
+                                    <h6 class="number ms-auto fs-6">{{formatMoneytotal.charges}}</h6>
                                 </div>
                                     {{#each transactionCharges}}
                                     <div class="d-flex">
@@ -183,7 +189,7 @@
                                 {{#if transactionDiscounts}}
                                 <div class="d-flex">
                                     <h6 class="number fw-bold fs-6">Discounts</h6>
-                                    <h6 class="number ms-auto fs-6">0.00</h6>
+                                    <h6 class="number ms-auto fs-6">{{formatMoneytotal.discounts}}</h6>
                                 </div>
                                     {{#each transactionDiscounts}}
                                     <div class="d-flex">

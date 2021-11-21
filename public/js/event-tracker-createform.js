@@ -625,29 +625,6 @@ function updateBreakdownTable() {
 }
 
 function initializeRealTimeValidation() {
-    $("form :input").change(function () {
-        let error = false;
-        let text = '';
-        $('.error').each(function () {
-            console.log($(this).text())
-            console.log(error)
-            if ($(this).text() != '')
-                error = true;
-        });
-
-        $('#submit').prop('disabled', error);
-        if (error)
-            text = 'There are still invalid inputs. Please resolve these before submitting the form.';
-
-        $("#submit-button").hover(function () {
-            $(this).attr('title', text);
-        });
-    });
-
-    $("button").on('click', function () {
-        console.log('ror')
-    });
-
     $('#client-mobile-number').change(function () {
         if ($(this).intlTelInput('isValidNumber') || validator.isEmpty($(this).val()))
             resetField($('#client-mobile-number'), $('#client-number-error'));
@@ -801,10 +778,6 @@ function displayError(inputField, errorField, errorText) {
 function resetField(inputField, errorField) {
     errorField.text('');
     inputField.removeClass('is-invalid');
-}
-
-function enableSubmitButton() {
-    $('#submit-button').prop('hidden', true);
 }
 
 function checkEventAvailability() {
@@ -1049,6 +1022,14 @@ function submitForm() {
             transactionCharges: transactionCharges,
             transactionDiscounts: transactionDiscounts,
 
+            totalPrices: {
+                packages: calculatePackageTotal(),
+                food: calculateItemTotal($('.additional-item-amt')),
+                charges: calculateItemTotal($('.extra-charges-item-amt')),
+                discounts: calculateItemTotal($('.discount-item-amt')),
+                all: calculateTotal()
+            },
+            
             downpaymentDate: $('#downpayment-date').val(),
             downpaymentMode: $('#downpayment-mode').val(),
             downpaymentAmount: $('#downpayment-amount').val(),
@@ -1065,7 +1046,7 @@ function submitForm() {
 
         // makes a POST request using AJAX to store the data and returns the user to the reservation page
         $.post("/event-tracker/submit", json, function (result) {
-            window.location.href = "/event-tracker";
+            window.location.href = "/event-tracker/pencilbookings";
         });
     });
 }

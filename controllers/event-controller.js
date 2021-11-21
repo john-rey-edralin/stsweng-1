@@ -20,12 +20,125 @@ const eventController = {
         });
     },
 
-    getPencilbookings: function (req, res) {
-        res.render('event-tracker-pencilbookings');
+    getPencilBookings: function (req, res) {
+        let query = {
+            status: 'booked',
+        };
+        db.findMany(Event, query, '', function (results) {
+            console.log(results);
+            let data = {
+                bookings: results,
+            };
+            res.render('event-tracker-pencilbookings', data);
+        });
+    },
+
+    getPencilBookingsFilter: function (req, res) {
+        let query = {
+            status: 'booked'
+        };
+
+        if (req.query.venue)
+            query.eventVenues = {
+                "$in": [req.query.venue]
+            };
+        if (req.query.time)
+            query.eventTime = req.query.time;
+        if (req.query.date) {
+            let date = new Date(req.query.date);
+            let tomorrow = new Date(req.query.date);
+            query.eventDate = {
+                "$gte": date,
+                "$lt": tomorrow.setDate(date.getDate() + 1)
+            };
+        }
+
+        db.findMany(Event, query, '', function (results) {
+            let data = {
+                bookings: results,
+                venue: req.query.venue,
+                time: req.query.time,
+                date: req.query.date
+            };
+            res.render('event-tracker-pencilbookings', data);
+        });
+    },
+
+    getPencilBookingsSearch: function (req, res) {
+        let query = {
+            status: 'booked'
+        };
+
+        if (req.query.name)
+            query.clientName = req.query.name;
+
+        db.findMany(Event, query, '', function (results) {
+            let data = {
+                bookings: results,
+                search: req.query.name
+            };
+            res.render('event-tracker-pencilbookings', data);
+        });
     },
 
     getReservations: function (req, res) {
-        res.render('event-tracker-reservations');
+        let query = {
+            status: 'reserved',
+        };
+        db.findMany(Event, query, '', function (results) {
+            let data = {
+                reservations: results,
+            };
+            res.render('event-tracker-reservations', data);
+        });
+    },
+
+    getReservationsFilter: function (req, res) {
+        let query = {
+            status: 'reserved'
+        };
+
+        if (req.query.venue)
+            query.eventVenues = {
+                "$in": [req.query.venue]
+            };
+        if (req.query.time)
+            query.eventTime = req.query.time;
+        if (req.query.date) {
+            let date = new Date(req.query.date);
+            let tomorrow = new Date(req.query.date);
+            query.eventDate = { 
+                "$gte": date,
+                "$lt": tomorrow.setDate(date.getDate() +1)
+            };
+        }
+
+        db.findMany(Event, query, '', function (results) {
+            let data = {
+                reservations: results,
+                venue: req.query.venue,
+                time: req.query.time,
+                date: req.query.date
+            };
+            res.render('event-tracker-reservations', data);
+        });
+    },
+
+    getReservationsSearch: function (req, res) {
+        let query = {
+            status: 'reserved'
+        };
+
+        if (req.query.name)
+            query.clientName = req.query.name;
+
+        db.findMany(Event, query, '', function (results) {
+            let data = {
+                reservations: results,
+                search: req.query.name
+            };
+            res.render('event-tracker-reservations', data);
+        });
     },
 
     getFood: function (req, res) {
