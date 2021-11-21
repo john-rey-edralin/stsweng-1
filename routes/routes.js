@@ -12,9 +12,12 @@ app.get('/', controller.getIndex);
 app.get('/event-tracker/home', eventController.getHome);
 app.get('/event-tracker/create', eventController.getCreateEvent);
 app.get('/event-tracker/pencilbookings', eventController.getPencilBookings);
-app.get('/event-tracker/reservations', eventController.getReservations);
 
-// temporary
+app.route('/event-tracker/reservations')
+    .get(eventController.getReservations)
+    .put(eventController.putReservations);
+
+// temporary might break create event, uncommnet ⬇ below
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get(
     '/event-tracker/check/event-availability',
