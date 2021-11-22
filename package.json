@@ -4,7 +4,7 @@
     "main": "index.js",
     "scripts": {
         "test": "jest tests/*",
-        "dev": "concurrently \"jest --watchAll\" \"nodemon index.js\"",
+        "dev": "nodemon index.js",
         "build": "jest && node index.js"
     },
     "repository": {
