@@ -9,6 +9,28 @@ const eventController = {
         res.render('event-tracker-home');
     },
 
+    getAllEvents: async function (req, res) {
+        const events = await Event.aggregate([
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+        res.json(events);
+    },
+
     getCreateEvent: function (req, res) {
         res.render('event-tracker-createform');
     },
@@ -35,21 +57,20 @@ const eventController = {
 
     getPencilBookingsFilter: function (req, res) {
         let query = {
-            status: 'booked'
+            status: 'booked',
         };
 
         if (req.query.venue)
             query.eventVenues = {
-                "$in": [req.query.venue]
+                $in: [req.query.venue],
             };
-        if (req.query.time)
-            query.eventTime = req.query.time;
+        if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
             let date = new Date(req.query.date);
             let tomorrow = new Date(req.query.date);
             query.eventDate = {
-                "$gte": date,
-                "$lt": tomorrow.setDate(date.getDate() + 1)
+                $gte: date,
+                $lt: tomorrow.setDate(date.getDate() + 1),
             };
         }
 
@@ -58,7 +79,7 @@ const eventController = {
                 bookings: results,
                 venue: req.query.venue,
                 time: req.query.time,
-                date: req.query.date
+                date: req.query.date,
             };
             res.render('event-tracker-pencilbookings', data);
         });
@@ -66,16 +87,15 @@ const eventController = {
 
     getPencilBookingsSearch: function (req, res) {
         let query = {
-            status: 'booked'
+            status: 'booked',
         };
 
-        if (req.query.name)
-            query.clientName = req.query.name;
+        if (req.query.name) query.clientName = req.query.name;
 
         db.findMany(Event, query, '', function (results) {
             let data = {
                 bookings: results,
-                search: req.query.name
+                search: req.query.name,
             };
             res.render('event-tracker-pencilbookings', data);
         });
@@ -95,21 +115,20 @@ const eventController = {
 
     getReservationsFilter: function (req, res) {
         let query = {
-            status: 'reserved'
+            status: 'reserved',
         };
 
         if (req.query.venue)
             query.eventVenues = {
-                "$in": [req.query.venue]
+                $in: [req.query.venue],
             };
-        if (req.query.time)
-            query.eventTime = req.query.time;
+        if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
             let date = new Date(req.query.date);
             let tomorrow = new Date(req.query.date);
-            query.eventDate = { 
-                "$gte": date,
-                "$lt": tomorrow.setDate(date.getDate() +1)
+            query.eventDate = {
+                $gte: date,
+                $lt: tomorrow.setDate(date.getDate() + 1),
             };
         }
 
@@ -118,7 +137,7 @@ const eventController = {
                 reservations: results,
                 venue: req.query.venue,
                 time: req.query.time,
-                date: req.query.date
+                date: req.query.date,
             };
             res.render('event-tracker-reservations', data);
         });
@@ -126,16 +145,15 @@ const eventController = {
 
     getReservationsSearch: function (req, res) {
         let query = {
-            status: 'reserved'
+            status: 'reserved',
         };
 
-        if (req.query.name)
-            query.clientName = req.query.name;
+        if (req.query.name) query.clientName = req.query.name;
 
         db.findMany(Event, query, '', function (results) {
             let data = {
                 reservations: results,
-                search: req.query.name
+                search: req.query.name,
             };
             res.render('event-tracker-reservations', data);
         });
@@ -171,7 +189,7 @@ const eventController = {
         db.findOne(Event, query, '', function (result) {
             res.send(result);
         });
-    }
-}
+    },
+};
 
 module.exports = eventController;
