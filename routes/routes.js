@@ -16,14 +16,30 @@ app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get('/event-tracker/get/food', eventController.getFood);
 app.get('/event-tracker/get/charges', eventController.getCharges);
 app.get('/event-tracker/get/packages', eventController.getPackages);
-app.get('/event-tracker/check/event-availability', eventController.getCheckEventAvailability);
+app.get(
+    '/event-tracker/check/event-availability',
+    eventController.getCheckEventAvailability
+);
 
 app.get('/event-tracker/pencilbookings', eventController.getPencilBookings);
-app.get('/event-tracker/pencilbookings/search', eventController.getPencilBookingsSearch);
-app.get('/event-tracker/pencilbookings/filter', eventController.getPencilBookingsFilter);
+app.get(
+    '/event-tracker/pencilbookings/search',
+    eventController.getPencilBookingsSearch
+);
+app.get(
+    '/event-tracker/pencilbookings/filter',
+    eventController.getPencilBookingsFilter
+);
 
 app.get('/event-tracker/reservations', eventController.getReservations);
-app.get('/event-tracker/reservations/search', eventController.getReservationsSearch);
-app.get('/event-tracker/reservations/filter', eventController.getReservationsFilter);
+app.get(
+    '/event-tracker/reservations/search',
+    eventController.getReservationsSearch
+);
+app.get(
+    '/event-tracker/reservations/filter',
+    eventController.getReservationsFilter
+);
 
+app.get('/event-tracker/events/', eventController.getAllEvents);
 module.exports = app;
