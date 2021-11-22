@@ -41,8 +41,7 @@ const eventController = {
             eventDate: { $gte: new Date() },
         });
 
-        // res.render('event-tracker-reservations', reservations);
-        res.json(reservations);
+        res.render('event-tracker-reservations', reservations);
     },
 
     putReservations: async function (req, res) {
