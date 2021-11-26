@@ -17,7 +17,8 @@ app.route('/event-tracker/reservations')
     .get(eventController.getReservations)
     .put(eventController.putReservations);
 
-// temporary might break create event, uncommnet ⬇ below
+app.get('/event-tracker/cancelled-events', eventController.getCancelledEvents);
+
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get(
     '/event-tracker/check/event-availability',

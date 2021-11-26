@@ -35,6 +35,33 @@ const eventController = {
         });
     },
 
+    getFood: function (req, res) {
+        let projection = 'name price';
+        db.findMany(Food, {}, projection, function (result) {
+            res.send(result);
+        });
+    },
+
+    getCharges: function (req, res) {
+        let projection = 'name price';
+        db.findMany(Charge, {}, projection, function (result) {
+            res.send(result);
+        });
+    },
+
+    getCheckEventAvailability: function (req, res) {
+        let query = {
+            eventDate: req.query.eventDate,
+            eventTime: req.query.eventTime,
+            eventVenues: { $in: req.query.eventVenues },
+        };
+
+        db.findOne(Event, query, '', function (result) {
+            res.send(result);
+        });
+    },
+
+    //#region me and lorene
     getReservations: async function (req, res) {
         const reservations = await Event.find({
             status: 'reserved',
@@ -64,31 +91,11 @@ const eventController = {
         res.json(event);
     },
 
-    getFood: function (req, res) {
-        let projection = 'name price';
-        db.findMany(Food, {}, projection, function (result) {
-            res.send(result);
-        });
+    getCancelledEvents: async function (req, res) {
+        const cancelledEvents = await Event.find({ status: 'cancelled' });
+        res.json(cancelledEvents);
     },
-
-    getCharges: function (req, res) {
-        let projection = 'name price';
-        db.findMany(Charge, {}, projection, function (result) {
-            res.send(result);
-        });
-    },
-
-    getCheckEventAvailability: function (req, res) {
-        let query = {
-            eventDate: req.query.eventDate,
-            eventTime: req.query.eventTime,
-            eventVenues: { $in: req.query.eventVenues },
-        };
-
-        db.findOne(Event, query, '', function (result) {
-            res.send(result);
-        });
-    },
+    //#endregion
 };
 
 module.exports = eventController;
