@@ -9,7 +9,7 @@ branches:
 addons:
   chrome: stable
 before_install:
-  - google-chrome-stable --no-sandbox --no-default-browser-check --no-first-run --disable-default-apps
+  - google-chrome-stable --no-default-browser-check --no-first-run --disable-default-apps
 
 before_script:
   - wget -N https://chromedriver.storage.googleapis.com/80.0.3987.106/chromedriver_linux64.zip -P ~/
