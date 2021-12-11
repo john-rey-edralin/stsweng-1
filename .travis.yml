@@ -1,3 +1,13 @@
 language: node_js
+
 node_js:
   - node
+
+install:
+  - pip install robotframework
+  - pip install --upgrade robotframework-seleniumlibrary
+
+# safelist
+branches:
+  only:
+  - develop
