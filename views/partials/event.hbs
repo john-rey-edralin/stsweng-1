@@ -1,6 +1,6 @@
 {{!-- LIST --}}
 <div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4" data-bs-toggle="modal"
-    data-bs-target="#modal-{{id}}">
+    data-bs-target="#modal-{{_id}}">
     <h1 class="mb-0 mt-1">
         {{#ifEquals eventTime "Afternoon"}}
         <span class="event-icon material-icons-two-tone md-36 orange-icon">light_mode</span>
@@ -15,7 +15,7 @@
 <br>
 
 {{!-- VIEW DETAILS MODAL --}}
-<div class="modal fade" id="modal-{{id}}" tabindex="-1">
+<div class="modal fade" id="modal-{{_id}}" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -128,7 +128,7 @@
                                 </div>
                                 {{#each menuAdditional}}
                                 <div class="d-flex">
-                                    <h6 class="number fw-bold fs-6">{{foodItem}}</h6>
+                                    <h6 class="number fw-bold fs-6">{{foodList[@index].name}}</h6>
                                     <h6 class="number ms-auto fs-6">{{foodQuantity}}</h6>
                                 </div>
                                 {{/each}}
@@ -149,10 +149,10 @@
                                     <h6 class="number fw-bold fs-6">Packages</h6>
                                     <h6 class="number ms-auto fs-6">{{formatMoney total.packages}}</h6>
                                 </div>
-                                {{#each eventPackages}}
+                                {{#each packageList}}
                                 <div class="d-flex">
-                                        <h6 class="number fw-bold ms-3 fs-6">{{this}}</h6>
-                                        <h6 class="number ms-auto fs-6">0.00</h6>
+                                        <h6 class="number fw-bold ms-3 fs-6">{{packageName}}</h6>
+                                        <h6 class="number ms-auto fs-6">{{formatMoney packagePrice}}</h6>
                                 </div>
                                 {{/each}}
                                 {{#ifEquals packageAdditionalPax true}}
@@ -168,8 +168,8 @@
                                 </div>
                                 {{#each menuAdditional}}
                                 <div class="d-flex">
-                                    <h6 class="number fw-bold ms-3 fs-6">{{foodItem}} (x{{foodQuantity}})</h6>
-                                    <h6 class="number ms-auto fs-6">0.00</h6>
+                                    <h6 class="number fw-bold ms-3 fs-6">{{foodList[@index].name}} (x{{foodQuantity}})</h6>
+                                    <h6 class="number ms-auto fs-6">{{formatMoney foodCost}}</h6>
                                 </div>
                                 {{/each}}
                                 {{/if}}

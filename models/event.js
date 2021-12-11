@@ -110,6 +110,9 @@ var EventSchema = new mongoose.Schema({
                 foodQuantity: {
                     type: Number,
                 },
+                foodCost: {
+                    type: Number
+                }
             },
         ],
     },

@@ -40,6 +40,4 @@ app.get(
     '/event-tracker/reservations/filter',
     eventController.getReservationsFilter
 );
-
-app.get('/event-tracker/events/', eventController.getAllEvents);
 module.exports = app;

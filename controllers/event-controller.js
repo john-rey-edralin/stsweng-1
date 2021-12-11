@@ -42,17 +42,32 @@ const eventController = {
         });
     },
 
-    getPencilBookings: function (req, res) {
-        let query = {
-            status: 'booked',
+    getPencilBookings: async function (req, res) {
+        const bookings = await Event.aggregate([
+            { $match: { status: 'booked' } },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        let data = {
+            bookings: bookings,
         };
-        db.findMany(Event, query, '', function (results) {
-            console.log(results);
-            let data = {
-                bookings: results,
-            };
-            res.render('event-tracker-pencilbookings', data);
-        });
+
+        res.render('event-tracker-pencilbookings', data);
     },
 
     getPencilBookingsFilter: function (req, res) {
@@ -101,16 +116,32 @@ const eventController = {
         });
     },
 
-    getReservations: function (req, res) {
-        let query = {
-            status: 'reserved',
+    getReservations: async function (req, res) {
+        const reservations = await Event.aggregate([
+            { $match: { status: 'reserved' } },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+        console.log(reservations)
+        let data = {
+            reservations: reservations,
         };
-        db.findMany(Event, query, '', function (results) {
-            let data = {
-                reservations: results,
-            };
-            res.render('event-tracker-reservations', data);
-        });
+        
+        res.render('event-tracker-reservations', data);
     },
 
     getReservationsFilter: function (req, res) {

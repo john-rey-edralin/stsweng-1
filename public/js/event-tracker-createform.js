@@ -868,6 +868,10 @@ function getExtraChargePrice(name) {
     return chargeList[chargeNameList.indexOf($('#extra-charges-name').val())].price
 }
 
+function getPackageID(code) {
+    return packageList[packageList.map(e => e.packageCode).indexOf(code)]._id;
+}
+
 function getPackageName(code) {
     return packageList[packageList.map(e => e.packageCode).indexOf(code)].packageName;
 }
@@ -930,7 +934,7 @@ function submitForm() {
             if ($(this).is(':checked')) {
                 eventVenues.push($(this).val());
                 if ($(this).parent().siblings('select').val())
-                    eventPackages.push(getPackageName($(this).parent().siblings('select').val()));
+                    eventPackages.push(getPackageID($(this).parent().siblings('select').val()));
             }
         });
 
@@ -939,7 +943,8 @@ function submitForm() {
         $('.additional-item').each(function () {
             menuAdditional.push({
                 foodItem: $(this).children('.additional-item-name').text(),
-                foodQuantity: $(this).children('.additional-item-quantity').text()
+                foodQuantity: $(this).children('.additional-item-quantity').text(),
+                foodCost: formatAsDecimal(parseFloat($(this).children('.additional-item-quantity').text()) * getMenuItemPrice($(this).children('.additional-item-name').text()))
             });
         });
 
@@ -1034,7 +1039,7 @@ function submitForm() {
                 discounts: calculateItemTotal($('.discount-item-amt')),
                 all: calculateTotal()
             },
-            
+
             downpaymentDate: $('#downpayment-date').val(),
             downpaymentMode: $('#downpayment-mode').val(),
             downpaymentAmount: $('#downpayment-amount').val(),
@@ -1055,3 +1060,4 @@ function submitForm() {
         });
     });
 }
+
