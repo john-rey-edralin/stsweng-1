@@ -6,6 +6,7 @@ node_js:
 install:
   - pip install robotframework
   - pip install --upgrade robotframework-seleniumlibrary
+  - pip install webdrivermanager
 
 cache: npm
 
