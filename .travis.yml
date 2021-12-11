@@ -14,11 +14,7 @@ branches:
   - develop
 
 addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
+  chrome: stable
 
 install:
   - pip install robotframework
