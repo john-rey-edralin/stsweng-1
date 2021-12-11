@@ -12,11 +12,9 @@ env:
   - HOSTNAME = localhost
   - PORT = 3000
   - DB_URL = mongodb+srv://admin:admin@cluster0.mvdgu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-before_install:
+before_script:
   - node index.js
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-
-before_script:
   - wget -N https://chromedriver.storage.googleapis.com/80.0.3987.106/chromedriver_linux64.zip -P ~/
   - unzip ~/chromedriver_linux64.zip -d ~/
   - rm ~/chromedriver_linux64.zip
