@@ -3,9 +3,14 @@ language: node_js
 node_js:
   - node
 
+before_install:
+  - npm i -g npm@version-number
+
 install:
   - pip install robotframework
   - pip install --upgrade robotframework-seleniumlibrary
+
+cache: npm
 
 # safelist
 branches:
