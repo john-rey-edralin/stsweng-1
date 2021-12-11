@@ -6,12 +6,11 @@ cache:
   directories: node_modules
 branches:
   only: develop
+env:
+  global:
+    - MOZ_HEADLESS=1
 addons:
   firefox: latest
-env:
-  - HOSTNAME = localhost
-  - PORT = 3000
-  - DB_URL = mongodb+srv://admin:admin@cluster0.mvdgu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 before-install:
   - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz -P ~/
   - tar -xzf ~/geckodriver-v0.26.0-linux64.tar.gz -C ~/
