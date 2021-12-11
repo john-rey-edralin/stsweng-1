@@ -7,7 +7,7 @@ Library         SeleniumLibrary
 
 *** Variables ***
 ${SERVER}               localhost:3000
-${BROWSER}              chrome
+${BROWSER}              firefox
 ${DELAY}                0
 ${VALID USER}           admin
 ${LOCKED OUT USER}      admin
