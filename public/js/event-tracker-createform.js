@@ -241,8 +241,10 @@ function initializeTransactionFields() {
 }
 
 function initializePaymentFields() {
-    setDefaultDate('downpayment-date');
-    setDefaultDate('final-payment-date');
+    //setDefaultDate('downpayment-date');
+    //setDefaultDate('final-payment-date');
+    $('#downpayment-date').val("");
+    $('#final-payment-date').val("");
     var downp = 0;
     var finalp = 0;
     $('.payment-checkbox').on('change', function () {
@@ -312,6 +314,7 @@ function initializePaymentFields() {
                 resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
                 $('#downpayment-mode').val("");
                 $('#downpayment-amount').val("");
+                $('#downpayment-date').val("");
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
             var amt2 = 0;
@@ -328,6 +331,7 @@ function initializePaymentFields() {
                 resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
                 $('#final-payment-mode').val("");
                 $('#final-payment-amount').val("");
+                $('#final-payment-date').val("");
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }  
             $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
