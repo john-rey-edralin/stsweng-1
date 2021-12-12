@@ -20,3 +20,5 @@ before-install:
 install:
   - pip install robotframework
   - pip install --upgrade robotframework-seleniumlibrary
+before-script:
+  - node index.js
