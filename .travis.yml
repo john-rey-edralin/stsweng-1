@@ -20,7 +20,5 @@ before-install:
 install:
  - pip install robotframework
  - pip install --upgrade robotframework-seleniumlibrary
-before-script:
- - npm install dotenv
- - node index.js
+after-script:
  - robot tests
