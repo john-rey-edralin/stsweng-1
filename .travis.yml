@@ -26,3 +26,4 @@ install:
 before-script:
   - npm install dotenv
   - node index.js
+  - robot tests
