@@ -5,12 +5,21 @@ const Charge = require('../models/charge.js');
 const Package = require('../models/package.js');
 
 const eventController = {
-    getHome: function (req, res) {
-        res.render('event-tracker-home');
-    },
+    getHome: async function (req, res) {
+        let date = new Date();
+        let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
 
-    getAllEvents: async function (req, res) {
         const events = await Event.aggregate([
+            {
+                $match: {
+                    status: 'reserved',
+                    eventDate: {
+                        $gte: today,
+                        $lt: tomorrow
+                    }
+                }
+            },
             {
                 $lookup: {
                     from: 'packages',
@@ -28,7 +37,12 @@ const eventController = {
                 },
             },
         ]);
-        res.json(events);
+
+        let data = {
+            events: events
+        };
+
+        res.render('event-tracker-home', data);
     },
 
     getCreateEvent: function (req, res) {
@@ -44,7 +58,11 @@ const eventController = {
 
     getPencilBookings: async function (req, res) {
         const bookings = await Event.aggregate([
-            { $match: { status: 'booked' } },
+            {
+                $match: {
+                    status: 'booked'
+                }
+            },
             {
                 $lookup: {
                     from: 'packages',
@@ -70,7 +88,7 @@ const eventController = {
         res.render('event-tracker-pencilbookings', data);
     },
 
-    getPencilBookingsFilter: function (req, res) {
+    getPencilBookingsFilter: async function (req, res) {
         let query = {
             status: 'booked',
         };
@@ -81,39 +99,82 @@ const eventController = {
             };
         if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
-            let date = new Date(req.query.date);
-            let tomorrow = new Date(req.query.date);
+            let date = new Date();
+            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
             query.eventDate = {
-                $gte: date,
-                $lt: tomorrow.setDate(date.getDate() + 1),
+                $gte: today,
+                $lt: tomorrow,
             };
         }
 
-        db.findMany(Event, query, '', function (results) {
-            let data = {
-                bookings: results,
-                venue: req.query.venue,
-                time: req.query.time,
-                date: req.query.date,
-            };
-            res.render('event-tracker-pencilbookings', data);
-        });
+        const bookings = await Event.aggregate([
+            {
+                $match: query
+            },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        let data = {
+            bookings: bookings,
+            venue: req.query.venue,
+            time: req.query.time,
+            date: req.query.date,
+        };
+
+        res.render('event-tracker-pencilbookings', data);
     },
 
-    getPencilBookingsSearch: function (req, res) {
+    getPencilBookingsSearch: async function (req, res) {
         let query = {
             status: 'booked',
         };
 
         if (req.query.name) query.clientName = req.query.name;
 
-        db.findMany(Event, query, '', function (results) {
-            let data = {
-                bookings: results,
-                search: req.query.name,
-            };
-            res.render('event-tracker-pencilbookings', data);
-        });
+        const bookings = await Event.aggregate([
+            {
+                $match: query
+            },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        let data = {
+            bookings: bookings,
+            search: req.query.name,
+        };
+
+        res.render('event-tracker-pencilbookings', data);
     },
 
     getReservations: async function (req, res) {
@@ -140,11 +201,11 @@ const eventController = {
         let data = {
             reservations: reservations,
         };
-        
+
         res.render('event-tracker-reservations', data);
     },
 
-    getReservationsFilter: function (req, res) {
+    getReservationsFilter: async function (req, res) {
         let query = {
             status: 'reserved',
         };
@@ -155,39 +216,82 @@ const eventController = {
             };
         if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
-            let date = new Date(req.query.date);
-            let tomorrow = new Date(req.query.date);
+            let date = new Date();
+            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
             query.eventDate = {
-                $gte: date,
-                $lt: tomorrow.setDate(date.getDate() + 1),
+                $gte: today,
+                $lt: tomorrow,
             };
         }
 
-        db.findMany(Event, query, '', function (results) {
-            let data = {
-                reservations: results,
-                venue: req.query.venue,
-                time: req.query.time,
-                date: req.query.date,
-            };
-            res.render('event-tracker-reservations', data);
-        });
+        const reservations = await Event.aggregate([
+            {
+                $match: query
+            },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        let data = {
+            reservations: reservations,
+            venue: req.query.venue,
+            time: req.query.time,
+            date: req.query.date,
+        };
+
+        res.render('event-tracker-reservations', data);
     },
 
-    getReservationsSearch: function (req, res) {
+    getReservationsSearch: async function (req, res) {
         let query = {
             status: 'reserved',
         };
 
         if (req.query.name) query.clientName = req.query.name;
 
-        db.findMany(Event, query, '', function (results) {
-            let data = {
-                reservations: results,
-                search: req.query.name,
-            };
-            res.render('event-tracker-reservations', data);
-        });
+        const reservations = await Event.aggregate([
+            {
+                $match: query
+            },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        let data = {
+            reservations: reservations,
+            search: req.query.name,
+        };
+        
+        res.render('event-tracker-reservations', data);
     },
 
     getFood: function (req, res) {
