@@ -605,7 +605,7 @@ function updateBreakdownTable() {
                 '<h6 class="col-5 mb-0 mt-1 text-start number">' + 'Additional 5 Pax' + '</h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-end number">' + formatAsDecimal(getPackagePrice('5pax')) + '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-end number">' + formatAsDecimal(2000) + '</h6>' +
                 '</div>' +
                 '</div>'
             );
@@ -1222,7 +1222,7 @@ function getPackageIndex(list, code) {
 }
 
 function getMenuItemPrice(name) {
-    return foodList[foodNameList.indexOf($('#additional-name').val())].price
+    return foodList[foodNameList.indexOf(name)].price
 }
 
 function getExtraChargePrice(name) {
@@ -1355,7 +1355,6 @@ function submitForm() {
         if (fishName)
             fishQuantity = $('#fish-quantity').val();
 
-
         // stores all information as an object
         let data = {
             status: getEventStatus(),
@@ -1410,6 +1409,8 @@ function submitForm() {
             finalPaymentAmount: $('#final-payment-amount').val(),
         };
 
+        console.log(data)
+
         // converts the JSON object into a String
         let json = {
             data: JSON.stringify(data)
@@ -1417,6 +1418,7 @@ function submitForm() {
 
         // makes a POST request using AJAX to store the data and returns the user to the reservation page
         $.post("/event-tracker/submit", json, function (result) {
+            console.log(result)
             window.location.href = "/event-tracker/pencilbookings";
         });
     });
