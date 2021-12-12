@@ -1,31 +1,26 @@
-jobs:
- inlcude:
-  - stage: "Tests"
-    name: "Unit Tests"
-  - name: "Robot Tests"
-    dist: xenial
-    language: node_js
-    node_js:
-    - node
-    cache: npm
-    branches:
-     only: develop
-    env:
-    global:
-     - MOZ_HEADLESS=1
-    addons:
-     firefox: latest
-    before-install:
-    - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz -P ~/
-    - tar -xzf ~/geckodriver-v0.26.0-linux64.tar.gz -C ~/
-    - rm ~/geckodriver-v0.26.0-linux64.tar.gz
-    - sudo mv -f ~/geckodriver /usr/local/share
-    - sudo chmod +x /usr/local/share/geckodriver
-    - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
-    install:
-    - pip install robotframework
-    - pip install --upgrade robotframework-seleniumlibrary
-    after-script:
-    - npm install
-    - node index.js &
-    - robot tests
+dist: xenial
+language: node_js
+node_js:
+ - node
+cache: npm
+branches:
+ only: develop
+env:
+ global:
+ - MOZ_HEADLESS=1
+addons:
+ firefox: latest
+before-install:
+ - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz -P ~/
+ - tar -xzf ~/geckodriver-v0.26.0-linux64.tar.gz -C ~/
+ - rm ~/geckodriver-v0.26.0-linux64.tar.gz
+ - sudo mv -f ~/geckodriver /usr/local/share
+ - sudo chmod +x /usr/local/share/geckodriver
+ - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
+install:
+ - pip install robotframework
+ - pip install --upgrade robotframework-seleniumlibrary
+after-script:
+ - npm install
+ - node index.js &
+ - robot tests
