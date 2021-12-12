@@ -1,29 +1,29 @@
 dist: xenial
 language: node_js
 node_js:
-  - node
+ - node
 cache: npm
 branches:
-  only: develop
+ only: develop
 env:
-  - HOSTNAME = localhost
-  - PORT = 3000
-  - DB_URL = mongodb+srv://admin:admin@cluster0.mvdgu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-  global:
-    - MOZ_HEADLESS=1
+ - HOSTNAME = localhost
+ - PORT = 3000
+ - DB_URL = mongodb+srv://admin:admin@cluster0.mvdgu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+ global:
+ - MOZ_HEADLESS=1
 addons:
-  firefox: latest
+ firefox: latest
 before-install:
-  - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz -P ~/
-  - tar -xzf ~/geckodriver-v0.26.0-linux64.tar.gz -C ~/
-  - rm ~/geckodriver-v0.26.0-linux64.tar.gz
-  - sudo mv -f ~/geckodriver /usr/local/share
-  - sudo chmod +x /usr/local/share/geckodriver
-  - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
+ - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz -P ~/
+ - tar -xzf ~/geckodriver-v0.26.0-linux64.tar.gz -C ~/
+ - rm ~/geckodriver-v0.26.0-linux64.tar.gz
+ - sudo mv -f ~/geckodriver /usr/local/share
+ - sudo chmod +x /usr/local/share/geckodriver
+ - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
 install:
-  - pip install robotframework
-  - pip install --upgrade robotframework-seleniumlibrary
+ - pip install robotframework
+ - pip install --upgrade robotframework-seleniumlibrary
 before-script:
-  - npm install dotenv
-  - node index.js
-  - robot tests
+ - npm install dotenv
+ - node index.js
+ - robot tests
