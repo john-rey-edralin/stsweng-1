@@ -22,4 +22,5 @@ install:
  - pip install --upgrade robotframework-seleniumlibrary
 after-script:
  - npm install
+ - node index.js &
  - robot tests
