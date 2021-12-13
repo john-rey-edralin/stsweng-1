@@ -57,6 +57,8 @@
                 </div>
             </div>
 
+            <p id="event-id" hidden>{{event._id}}</p>
+
             <br>
             <form>
                 {{!-- EVENT DETAILS --}}
@@ -76,14 +78,14 @@
                         <div class="col px-4">
                             <div class="form-group my-3">
                                 <label for="client-name">Client Name</label>
-                                <input type="text" class="form-control" id="client-name" name="client-name" required>
+                                <input type="text" class="form-control" id="client-name" name="client-name" value="{{event.clientName}}" required>
                                 <div id="client-name-help" class="form-text">Can be the client's given name or Facebook
                                     name.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="client-mobile-number">Client Mobile Number</label>
                                 <input type="tel" class="form-control" id="client-mobile-number"
-                                    name="client-mobile-number" required>
+                                    name="client-mobile-number" value="{{event.clientMobileNumber}}" required>
                                 <div id="client-mobile-number-help" class="form-text">Country code can be changed if
                                     needed.
                                 </div>
@@ -91,14 +93,14 @@
                             <div class="form-group my-3">
                                 <label for="representative-name">Representative Name</label>
                                 <input type="text" class="form-control" id="representative-name"
-                                    name="representative-name">
+                                    name="representative-name" value="{{event.repName}}">
                                 <div id="representative-name-help" class="form-text">Authorized representative of the
                                     client.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="representative-contact-number">Representative Mobile Number</label>
                                 <input type="tel" class="form-control" id="representative-mobile-number"
-                                    name="representative-mobile-number">
+                                    name="representative-mobile-number" value="{{event.repMobileNumber}}">
                                 <div id="representative-mobile-number-help" class="form-text">Country code can be
                                     changed if needed.
                                 </div>
@@ -109,20 +111,20 @@
                         <div class="col px-4">
                             <div class="form-group my-3">
                                 <label for="event-type">Type of Event</label>
-                                <input type="text" class="form-control autocomplete" id="event-type" name="event-type"
+                                <input type="text" class="form-control autocomplete" id="event-type" name="event-type" value="{{event.eventType}}"
                                     required>
                                 <div id="event-type-help" class="form-text">Start typing for suggestions or input a new
                                     type.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-date">Date of Event</label>
-                                <input type="date" class="form-control w-75" id="event-date" name="event-date" required>
+                                <input type="date" class="form-control w-75" id="event-date" name="event-date" value="{{event.eventDate}}" required>
                                 <div id="event-date-help" class="form-text">Choose a date from the date picker.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-time">Time of Event</label>
                                 <select class="form-control form-select" id="event-time" name="event-time" required>
-                                    <option value="" selected value>Select an option...</option>
+                                    <option value="">Select an option...</option>
                                     <option value="Afternoon">Afternoon (11:00 AM - 02:00 PM)</option>
                                     <option value="Evening">Evening (04:00 PM - 07:00 PM)</option>
                                 </select>
@@ -131,7 +133,7 @@
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-pax">Number of Pax</label>
-                                <input type="number" class="form-control w-50" id="event-pax" name="event-pax" required>
+                                <input type="number" class="form-control w-50" id="event-pax" name="event-pax" value="{{event.numOfPax}}" required>
                                 <div id="event-pax-help" class="form-text">Input by typing or using the spinner.
                                 </div>
                             </div>
@@ -193,7 +195,7 @@
 
                             <div class="form-group my-3">
                                 <label for="event-notes">Notes</label>
-                                <textarea class="form-control" id="event-notes" name="event-notes" rows="4"></textarea>
+                                <textarea class="form-control" id="event-notes" name="event-notes" rows="4" value="{{event.eventNotes}}"></textarea>
                                 <div id="event-notes-help" name class="form-text">Additional details about the event, if
                                     any.
                                     The box can be resized by dragging the lower-right corner.
@@ -281,7 +283,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="salad-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="salad-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="salad-quantity" value="{{event.menuPackage.saladQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -305,7 +307,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="pasta-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="pasta-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="pasta-quantity" value="{{event.menuPackage.pastaQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -329,7 +331,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="beef-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="beef-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="beef-quantity" value="{{event.menuPackage.beefQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -348,7 +350,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="pork-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="pork-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="pork-quantity" value="{{event.menuPackage.porkQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -372,7 +374,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="chicken-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="chicken-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="chicken-quantity" value="{{event.menuPackage.chickenQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -391,7 +393,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="fish-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="fish-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="fish-quantity" value="{{event.menuPackage.fishQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -406,7 +408,7 @@
                                     <label for="icedtea-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
                                         <input type="number" class="form-control w-75" id="icedtea-quantity"
-                                            name="icedtea-quantity" disabled>
+                                            name="icedtea-quantity" value="{{event.menuPackage.icedTeaQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -417,7 +419,7 @@
                                     <label for="rice-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
                                         <input type="number" class="form-control w-75" id="rice-quantity"
-                                            name="rice-quantity" disabled>
+                                            name="rice-quantity" value="{{event.menuPackage.riceQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
