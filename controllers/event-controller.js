@@ -3,6 +3,7 @@ const Food = require('../models/food.js');
 const Event = require('../models/event.js');
 const Charge = require('../models/charge.js');
 const Package = require('../models/package.js');
+const mongoose = require('mongoose');
 
 const eventController = {
     getHome: async function (req, res) {
@@ -294,6 +295,28 @@ const eventController = {
         res.render('event-tracker-reservations', data);
     },
 
+    getEditReservation: function (req, res) {
+        db.findOne(Event, { _id: req.params.id }, '', function (result) {
+            let data = {
+                event : result
+            }
+            res.render('event-tracker-editform', data);
+        });
+    },
+
+    putReservations: async function (req, res) {
+        const { id, updateInfo } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Event.findOneAndUpdate(
+            { _id, status: 'reserved' },
+            updateInfo,
+            { returnDocument: 'after' }
+        );
+
+        res.send(doc);
+    },
+
     getFood: function (req, res) {
         let projection = 'name price';
         db.findMany(Food, {}, projection, function (result) {
@@ -325,6 +348,37 @@ const eventController = {
             res.send(result);
         });
     },
+
+    getEvent: async function (req, res) {
+        console.log(req.query.id)
+        const event = await Event.aggregate([
+            {
+                $match: { 
+                    _id: mongoose.Types.ObjectId(req.query.id) 
+                }
+            },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        console.log(event)
+    
+        res.send(event);
+    }
 };
 
 module.exports = eventController;
