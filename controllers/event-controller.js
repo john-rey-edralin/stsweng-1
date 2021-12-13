@@ -2,10 +2,11 @@ const db = require('../models/db.js');
 const Food = require('../models/food.js');
 const Event = require('../models/event.js');
 const Charge = require('../models/charge.js');
-const Package = require('../models/package.js');
+const mongoose = require('mongoose');
 
 const eventController = {
     getHome: function (req, res) {
+        let event = {};
         res.render('event-tracker-home');
     },
 
@@ -139,6 +140,28 @@ const eventController = {
             };
             res.render('event-tracker-reservations', data);
         });
+
+        res.render('event-tracker-reservations', reservations);
+    },
+
+    putReservations: async function (req, res) {
+        const { id, updateInfo } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Event.findOneAndUpdate(
+            { _id, status: 'reserved' },
+            updateInfo,
+            { returnDocument: 'after' }
+        );
+
+        res.json(doc);
+    },
+
+    getEvent: async function (req, res) {
+        const { id } = req.query;
+        const event = await Event.findOne({ _id: mongoose.Types.ObjectId(id) });
+
+        res.json(event);
     },
 
     getFood: function (req, res) {
@@ -171,7 +194,7 @@ const eventController = {
         db.findOne(Event, query, '', function (result) {
             res.send(result);
         });
-    }
-}
+    },
+};
 
 module.exports = eventController;

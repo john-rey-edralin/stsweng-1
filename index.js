@@ -14,6 +14,8 @@ const app = express();
 
 //parse incoming requests with urlencoded payloads
 app.use(express.urlencoded({ extended: false }));
+//parse incoming json payload
+app.use(express.json());
 //set the file path containing the static assets
 app.use(express.static(path.join(__dirname, 'public')));
 //set the session middleware
