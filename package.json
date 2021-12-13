@@ -4,7 +4,7 @@
     "main": "index.js",
     "scripts": {
         "test": "jest tests/*",
-        "dev": "concurrently \"jest --watchAll\" \"nodemon index.js\"",
+        "dev": "nodemon index.js",
         "build": "jest && node index.js"
     },
     "repository": {
@@ -20,13 +20,15 @@
     "dependencies": {
         "bcrypt": "^5.0.1",
         "concurrently": "^6.4.0",
+        "chromedriver": "^96.0.0",
         "connect-mongo": "^4.6.0",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
         "express-session": "^1.17.2",
         "hbs": "^4.1.2",
         "mongoose": "^6.0.12",
-        "nodemon": "^2.0.15"
+        "nodemon": "^2.0.15",
+        "robotremote": "^1.4.0"
     },
     "devDependencies": {
         "jest": "^27.3.1"

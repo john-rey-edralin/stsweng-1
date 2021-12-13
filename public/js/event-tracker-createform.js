@@ -31,6 +31,7 @@ let discountsTableHeader =
     '<div class="col"></div>';
 
 $(document).ready(function () {
+    $('#submit').attr("disabled", true);
     retrieveInfoFromDB();
 
     setRequiredFields();
@@ -40,10 +41,15 @@ $(document).ready(function () {
     initializeMenuFields();
     initializeTransactionFields();
     initializePaymentFields();
-
-    initializeRealTimeValidation();
-
+    
+    initializeRealTimeValidation(); 
+    
     submitForm();
+});
+
+window.addEventListener('beforeunload', function (e) {
+    e.preventDefault();
+    e.returnValue = '';
 });
 
 function retrieveInfoFromDB() {
@@ -106,6 +112,8 @@ function initializeTooltips() {
 }
 
 function initializeEventFields() {
+    //initialize event date
+    setDefaultDate('event-date');
     // initialize contact number fields
     let settings = { autoPlaceholder: "aggressive", preferredCountries: ["ph"], separateDialCode: true, utilsScript: "/js/utils.js" };
     $("#client-mobile-number").intlTelInput(settings);
@@ -233,23 +241,120 @@ function initializeTransactionFields() {
 }
 
 function initializePaymentFields() {
+    //setDefaultDate('downpayment-date');
+    //setDefaultDate('final-payment-date');
+    $('#downpayment-date').val("");
+    $('#final-payment-date').val("");
+    var downp = 0;
+    var finalp = 0;
     $('.payment-checkbox').on('change', function () {
         if ($(this).is(':checked')) {
+            $('#submit').attr("disabled", true);
             $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', false);
-        } else {
+            if(document.getElementById("downpayment").checked) {
+                $('#downpayment-amount').on('change', function () {
+                    if($('#downpayment-amount').val() == '')
+                        $('#downpayment-amount').val(0); 
+                    downp = parseFloat($('#downpayment-amount').val());
+                    $('#payment-amount-total').val(downp + finalp);
+                    $('#final-payment-amount').on('change', function () {
+                        finalp = parseFloat($('#final-payment-amount').val());
+                        $('#payment-amount-total').val(downp + finalp);
+                    });
+                    $('#payment-balance').val(calculateTotal() - $('#payment-amount-total').val());
+                    $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+                    $('#submit').attr("disabled", checkIfFilledEventFields());
+                });
+                
+                $('#downpayment-mode').change(function () {
+                    if ($('#downpayment-mode').val() == '')
+                        displayError($('#downpayment-mode'), $('#downpayment-mode-error'), 'Select 1 payment mode.');
+                    else
+                        resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
+                });
+                $('#submit').attr("disabled", checkIfFilledEventFields());
+            }
+            if(document.getElementById("final-payment").checked) {
+                $('#final-payment-amount').on('change', function () {
+                    if($('#final-payment-amount').val() == '')
+                        $('#final-payment-amount').val(0); 
+                    finalp = parseFloat($('#final-payment-amount').val());
+                    $('#payment-amount-total').val(downp + finalp);
+                    $('#downpayment-amount').on('change', function () {
+                        downp = parseFloat($('#downpayment-amount').val()); 
+                        $('#payment-amount-total').val(downp + finalp);
+                    });
+                    $('#payment-balance').val(calculateTotal() - $('#payment-amount-total').val());
+                    $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+                    $('#submit').attr("disabled", checkIfFilledEventFields());
+                });
+
+                $('#final-payment-mode').change(function () {
+                    if ($('#final-payment-mode').val() == '')
+                        displayError($('#final-payment-mode'), $('#final-payment-mode-error'), 'Select 1 payment mode.');
+                    else
+                        resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
+                });
+                $('#submit').attr("disabled", checkIfFilledEventFields());
+            }
+        } 
+        else {
+            var amt1 = 0;
+            if($('#payment-amount-total').val() != '')
+                amt1 = parseFloat($('#payment-amount-total').val());
+            if(!document.getElementById("downpayment").checked) {
+                //console.log("AAAAAAAAA");
+                downp = 0;
+                $('#payment-amount-total').val(amt1 - parseFloat($('#downpayment-amount').val()));
+                $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#downpayment-amount').val()));
+                $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+                
+                setDefaultDate('downpayment-date');
+                resetField($('#downpayment-date'), $('#downpayment-error'));
+                resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
+                $('#downpayment-mode').val("");
+                $('#downpayment-amount').val("");
+                $('#downpayment-date').val("");
+                $('#submit').attr("disabled", checkIfFilledEventFields());
+            }
+            var amt2 = 0;
+            if($('#payment-amount-total').val() != '')
+                amt2 = parseFloat($('#payment-amount-total').val());
+            if(!document.getElementById("final-payment").checked) {
+                //console.log("WEEEEEEEEE");
+                finalp = 0;
+                $('#payment-amount-total').val(amt2 - parseFloat($('#final-payment-amount').val()));
+                $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#final-payment-amount').val()));
+                $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+                setDefaultDate('final-payment-date');
+                resetField($('#final-payment-date'), $('#final-payment-error'));
+                resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
+                $('#final-payment-mode').val("");
+                $('#final-payment-amount').val("");
+                $('#final-payment-date').val("");
+                $('#submit').attr("disabled", checkIfFilledEventFields());
+            }  
             $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
         }
-    })
-
-    $('#downpayment-amount').on('change', function () {
-        $('#payment-balance').val(calculateTotal() - $('#downpayment-amount').val());
-        $('#final-payment-amount').attr("placeholder", calculateTotal() - $(this).val());
     });
+}
 
-    $('#final-payment-amount').on('change', function () {
-        $('#payment-amount-total').val(parseFloat($('#downpayment-amount').val()) + parseFloat($(this).val()));
-        $('#payment-balance').val((calculateTotal() - $('#payment-amount-total').val()) * -1);
-    });
+/**  
+ * Sets default date to today
+ */
+ function setDefaultDate (datefield) {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = today.getFullYear();
+    if(dd < 10)
+        dd='0'+dd;
+    if(mm < 10)
+        mm='0'+mm; 
+    today = yyyy+'-'+mm+'-'+dd;
+    
+    var field = "#" + datefield;
+    $(field).val(today);
 }
 
 /**
@@ -504,7 +609,7 @@ function updateBreakdownTable() {
                 '<h6 class="col-5 mb-0 mt-1 text-start number">' + 'Additional 5 Pax' + '</h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-end number">' + formatAsDecimal(getPackagePrice('5pax')) + '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-end number">' + formatAsDecimal(2000) + '</h6>' +
                 '</div>' +
                 '</div>'
             );
@@ -612,43 +717,44 @@ function updateBreakdownTable() {
             '<h6 class="mb-0 mt-1 text-center">Please fill out the information above.</h6>'
         );
     }
-
-    if ($('#downpayment-amount').val() != '') {
-        $('#payment-balance').val(calculateTotal() - $('#downpayment-amount').val());
-        $('#final-payment-amount').attr("placeholder", calculateTotal() - $(this).val());
-    }
-
-    if ($('#final-payment-amount').val() != '') {
-        $('#payment-amount-total').val(parseFloat($('#downpayment-amount').val()) + parseFloat($(this).val()));
-        $('#payment-balance').val((calculateTotal() - $('#payment-amount-total').val()));
-    }
+    $('#payment-balance').val("");
+    $('#payment-amount-total').val("");
+    $('#downpayment-amount').val("");
+    $('#final-payment-amount').val("");
 }
 
 function initializeRealTimeValidation() {
-    $('#client-mobile-number').change(function () {
-        if ($(this).intlTelInput('isValidNumber') || validator.isEmpty($(this).val()))
+    //Event Details
+    $('#client-name').keyup(function () {
+        var clientname = validator.trim($('#client-name').val());
+        if (validator.isEmpty(clientname))
+            displayError($('#client-name'), $('#client-name-error'), 'Client name should be filled.');
+        else if (checkStringInput(clientname))
+            displayError($('#client-name'), $('#client-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
+        else resetField($('#client-name'), $('#client-name-error'));   
+    });
+    
+    $('#client-mobile-number').keyup(function () {
+        if(validator.isEmpty($(this).val()))
+            displayError($('#client-mobile-number'), $('#client-number-error'), 'Client mobile number should be filled.'); 
+        else if ($(this).intlTelInput('isValidNumber'))
             resetField($('#client-mobile-number'), $('#client-number-error'));
         else
             displayError($('#client-mobile-number'), $('#client-number-error'), 'Invalid client mobile number.');
     });
 
-    $('#representative-mobile-number').change(function () {
-        if ($(this).intlTelInput('isValidNumber') || validator.isEmpty($(this).val()))
-            resetField($('#representative-mobile-number'), $('#rep-number-error'));
-        else
-            displayError($('#representative-mobile-number'), $('#rep-number-error'), 'Invalid representative mobile number.');
+    $('#event-type').keyup(function() {
+        var eventtype = validator.trim($(this).val());
+        if(validator.isEmpty(eventtype))
+            displayError($(this), $('#event-type-error'), 'Event type should be filled.');  
+        else resetField($(this), $('#event-type-error'));
+
     });
-
-    $('#event-date').change(function () {
-        let input = new Date($('#event-date').val());
-        input.setDate(input.getDate() + 1);
-
-        if (input < new Date())
-            displayError($('#event-date'), $('#event-date-error'), 'Event date cannot be in the past.');
-        else
-            resetField($('#event-date'), $('#event-date-error'));
+    $("#event-date").on("change", function () {
+        var eventdate = document.getElementById("event-date").value;
+        validDate(eventdate, $('#event-date-error'), "event-date");
         checkEventAvailability();
-    });
+    });    
 
     $('#event-time').change(function () {
         if ($('#event-time').val() == '')
@@ -658,7 +764,7 @@ function initializeRealTimeValidation() {
         checkEventAvailability();
     });
 
-    $('#event-pax').change(function () {
+    $('#event-pax').on("change",function () {
         if ($('#event-pax').val() < 0) {
             displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be negative.');
         } else if ($('#event-pax').val() == 0) {
@@ -668,8 +774,40 @@ function initializeRealTimeValidation() {
         }
     });
 
+    $('.venue-checkbox').change(function() {
+        var checked = $("input[type=checkbox]:checked").length;
+        if (checked <= 0)
+            displayError($('.venue-checkbox'), $('#missing-error'), 'At least 1 venue should be checked.');
+        else 
+            resetField($('.venue-checkbox'), $('#missing-error'));                      
+    });
+
     $('.package').change(function () {
+        let garden = $('#garden-options').val();
+        let sunroom = $('#sunroom-options').val();
+        let terrace = $('#terrace-options').val();
+        let package = (garden || sunroom || terrace);
+        if (package == 0) {
+            displayError($('.package'), $('#missing-error'), 'At least 1 Package should be selected.');
+            $('#submit').attr("disabled", true);
+        }          
+        else
+            resetField($('.package'), $('#missing-error'));
         checkEventAvailability();
+    });
+
+    $('#representative-name').keyup(function () {
+        var repname = validator.trim($('#representative-name').val());
+        if (checkStringInput(repname))
+            displayError($('#representative-name'), $('#rep-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
+        else resetField($('#representative-name'), $('#rep-name-error')); 
+    });
+
+    $('#representative-mobile-number').keyup(function () {
+        if ($(this).intlTelInput('isValidNumber') || validator.isEmpty($(this).val()))
+            resetField($('#representative-mobile-number'), $('#rep-number-error'));
+        else
+            displayError($('#representative-mobile-number'), $('#rep-number-error'), 'Invalid representative mobile number.');
     });
 
     $('#additional-quantity').change(function () {
@@ -681,7 +819,7 @@ function initializeRealTimeValidation() {
             resetField($('#additional-quantity'), $('#additional-items-error'));
         }
     });
-
+    //menu details
     $('#additional-price').change(function () {
         if ($('#additional-price').val() < 0) {
             displayError($('#additional-quantity'), $('#additional-items-error'), 'Price cannot be negative.');
@@ -689,7 +827,7 @@ function initializeRealTimeValidation() {
             resetField($('#additional-quantity'), $('#additional-items-error'));
         }
     });
-
+    //transactional details
     $('#extra-charges-quantity').change(function () {
         if ($('#extra-charges-quantity').val() < 0) {
             $('#extra-charges-error').text('Quantity cannot be negative.');
@@ -715,12 +853,24 @@ function initializeRealTimeValidation() {
             $('#discount-error').text('');
         }
     });
+    //payment details
+    $("#downpayment-date").on("change", function () {
+        var downpaydate = document.getElementById("downpayment-date").value;
+        validDate(downpaydate, $('#downpayment-error'), "downpayment-date");
+    }); 
+
+    $("#final-payment-date").on("change", function () {
+        var finalpaydate = document.getElementById("final-payment-date").value;
+        validDate(finalpaydate, $('#final-payment-error'), "final-payment-date");
+    }); 
 }
 
+/* validation */
 function checkIfFilledEventFields() {
-    let name = $('#client-name').val();
+    //console.log("here!");
+    let name = validator.trim($('#client-name').val());
     let cp = $('#client-mobile-number').val();
-    let type = $('#event-type').val();
+    let type = validator.trim($('#event-type').val());
     let date = $('#event-date').val();
     let time = $('#event-time').val();
     let pax = $('#event-pax').val();
@@ -728,56 +878,276 @@ function checkIfFilledEventFields() {
     let sunroom = $('#sunroom-options').val();
     let terrace = $('#terrace-options').val();
     let package = (garden || sunroom || terrace);
+ 
+    var dd = 1;
+    var mm = 1;
+    var yyyy = 2032;
+    var dateMax = getDateTime(yyyy + "-" + ("0" + mm) + "-" + ("0" +dd));
+
+    var today = new Date();
+    var td = today.getDate();
+    var tm = today.getMonth() + 1;
+    var tyyy = today.getFullYear();
+    if(td < 10)
+        td='0'+td;
+    if(tm < 10)
+        tm='0'+tm; 
+    var dateMin = getDateTime(tyyy+'-'+tm+'-'+td);
 
     if (validator.isEmpty(name)) {
+        //console.log("aaaaaaa");
         $('#missing-error').val('Client name should be filled.');
-        return false;
+        return true;
+    }
+
+    else if (checkStringInput(name)) {
+        //console.log("huhu")
+        $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
+        return true;
+    }
+
+    else if (checkStringInput($('#representative-name').val())) {
+        //console.log("rawrrawr")
+        $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
+        return true;
     }
 
     else if (validator.isEmpty(cp)) {
+        //console.log("empty cp")
         $('#missing-error').val('Client mobile number should be filled.');
-        return false;
+        return true;
     }
-
+    else if (!($('#client-mobile-number').intlTelInput('isValidNumber'))) {
+        //console.log("a ph number")
+        $('#missing-error').val('Invalid cellphone number.');
+        return true;
+    }
+    else if (!validator.isEmpty($('#representative-mobile-number').val())){
+        if (!($('#representative-mobile-number').intlTelInput('isValidNumber'))) {
+            //console.log("a rep ph number")
+            $('#missing-error').val('Invalid cellphone number.');
+            return true;
+        }    
+    }
     else if (validator.isEmpty(type)) {
         $('#missing-error').val('Event type should be filled.');
-        return false;
+        return true;
     }
 
     else if (validator.isEmpty(date)) {
-        $('#missing-error').val('Event date should be filled.');
-        return false;
+        //console.log('no event date')
+        $('#missing-error').val('Event date should be filled.'); 
+        return true;
+    }
+    else if(!validator.isEmpty(date)) {
+        var eventdate = getDateTime(date);
+        if($('#event-date').val().length > 10) {
+            $('#missing-error').val('Invalid date.');
+            return true; 
+        }
+        else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
+            //console.log('event date behind')
+            $('#missing-error').val('Date cannot be in the past.');
+            return true;
+        }
+        else if ((eventdate - dateMax >= 0) || isNaN(eventdate)) {
+            //console.log('event date later')
+            $('#missing-error').val('Date cannot be later than 2031.');
+            return true;
+        }            
     }
 
-    else if (validator.isEmpty(time)) {
+    if (validator.isEmpty(time)) {
         $('#missing-error').val('Event time should be filled.');
-        return false;
+        return true;
     }
 
     else if (validator.isEmpty(pax)) {
+        //console.log('MAAM THATS EMPTY PAX');
         $('#missing-error').val('Number of pax should be filled.');
-        return false;
-    }
-
-    else if (validator.isEmpty(package)) {
-        $('#missing-error').val('Package should be filled.');
-        return false;
-    }
-
-    else {
-        $('#missing-error').val('');
         return true;
+    }
+    else if (pax <= 0) {
+        //console.log('MAAM THATS NEGATIVE PAX');
+        $('#missing-error').val('Invalid number of pax.');
+        return true;
+    }
+    else if($("input[type=checkbox]:checked").length <= 0) {
+        $('#missing-error').val('At least 1 venue should be selected.');
+        return true;       
+    }
+    else if (package == 0) {
+        $('#missing-error').val('At least 1 package should be selected.');
+        return true;
+    }
+    if(document.getElementById("downpayment").checked) {
+        //console.log("HERE HERE");
+        if (validator.isEmpty($('#downpayment-mode').val())){
+            $('#downpayment-mode-error').val('Select 1 payment mode.');
+            //console.log("HERE HERE HERE");
+            return true;
+        }
+        else if(validator.isEmpty($('#downpayment-date').val())) {
+            $('#downpayment-error').val('Date should be filled.');
+            //console.log("HERE RAWR");
+            return true; 
+        }
+        else if(!validator.isEmpty($('#downpayment-date').val())) {
+            var dpaydate = getDateTime($('#downpayment-date').val());
+            if($('#downpayment-date').val().length > 10) {
+                $('#downpayment-error').val('Invalid date.');
+                return true; 
+            }
+            else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
+                //console.log('downpayment date behind')
+                $('#downpayment-error').val('Date cannot be in the past.');
+                return true;
+            }
+            else if ((dpaydate - dateMax >= 0) || isNaN(dpaydate)) {
+                //console.log('downpayment date later')
+                $('#downpayment-error').val('Date cannot be later than 2031.');
+                return true;
+            }            
+        }
+    }
+    if(document.getElementById("final-payment").checked) {
+        console.log("HEHEHE")
+        var totalpayment = parseFloat($('#downpayment-amount').val()) + parseFloat($('#final-payment-amount').val());
+        if(validator.isEmpty($('#final-payment-mode').val())){
+            //console.log("HEHE HEHE")
+            $('#final-payment-mode-error').val('Select 1 payment mode.');
+            return true;
+        }
+        else if(validator.isEmpty($('#final-payment-date').val())) {
+            //console.log("EHE")
+            $('#final-payment-error').val('Date should be filled.');
+            return true; 
+        }
+        else if(!validator.isEmpty($('#final-payment-date').val())) {
+            var fpaydate = getDateTime($('#final-payment-date').val());
+            if($('#final-payment-date').val().length > 10) {
+                $('#final-payment-error').val('Invalid date.');
+                return true; 
+            }
+            else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
+                //console.log('final payment date behind')
+                $('#final-payment-error').val('Date cannot be in the past.');
+                return true;
+            }
+            else if ((fpaydate - dateMax >= 0) || isNaN(fpaydate)) {
+                //console.log('final payment date later')
+                $('#final-payment-error').val('Date cannot be later than 2031.');
+                return true;
+            }            
+        }
+        
+        // if(totalpayment < calculateTotal()) {
+        //     console.log("NOT FULLY PAID")
+        //     $('#payment-error').text('Insuffcient payment.');
+        //     $('#payment-amount-total').addClass('is-invalid');
+        //     $('#payment-balance').addClass('is-invalid');
+        //     return true;             
+        // }   
+        // else if(totalpayment > calculateTotal()) {
+        //     console.log("FULLY PAID BUT HAS CHANGE")
+        //     $('#payment-error').text('Customer payment is greater than the total price.');
+        //     $('#payment-amount-total').addClass('is-invalid');
+        //     $('#payment-balance').addClass('is-invalid');
+        //     return true;             
+        // }  
+    }
+ 
+        //console.log("HEHEHE VALID")
+        // $('#payment-error').text('');
+        // $('#payment-amount-total').removeClass('is-invalid');
+        // $('#payment-balance').removeClass('is-invalid');  
+        $('#missing-error').val('');
+        return false;
+}
+
+function checkStringInput(input) {
+    const blacklist = ["~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")",
+    "_", "=", "+", "{", "}", "[", "]", "|", "\\", ";", ":", "\'",
+    "\"", ".", ",", "<", ">", "/", "?"];
+    var flag = false;
+
+    for (const item of blacklist)
+        if (input.indexOf(item) != -1)
+            flag = true;
+    
+    return flag;
+}
+
+/**
+ * Gets and returns the time (millisecond) equivalent of a date
+ * 
+ * @param {String}  input   The date in String format to be converted
+*/
+function getDateTime (input) {
+    var day = parseInt(input.slice(8, 10));
+    var month = parseInt(input.slice(5, 7));
+    var year = parseInt(input.slice(0, 4));
+
+    return new Date (year, month, day).getTime();
+}
+
+/**
+ * Checks date fields if they are not set at most today (YYYY-MM-DD)
+ * 
+ * @param {String} input        The user input for a specific field in the form
+ * @param {String} errorfield   The ID of the error field in the form to display the errormsg in
+ * @param {String} id           The ID of the field in the form with discrepancies
+*/
+function validDate (input, errorfield, id) {
+    var idfield = '#' + id;
+    if(input.length > 10)
+        displayError($(idfield), errorfield, 'Invalid date.');        
+    else {
+        var dateInput = getDateTime(input);
+        var dd = 1;
+        var mm = 1;
+        var yyyy = 2032;
+        var dateMax = getDateTime(yyyy + "-" + ("0" + mm) + "-" + ("0" +dd));
+
+        var today = new Date();
+        var td = today.getDate();
+        var tm = today.getMonth() + 1;
+        var tyyy = today.getFullYear();
+        if(td < 10)
+            td='0'+td;
+        if(tm < 10)
+            tm='0'+tm; 
+        var dateMin = getDateTime(tyyy+'-'+tm+'-'+td);
+    
+        if (input == "") {
+            displayError($(idfield), errorfield, 'Date cannot be empty.'); 
+            return true;
+        }
+        else if ((dateInput - dateMin < 0) || isNaN(dateInput)) {
+            displayError($(idfield), errorfield, 'Date cannot be in the past.');
+            return true;
+        }
+        else if ((dateInput - dateMax >= 0) || isNaN(dateInput)) {
+            displayError($(idfield), errorfield, 'Date cannot be later than 2031.');
+            return true;
+        }
+        else{
+            resetField($(idfield), errorfield);
+            return false;
+        }
     }
 }
 
 function displayError(inputField, errorField, errorText) {
     errorField.text(errorText);
     inputField.addClass('is-invalid');
+    $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
 function resetField(inputField, errorField) {
     errorField.text('');
     inputField.removeClass('is-invalid');
+    $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
 function checkEventAvailability() {
@@ -856,11 +1226,15 @@ function getPackageIndex(list, code) {
 }
 
 function getMenuItemPrice(name) {
-    return foodList[foodNameList.indexOf($('#additional-name').val())].price
+    return foodList[foodNameList.indexOf(name)].price
 }
 
 function getExtraChargePrice(name) {
     return chargeList[chargeNameList.indexOf($('#extra-charges-name').val())].price
+}
+
+function getPackageID(code) {
+    return packageList[packageList.map(e => e.packageCode).indexOf(code)]._id;
 }
 
 function getPackageName(code) {
@@ -925,7 +1299,7 @@ function submitForm() {
             if ($(this).is(':checked')) {
                 eventVenues.push($(this).val());
                 if ($(this).parent().siblings('select').val())
-                    eventPackages.push(getPackageName($(this).parent().siblings('select').val()));
+                    eventPackages.push(getPackageID($(this).parent().siblings('select').val()));
             }
         });
 
@@ -934,7 +1308,8 @@ function submitForm() {
         $('.additional-item').each(function () {
             menuAdditional.push({
                 foodItem: $(this).children('.additional-item-name').text(),
-                foodQuantity: $(this).children('.additional-item-quantity').text()
+                foodQuantity: $(this).children('.additional-item-quantity').text(),
+                foodCost: formatAsDecimal(parseFloat($(this).children('.additional-item-quantity').text()) * getMenuItemPrice($(this).children('.additional-item-name').text()))
             });
         });
 
@@ -984,7 +1359,6 @@ function submitForm() {
         if (fishName)
             fishQuantity = $('#fish-quantity').val();
 
-
         // stores all information as an object
         let data = {
             status: getEventStatus(),
@@ -1029,7 +1403,7 @@ function submitForm() {
                 discounts: calculateItemTotal($('.discount-item-amt')),
                 all: calculateTotal()
             },
-            
+
             downpaymentDate: $('#downpayment-date').val(),
             downpaymentMode: $('#downpayment-mode').val(),
             downpaymentAmount: $('#downpayment-amount').val(),
@@ -1039,6 +1413,8 @@ function submitForm() {
             finalPaymentAmount: $('#final-payment-amount').val(),
         };
 
+        //console.log(data)
+
         // converts the JSON object into a String
         let json = {
             data: JSON.stringify(data)
@@ -1046,7 +1422,9 @@ function submitForm() {
 
         // makes a POST request using AJAX to store the data and returns the user to the reservation page
         $.post("/event-tracker/submit", json, function (result) {
+            //console.log(result)
             window.location.href = "/event-tracker/pencilbookings";
         });
     });
 }
+
