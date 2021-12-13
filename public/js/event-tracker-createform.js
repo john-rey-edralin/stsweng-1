@@ -1423,7 +1423,7 @@ function submitForm() {
         // makes a POST request using AJAX to store the data and returns the user to the reservation page
         $.post("/event-tracker/submit", json, function (result) {
             //console.log(result)
-            window.location.href = "/event-tracker/pencilbookings";
+            //window.location.href = "/event-tracker/pencilbookings";
         });
     });
 }

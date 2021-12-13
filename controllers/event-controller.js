@@ -52,7 +52,9 @@ const eventController = {
     postCreateEvent: function (req, res) {
         let event = JSON.parse(req.body.data);
         db.insertOne(Event, event, function (result) {
-            if (result) res.redirect('/event-tracker/pencilbookings');
+            if (event.status == 'reserved') res.redirect('/event-tracker/reservations');
+            else res.redirect('/event-tracker/pencilbookings');
+
         });
     },
 
