@@ -50,10 +50,10 @@ $(document).ready(function () {
     submitForm();
 });
 
-window.addEventListener('beforeunload', function (e) {
-    e.preventDefault();
-    e.returnValue = '';
-});
+// window.addEventListener('beforeunload', function (e) {
+//     e.preventDefault();
+//     e.returnValue = '';
+// });
 
 function retrieveInfoFromDB() {
     $.get('/event-tracker/get/food', function (result) {
@@ -1645,18 +1645,9 @@ function submitForm() {
         let menuAdditional = [];
         $('.additional-item').each(function () {
             menuAdditional.push({
-                foodItem: $(this).children('.additional-item-name').text(),
-                foodQuantity: $(this)
-                    .children('.additional-item-quantity')
-                    .text(),
-                foodCost: formatAsDecimal(
-                    parseFloat(
-                        $(this).children('.additional-item-quantity').text()
-                    ) *
-                    getMenuItemPrice(
-                        $(this).children('.additional-item-name').text()
-                    )
-                ),
+                foodItem: getFoodID($(this).children('.additional-item-name').text()),
+                foodQuantity: $(this).children('.additional-item-quantity').text(),
+                foodCost: parseFloat($(this).children('.additional-item-quantity').text()) * getMenuItemPrice($(this).children('.additional-item-name').text())
             });
         });
 
@@ -1777,8 +1768,10 @@ function submitForm() {
             data: json,
             contentType: 'application/json',
             success: function (result) {
-                if (result)
+                if (getEventStatus() == 'reserved')
                     window.location.href = '/event-tracker/reservations';
+                else
+                    window.location.href = '/event-tracker/pencilbookings';
             },
         });
     });
