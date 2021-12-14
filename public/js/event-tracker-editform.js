@@ -1617,7 +1617,7 @@ function getFoodQuantity(food) {
 }
 
 function getEventStatus() {
-    if ($('#downpayment').is('checked')) return 'reserved';
+    if ($('#downpayment-amount').val('') != '') return 'reserved';
     else return 'booked';
 }
 
