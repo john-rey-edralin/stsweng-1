@@ -1982,5 +1982,17 @@ function addExistingFields() {
                 .prop('disabled', false);
         }
 
+        if (currevent.finalPaymentDate) {
+            $('#downpayment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
+            $('#downpayment-mode').val(currevent.finalPaymentMode);
+            $('#downpayment').prop('checked', true);
+            $(downpayment)
+                .parent()
+                .siblings()
+                .children()
+                .children('input:not(.static), select')
+                .prop('disabled', false);
+        }
+
     });
 }
