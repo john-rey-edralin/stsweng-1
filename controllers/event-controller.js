@@ -14,7 +14,6 @@ const eventController = {
         const events = await Event.aggregate([
             {
                 $match: {
-                    status: 'reserved',
                     eventDate: {
                         $gte: today,
                         $lt: tomorrow
