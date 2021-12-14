@@ -156,13 +156,13 @@
                                 {{#each packageList}}
                                 <div class="d-flex">
                                         <h6 class="number fw-bold ms-3 fs-6">{{packageName}}</h6>
-                                        <h6 class="number ms-auto fs-6">{{formatMoney packagePrice}}</h6>
+                                        <h6 class="number ms-auto fs-6 me-4">{{formatMoney packagePrice}}</h6>
                                 </div>
                                 {{/each}}
                                 {{#ifEquals packageAdditionalPax true}}
                                 <div class="d-flex">
                                     <h6 class="number fw-bold ms-3 fs-6">Additional 5 Pax</h6>
-                                    <h6 class="number ms-auto fs-6">2,000.00</h6>
+                                    <h6 class="number ms-auto fs-6 me-4">2,000.00</h6>
                                 </div>
                                 {{/ifEquals}}
                                 {{#if menuAdditional}}
@@ -175,7 +175,7 @@
                                     <h6 class="number fw-bold ms-3 fs-6">{{#with (lookup ../foodList @index)}}
                                     {{name}}
                                     {{/with}} (x{{foodQuantity}})</h6>
-                                    <h6 class="number ms-auto fs-6">{{formatMoney foodCost}}</h6>
+                                    <h6 class="number ms-auto fs-6 me-4">{{formatMoney foodCost}}</h6>
                                 </div>
                                 {{/each}}
                                 {{/if}}
@@ -187,7 +187,7 @@
                                     {{#each transactionCharges}}
                                     <div class="d-flex">
                                         <h6 class="number fw-bold ms-3 fs-6">{{chargeName}} (x{{chargeQuantity}})</h6>
-                                        <h6 class="number ms-auto fs-6">{{formatMoney chargePrice}}</h6>
+                                        <h6 class="number ms-auto fs-6 me-4">{{formatMoney chargePrice}}</h6>
                                     </div>
                                     {{/each}}
                                 {{/if}}
@@ -200,7 +200,7 @@
                                     {{#each transactionDiscounts}}
                                     <div class="d-flex">
                                         <h6 class="number fw-bold ms-3 fs-6">{{discountName}}</h6>
-                                        <h6 class="number ms-auto fs-6">{{formatMoney discountPrice}}</h6>
+                                        <h6 class="number ms-auto fs-6 me-4">{{formatMoney discountPrice}}</h6>
                                     </div>
                                     {{/each}}
                                 {{/if}}
