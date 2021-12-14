@@ -16,7 +16,7 @@ hbs.registerHelper('formatDate', function (date) {
 hbs.registerHelper('formatDateShort', function (date) {
     if (date) {
         date = new Date(date);
-        let month = date.getMonth().toString().padStart(2, 0);
+        let month = (date.getMonth()+1).toString().padStart(2, 0);
         let day = date.getDate().toString().padStart(2, 0);
         let year = date.getFullYear().toString();
         return `${month}/${day}/${year}`;
