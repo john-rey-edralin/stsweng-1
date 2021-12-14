@@ -54,7 +54,6 @@ const eventController = {
         db.insertOne(Event, event, function (result) {
             if (event.status == 'reserved') res.redirect('/event-tracker/reservations');
             else res.redirect('/event-tracker/pencilbookings');
-
         });
     },
 
@@ -63,6 +62,11 @@ const eventController = {
             {
                 $match: {
                     status: 'booked'
+                }
+            },
+            {
+                $sort: {
+                    eventDate: 1
                 }
             },
             {
@@ -109,10 +113,16 @@ const eventController = {
                 $lt: tomorrow,
             };
         }
+        let sort = { eventDate: 1 };
+        if (req.query.sort == "date-dsc")
+            sort = { eventDate: -1 };
 
         const bookings = await Event.aggregate([
             {
                 $match: query
+            },
+            {
+                $sort: sort
             },
             {
                 $lookup: {
@@ -153,6 +163,7 @@ const eventController = {
             {
                 $match: query
             },
+            
             {
                 $lookup: {
                     from: 'packages',
@@ -181,7 +192,16 @@ const eventController = {
 
     getReservations: async function (req, res) {
         const reservations = await Event.aggregate([
-            { $match: { status: 'reserved' } },
+            {
+                $match: {
+                    status: 'reserved'
+                }
+            },
+            {
+                $sort: {
+                    eventDate: 1
+                }
+            },
             {
                 $lookup: {
                     from: 'packages',
@@ -227,9 +247,16 @@ const eventController = {
             };
         }
 
+        let sort = { eventDate: 1 };
+        if (req.query.sort == "date-dsc")
+            sort = { eventDate: -1 };
+
         const reservations = await Event.aggregate([
             {
                 $match: query
+            },
+            {
+                $sort: sort
             },
             {
                 $lookup: {
@@ -292,7 +319,7 @@ const eventController = {
             reservations: reservations,
             search: req.query.name,
         };
-        
+
         res.render('event-tracker-reservations', data);
     },
 
