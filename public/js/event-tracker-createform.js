@@ -241,8 +241,6 @@ function initializeTransactionFields() {
 }
 
 function initializePaymentFields() {
-    //setDefaultDate('downpayment-date');
-    //setDefaultDate('final-payment-date');
     $('#downpayment-date').val("");
     $('#final-payment-date').val("");
     var downp = 0;
@@ -252,9 +250,17 @@ function initializePaymentFields() {
             $('#submit').attr("disabled", true);
             $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', false);
             if(document.getElementById("downpayment").checked) {
+                $('#downpayment-date').siblings("label").addClass('required');
+                $('#downpayment-mode').siblings("label").addClass('required');
+                $('#downpayment-amount').siblings("label").addClass('required');
+                
                 $('#downpayment-amount').on('change', function () {
                     if($('#downpayment-amount').val() == '')
                         $('#downpayment-amount').val(0); 
+                    else if ($('#downpayment-amount').val() < 0 )
+                        displayError($('#downpayment-amount'), $('#downpayment-error'), 'Invalid payment.');
+                    else 
+                        resetField($('#downpayment-amount'), $('#downpayment-error'));
                     downp = parseFloat($('#downpayment-amount').val());
                     $('#payment-amount-total').val(downp + finalp);
                     $('#final-payment-amount').on('change', function () {
@@ -275,9 +281,16 @@ function initializePaymentFields() {
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
             if(document.getElementById("final-payment").checked) {
+                $('#final-payment-date').siblings("label").addClass('required');
+                $('#final-payment-mode').siblings("label").addClass('required');
+                $('#final-payment-amount').siblings("label").addClass('required');
                 $('#final-payment-amount').on('change', function () {
                     if($('#final-payment-amount').val() == '')
                         $('#final-payment-amount').val(0); 
+                    else if ($('#final-payment-amount').val() < 0 )
+                        displayError($('#final-payment-amount'), $('#final-payment-error'), 'Invalid payment.');
+                    else 
+                        resetField($('#final-payment-amount'), $('#final-payment-error'));
                     finalp = parseFloat($('#final-payment-amount').val());
                     $('#payment-amount-total').val(downp + finalp);
                     $('#downpayment-amount').on('change', function () {
@@ -303,6 +316,9 @@ function initializePaymentFields() {
             if($('#payment-amount-total').val() != '')
                 amt1 = parseFloat($('#payment-amount-total').val());
             if(!document.getElementById("downpayment").checked) {
+                $('#downpayment-date').siblings("label").removeClass('required');
+                $('#downpayment-mode').siblings("label").removeClass('required');
+                $('#downpayment-amount').siblings("label").removeClass('required');
                 //console.log("AAAAAAAAA");
                 downp = 0;
                 $('#payment-amount-total').val(amt1 - parseFloat($('#downpayment-amount').val()));
@@ -322,6 +338,9 @@ function initializePaymentFields() {
                 amt2 = parseFloat($('#payment-amount-total').val());
             if(!document.getElementById("final-payment").checked) {
                 //console.log("WEEEEEEEEE");
+                $('#final-payment-date').siblings("label").removeClass('required');
+                $('#final-payment-mode').siblings("label").removeClass('required');
+                $('#final-payment-amount').siblings("label").removeClass('required');
                 finalp = 0;
                 $('#payment-amount-total').val(amt2 - parseFloat($('#final-payment-amount').val()));
                 $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#final-payment-amount').val()));
@@ -342,7 +361,7 @@ function initializePaymentFields() {
 /**  
  * Sets default date to today
  */
- function setDefaultDate (datefield) {
+function setDefaultDate (datefield) {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1;
@@ -982,7 +1001,10 @@ function checkIfFilledEventFields() {
     }
     if(document.getElementById("downpayment").checked) {
         //console.log("HERE HERE");
-        if (validator.isEmpty($('#downpayment-mode').val())){
+        if ($('#downpayment-amount').val() < 0)
+{            $('#downpayment-error').val('Invalid payment.');
+            return true;}
+        else if (validator.isEmpty($('#downpayment-mode').val())){
             $('#downpayment-mode-error').val('Select 1 payment mode.');
             //console.log("HERE HERE HERE");
             return true;
@@ -1013,7 +1035,11 @@ function checkIfFilledEventFields() {
     if(document.getElementById("final-payment").checked) {
         console.log("HEHEHE")
         var totalpayment = parseFloat($('#downpayment-amount').val()) + parseFloat($('#final-payment-amount').val());
-        if(validator.isEmpty($('#final-payment-mode').val())){
+        if ($('#final-payment-amount').val() < 0) {
+            $('#final-payment-error').val('Invalid payment.');
+            return true;
+        }
+        else if(validator.isEmpty($('#final-payment-mode').val())){
             //console.log("HEHE HEHE")
             $('#final-payment-mode-error').val('Select 1 payment mode.');
             return true;
