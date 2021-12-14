@@ -32,6 +32,18 @@ let discountsTableHeader =
 
 $(document).ready(function () {
     $('#submit').attr("disabled", true);
+    // if($('#submit').is(':disabled'))
+    // {
+    //     $('#submit').popover('enable');
+    //     console.log('AAAAAayoo');
+    //     $('#submit').attr('data-trigger', 'hover');
+    //     $('#submit').attr('data-bs-toggle', 'popover');
+    //     var msg = 'rawr';
+    //     $('#submit').attr('data-content', msg);
+    //     $('#submit').attr('data-placement', 'left');
+    //     $('#submit').attr('data-container', 'body');
+
+    // }
     retrieveInfoFromDB();
 
     setRequiredFields();
@@ -43,7 +55,6 @@ $(document).ready(function () {
     initializePaymentFields();
     
     initializeRealTimeValidation(); 
-    
     submitForm();
 });
 
@@ -255,9 +266,9 @@ function initializePaymentFields() {
                 $('#downpayment-amount').siblings("label").addClass('required');
                 
                 $('#downpayment-amount').on('change', function () {
-                    if($('#downpayment-amount').val() == '')
-                        $('#downpayment-amount').val(0); 
-                    else if ($('#downpayment-amount').val() < 0 )
+                    // if($('#downpayment-amount').val() == '')
+                    //     $('#downpayment-amount').val(0); 
+                    if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '')
                         displayError($('#downpayment-amount'), $('#downpayment-error'), 'Invalid payment.');
                     else 
                         resetField($('#downpayment-amount'), $('#downpayment-error'));
@@ -285,9 +296,9 @@ function initializePaymentFields() {
                 $('#final-payment-mode').siblings("label").addClass('required');
                 $('#final-payment-amount').siblings("label").addClass('required');
                 $('#final-payment-amount').on('change', function () {
-                    if($('#final-payment-amount').val() == '')
-                        $('#final-payment-amount').val(0); 
-                    else if ($('#final-payment-amount').val() < 0 )
+                    // if($('#final-payment-amount').val() == '')
+                    //     $('#final-payment-amount').val(0); 
+                    if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '')
                         displayError($('#final-payment-amount'), $('#final-payment-error'), 'Invalid payment.');
                     else 
                         resetField($('#final-payment-amount'), $('#final-payment-error'));
@@ -328,6 +339,7 @@ function initializePaymentFields() {
                 setDefaultDate('downpayment-date');
                 resetField($('#downpayment-date'), $('#downpayment-error'));
                 resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
+                resetField($('#downpayment-amount'), $('#downpayment-error'));
                 $('#downpayment-mode').val("");
                 $('#downpayment-amount').val("");
                 $('#downpayment-date').val("");
@@ -348,6 +360,7 @@ function initializePaymentFields() {
                 setDefaultDate('final-payment-date');
                 resetField($('#final-payment-date'), $('#final-payment-error'));
                 resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
+                resetField($('#final-payment-amount'), $('#final-payment-error'));
                 $('#final-payment-mode').val("");
                 $('#final-payment-amount').val("");
                 $('#final-payment-date').val("");
@@ -1001,9 +1014,10 @@ function checkIfFilledEventFields() {
     }
     if(document.getElementById("downpayment").checked) {
         //console.log("HERE HERE");
-        if ($('#downpayment-amount').val() < 0)
-{            $('#downpayment-error').val('Invalid payment.');
-            return true;}
+        if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '') {
+            $('#downpayment-error').val('Invalid payment.');
+            return true;
+        }
         else if (validator.isEmpty($('#downpayment-mode').val())){
             $('#downpayment-mode-error').val('Select 1 payment mode.');
             //console.log("HERE HERE HERE");
@@ -1035,7 +1049,7 @@ function checkIfFilledEventFields() {
     if(document.getElementById("final-payment").checked) {
         console.log("HEHEHE")
         var totalpayment = parseFloat($('#downpayment-amount').val()) + parseFloat($('#final-payment-amount').val());
-        if ($('#final-payment-amount').val() < 0) {
+        if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '') {
             $('#final-payment-error').val('Invalid payment.');
             return true;
         }
@@ -1317,7 +1331,6 @@ function getEventStatus() {
 function submitForm() {
     $("form").on("submit", function (event) {
         event.preventDefault();
-
         // stores the venues and packages into an array of strings
         let eventVenues = [];
         let eventPackages = []
@@ -1443,7 +1456,7 @@ function submitForm() {
         let json = {
             data: JSON.stringify(data)
         };
-
+        
         // makes a POST request using AJAX to store the data and returns the user to the reservation page
         $.post("/event-tracker/submit", json, function (result) {
             if (getEventStatus() == 'reserved')
