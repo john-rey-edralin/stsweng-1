@@ -220,7 +220,7 @@ const eventController = {
                 },
             },
         ]);
-        console.log(reservations)
+
         let data = {
             reservations: reservations,
         };
@@ -327,22 +327,23 @@ const eventController = {
     getEditReservation: function (req, res) {
         db.findOne(Event, { _id: req.params.id }, '', function (result) {
             let data = {
-                event : result
+                event: result
             }
             res.render('event-tracker-editform', data);
         });
     },
 
     putReservations: async function (req, res) {
-        const { id, updateInfo } = req.body;
+        const { id, data } = req.body;
         const _id = mongoose.Types.ObjectId(id);
+        console.log(data)
 
         const doc = await Event.findOneAndUpdate(
             { _id, status: 'reserved' },
-            updateInfo,
+            data,
             { returnDocument: 'after' }
         );
-
+        console.log(doc)
         res.send(doc);
     },
 
@@ -379,11 +380,10 @@ const eventController = {
     },
 
     getEvent: async function (req, res) {
-        console.log(req.query.id)
         const event = await Event.aggregate([
             {
-                $match: { 
-                    _id: mongoose.Types.ObjectId(req.query.id) 
+                $match: {
+                    _id: mongoose.Types.ObjectId(req.query.id)
                 }
             },
             {
@@ -405,7 +405,7 @@ const eventController = {
         ]);
 
         console.log(event)
-    
+
         res.send(event);
     }
 };

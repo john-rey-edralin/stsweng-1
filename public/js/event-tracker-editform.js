@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     initializeRealTimeValidation();
 
-    addExistingFields();
+    
 
     submitForm();
 });
@@ -127,6 +127,7 @@ function retrieveInfoFromDB() {
                 })
             );
         });
+        addExistingFields();
     });
 }
 
@@ -393,7 +394,7 @@ function initializePaymentFields() {
                 );
                 $('#payment-balance').val(
                     parseFloat($('#payment-balance').val()) +
-                        parseFloat($('#downpayment-amount').val())
+                    parseFloat($('#downpayment-amount').val())
                 );
                 $('#final-payment-amount').attr(
                     'placeholder',
@@ -422,7 +423,7 @@ function initializePaymentFields() {
                 );
                 $('#payment-balance').val(
                     parseFloat($('#payment-balance').val()) +
-                        parseFloat($('#final-payment-amount').val())
+                    parseFloat($('#final-payment-amount').val())
                 );
                 $('#final-payment-amount').attr(
                     'placeholder',
@@ -519,24 +520,24 @@ function addAdditionalItem() {
 
         $('#additional-items-list').append(
             '<div>' +
-                '<hr class="mx-5">' +
-                '<div class="row px-4 py-2 mx-5 additional-item">' +
-                '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
-                name +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
-                quantity +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
-                formatAsDecimal(price) +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
-                formatAsDecimal(quantity * price) +
-                '</h6>' +
-                '<span class="col material-icons-two-tone text-end md-btn"' +
-                'onclick="removeAdditionalItem(this)">close</span>' +
-                '</div>' +
-                '</div>'
+            '<hr class="mx-5">' +
+            '<div class="row px-4 py-2 mx-5 additional-item">' +
+            '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
+            name +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
+            quantity +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
+            formatAsDecimal(price) +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
+            formatAsDecimal(quantity * price) +
+            '</h6>' +
+            '<span class="col material-icons-two-tone text-end md-btn"' +
+            'onclick="removeAdditionalItem(this)">close</span>' +
+            '</div>' +
+            '</div>'
         );
 
         // reset all fields and error message
@@ -554,8 +555,8 @@ function addAdditionalItem() {
         $('#additional-items-total').empty();
         $('#additional-items-total').append(
             '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
-                formatAsDecimal(calculateItemTotal($('.additional-item-amt'))) +
-                '</h4>'
+            formatAsDecimal(calculateItemTotal($('.additional-item-amt'))) +
+            '</h4>'
         );
         updateBreakdownTable();
     }
@@ -576,7 +577,7 @@ function removeAdditionalItem(elem) {
         .children('h4')
         .text(
             'Php ' +
-                formatAsDecimal(calculateItemTotal($('.additional-item-amt')))
+            formatAsDecimal(calculateItemTotal($('.additional-item-amt')))
         );
     updateBreakdownTable();
 }
@@ -601,24 +602,24 @@ function addExtraCharge() {
 
         $('#extra-charges-list').append(
             '<div>' +
-                '<hr class="mx-5">' +
-                '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
-                '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
-                name +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
-                quantity +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
-                formatAsDecimal(price) +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
-                formatAsDecimal(quantity * price) +
-                '</h6>' +
-                '<span class="col material-icons-two-tone text-end md-btn"' +
-                'onclick="removeExtraCharge(this)">close</span>' +
-                '</div>' +
-                '</div>'
+            '<hr class="mx-5">' +
+            '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
+            '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
+            name +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
+            quantity +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
+            formatAsDecimal(price) +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
+            formatAsDecimal(quantity * price) +
+            '</h6>' +
+            '<span class="col material-icons-two-tone text-end md-btn"' +
+            'onclick="removeExtraCharge(this)">close</span>' +
+            '</div>' +
+            '</div>'
         );
 
         // reset all fields and error message
@@ -635,10 +636,10 @@ function addExtraCharge() {
         $('#extra-charges-total').empty();
         $('#extra-charges-total').append(
             '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
-                formatAsDecimal(
-                    calculateItemTotal($('.extra-charges-item-amt'))
-                ) +
-                '</h4>'
+            formatAsDecimal(
+                calculateItemTotal($('.extra-charges-item-amt'))
+            ) +
+            '</h4>'
         );
         updateBreakdownTable();
     }
@@ -659,9 +660,9 @@ function removeExtraCharge(elem) {
         .children('h4')
         .text(
             'Php ' +
-                formatAsDecimal(
-                    calculateItemTotal($('.extra-charges-item-amt'))
-                )
+            formatAsDecimal(
+                calculateItemTotal($('.extra-charges-item-amt'))
+            )
         );
     updateBreakdownTable();
 }
@@ -677,20 +678,20 @@ function addDiscount() {
 
         $('#discounts-list').append(
             '<div>' +
-                '<hr class="mx-5">' +
-                '<div class="row px-4 py-2 mx-5 discount-item">' +
-                '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
-                name +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
-                formatAsDecimal(price) +
-                '</h6>' +
-                '<span class="col material-icons-two-tone text-end md-btn"' +
-                'onclick="removeDiscount(this)">close</span>' +
-                '</div>' +
-                '</div>'
+            '<hr class="mx-5">' +
+            '<div class="row px-4 py-2 mx-5 discount-item">' +
+            '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
+            name +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
+            formatAsDecimal(price) +
+            '</h6>' +
+            '<span class="col material-icons-two-tone text-end md-btn"' +
+            'onclick="removeDiscount(this)">close</span>' +
+            '</div>' +
+            '</div>'
         );
 
         // reset all fields and error message
@@ -708,8 +709,8 @@ function addDiscount() {
         $('#discounts-total').empty();
         $('#discounts-total').append(
             '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
-                formatAsDecimal(calculateItemTotal($('.discount-item-amt'))) +
-                '</h4>'
+            formatAsDecimal(calculateItemTotal($('.discount-item-amt'))) +
+            '</h4>'
         );
         updateBreakdownTable();
     }
@@ -729,7 +730,7 @@ function removeDiscount(elem) {
         .children('h4')
         .text(
             'Php ' +
-                formatAsDecimal(calculateItemTotal($('.discount-item-amt')))
+            formatAsDecimal(calculateItemTotal($('.discount-item-amt')))
         );
     updateBreakdownTable();
 }
@@ -746,64 +747,64 @@ function updateBreakdownTable() {
     if (package) {
         $('#breakdown-list').append(
             '<div>' +
-                '<div class="row px-4 py-2 mx-4">' +
-                '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Package/s</strong></h3>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
-                formatAsDecimal(package) +
-                '</strong></h3>' +
-                '</div>' +
-                '</div>'
+            '<div class="row px-4 py-2 mx-4">' +
+            '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Package/s</strong></h3>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
+            formatAsDecimal(package) +
+            '</strong></h3>' +
+            '</div>' +
+            '</div>'
         );
 
         $('.package').each(function () {
             if ($(this).val())
                 $('#breakdown-list').append(
                     '<div class="ms-4">' +
-                        '<div class="row px-4 py-2 mx-4">' +
-                        '<h6 class="col-5 mb-0 mt-1 text-start number">' +
-                        getPackageName($(this).val()) +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                        '<h6 class="col mb-0 mt-1 text-end number">' +
-                        formatAsDecimal(getPackagePrice($(this).val())) +
-                        '</h6>' +
-                        '</div>' +
-                        '</div>'
+                    '<div class="row px-4 py-2 mx-4">' +
+                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                    getPackageName($(this).val()) +
+                    '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-end number">' +
+                    formatAsDecimal(getPackagePrice($(this).val())) +
+                    '</h6>' +
+                    '</div>' +
+                    '</div>'
                 );
         });
 
         if ($('#additional-pax').is(':checked'))
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
-                    '<div class="row px-4 py-2 mx-4">' +
-                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
-                    'Additional 5 Pax' +
-                    '</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-end number">' +
-                    formatAsDecimal(getPackagePrice('5pax')) +
-                    '</h6>' +
-                    '</div>' +
-                    '</div>'
+                '<div class="row px-4 py-2 mx-4">' +
+                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                'Additional 5 Pax' +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-end number">' +
+                formatAsDecimal(getPackagePrice('add5')) +
+                '</h6>' +
+                '</div>' +
+                '</div>'
             );
     }
 
     if (additional) {
         $('#breakdown-list').append(
             '<div>' +
-                '<div class="row px-4 py-2 mx-4">' +
-                '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Additional Food</strong></h3>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
-                formatAsDecimal(additional) +
-                '</strong></h3>' +
-                '</div>' +
-                '</div>'
+            '<div class="row px-4 py-2 mx-4">' +
+            '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Additional Food</strong></h3>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
+            formatAsDecimal(additional) +
+            '</strong></h3>' +
+            '</div>' +
+            '</div>'
         );
 
         $('.additional-item').each(function () {
@@ -815,19 +816,19 @@ function updateBreakdownTable() {
 
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
-                    '<div class="row px-4 py-2 mx-4">' +
-                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
-                    name +
-                    ' (' +
-                    qty +
-                    ' Serving/s)</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-end number">' +
-                    formatAsDecimal(amt) +
-                    '</h6>' +
-                    '</div>' +
-                    '</div>'
+                '<div class="row px-4 py-2 mx-4">' +
+                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                name +
+                ' (' +
+                qty +
+                ' Serving/s)</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-end number">' +
+                formatAsDecimal(amt) +
+                '</h6>' +
+                '</div>' +
+                '</div>'
             );
         });
     }
@@ -835,15 +836,15 @@ function updateBreakdownTable() {
     if (charges) {
         $('#breakdown-list').append(
             '<div>' +
-                '<div class="row px-4 py-2 mx-4">' +
-                '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Extra Charges</strong></h3>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
-                formatAsDecimal(charges) +
-                '</strong></h3>' +
-                '</div>' +
-                '</div>'
+            '<div class="row px-4 py-2 mx-4">' +
+            '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Extra Charges</strong></h3>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
+            formatAsDecimal(charges) +
+            '</strong></h3>' +
+            '</div>' +
+            '</div>'
         );
 
         $('.extra-charges-item').each(function () {
@@ -855,19 +856,19 @@ function updateBreakdownTable() {
 
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
-                    '<div class="row px-4 py-2 mx-4">' +
-                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
-                    name +
-                    ' (x' +
-                    qty +
-                    ')</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-end number">' +
-                    formatAsDecimal(amt) +
-                    '</h6>' +
-                    '</div>' +
-                    '</div>'
+                '<div class="row px-4 py-2 mx-4">' +
+                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                name +
+                ' (x' +
+                qty +
+                ')</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-end number">' +
+                formatAsDecimal(amt) +
+                '</h6>' +
+                '</div>' +
+                '</div>'
             );
         });
     }
@@ -875,15 +876,15 @@ function updateBreakdownTable() {
     if (discounts) {
         $('#breakdown-list').append(
             '<div>' +
-                '<div class="row px-4 py-2 mx-4">' +
-                '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Discount/s</strong></h3>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h3 class="col mb-0 mt-1 text-end number"><strong>-' +
-                formatAsDecimal(discounts) +
-                '</strong></h3>' +
-                '</div>' +
-                '</div>'
+            '<div class="row px-4 py-2 mx-4">' +
+            '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Discount/s</strong></h3>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h3 class="col mb-0 mt-1 text-end number"><strong>-' +
+            formatAsDecimal(discounts) +
+            '</strong></h3>' +
+            '</div>' +
+            '</div>'
         );
 
         $('.discount-item').each(function () {
@@ -894,17 +895,17 @@ function updateBreakdownTable() {
 
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
-                    '<div class="row px-4 py-2 mx-4">' +
-                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
-                    name +
-                    '</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-end number">-' +
-                    formatAsDecimal(amt) +
-                    '</h6>' +
-                    '</div>' +
-                    '</div>'
+                '<div class="row px-4 py-2 mx-4">' +
+                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                name +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-end number">-' +
+                formatAsDecimal(amt) +
+                '</h6>' +
+                '</div>' +
+                '</div>'
             );
         });
     }
@@ -914,8 +915,8 @@ function updateBreakdownTable() {
     if (total) {
         $('#breakdown-total').append(
             '<h2 class="mb-0 mt-5 text-end me-5 number"><strong>Total: </strong>Php ' +
-                formatAsDecimal(total) +
-                '</h2>'
+            formatAsDecimal(total) +
+            '</h2>'
         );
     } else {
         $('#breakdown-list').append(
@@ -929,14 +930,14 @@ function updateBreakdownTable() {
         );
         $('#final-payment-amount').attr(
             'placeholder',
-            calculateTotal() - $(this).val()
+            calculateTotal() - $('#downpayment-amount').val()
         );
     }
 
     if ($('#final-payment-amount').val() != '') {
         $('#payment-amount-total').val(
             parseFloat($('#downpayment-amount').val()) +
-                parseFloat($(this).val())
+            parseFloat($(this).val())
         );
         $('#payment-balance').val(
             calculateTotal() - $('#payment-amount-total').val()
@@ -1493,18 +1494,20 @@ function formatAsNumber(value) {
 }
 
 function calculatePackageTotal() {
-    let gardenIndex = getPackageIndex(
-        gardenPackageList,
-        $('#garden-options').val()
-    );
-    let sunroomIndex = getPackageIndex(
-        sunroomPackageList,
-        $('#sunroom-options').val()
-    );
-    let terraceIndex = getPackageIndex(
-        terracePackageList,
-        $('#terrace-options').val()
-    );
+    let gardenIndex = -1, 
+        sunroomIndex = -1, 
+        terraceIndex = -1;
+    console.log($('#garden-options').val());
+    console.log($('#sunroom-options').val());
+    console.log($('#terrace-options').val());
+
+    if ($('#garden-options').val() != '')
+        gardenIndex = getPackageIndex(gardenPackageList, $('#garden-options').val());
+    if ($('#sunroom-options').val() != '')
+        sunroomIndex = getPackageIndex(sunroomPackageList, $('#sunroom-options').val());
+    if ($('#terrace-options').val() != '')
+        terraceIndex = getPackageIndex(terracePackageList, $('#terrace-options').val());
+    
     let add5paxIndex = getPackageIndex(additionalPackageList, 'add5');
 
     let sum = 0;
@@ -1555,13 +1558,11 @@ function getPackageID(code) {
 }
 
 function getPackageName(code) {
-    return packageList[packageList.map((e) => e.packageCode).indexOf(code)]
-        .packageName;
+    return packageList[packageList.map((e) => e.packageCode).indexOf(code)].packageName;
 }
 
 function getPackagePrice(code) {
-    return packageList[packageList.map((e) => e.packageCode).indexOf(code)]
-        .packagePrice;
+    return packageList[packageList.map((e) => e.packageCode).indexOf(code)].packagePrice;
 }
 
 function getVariantCount(code) {
@@ -1652,9 +1653,9 @@ function submitForm() {
                     parseFloat(
                         $(this).children('.additional-item-quantity').text()
                     ) *
-                        getMenuItemPrice(
-                            $(this).children('.additional-item-name').text()
-                        )
+                    getMenuItemPrice(
+                        $(this).children('.additional-item-name').text()
+                    )
                 ),
             });
         });
@@ -1763,12 +1764,11 @@ function submitForm() {
             finalPaymentAmount: $('#final-payment-amount').val(),
         };
 
-        //console.log(data)
-
         // converts the JSON object into a String
-        let json = {
-            data: JSON.stringify(data),
-        };
+        let json = JSON.stringify({
+            id: curreventID,
+            data: data
+        });
 
         // makes a POST request using AJAX to store the data and returns the user to the reservation page
         $.ajax({
@@ -1786,188 +1786,201 @@ function submitForm() {
 
 function addExistingFields() {
     let currevent;
-    $.get(
-        '/event-tracker/get/event',
-        { id: $('#event-id').text() },
-        function (result) {
-            currevent = result[0];
-            curreventID = currevent._id;
-            console.log(currevent);
+    $.get('/event-tracker/get/event', { id: $('#event-id').text() }, function (result) {
+        currevent = result[0];
+        curreventID = currevent._id;
 
-            $('#event-time').val(currevent.eventTime);
+        // set event time
+        $('#event-time').val(currevent.eventTime);
 
-            $('#venue-garden').prop(
-                'checked',
-                currevent.eventVenues.includes('Garden')
-            );
-            $('#venue-sunroom').prop(
-                'checked',
-                currevent.eventVenues.includes('Sunroom')
-            );
-            $('#venue-terrace').prop(
-                'checked',
-                currevent.eventVenues.includes('Terrace')
-            );
+        // set event date
+        $('#event-date').val(new Date(currevent.eventDate).toISOString().substr(0, 10));
 
-            $('.venue-checkbox').each(function () {
-                if ($(this).is(':checked'))
-                    $(this).parent().siblings('select').prop('disabled', false);
-            });
+        // set event venue checkboxes
+        $('#venue-garden').prop(
+            'checked',
+            currevent.eventVenues.includes('Garden')
+        );
+        $('#venue-sunroom').prop(
+            'checked',
+            currevent.eventVenues.includes('Sunroom')
+        );
+        $('#venue-terrace').prop(
+            'checked',
+            currevent.eventVenues.includes('Terrace')
+        );
 
-            for (let j = 0; j < currevent.packageList.length; j++) {
-                if (currevent.packageList[j].packageVenue === 'Garden')
-                    $('#garden-options').val(
-                        currevent.packageList[j].packageCode
-                    );
-                else if (currevent.packageList[j].packageVenue === 'Sunroom')
-                    $('#sunroom-options').val(
-                        currevent.packageList[j].packageCode
-                    );
-                else if (currevent.packageList[j].packageVenue === 'Terrace')
-                    $('#terrace-options').val(
-                        currevent.packageList[j].packageCode
-                    );
-            }
+        $('.venue-checkbox').each(function () {
+            if ($(this).is(':checked'))
+                $(this).parent().siblings('select').prop('disabled', false);
+        });
 
-            $('#additional-pax').prop(
-                'checked',
-                currevent.packageAdditionalPax
-            );
-
-            if (currevent.menuPackage.saladName) {
-                $('#menu-salad-button').trigger('click');
-                $(
-                    'input[name=salad-options][value=' +
-                        currevent.menuPackage.saladName +
-                        ']'
-                ).prop('checked', true);
-            }
-
-            if (currevent.menuPackage.pastaName) {
-                $('#menu-pasta-button').trigger('click');
-                $(
-                    'input[name=pasta-options][value=' +
-                        currevent.menuPackage.pastaName +
-                        ']'
-                ).prop('checked', true);
-            }
-
-            if (currevent.menuPackage.beefName) {
-                $('#menu-beef-button').trigger('click');
-                $(
-                    'input[name=beef-options][value=' +
-                        currevent.menuPackage.beefName +
-                        ']'
-                ).prop('checked', true);
-            }
-
-            if (currevent.menuPackage.porkName) {
-                $('#menu-pork-button').trigger('click');
-                $(
-                    'input[name=pork-options][value=' +
-                        currevent.menuPackage.porkName +
-                        ']'
-                ).prop('checked', true);
-            }
-
-            if (currevent.menuPackage.chickenName) {
-                $('#menu-chicken-button').trigger('click');
-                $(
-                    'input[name=chicken-options][value=' +
-                        currevent.menuPackage.chickenName +
-                        ']'
-                ).prop('checked', true);
-            }
-
-            if (currevent.menuPackage.fishName) {
-                $('#menu-fish-button').trigger('click');
-                $('input[name=fish-options][value=' + fishName + ']').prop(
-                    'checked',
-                    true
+        // set event packages dropdowns
+        for (let j = 0; j < currevent.packageList.length; j++) {
+            if (currevent.packageList[j].packageVenue === 'Garden')
+                $('#garden-options').val(
+                    currevent.packageList[j].packageCode
                 );
-            }
-
-            for (let j = 0; j < currevent.foodList.length; j++) {
-                let name = currevent.foodList[j].name;
-                let quantity = currevent.menuAdditional[j].foodQuantity;
-                let price = currevent.foodList[j].price;
-                let cost = currevent.menuAdditional[j].foodCost;
-
-                $('#additional-items-list').append(
-                    '<div>' +
-                        '<hr class="mx-5">' +
-                        '<div class="row px-4 py-2 mx-5 additional-item">' +
-                        '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
-                        name +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
-                        quantity +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
-                        formatAsDecimal(price) +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
-                        formatAsDecimal(cost) +
-                        '</h6>' +
-                        '<span class="col material-icons-two-tone text-end md-btn"' +
-                        'onclick="removeAdditionalItem(this)">close</span>' +
-                        '</div>' +
-                        '</div>'
+            else if (currevent.packageList[j].packageVenue === 'Sunroom')
+                $('#sunroom-options').val(
+                    currevent.packageList[j].packageCode
                 );
-            }
-
-            for (let j = 0; j < currevent.transactionCharges.length; j++) {
-                let name = currevent.transactionCharges[j].chargeName;
-                let quantity = currevent.transactionCharges[j].chargeQuantity;
-                let price = currevent.transactionCharges[j].chargePrice;
-
-                $('#extra-charges-list').append(
-                    '<div>' +
-                        '<hr class="mx-5">' +
-                        '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
-                        '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
-                        name +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
-                        quantity +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
-                        formatAsDecimal(price) +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
-                        formatAsDecimal(quantity * price) +
-                        '</h6>' +
-                        '<span class="col material-icons-two-tone text-end md-btn"' +
-                        'onclick="removeExtraCharge(this)">close</span>' +
-                        '</div>' +
-                        '</div>'
+            else if (currevent.packageList[j].packageVenue === 'Terrace')
+                $('#terrace-options').val(
+                    currevent.packageList[j].packageCode
                 );
-            }
-
-            for (let j = 0; j < currevent.transactionDiscounts.length; j++) {
-                let name = currevent.transactionDiscounts[j].discountName;
-                let price = currevent.transactionDiscounts[j].discountPrice;
-
-                $('#discounts-list').append(
-                    '<div>' +
-                        '<hr class="mx-5">' +
-                        '<div class="row px-4 py-2 mx-5 discount-item">' +
-                        '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
-                        name +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
-                        formatAsDecimal(price) +
-                        '</h6>' +
-                        '<span class="col material-icons-two-tone text-end md-btn"' +
-                        'onclick="removeDiscount(this)">close</span>' +
-                        '</div>' +
-                        '</div>'
-                );
-            }
-
-            updateBreakdownTable();
         }
-    );
+
+        // set additional pax checkbox
+        $('#additional-pax').prop(
+            'checked',
+            currevent.packageAdditionalPax
+        );
+
+        // set menu items
+        if (currevent.menuPackage.saladName) {
+            $('#menu-salad-button').trigger('click');
+            //$('#menu-salad-contents').collapse('toggle');
+            $('input[name="salad-options"][value="' + currevent.menuPackage.saladName + '"]').prop('checked', true);
+        }
+
+        if (currevent.menuPackage.pastaName) {
+            $('#menu-pasta-button').trigger('click');
+            $('input[name="pasta-options"][value="' + currevent.menuPackage.pastaName + '"]').prop('checked', true);
+        }
+
+        if (currevent.menuPackage.beefName) {
+            $('#menu-beef-button').trigger('click');
+            $('input[name="beef-options"][value="' + currevent.menuPackage.beefName + '"]').prop('checked', true);
+        }
+
+        if (currevent.menuPackage.porkName) {
+            $('#menu-pork-button').trigger('click');
+            $('input[name="pork-options"][value="' + currevent.menuPackage.porkName + '"]').prop('checked', true);
+        }
+
+        if (currevent.menuPackage.chickenName) {
+            $('#menu-chicken-button').trigger('click');
+            $('input[name="chicken-options"][value="' + currevent.menuPackage.chickenName + '"]').prop('checked', true);
+        }
+
+        if (currevent.menuPackage.fishName) {
+            $('#menu-fish-button').trigger('click');
+            $('input[name="fish-options"][value="' + currevent.menuPackage.fishName + '"]').prop('checked', true);
+        }
+
+        // set additional items table
+        if (currevent.foodList.length != 0) {
+            $('#additional-items-header').empty();
+            $('#additional-items-header').append(additionalFoodTableHeader);
+        }
+        for (let j = 0; j < currevent.foodList.length; j++) {
+            let name = currevent.foodList[j].name;
+            let quantity = currevent.menuAdditional[j].foodQuantity;
+            let price = currevent.foodList[j].price;
+            let cost = currevent.menuAdditional[j].foodCost;
+
+            $('#additional-items-list').append(
+                '<div>' +
+                '<hr class="mx-5">' +
+                '<div class="row px-4 py-2 mx-5 additional-item">' +
+                '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
+                name +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
+                quantity +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
+                formatAsDecimal(price) +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
+                formatAsDecimal(cost) +
+                '</h6>' +
+                '<span class="col material-icons-two-tone text-end md-btn"' +
+                'onclick="removeAdditionalItem(this)">close</span>' +
+                '</div>' +
+                '</div>'
+            );
+        }
+
+        // set extra charges table
+        if (currevent.transactionCharges.length != 0) {
+            $('#extra-charges-header').empty();
+            $('#extra-charges-header').append(extraChargesTableHeader);
+        }
+            
+        for (let j = 0; j < currevent.transactionCharges.length; j++) {
+            let name = currevent.transactionCharges[j].chargeName;
+            let quantity = currevent.transactionCharges[j].chargeQuantity;
+            let price = currevent.transactionCharges[j].chargePrice;
+
+            $('#extra-charges-list').append(
+                '<div>' +
+                '<hr class="mx-5">' +
+                '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
+                '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
+                name +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
+                quantity +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
+                formatAsDecimal(price) +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
+                formatAsDecimal(quantity * price) +
+                '</h6>' +
+                '<span class="col material-icons-two-tone text-end md-btn"' +
+                'onclick="removeExtraCharge(this)">close</span>' +
+                '</div>' +
+                '</div>'
+            );
+        }
+
+        // set discounts table
+        if (currevent.transactionDiscounts.length != 0) {
+            $('#discounts-header').empty();
+            $('#discounts-header').append(discountsTableHeader);
+        }
+        for (let j = 0; j < currevent.transactionDiscounts.length; j++) {
+            let name = currevent.transactionDiscounts[j].discountName;
+            let price = currevent.transactionDiscounts[j].discountPrice;
+
+            $('#discounts-list').append(
+                '<div>' +
+                '<hr class="mx-5">' +
+                '<div class="row px-4 py-2 mx-5 discount-item">' +
+                '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
+                name +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
+                formatAsDecimal(price) +
+                '</h6>' +
+                '<span class="col material-icons-two-tone text-end md-btn"' +
+                'onclick="removeDiscount(this)">close</span>' +
+                '</div>' +
+                '</div>'
+            );
+        }
+
+        // set breakdown table
+        updateBreakdownTable();
+
+        // set payment details
+        console.log(currevent.downpaymentDate)
+        if (currevent.downpaymentDate) {
+            $('#downpayment-date').val(new Date(currevent.downpaymentDate).toISOString().substr(0, 10));
+            $('#downpayment-mode').val(currevent.downpaymentMode);
+            $('#downpayment').prop('checked', true);
+            $(downpayment)
+                .parent()
+                .siblings()
+                .children()
+                .children('input:not(.static), select')
+                .prop('disabled', false);
+        }
+
+    });
 }
