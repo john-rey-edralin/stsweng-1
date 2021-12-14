@@ -14,6 +14,7 @@ app.get('/event-tracker/home', eventController.getHome);
 app.get('/event-tracker/create', eventController.getCreateEvent);
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get('/event-tracker/get/food', eventController.getFood);
+app.get('/event-tracker/get/event', eventController.getEvent);
 app.get('/event-tracker/get/charges', eventController.getCharges);
 app.get('/event-tracker/get/packages', eventController.getPackages);
 app.get(
@@ -22,6 +23,11 @@ app.get(
 );
 
 app.get('/event-tracker/pencilbookings', eventController.getPencilBookings);
+
+
+
+// temporary might break create event, uncommnet ⬇ below
+app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get(
     '/event-tracker/pencilbookings/search',
     eventController.getPencilBookingsSearch
@@ -31,7 +37,12 @@ app.get(
     eventController.getPencilBookingsFilter
 );
 
-app.get('/event-tracker/reservations', eventController.getReservations);
+app.route('/event-tracker/reservations')
+    .get(eventController.getReservations)
+    .put(eventController.putReservations);
+
+app.get('/event-tracker/reservations/edit/:id', eventController.getEditReservation);
+
 app.get(
     '/event-tracker/reservations/search',
     eventController.getReservationsSearch
