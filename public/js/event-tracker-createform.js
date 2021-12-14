@@ -58,10 +58,10 @@ $(document).ready(function () {
     submitForm();
 });
 
-window.addEventListener('beforeunload', function (e) {
-    e.preventDefault();
-    e.returnValue = '';
-});
+// window.addEventListener('beforeunload', function (e) {
+//     e.preventDefault();
+//     e.returnValue = '';
+// });
 
 function retrieveInfoFromDB() {
     $.get('/event-tracker/get/food', function (result) {
