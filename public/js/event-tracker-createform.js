@@ -1304,6 +1304,10 @@ function getMenuItemPrice(name) {
     return foodList[foodNameList.indexOf(name)].price
 }
 
+function getFoodID(name) {
+    return foodList[foodNameList.indexOf(name)]._id;
+}
+
 function getExtraChargePrice(name) {
     return chargeList[chargeNameList.indexOf($('#extra-charges-name').val())].price
 }
@@ -1381,9 +1385,9 @@ function submitForm() {
         let menuAdditional = [];
         $('.additional-item').each(function () {
             menuAdditional.push({
-                foodItem: $(this).children('.additional-item-name').text(),
+                foodItem: getFoodID($(this).children('.additional-item-name').text()),
                 foodQuantity: $(this).children('.additional-item-quantity').text(),
-                foodCost: formatAsDecimal(parseFloat($(this).children('.additional-item-quantity').text()) * getMenuItemPrice($(this).children('.additional-item-name').text()))
+                foodCost: parseFloat($(this).children('.additional-item-quantity').text()) * getMenuItemPrice($(this).children('.additional-item-name').text())
             });
         });
 
