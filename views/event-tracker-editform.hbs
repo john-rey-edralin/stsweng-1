@@ -52,7 +52,7 @@
             {{!-- FORM TITLE --}}
             <div class="d-flex flex-row">
                 <div id="form-title" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-2">
-                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">class</span> CREATE EVENT
+                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">class</span> EDIT EVENT
                     </h1>
                 </div>
             </div>
@@ -208,8 +208,11 @@
                     <div id="form-event-errors">
                         <strong>
                             <div class="text-center text-danger error" id="missing-error"></div>
+                            <div class="text-center text-danger error" id="client-name-error"></div>
                             <div class="text-center text-danger error" id="client-number-error"></div>
+                            <div class="text-center text-danger error" id="rep-name-error"></div>
                             <div class="text-center text-danger error" id="rep-number-error"></div>
+                            <div class="text-center text-danger error" id="event-type-error"></div>
                             <div class="text-center text-danger error" id="event-date-error"></div>
                             <div class="text-center text-danger error" id="event-time-error"></div>
                             <div class="text-center text-danger error" id="event-pax-error"></div>
@@ -696,6 +699,13 @@
                                         spinner.</div>
                                 </div>
                             </div>
+                            <div id="form-event-errors">
+                                <strong>
+                                    <div class="text-center text-danger error" id="downpayment-error"></div>
+                                    <div class="text-center text-danger error" id="downpayment-mode-error"></div>
+                                    <div class="text-center text-danger error" id="downpayment-amount-error"></div>
+                                </strong>
+                            </div>                        
                         </div>
 
                         <hr>
@@ -736,6 +746,13 @@
                                         spinner.</div>
                                 </div>
                             </div>
+                        <div id="form-event-errors">
+                            <strong>
+                                <div class="text-center text-danger error" id="final-payment-error"></div>
+                                <div class="text-center text-danger error" id="final-payment-mode-error"></div>
+                                <div class="text-center text-danger error" id="final-payment-amount-error"></div>
+                            </strong>
+                        </div>   
                         </div>
 
                         <hr>
@@ -756,6 +773,11 @@
                                     <div id="payment-balance-help" class="form-text">Amount owed by the client.</div>
                                 </div>
                             </div>
+                        <div id="form-event-errors">
+                            <strong>
+                                <div class="text-center text-danger error" id="payment-error"></div>
+                            </strong>
+                        </div>
                         </div>
 
                     </div>
@@ -765,8 +787,9 @@
                 {{!-- SUBMIT BUTTON --}}
                 <div class="d-flex flex-row">
                     <div id="submit-button" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-auto">
+                        <a data-bs-toggle="tooltip" data-placement="left" title="Tip: Double check the required* fields">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-submit-modal"
-                            class="btn btn-light" id="submit">Submit</button>
+                            class="btn btn-light" id="submit">Submit</button></a>
                     </div>
                 </div>
 
