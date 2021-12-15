@@ -220,7 +220,7 @@ const eventController = {
                 },
             },
         ]);
-      
+
         let data = {
             reservations: reservations,
         };

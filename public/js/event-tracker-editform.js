@@ -50,10 +50,10 @@ $(document).ready(function () {
     submitForm();
 });
 
-window.addEventListener('beforeunload', function (e) {
-    e.preventDefault();
-    e.returnValue = '';
-});
+// window.addEventListener('beforeunload', function (e) {
+//     e.preventDefault();
+//     e.returnValue = '';
+// });
 
 function retrieveInfoFromDB() {
     $.get('/event-tracker/get/food', function (result) {
@@ -950,150 +950,96 @@ function initializeRealTimeValidation() {
     $('#client-name').keyup(function () {
         var clientname = validator.trim($('#client-name').val());
         if (validator.isEmpty(clientname))
-            displayError(
-                $('#client-name'),
-                $('#client-name-error'),
-                'Client name should be filled.'
-            );
+            displayError($('#client-name'), $('#client-name-error'), 'Client name should be filled.');
         else if (checkStringInput(clientname))
-            displayError(
-                $('#client-name'),
-                $('#client-name-error'),
-                'Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.'
-            );
+            displayError($('#client-name'), $('#client-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         else resetField($('#client-name'), $('#client-name-error'));
     });
 
     $('#client-mobile-number').keyup(function () {
         if (validator.isEmpty($(this).val()))
-            displayError(
-                $('#client-mobile-number'),
-                $('#client-number-error'),
-                'Client mobile number should be filled.'
-            );
+            displayError($('#client-mobile-number'), $('#client-number-error'), 'Client mobile number should be filled.');
         else if ($(this).intlTelInput('isValidNumber'))
             resetField($('#client-mobile-number'), $('#client-number-error'));
         else
-            displayError(
-                $('#client-mobile-number'),
-                $('#client-number-error'),
-                'Invalid client mobile number.'
-            );
+            displayError($('#client-mobile-number'), $('#client-number-error'), 'Invalid client mobile number.');
     });
 
     $('#event-type').keyup(function () {
         var eventtype = validator.trim($(this).val());
         if (validator.isEmpty(eventtype))
-            displayError(
-                $(this),
-                $('#event-type-error'),
-                'Event type should be filled.'
-            );
+            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
         else resetField($(this), $('#event-type-error'));
+
     });
-    $('#event-date').on('change', function () {
-        var eventdate = document.getElementById('event-date').value;
-        validDate(eventdate, $('#event-date-error'), 'event-date');
+    $("#event-date").on("change", function () {
+        var eventdate = document.getElementById("event-date").value;
+        validDate(eventdate, $('#event-date-error'), "event-date");
         checkEventAvailability();
     });
 
     $('#event-time').change(function () {
         if ($('#event-time').val() == '')
-            displayError(
-                $('#event-time'),
-                $('#event-time-error'),
-                'Event time cannot be empty.'
-            );
-        else resetField($('#event-time'), $('#event-time-error'));
+            displayError($('#event-time'), $('#event-time-error'), 'Event time cannot be empty.');
+        else
+            resetField($('#event-time'), $('#event-time-error'));
         checkEventAvailability();
     });
 
-    $('#event-pax').on('change', function () {
+    $('#event-pax').on("change", function () {
         if ($('#event-pax').val() < 0) {
-            displayError(
-                $('#event-pax'),
-                $('#event-pax-error'),
-                'Number of pax cannot be negative.'
-            );
+            displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be negative.');
         } else if ($('#event-pax').val() == 0) {
-            displayError(
-                $('#event-pax'),
-                $('#event-pax-error'),
-                'Number of pax cannot be zero.'
-            );
-        } else {
+            displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be zero.');
+        } else if ($('#event-pax').val() > 120) {
+            displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be more than 120.');
+        }
+        else {
             resetField($('#event-pax'), $('#event-pax-error'));
         }
     });
 
     $('.venue-checkbox').change(function () {
-        var checked = $('input[type=checkbox]:checked').length;
+        var checked = $("input[type=checkbox]:checked").length;
         if (checked <= 0)
-            displayError(
-                $('.venue-checkbox'),
-                $('#missing-error'),
-                'At least 1 venue should be checked.'
-            );
-        else resetField($('.venue-checkbox'), $('#missing-error'));
+            displayError($('.venue-checkbox'), $('#missing-error'), 'At least 1 venue should be checked.');
+        else
+            resetField($('.venue-checkbox'), $('#missing-error'));
     });
 
     $('.package').change(function () {
         let garden = $('#garden-options').val();
         let sunroom = $('#sunroom-options').val();
         let terrace = $('#terrace-options').val();
-        let package = garden || sunroom || terrace;
+        let package = (garden || sunroom || terrace);
         if (package == 0) {
-            displayError(
-                $('.package'),
-                $('#missing-error'),
-                'At least 1 Package should be selected.'
-            );
-            $('#submit').attr('disabled', true);
-        } else resetField($('.package'), $('#missing-error'));
+            displayError($('.package'), $('#missing-error'), 'At least 1 Package should be selected.');
+            $('#submit').attr("disabled", true);
+        }
+        else
+            resetField($('.package'), $('#missing-error'));
         checkEventAvailability();
     });
 
     $('#representative-name').keyup(function () {
         var repname = validator.trim($('#representative-name').val());
         if (checkStringInput(repname))
-            displayError(
-                $('#representative-name'),
-                $('#rep-name-error'),
-                'Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.'
-            );
+            displayError($('#representative-name'), $('#rep-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         else resetField($('#representative-name'), $('#rep-name-error'));
     });
 
     $('#representative-mobile-number').keyup(function () {
-        if (
-            $(this).intlTelInput('isValidNumber') ||
-            validator.isEmpty($(this).val())
-        )
-            resetField(
-                $('#representative-mobile-number'),
-                $('#rep-number-error')
-            );
+        if ($(this).intlTelInput('isValidNumber') || validator.isEmpty($(this).val()))
+            resetField($('#representative-mobile-number'), $('#rep-number-error'));
         else
-            displayError(
-                $('#representative-mobile-number'),
-                $('#rep-number-error'),
-                'Invalid representative mobile number.'
-            );
+            displayError($('#representative-mobile-number'), $('#rep-number-error'), 'Invalid representative mobile number.');
     });
 
     $('#additional-quantity').change(function () {
         if ($('#additional-quantity').val() < 0) {
-            displayError(
-                $('#additional-quantity'),
-                $('#additional-items-error'),
-                'Quantity cannot be negative.'
-            );
+            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
         } else if ($('#additional-quantity').val() == 0) {
-            displayError(
-                $('#additional-quantity'),
-                $('#additional-items-error'),
-                'Quantity cannot be zero.'
-            );
+            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
         } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
         }
@@ -1101,11 +1047,7 @@ function initializeRealTimeValidation() {
     //menu details
     $('#additional-price').change(function () {
         if ($('#additional-price').val() < 0) {
-            displayError(
-                $('#additional-quantity'),
-                $('#additional-items-error'),
-                'Price cannot be negative.'
-            );
+            displayError($('#additional-quantity'), $('#additional-items-error'), 'Price cannot be negative.');
         } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
         }
@@ -1137,18 +1079,14 @@ function initializeRealTimeValidation() {
         }
     });
     //payment details
-    $('#downpayment-date').on('change', function () {
-        var downpaydate = document.getElementById('downpayment-date').value;
-        validDate(downpaydate, $('#downpayment-error'), 'downpayment-date');
+    $("#downpayment-date").on("change", function () {
+        var downpaydate = document.getElementById("downpayment-date").value;
+        validDate(downpaydate, $('#downpayment-error'), "downpayment-date");
     });
 
-    $('#final-payment-date').on('change', function () {
-        var finalpaydate = document.getElementById('final-payment-date').value;
-        validDate(
-            finalpaydate,
-            $('#final-payment-error'),
-            'final-payment-date'
-        );
+    $("#final-payment-date").on("change", function () {
+        var finalpaydate = document.getElementById("final-payment-date").value;
+        validDate(finalpaydate, $('#final-payment-error'), "final-payment-date");
     });
 }
 
@@ -1164,68 +1102,80 @@ function checkIfFilledEventFields() {
     let garden = $('#garden-options').val();
     let sunroom = $('#sunroom-options').val();
     let terrace = $('#terrace-options').val();
-    let package = garden || sunroom || terrace;
+    let package = (garden || sunroom || terrace);
 
     var dd = 1;
     var mm = 1;
     var yyyy = 2032;
-    var dateMax = getDateTime(yyyy + '-' + ('0' + mm) + '-' + ('0' + dd));
+    var dateMax = getDateTime(yyyy + "-" + ("0" + mm) + "-" + ("0" + dd));
 
     var today = new Date();
     var td = today.getDate();
     var tm = today.getMonth() + 1;
     var tyyy = today.getFullYear();
-    if (td < 10) td = '0' + td;
-    if (tm < 10) tm = '0' + tm;
+    if (td < 10)
+        td = '0' + td;
+    if (tm < 10)
+        tm = '0' + tm;
     var dateMin = getDateTime(tyyy + '-' + tm + '-' + td);
 
     if (validator.isEmpty(name)) {
         //console.log("aaaaaaa");
         $('#missing-error').val('Client name should be filled.');
         return true;
-    } else if (checkStringInput(name)) {
+    }
+
+    else if (checkStringInput(name)) {
         //console.log("huhu")
-        $('#missing-error').val(
-            'Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.'
-        );
+        $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         return true;
-    } else if (checkStringInput($('#representative-name').val())) {
+    }
+
+    else if (checkStringInput($('#representative-name').val())) {
         //console.log("rawrrawr")
-        $('#missing-error').val(
-            'Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.'
-        );
+        $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         return true;
-    } else if (validator.isEmpty(cp)) {
+    }
+
+    else if (validator.isEmpty(cp)) {
         //console.log("empty cp")
         $('#missing-error').val('Client mobile number should be filled.');
         return true;
-    } else if (!$('#client-mobile-number').intlTelInput('isValidNumber')) {
+    }
+    else if (!($('#client-mobile-number').intlTelInput('isValidNumber'))) {
         //console.log("a ph number")
         $('#missing-error').val('Invalid cellphone number.');
         return true;
-    } else if (!validator.isEmpty($('#representative-mobile-number').val())) {
-        if (!$('#representative-mobile-number').intlTelInput('isValidNumber')) {
+    }
+    else if (!validator.isEmpty($('#representative-mobile-number').val())) {
+        if (!($('#representative-mobile-number').intlTelInput('isValidNumber'))) {
             //console.log("a rep ph number")
             $('#missing-error').val('Invalid cellphone number.');
             return true;
         }
-    } else if (validator.isEmpty(type)) {
+    }
+    else if (validator.isEmpty(type)) {
         $('#missing-error').val('Event type should be filled.');
         return true;
-    } else if (validator.isEmpty(date)) {
+    }
+
+    else if (validator.isEmpty(date)) {
         //console.log('no event date')
         $('#missing-error').val('Event date should be filled.');
         return true;
-    } else if (!validator.isEmpty(date)) {
+    }
+    else if (!validator.isEmpty(date)) {
         var eventdate = getDateTime(date);
         if ($('#event-date').val().length > 10) {
             $('#missing-error').val('Invalid date.');
             return true;
-        } else if (eventdate - dateMin < 0 || isNaN(eventdate)) {
+        }
+        else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
             //console.log('event date behind')
             $('#missing-error').val('Date cannot be in the past.');
             return true;
-        } else if (eventdate - dateMax >= 0 || isNaN(eventdate)) {
+        }
+        else if ((eventdate - dateMax >= 0) || isNaN(eventdate)) {
             //console.log('event date later')
             $('#missing-error').val('Date cannot be later than 2031.');
             return true;
@@ -1235,74 +1185,96 @@ function checkIfFilledEventFields() {
     if (validator.isEmpty(time)) {
         $('#missing-error').val('Event time should be filled.');
         return true;
-    } else if (validator.isEmpty(pax)) {
+    }
+
+    else if (validator.isEmpty(pax)) {
         //console.log('MAAM THATS EMPTY PAX');
         $('#missing-error').val('Number of pax should be filled.');
         return true;
-    } else if (pax <= 0) {
+    }
+    else if (pax <= 0) {
         //console.log('MAAM THATS NEGATIVE PAX');
-        $('#missing-error').val('Invalid number of pax.');
+        $('#missing-error').val('Number of pax should not be less than or equal to zero.');
         return true;
-    } else if ($('input[type=checkbox]:checked').length <= 0) {
+    }
+    else if (pax > 120) {
+        //console.log('MAAM THATS A LOT OF PAX');
+        $('#missing-error').val('Number of pax should not be more than 120.');
+        return true;
+    }
+    else if ($("input[type=checkbox]:checked").length <= 0) {
         $('#missing-error').val('At least 1 venue should be selected.');
         return true;
-    } else if (package == 0) {
+    }
+    else if (package == 0) {
         $('#missing-error').val('At least 1 package should be selected.');
         return true;
     }
-    if (document.getElementById('downpayment').checked) {
+    if (document.getElementById("downpayment").checked) {
         //console.log("HERE HERE");
-        if (validator.isEmpty($('#downpayment-mode').val())) {
+        if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '') {
+            $('#downpayment-amount-error').val('Invalid payment.');
+            return true;
+        }
+        else if (validator.isEmpty($('#downpayment-mode').val())) {
             $('#downpayment-mode-error').val('Select 1 payment mode.');
             //console.log("HERE HERE HERE");
             return true;
-        } else if (validator.isEmpty($('#downpayment-date').val())) {
+        }
+        else if (validator.isEmpty($('#downpayment-date').val())) {
             $('#downpayment-error').val('Date should be filled.');
             //console.log("HERE RAWR");
             return true;
-        } else if (!validator.isEmpty($('#downpayment-date').val())) {
+        }
+        else if (!validator.isEmpty($('#downpayment-date').val())) {
             var dpaydate = getDateTime($('#downpayment-date').val());
             if ($('#downpayment-date').val().length > 10) {
                 $('#downpayment-error').val('Invalid date.');
                 return true;
-            } else if (dpaydate - dateMin < 0 || isNaN(dpaydate)) {
+            }
+            else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
                 //console.log('downpayment date behind')
                 $('#downpayment-error').val('Date cannot be in the past.');
                 return true;
-            } else if (dpaydate - dateMax >= 0 || isNaN(dpaydate)) {
+            }
+            else if ((dpaydate - dateMax >= 0) || isNaN(dpaydate)) {
                 //console.log('downpayment date later')
                 $('#downpayment-error').val('Date cannot be later than 2031.');
                 return true;
             }
         }
     }
-    if (document.getElementById('final-payment').checked) {
-        console.log('HEHEHE');
-        var totalpayment =
-            parseFloat($('#downpayment-amount').val()) +
-            parseFloat($('#final-payment-amount').val());
-        if (validator.isEmpty($('#final-payment-mode').val())) {
+    if (document.getElementById("final-payment").checked) {
+        console.log("HEHEHE")
+        var totalpayment = parseFloat($('#downpayment-amount').val()) + parseFloat($('#final-payment-amount').val());
+        if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '') {
+            $('#final-payment-amount-error').val('Invalid payment.');
+            return true;
+        }
+        else if (validator.isEmpty($('#final-payment-mode').val())) {
             //console.log("HEHE HEHE")
             $('#final-payment-mode-error').val('Select 1 payment mode.');
             return true;
-        } else if (validator.isEmpty($('#final-payment-date').val())) {
+        }
+        else if (validator.isEmpty($('#final-payment-date').val())) {
             //console.log("EHE")
             $('#final-payment-error').val('Date should be filled.');
             return true;
-        } else if (!validator.isEmpty($('#final-payment-date').val())) {
+        }
+        else if (!validator.isEmpty($('#final-payment-date').val())) {
             var fpaydate = getDateTime($('#final-payment-date').val());
             if ($('#final-payment-date').val().length > 10) {
                 $('#final-payment-error').val('Invalid date.');
                 return true;
-            } else if (fpaydate - dateMin < 0 || isNaN(fpaydate)) {
+            }
+            else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
                 //console.log('final payment date behind')
                 $('#final-payment-error').val('Date cannot be in the past.');
                 return true;
-            } else if (fpaydate - dateMax >= 0 || isNaN(fpaydate)) {
+            }
+            else if ((fpaydate - dateMax >= 0) || isNaN(fpaydate)) {
                 //console.log('final payment date later')
-                $('#final-payment-error').val(
-                    'Date cannot be later than 2031.'
-                );
+                $('#final-payment-error').val('Date cannot be later than 2031.');
                 return true;
             }
         }
@@ -1312,21 +1284,20 @@ function checkIfFilledEventFields() {
         //     $('#payment-error').text('Insuffcient payment.');
         //     $('#payment-amount-total').addClass('is-invalid');
         //     $('#payment-balance').addClass('is-invalid');
-        //     return true;
-        // }
-        // else if(totalpayment > calculateTotal()) {
-        //     console.log("FULLY PAID BUT HAS CHANGE")
-        //     $('#payment-error').text('Customer payment is greater than the total price.');
-        //     $('#payment-amount-total').addClass('is-invalid');
-        //     $('#payment-balance').addClass('is-invalid');
-        //     return true;
-        // }
+        //     return true;             
+        // }   
     }
-
+    if ($('#payment-balance').val() < 0) {
+        console.log("FULLY PAID BUT HAS CHANGE")
+        $('#payment-error').text('Customer payment is greater than the total price.');
+        $('#payment-amount-total').addClass('is-invalid');
+        $('#payment-balance').addClass('is-invalid');
+        return true;
+    }
     //console.log("HEHEHE VALID")
-    // $('#payment-error').text('');
-    // $('#payment-amount-total').removeClass('is-invalid');
-    // $('#payment-balance').removeClass('is-invalid');
+    $('#payment-error').text('');
+    $('#payment-amount-total').removeClass('is-invalid');
+    $('#payment-balance').removeClass('is-invalid');
     $('#missing-error').val('');
     return false;
 }
@@ -1617,7 +1588,7 @@ function getFoodQuantity(food) {
 }
 
 function getEventStatus() {
-    if ($('#downpayment').is('checked')) return 'reserved';
+    if ($('#downpayment-amount').val('') != '') return 'reserved';
     else return 'booked';
 }
 
@@ -1645,18 +1616,9 @@ function submitForm() {
         let menuAdditional = [];
         $('.additional-item').each(function () {
             menuAdditional.push({
-                foodItem: $(this).children('.additional-item-name').text(),
-                foodQuantity: $(this)
-                    .children('.additional-item-quantity')
-                    .text(),
-                foodCost: formatAsDecimal(
-                    parseFloat(
-                        $(this).children('.additional-item-quantity').text()
-                    ) *
-                    getMenuItemPrice(
-                        $(this).children('.additional-item-name').text()
-                    )
-                ),
+                foodItem: getFoodID($(this).children('.additional-item-name').text()),
+                foodQuantity: $(this).children('.additional-item-quantity').text(),
+                foodCost: parseFloat($(this).children('.additional-item-quantity').text()) * getMenuItemPrice($(this).children('.additional-item-name').text())
             });
         });
 
@@ -1777,8 +1739,10 @@ function submitForm() {
             data: json,
             contentType: 'application/json',
             success: function (result) {
-                if (result)
+                if (getEventStatus() == 'reserved')
                     window.location.href = '/event-tracker/reservations';
+                else
+                    window.location.href = '/event-tracker/pencilbookings';
             },
         });
     });
@@ -1973,6 +1937,18 @@ function addExistingFields() {
         if (currevent.downpaymentDate) {
             $('#downpayment-date').val(new Date(currevent.downpaymentDate).toISOString().substr(0, 10));
             $('#downpayment-mode').val(currevent.downpaymentMode);
+            $('#downpayment').prop('checked', true);
+            $(downpayment)
+                .parent()
+                .siblings()
+                .children()
+                .children('input:not(.static), select')
+                .prop('disabled', false);
+        }
+
+        if (currevent.finalPaymentDate) {
+            $('#downpayment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
+            $('#downpayment-mode').val(currevent.finalPaymentMode);
             $('#downpayment').prop('checked', true);
             $(downpayment)
                 .parent()
