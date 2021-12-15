@@ -184,6 +184,8 @@ let menuPackageHTML =
     '</div>';
 
 $(document).ready(function () {
+    $('#submit').attr("disabled", true);
+
     retrieveInfoFromDB();
 
     setRequiredFields();
@@ -193,11 +195,9 @@ $(document).ready(function () {
     initializeMenuFields();
     initializeTransactionFields();
     initializePaymentFields();
-
-    initializeRealTimeValidation();
-
     
-
+    initializeRealTimeValidation();
+    
     submitForm();
 });
 
@@ -433,9 +433,9 @@ function initializeTransactionFields() {
 }
 
 function initializePaymentFields() {
-    $('#downpayment-date').val("");
-    $('#final-payment-date').val("");
-    document.getElementById("final-payment").disabled = true;
+    //$('#downpayment-date').val("");
+    //$('#final-payment-date').val("");
+    //document.getElementById("final-payment").disabled = true;
     var downp = 0;
     var finalp = 0;
     $('.payment-checkbox').on('change', function () {
@@ -496,7 +496,7 @@ function initializePaymentFields() {
                     finalp = parseFloat($('#final-payment-amount').val());
                     $('#payment-amount-total').val(downp + finalp);
                     $('#downpayment-amount').on('change', function () {
-                        downp = parseFloat($('#downpayment-amount').val());
+                        downp = parseFloat($('#downpayment-amount').val()); 
                         $('#payment-amount-total').val(downp + finalp);
                     });
                     $('#payment-balance').val(calculateTotal() - $('#payment-amount-total').val());
@@ -526,20 +526,32 @@ function initializePaymentFields() {
         }
         else {
             var amt1 = 0;
-            if ($('#payment-amount-total').val() != '')
+            if($('#payment-amount-total').val() != '')
                 amt1 = parseFloat($('#payment-amount-total').val());
             if (!document.getElementById("downpayment").checked) {
+                $('#downpayment')
+                .parent()
+                .siblings()
+                .children()
+                .children('input:not(.static), select')
+                .prop('disabled', true);
                 document.getElementById("final-payment").checked = false;
-                document.getElementById("final-payment").disabled = true;
+                $('#final-payment')
+                .parent()
+                .siblings()
+                .children()
+                .children('input:not(.static), select')
+                .prop('disabled', true);
                 $('#downpayment-date').siblings("label").removeClass('required');
                 $('#downpayment-mode').siblings("label").removeClass('required');
                 $('#downpayment-amount').siblings("label").removeClass('required');
 
                 downp = 0;
+                if($('#downpayment-amount').val() == '')
+                    $('#downpayment-amount').val(0);
                 $('#payment-amount-total').val(amt1 - parseFloat($('#downpayment-amount').val()));
                 $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#downpayment-amount').val()));
                 $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
-
                 setDefaultDate('downpayment-date');
                 resetField($('#downpayment-date'), $('#downpayment-error'));
                 resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
@@ -550,7 +562,7 @@ function initializePaymentFields() {
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
             var amt2 = 0;
-            if ($('#payment-amount-total').val() != '')
+            if($('#payment-amount-total').val() != '')
                 amt2 = parseFloat($('#payment-amount-total').val());
             if (!document.getElementById("final-payment").checked) {
                 $("#final-payment").parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
@@ -558,6 +570,8 @@ function initializePaymentFields() {
                 $('#final-payment-mode').siblings("label").removeClass('required');
                 $('#final-payment-amount').siblings("label").removeClass('required');
                 finalp = 0;
+                if($('#final-payment-amount').val() == '')
+                    $('#final-payment-amount').val(0);
                 $('#payment-amount-total').val(amt2 - parseFloat($('#final-payment-amount').val()));
                 $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#final-payment-amount').val()));
                 $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
@@ -571,11 +585,17 @@ function initializePaymentFields() {
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
 
-            if (!document.getElementById("final-payment").checked && !document.getElementById("downpayment").checked) {
+            if(!document.getElementById("final-payment").checked && !document.getElementById("downpayment").checked) {
                 $('#payment-amount-total').val("")
                 $('#payment-balance').val("")
-            }
-            $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
+            } 
+
+            // $(this)
+            //     .parent()
+            //     .siblings()
+            //     .children()
+            //     .children('input:not(.static), select')
+            //     .prop('disabled', true);
         }
     });
 }
@@ -1053,7 +1073,10 @@ function updateBreakdownTable() {
             '<h6 class="mb-0 mt-1 text-center">Please fill out the information above.</h6>'
         );
     }
-
+    // $('#payment-balance').val("");
+    // $('#payment-amount-total').val("");
+    // $('#downpayment-amount').val("");
+    // $('#final-payment-amount').val("");
     if ($('#downpayment-amount').val() != '') {
         $('#payment-balance').val(
             calculateTotal() - $('#downpayment-amount').val()
@@ -1375,8 +1398,6 @@ function checkIfFilledEventFields() {
         }
     }
     if (document.getElementById("final-payment").checked) {
-        console.log("HEHEHE")
-        var totalpayment = parseFloat($('#downpayment-amount').val()) + parseFloat($('#final-payment-amount').val());
         if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '') {
             $('#final-payment-amount-error').val('Invalid payment.');
             return true;
@@ -1418,7 +1439,7 @@ function checkIfFilledEventFields() {
         // }   
     }
     if ($('#payment-balance').val() < 0) {
-        console.log("FULLY PAID BUT HAS CHANGE")
+        //console.log("FULLY PAID BUT HAS CHANGE")
         $('#payment-error').text('Customer payment is greater than the total price.');
         $('#payment-amount-total').addClass('is-invalid');
         $('#payment-balance').addClass('is-invalid');
@@ -1728,7 +1749,7 @@ function getEventStatus() {
 function submitForm() {
     $('form').on('submit', function (event) {
         event.preventDefault();
-
+        
         // stores the venues and packages into an array of strings
         let eventVenues = [];
         let eventPackages = [];
@@ -1795,7 +1816,8 @@ function submitForm() {
         if (porkName) porkQuantity = $('#pork-quantity').val();
         if (chickenName) chickenQuantity = $('#chicken-quantity').val();
         if (fishName) fishQuantity = $('#fish-quantity').val();
-
+        //alert("YYOOOOOOO " + $('#downpayment-amount').val());
+        var downpaymentAmount = $('#downpayment-amount').val();
         // stores all information as an object
         let data = {
             status: getEventStatus(),
@@ -1846,16 +1868,18 @@ function submitForm() {
                 discounts: calculateItemTotal($('.discount-item-amt')),
                 all: calculateTotal(),
             },
-
+            
             downpaymentDate: $('#downpayment-date').val(),
             downpaymentMode: $('#downpayment-mode').val(),
-            downpaymentAmount: $('#downpayment-amount').val(),
+            downpaymentAmount: downpaymentAmount,
 
             finalPaymentDate: $('#final-payment-date').val(),
             finalPaymentMode: $('#final-payment-mode').val(),
             finalPaymentAmount: $('#final-payment-amount').val(),
         };
-
+        $('#downpayment-amount').val(downpaymentAmount);
+        //alert("WEEWOOO " + $('#downpayment-amount').val());
+        
         // converts the JSON object into a String
         let json = JSON.stringify({
             id: curreventID,

@@ -184,15 +184,10 @@ let menuPackageHTML =
 $(document).ready(function () {
     $('#submit').attr("disabled", true);
 
-    $('[data-bs-toggle="tooltip"]').tooltip({
-        placement: 'left'
-    });
-    $('[data-toggle="popover"]').popover();
-
     retrieveInfoFromDB();
 
     setRequiredFields();
-    initializeTooltips()
+    initializeTooltips();
 
     initializeEventFields();
     initializeMenuFields();
@@ -1241,9 +1236,8 @@ function checkIfFilledEventFields() {
             }
         }
     }
-    if (document.getElementById("final-payment").checked) {
-        console.log("HEHEHE")
-        var totalpayment = parseFloat($('#downpayment-amount').val()) + parseFloat($('#final-payment-amount').val());
+    if(document.getElementById("final-payment").checked) {
+        //console.log("HEHEHE")
         if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '') {
             $('#final-payment-amount-error').val('Invalid payment.');
             return true;
@@ -1285,7 +1279,7 @@ function checkIfFilledEventFields() {
         // }   
     }
     if ($('#payment-balance').val() < 0) {
-        console.log("FULLY PAID BUT HAS CHANGE")
+        //console.log("FULLY PAID BUT HAS CHANGE")
         $('#payment-error').text('Customer payment is greater than the total price.');
         $('#payment-amount-total').addClass('is-invalid');
         $('#payment-balance').addClass('is-invalid');

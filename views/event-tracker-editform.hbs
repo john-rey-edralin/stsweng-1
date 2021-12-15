@@ -52,7 +52,7 @@
             {{!-- FORM TITLE --}}
             <div class="d-flex flex-row">
                 <div id="form-title" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-2">
-                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">class</span> EDIT EVENT
+                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">class</span> CREATE EVENT
                     </h1>
                 </div>
             </div>
@@ -78,8 +78,7 @@
                         <div class="col px-4">
                             <div class="form-group my-3">
                                 <label for="client-name">Client Name</label>
-                                <input type="text" class="form-control" id="client-name" name="client-name"
-                                    value="{{event.clientName}}" required>
+                                <input type="text" class="form-control" id="client-name" name="client-name" value="{{event.clientName}}" required>
                                 <div id="client-name-help" class="form-text">Can be the client's given name or Facebook
                                     name.</div>
                             </div>
@@ -112,8 +111,8 @@
                         <div class="col px-4">
                             <div class="form-group my-3">
                                 <label for="event-type">Type of Event</label>
-                                <input type="text" class="form-control autocomplete" id="event-type" name="event-type"
-                                    value="{{event.eventType}}" required>
+                                <input type="text" class="form-control autocomplete" id="event-type" name="event-type" value="{{event.eventType}}"
+                                    required>
                                 <div id="event-type-help" class="form-text">Start typing for suggestions or input a new
                                     type.</div>
                             </div>
@@ -134,8 +133,7 @@
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-pax">Number of Pax</label>
-                                <input type="number" class="form-control w-50" id="event-pax" name="event-pax"
-                                    value="{{event.numOfPax}}" required>
+                                <input type="number" class="form-control w-50" id="event-pax" name="event-pax" value="{{event.numOfPax}}" required>
                                 <div id="event-pax-help" class="form-text">Input by typing or using the spinner.
                                 </div>
                             </div>
@@ -197,8 +195,7 @@
 
                             <div class="form-group my-3">
                                 <label for="event-notes">Notes</label>
-                                <textarea class="form-control" id="event-notes" name="event-notes" rows="4"
-                                    value="{{event.eventNotes}}"></textarea>
+                                <textarea class="form-control" id="event-notes" name="event-notes" rows="4" value="{{event.eventNotes}}"></textarea>
                                 <div id="event-notes-help" name class="form-text">Additional details about the event, if
                                     any.
                                     The box can be resized by dragging the lower-right corner.
@@ -211,8 +208,11 @@
                     <div id="form-event-errors">
                         <strong>
                             <div class="text-center text-danger error" id="missing-error"></div>
+                            <div class="text-center text-danger error" id="client-name-error"></div>
                             <div class="text-center text-danger error" id="client-number-error"></div>
+                            <div class="text-center text-danger error" id="rep-name-error"></div>
                             <div class="text-center text-danger error" id="rep-number-error"></div>
+                            <div class="text-center text-danger error" id="event-type-error"></div>
                             <div class="text-center text-danger error" id="event-date-error"></div>
                             <div class="text-center text-danger error" id="event-time-error"></div>
                             <div class="text-center text-danger error" id="event-pax-error"></div>
@@ -239,181 +239,167 @@
                             respective button. Clicking again will deselect the option. Additional food
                             options may also be added below.</div>
 
-                        <div id="menu-package">
+                        {{!-- MENU BUTTONS --}}
+                        <div class="d-flex flex-row flex-wrap justify-content-center">
+                            <button id="menu-salad-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-salad-contents"
+                                aria-expanded="false" aria-controls="menu-salad-contents">
+                                SALAD
+                            </button>
+                            <button id="menu-pasta-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-pasta-contents"
+                                aria-expanded="false" aria-controls="menu-pasta-contents">
+                                PASTA
+                            </button>
+                            <button id="menu-beef-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-beef-contents"
+                                aria-expanded="false" aria-controls="menu-beef-contents">
+                                BEEF
+                            </button>
+                            <button id="menu-pork-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-pork-contents"
+                                aria-expanded="false" aria-controls="menu-pork-contents">
+                                PORK
+                            </button>
+                            <button id="menu-chicken-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-chicken-contents"
+                                aria-expanded="false" aria-controls="menu-chicken-contents">
+                                CHICKEN
+                            </button>
+                            <button id="menu-fish-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-fish-contents"
+                                aria-expanded="false" aria-controls="menu-fish-contents">
+                                FISH
+                            </button>
+                        </div>
 
-                            {{!-- MENU BUTTONS --}}
-                            <div class="d-flex flex-row flex-wrap justify-content-center">
-                                <button id="menu-salad-button"
-                                    class="btn menu-button border rounded-pill mx-2 px-4 py-2" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#menu-salad-contents"
-                                    aria-expanded="false" aria-controls="menu-salad-contents">
-                                    SALAD
-                                </button>
-                                <button id="menu-pasta-button"
-                                    class="btn menu-button border rounded-pill mx-2 px-4 py-2" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#menu-pasta-contents"
-                                    aria-expanded="false" aria-controls="menu-pasta-contents">
-                                    PASTA
-                                </button>
-                                <button id="menu-beef-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#menu-beef-contents"
-                                    aria-expanded="false" aria-controls="menu-beef-contents">
-                                    BEEF
-                                </button>
-                                <button id="menu-pork-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#menu-pork-contents"
-                                    aria-expanded="false" aria-controls="menu-pork-contents">
-                                    PORK
-                                </button>
-                                <button id="menu-chicken-button"
-                                    class="btn menu-button border rounded-pill mx-2 px-4 py-2" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#menu-chicken-contents"
-                                    aria-expanded="false" aria-controls="menu-chicken-contents">
-                                    CHICKEN
-                                </button>
-                                <button id="menu-fish-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#menu-fish-contents"
-                                    aria-expanded="false" aria-controls="menu-fish-contents">
-                                    FISH
-                                </button>
-                            </div>
-
-                            {{!-- SALAD PACKAGE ITEMS --}}
-                            <div id="menu-salad-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Salad</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="salad-options" id="salad-1"
-                                            value="Chicken Caesar Salad">
-                                        <label class="form-check-label" for="salad-1">Chicken Caesar Salad</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="salad-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="salad-quantity"
-                                                value="{{event.menuPackage.saladQuantity}}" disabled>
-                                        </div>
+                        {{!-- SALAD PACKAGE ITEMS --}}
+                        <div id="menu-salad-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Salad</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="salad-options" id="salad-1"
+                                        value="Chicken Caesar Salad">
+                                    <label class="form-check-label" for="salad-1">Chicken Caesar Salad</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="salad-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="salad-quantity" value="{{event.menuPackage.saladQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {{!-- PASTA PACKAGE ITEMS --}}
-                            <div id="menu-pasta-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Pasta</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="pasta-options" id="pasta-1"
-                                            value="Creamy Chicken Pesto">
-                                        <label class="form-check-label" for="pasta-1">Creamy Chicken Pesto</label>
-                                    </div>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="pasta-options" id="pasta-2"
-                                            value="Shirmp and Squid Marinara">
-                                        <label class="form-check-label" for="pasta-2">Shirmp and Squid Marinara</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="pasta-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="pasta-quantity"
-                                                value="{{event.menuPackage.pastaQuantity}}" disabled>
-                                        </div>
+                        {{!-- PASTA PACKAGE ITEMS --}}
+                        <div id="menu-pasta-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Pasta</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="pasta-options" id="pasta-1"
+                                        value="Creamy Chicken Pesto">
+                                    <label class="form-check-label" for="pasta-1">Creamy Chicken Pesto</label>
+                                </div>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="pasta-options" id="pasta-2"
+                                        value="Shirmp and Squid Marinara">
+                                    <label class="form-check-label" for="pasta-2">Shirmp and Squid Marinara</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="pasta-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="pasta-quantity" value="{{event.menuPackage.pastaQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {{!-- BEEF PACKAGE ITEMS --}}
-                            <div id="menu-beef-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Beef</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="beef-options" id="beef-1"
-                                            value="Balai Yllana Kare Kare">
-                                        <label class="form-check-label" for="beef-1">Balai Yllana Kare Kare</label>
-                                    </div>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="beef-options" id="beef-2"
-                                            value="Caldereta">
-                                        <label class="form-check-label" for="beef-2">Caldereta</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="beef-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="beef-quantity"
-                                                value="{{event.menuPackage.beefQuantity}}" disabled>
-                                        </div>
+                        {{!-- BEEF PACKAGE ITEMS --}}
+                        <div id="menu-beef-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Beef</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="beef-options" id="beef-1"
+                                        value="Balai Yllana Kare Kare">
+                                    <label class="form-check-label" for="beef-1">Balai Yllana Kare Kare</label>
+                                </div>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="beef-options" id="beef-2"
+                                        value="Caldereta">
+                                    <label class="form-check-label" for="beef-2">Caldereta</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="beef-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="beef-quantity" value="{{event.menuPackage.beefQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {{!-- PORK PACKAGE ITEMS --}}
-                            <div id="menu-pork-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Pork</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="pork-options" id="pork-1"
-                                            value="Sisig Ihaw">
-                                        <label class="form-check-label" for="pork-1">Sisig Ihaw</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="pork-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="pork-quantity"
-                                                value="{{event.menuPackage.porkQuantity}}" disabled>
-                                        </div>
+                        {{!-- PORK PACKAGE ITEMS --}}
+                        <div id="menu-pork-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Pork</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="pork-options" id="pork-1"
+                                        value="Sisig Ihaw">
+                                    <label class="form-check-label" for="pork-1">Sisig Ihaw</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="pork-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="pork-quantity" value="{{event.menuPackage.porkQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {{!-- CHICKEN PACKAGE ITEMS --}}
-                            <div id="menu-chicken-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Chicken</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="chicken-options"
-                                            id="chicken-1" value="Buttered Chicken">
-                                        <label class="form-check-label" for="chicken-1">Buttered Chicken</label>
-                                    </div>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="chicken-options"
-                                            id="chicken-2" value="Balai Yllana Fried Chicken">
-                                        <label class="form-check-label" for="chicken-2">Balai Yllana Fried
-                                            Chicken</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="chicken-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="chicken-quantity"
-                                                value="{{event.menuPackage.chickenQuantity}}" disabled>
-                                        </div>
+                        {{!-- CHICKEN PACKAGE ITEMS --}}
+                        <div id="menu-chicken-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Chicken</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="chicken-options" id="chicken-1"
+                                        value="Buttered Chicken">
+                                    <label class="form-check-label" for="chicken-1">Buttered Chicken</label>
+                                </div>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="chicken-options" id="chicken-2"
+                                        value="Balai Yllana Fried Chicken">
+                                    <label class="form-check-label" for="chicken-2">Balai Yllana Fried Chicken</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="chicken-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="chicken-quantity" value="{{event.menuPackage.chickenQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {{!-- FISH PACKAGE ITEMS --}}
-                            <div id="menu-fish-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Fish</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="fish-options" id="fish-1"
-                                            value="Parmesan Crusted Fish">
-                                        <label class="form-check-label" for="fish-1">Parmesan Crusted Fish</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="fish-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="fish-quantity"
-                                                value="{{event.menuPackage.fishQuantity}}" disabled>
-                                        </div>
+                        {{!-- FISH PACKAGE ITEMS --}}
+                        <div id="menu-fish-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Fish</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="fish-options" id="fish-1"
+                                        value="Parmesan Crusted Fish">
+                                    <label class="form-check-label" for="fish-1">Parmesan Crusted Fish</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="fish-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="fish-quantity" value="{{event.menuPackage.fishQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
-                        
                         </div>
 
                         {{!-- RICE AND ICED TEA --}}
@@ -425,8 +411,7 @@
                                     <label for="icedtea-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
                                         <input type="number" class="form-control w-75" id="icedtea-quantity"
-                                            name="icedtea-quantity" value="{{event.menuPackage.icedTeaQuantity}}"
-                                            disabled>
+                                            name="icedtea-quantity" value="{{event.menuPackage.icedTeaQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -714,6 +699,13 @@
                                         spinner.</div>
                                 </div>
                             </div>
+                            <div id="form-event-errors">
+                                <strong>
+                                    <div class="text-center text-danger error" id="downpayment-error"></div>
+                                    <div class="text-center text-danger error" id="downpayment-mode-error"></div>
+                                    <div class="text-center text-danger error" id="downpayment-amount-error"></div>
+                                </strong>
+                            </div>                        
                         </div>
 
                         <hr>
@@ -754,6 +746,13 @@
                                         spinner.</div>
                                 </div>
                             </div>
+                        <div id="form-event-errors">
+                            <strong>
+                                <div class="text-center text-danger error" id="final-payment-error"></div>
+                                <div class="text-center text-danger error" id="final-payment-mode-error"></div>
+                                <div class="text-center text-danger error" id="final-payment-amount-error"></div>
+                            </strong>
+                        </div>   
                         </div>
 
                         <hr>
@@ -774,6 +773,11 @@
                                     <div id="payment-balance-help" class="form-text">Amount owed by the client.</div>
                                 </div>
                             </div>
+                        <div id="form-event-errors">
+                            <strong>
+                                <div class="text-center text-danger error" id="payment-error"></div>
+                            </strong>
+                        </div>
                         </div>
 
                     </div>
@@ -783,8 +787,9 @@
                 {{!-- SUBMIT BUTTON --}}
                 <div class="d-flex flex-row">
                     <div id="submit-button" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-auto">
+                        <a data-bs-toggle="tooltip" data-placement="left" title="Tip: Double check the required* fields">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-submit-modal"
-                            class="btn btn-light" id="submit">Submit</button>
+                            class="btn btn-light" id="submit">Submit</button></a>
                     </div>
                 </div>
 
