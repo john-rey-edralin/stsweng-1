@@ -32,6 +32,157 @@ let discountsTableHeader =
     '<h4 class="col mb-0 mt-1 text-center"><strong>Amount</strong></h4>' +
     '<div class="col"></div>';
 
+let menuPackageHTML =
+    '<div class="d-flex flex-row flex-wrap justify-content-center">' +
+    '<button id="menu-salad-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-salad-contents">' +
+    'SALAD' +
+    '</button>' +
+    '<button id="menu-pasta-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-pasta-contents">' +
+    'PASTA' +
+    '</button> ' +
+    '<button id="menu-beef-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-beef-contents">' +
+    'BEEF' +
+    '</button> ' +
+    '<button id="menu-pork-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-pork-contents">' +
+    'PORK' +
+    '</button> ' +
+    '<button id="menu-chicken-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-chicken-contents">' +
+    'CHICKEN' +
+    '</button> ' +
+    '<button id="menu-fish-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-fish-contents">' +
+    'FISH' +
+    '</button> ' +
+    '</div> ' +
+
+    '<div id="menu-salad-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Salad</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="salad-options" id="salad-1"' +
+    'value="Chicken Caesar Salad">' +
+    '<label class="form-check-label" for="salad-1">Chicken Caesar Salad</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="salad-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="salad-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div id="menu-pasta-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Pasta</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="pasta-options" id="pasta-1"' +
+    'value="Creamy Chicken Pesto">' +
+    '<label class="form-check-label" for="pasta-1">Creamy Chicken Pesto</label>' +
+    '</div>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="pasta-options" id="pasta-2"' +
+    'value="Shirmp and Squid Marinara">' +
+    '<label class="form-check-label" for="pasta-2">Shirmp and Squid Marinara</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="pasta-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="pasta-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div id="menu-beef-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Beef</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="beef-options" id="beef-1"' +
+    'value="Balai Yllana Kare Kare">' +
+    '<label class="form-check-label" for="beef-1">Balai Yllana Kare Kare</label>' +
+    '</div>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="beef-options" id="beef-2"' +
+    'value="Caldereta">' +
+    '<label class="form-check-label" for="beef-2">Caldereta</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="beef-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="beef-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div id="menu-pork-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Pork</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="pork-options" id="pork-1"' +
+    'value="Sisig Ihaw">' +
+    '<label class="form-check-label" for="pork-1">Sisig Ihaw</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="pork-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="pork-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div id="menu-chicken-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Chicken</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="chicken-options" id="chicken-1"' +
+    'value="Buttered Chicken">' +
+    '<label class="form-check-label" for="chicken-1">Buttered Chicken</label>' +
+    '</div>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="chicken-options" id="chicken-2"' +
+    'value="Balai Yllana Fried Chicken">' +
+    '<label class="form-check-label" for="chicken-2">Balai Yllana Fried Chicken</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="chicken-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="chicken-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div id="menu-fish-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Fish</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="fish-options" id="fish-1"' +
+    'value="Parmesan Crusted Fish">' +
+    '<label class="form-check-label" for="fish-1">Parmesan Crusted Fish</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="fish-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="fish-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>';
+
 $(document).ready(function () {
     retrieveInfoFromDB();
 
@@ -142,48 +293,44 @@ function initializeEventFields() {
     //initialize event date
     setDefaultDate('event-date');
     // initialize contact number fields
-    let settings = {
-        autoPlaceholder: 'aggressive',
-        preferredCountries: ['ph'],
-        separateDialCode: true,
-        utilsScript: '/js/utils.js',
-    };
-    $('#client-mobile-number').intlTelInput(settings);
-    $('#representative-mobile-number').intlTelInput(settings);
+    let settings = { autoPlaceholder: "aggressive", preferredCountries: ["ph"], separateDialCode: true, utilsScript: "/js/utils.js" };
+    $("#client-mobile-number").intlTelInput(settings);
+    $("#representative-mobile-number").intlTelInput(settings);
 
     // initialize event type autocomplete options
     let eventTypeTags = [
-        'Birthday',
-        '1st Birthday',
-        '7th Birthday',
-        'Debut',
-        'Wedding',
-        'Anniversary',
-        '10th Anniversary',
-        '25th Anniversary',
-        '50th Anniversary',
-        'Baptism',
-        'Dedication',
-        'Proposal',
-        'Baby Shower',
-        'Bridal Shower',
-        'Bachelor Party',
-        'Bachelorette Party',
-        'Christmas Party',
-        'Reunion',
+        "Birthday",
+        "1st Birthday",
+        "7th Birthday",
+        "Debut",
+        "Wedding",
+        "Anniversary",
+        "10th Anniversary",
+        "25th Anniversary",
+        "50th Anniversary",
+        "Baptism",
+        "Dedication",
+        "Proposal",
+        "Baby Shower",
+        "Bridal Shower",
+        "Bachelor Party",
+        "Bachelorette Party",
+        "Christmas Party",
+        "Reunion"
     ];
-    $('#event-type').autocomplete({
+    $("#event-type").autocomplete({
         minLength: 0,
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(eventTypeTags, request.term);
             response(results.slice(0, 5));
-        },
+        }
     });
 
     // initialize venue + package fields
     $('.venue-checkbox').on('change', function () {
         if ($(this).is(':checked')) {
             $(this).parent().siblings('select').prop('disabled', false);
+
         } else {
             $(this).parent().siblings('select').prop('disabled', true);
             $(this).parent().siblings('select').val('');
@@ -193,22 +340,26 @@ function initializeEventFields() {
 
     // initialize food quantity amount
     $('.package').on('change', function () {
+        if (getVariantCount() > $('.menu-button-active').length) {
+            $('.menu-button').prop('disabled', false);
+        }
+        else if (getVariantCount() == $('.menu-button-active').length) {
+            $('.menu-button:not(.menu-button-active)').prop('disabled', true);
+        }
+        else if (getVariantCount() < $('.menu-button-active').length) {
+            $('#menu-package').empty();
+            $('#menu-package').append(menuPackageHTML);
+            initializeMenuFields();
+        }
         updateFoodQuantity();
         updateBreakdownTable();
     });
-    $('#additional-pax').on('change', function () {
-        updateFoodQuantity();
-        updateBreakdownTable();
-    });
+    $('#additional-pax').on('change', function () { updateFoodQuantity(); updateBreakdownTable(); });
 }
 
 function initializeMenuFields() {
-    $('.menu-item-content').on('hidden.bs.collapse', function () {
-        hideMenuItemInfo($(this));
-    });
-    $('.menu-item-content').on('show.bs.collapse', function () {
-        showMenuItemInfo($(this));
-    });
+    $('.menu-item-content').on('hidden.bs.collapse', function () { hideMenuItemInfo($(this)) });
+    $('.menu-item-content').on('show.bs.collapse', function () { showMenuItemInfo($(this)) });
 
     $('.menu-button').on('click', function () {
         if ($(this).hasClass('menu-button-active')) {
@@ -219,31 +370,25 @@ function initializeMenuFields() {
             $(this).addClass('menu-button-active');
             variantCount++;
             if (getVariantCount() <= $('.menu-button-active').length) {
-                $('.menu-button:not(.menu-button-active)').prop(
-                    'disabled',
-                    true
-                );
+                $('.menu-button:not(.menu-button-active)').prop('disabled', true);
             }
         }
+
     });
 
-    $('.menu-item-autocomplete').autocomplete({
+    $(".menu-item-autocomplete").autocomplete({
         minLength: 0,
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(foodNameList, request.term);
             response(results.slice(0, 5));
-        },
+        }
     });
 
-    $('.additional-add-button').click(function () {
-        addAdditionalItem();
-    });
+    $('.additional-add-button').click(function () { addAdditionalItem(); });
 
     $('#additional-name').change(function () {
         if (foodNameList.includes($('#additional-name').val()))
-            $('#additional-price').val(
-                getMenuItemPrice($('#additional-name').val())
-            );
+            $('#additional-price').val(getMenuItemPrice($('#additional-name').val()));
     });
 
     $('#additional-item-modal').on('hidden.bs.modal', function () {
@@ -255,40 +400,29 @@ function initializeMenuFields() {
 }
 
 function initializeTransactionFields() {
-    $('.extra-charges-autocomplete').autocomplete({
+    $(".extra-charges-autocomplete").autocomplete({
         minLength: 0,
         source: function (request, response) {
-            var results = $.ui.autocomplete.filter(
-                chargeNameList,
-                request.term
-            );
+            var results = $.ui.autocomplete.filter(chargeNameList, request.term);
             response(results.slice(0, 5));
-        },
+        }
     });
 
-    $('.extra-charges-add-button').click(function () {
-        addExtraCharge();
-    });
+    $('.extra-charges-add-button').click(function () { addExtraCharge(); });
 
     $('#extra-charges-name').change(function () {
         if (chargeNameList.indexOf($('#extra-charges-name').val()) != -1)
-            $('#extra-charges-price').val(
-                getExtraChargePrice($('#extra-charges-name').val())
-            );
+            $('#extra-charges-price').val(getExtraChargePrice($('#extra-charges-name').val()));
     });
 
     $('#extra-charges-modal').on('hidden.bs.modal', function () {
-        $(
-            '#extra-charges-name, #extra-charges-quantity, #extra-charges-price'
-        ).val('');
+        $('#extra-charges-name, #extra-charges-quantity, #extra-charges-price').val('');
         resetField($('#extra-charges-name'), $('#extra-charges-error'));
         resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
         resetField($('#extra-charges-price'), $('#extra-charges-error'));
     });
 
-    $('.discount-add-button').click(function () {
-        addDiscount();
-    });
+    $('.discount-add-button').click(function () { addDiscount(); });
 
     $('#discounts-modal').on('hidden.bs.modal', function () {
         $('#discount-name, #discount-quantity, #discount-price').val('');
@@ -299,153 +433,149 @@ function initializeTransactionFields() {
 }
 
 function initializePaymentFields() {
-    $('#downpayment-date').val('');
-    $('#final-payment-date').val('');
+    $('#downpayment-date').val("");
+    $('#final-payment-date').val("");
+    document.getElementById("final-payment").disabled = true;
     var downp = 0;
     var finalp = 0;
     $('.payment-checkbox').on('change', function () {
         if ($(this).is(':checked')) {
-            $('#submit').attr('disabled', true);
-            $(this)
-                .parent()
-                .siblings()
-                .children()
-                .children('input:not(.static), select')
-                .prop('disabled', false);
-            if (document.getElementById('downpayment').checked) {
-                $('#downpayment-amount').on('change', function () {
-                    if ($('#downpayment-amount').val() == '')
-                        $('#downpayment-amount').val(0);
+            $('#submit').attr("disabled", true);
+            $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', false);
+            if (document.getElementById("downpayment").checked) {
+                document.getElementById("final-payment").disabled = false;
+                $('#downpayment-date').siblings("label").addClass('required');
+                $('#downpayment-mode').siblings("label").addClass('required');
+                $('#downpayment-amount').siblings("label").addClass('required');
+
+                $('#downpayment-amount').on('keyup', function () {
+                    if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '')
+                        displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
+                    else
+                        resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
                     downp = parseFloat($('#downpayment-amount').val());
                     $('#payment-amount-total').val(downp + finalp);
                     $('#final-payment-amount').on('change', function () {
                         finalp = parseFloat($('#final-payment-amount').val());
                         $('#payment-amount-total').val(downp + finalp);
                     });
-                    $('#payment-balance').val(
-                        calculateTotal() - $('#payment-amount-total').val()
-                    );
-                    $('#final-payment-amount').attr(
-                        'placeholder',
-                        $('#payment-balance').val()
-                    );
-                    $('#submit').attr('disabled', checkIfFilledEventFields());
+                    $('#payment-balance').val(calculateTotal() - $('#payment-amount-total').val());
+                    $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+                    $('#submit').attr("disabled", checkIfFilledEventFields());
+                    if ($('#payment-balance').val() < 0) {
+                        $('#payment-error').text('Customer payment is greater than the total price.');
+                        $('#payment-amount-total').addClass('is-invalid');
+                        $('#payment-balance').addClass('is-invalid');
+                    }
+                    else {
+                        $('#payment-error').text('');
+                        $('#payment-amount-total').removeClass('is-invalid');
+                        $('#payment-balance').removeClass('is-invalid');
+                    }
                 });
 
                 $('#downpayment-mode').change(function () {
                     if ($('#downpayment-mode').val() == '')
-                        displayError(
-                            $('#downpayment-mode'),
-                            $('#downpayment-mode-error'),
-                            'Select 1 payment mode.'
-                        );
+                        displayError($('#downpayment-mode'), $('#downpayment-mode-error'), 'Select 1 payment mode.');
                     else
-                        resetField(
-                            $('#downpayment-mode'),
-                            $('#downpayment-mode-error')
-                        );
+                        resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
                 });
-                $('#submit').attr('disabled', checkIfFilledEventFields());
+                $('#submit').attr("disabled", checkIfFilledEventFields());
             }
-            if (document.getElementById('final-payment').checked) {
-                $('#final-payment-amount').on('change', function () {
-                    if ($('#final-payment-amount').val() == '')
-                        $('#final-payment-amount').val(0);
+            if (document.getElementById("final-payment").checked) {
+                $('#final-payment-date').siblings("label").addClass('required');
+                $('#final-payment-mode').siblings("label").addClass('required');
+                $('#final-payment-amount').siblings("label").addClass('required');
+                $('#final-payment-amount').on('keyup', function () {
+                    // if($('#final-payment-amount').val() == '')
+                    //     $('#final-payment-amount').val(0); 
+                    if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '')
+                        displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
+                    else
+                        resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
                     finalp = parseFloat($('#final-payment-amount').val());
                     $('#payment-amount-total').val(downp + finalp);
                     $('#downpayment-amount').on('change', function () {
                         downp = parseFloat($('#downpayment-amount').val());
                         $('#payment-amount-total').val(downp + finalp);
                     });
-                    $('#payment-balance').val(
-                        calculateTotal() - $('#payment-amount-total').val()
-                    );
-                    $('#final-payment-amount').attr(
-                        'placeholder',
-                        $('#payment-balance').val()
-                    );
-                    $('#submit').attr('disabled', checkIfFilledEventFields());
+                    $('#payment-balance').val(calculateTotal() - $('#payment-amount-total').val());
+                    $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+                    $('#submit').attr("disabled", checkIfFilledEventFields());
+                    if ($('#payment-balance').val() < 0) {
+                        console.log($('#payment-balance').val());
+                        $('#payment-error').text('Customer payment is greater than the total price.');
+                        $('#payment-amount-total').addClass('is-invalid');
+                        $('#payment-balance').addClass('is-invalid');
+                    }
+                    else {
+                        $('#payment-error').text('');
+                        $('#payment-amount-total').removeClass('is-invalid');
+                        $('#payment-balance').removeClass('is-invalid');
+                    }
                 });
 
                 $('#final-payment-mode').change(function () {
                     if ($('#final-payment-mode').val() == '')
-                        displayError(
-                            $('#final-payment-mode'),
-                            $('#final-payment-mode-error'),
-                            'Select 1 payment mode.'
-                        );
+                        displayError($('#final-payment-mode'), $('#final-payment-mode-error'), 'Select 1 payment mode.');
                     else
-                        resetField(
-                            $('#final-payment-mode'),
-                            $('#final-payment-mode-error')
-                        );
+                        resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
                 });
-                $('#submit').attr('disabled', checkIfFilledEventFields());
+                $('#submit').attr("disabled", checkIfFilledEventFields());
             }
-        } else {
+        }
+        else {
             var amt1 = 0;
             if ($('#payment-amount-total').val() != '')
                 amt1 = parseFloat($('#payment-amount-total').val());
-            if (!document.getElementById('downpayment').checked) {
-                //console.log("AAAAAAAAA");
+            if (!document.getElementById("downpayment").checked) {
+                document.getElementById("final-payment").checked = false;
+                document.getElementById("final-payment").disabled = true;
+                $('#downpayment-date').siblings("label").removeClass('required');
+                $('#downpayment-mode').siblings("label").removeClass('required');
+                $('#downpayment-amount').siblings("label").removeClass('required');
+
                 downp = 0;
-                $('#payment-amount-total').val(
-                    amt1 - parseFloat($('#downpayment-amount').val())
-                );
-                $('#payment-balance').val(
-                    parseFloat($('#payment-balance').val()) +
-                    parseFloat($('#downpayment-amount').val())
-                );
-                $('#final-payment-amount').attr(
-                    'placeholder',
-                    $('#payment-balance').val()
-                );
+                $('#payment-amount-total').val(amt1 - parseFloat($('#downpayment-amount').val()));
+                $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#downpayment-amount').val()));
+                $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
 
                 setDefaultDate('downpayment-date');
                 resetField($('#downpayment-date'), $('#downpayment-error'));
-                resetField(
-                    $('#downpayment-mode'),
-                    $('#downpayment-mode-error')
-                );
-                $('#downpayment-mode').val('');
-                $('#downpayment-amount').val('');
-                $('#downpayment-date').val('');
-                $('#submit').attr('disabled', checkIfFilledEventFields());
+                resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
+                resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
+                $('#downpayment-mode').val("");
+                $('#downpayment-amount').val("");
+                $('#downpayment-date').val("");
+                $('#submit').attr("disabled", checkIfFilledEventFields());
             }
             var amt2 = 0;
             if ($('#payment-amount-total').val() != '')
                 amt2 = parseFloat($('#payment-amount-total').val());
-            if (!document.getElementById('final-payment').checked) {
-                //console.log("WEEEEEEEEE");
+            if (!document.getElementById("final-payment").checked) {
+                $("#final-payment").parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
+                $('#final-payment-date').siblings("label").removeClass('required');
+                $('#final-payment-mode').siblings("label").removeClass('required');
+                $('#final-payment-amount').siblings("label").removeClass('required');
                 finalp = 0;
-                $('#payment-amount-total').val(
-                    amt2 - parseFloat($('#final-payment-amount').val())
-                );
-                $('#payment-balance').val(
-                    parseFloat($('#payment-balance').val()) +
-                    parseFloat($('#final-payment-amount').val())
-                );
-                $('#final-payment-amount').attr(
-                    'placeholder',
-                    $('#payment-balance').val()
-                );
+                $('#payment-amount-total').val(amt2 - parseFloat($('#final-payment-amount').val()));
+                $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#final-payment-amount').val()));
+                $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
                 setDefaultDate('final-payment-date');
                 resetField($('#final-payment-date'), $('#final-payment-error'));
-                resetField(
-                    $('#final-payment-mode'),
-                    $('#final-payment-mode-error')
-                );
-                $('#final-payment-mode').val('');
-                $('#final-payment-amount').val('');
-                $('#final-payment-date').val('');
-                $('#submit').attr('disabled', checkIfFilledEventFields());
+                resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
+                resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
+                $('#final-payment-mode').val("");
+                $('#final-payment-amount').val("");
+                $('#final-payment-date').val("");
+                $('#submit').attr("disabled", checkIfFilledEventFields());
             }
-            $(this)
-                .parent()
-                .siblings()
-                .children()
-                .children('input:not(.static), select')
-                .prop('disabled', true);
+
+            if (!document.getElementById("final-payment").checked && !document.getElementById("downpayment").checked) {
+                $('#payment-amount-total').val("")
+                $('#payment-balance').val("")
+            }
+            $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
         }
     });
 }
