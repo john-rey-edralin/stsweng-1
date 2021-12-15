@@ -184,8 +184,7 @@ let menuPackageHTML =
     '</div>';
 
 $(document).ready(function () {
-    $('#submit').attr("disabled", true);
-
+    //$('#submit').attr("disabled", true);
     retrieveInfoFromDB();
 
     setRequiredFields();
@@ -278,8 +277,8 @@ function retrieveInfoFromDB() {
                 })
             );
         });
-        addExistingFields();
     });
+    addExistingFields();
 }
 
 function initializeTooltips() {
@@ -536,6 +535,7 @@ function initializePaymentFields() {
                 .children('input:not(.static), select')
                 .prop('disabled', true);
                 document.getElementById("final-payment").checked = false;
+                document.getElementById("final-payment").disabled = true;
                 $('#final-payment')
                 .parent()
                 .siblings()
@@ -551,7 +551,7 @@ function initializePaymentFields() {
                     $('#downpayment-amount').val(0);
                 $('#payment-amount-total').val(amt1 - parseFloat($('#downpayment-amount').val()));
                 $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#downpayment-amount').val()));
-                $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+                $('#final-payment-amount').attr("placeholder", "");
                 setDefaultDate('downpayment-date');
                 resetField($('#downpayment-date'), $('#downpayment-error'));
                 resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
@@ -559,6 +559,8 @@ function initializePaymentFields() {
                 $('#downpayment-mode').val("");
                 $('#downpayment-amount').val("");
                 $('#downpayment-date').val("");
+                $('#payment-amount-total').val("")
+                $('#payment-balance').val("")
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
             var amt2 = 0;
@@ -582,13 +584,9 @@ function initializePaymentFields() {
                 $('#final-payment-mode').val("");
                 $('#final-payment-amount').val("");
                 $('#final-payment-date').val("");
+                $('#final-payment-amount').attr("placeholder", "");
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
-
-            if(!document.getElementById("final-payment").checked && !document.getElementById("downpayment").checked) {
-                $('#payment-amount-total').val("")
-                $('#payment-balance').val("")
-            } 
 
             // $(this)
             //     .parent()
@@ -1090,7 +1088,7 @@ function updateBreakdownTable() {
     if ($('#final-payment-amount').val() != '') {
         $('#payment-amount-total').val(
             parseFloat($('#downpayment-amount').val()) +
-            parseFloat($(this).val())
+            parseFloat($('#final-payment-amount').val())
         );
         $('#payment-balance').val(
             calculateTotal() - $('#payment-amount-total').val()
@@ -1938,15 +1936,15 @@ function addExistingFields() {
             if (currevent.packageList[j].packageVenue === 'Garden')
                 $('#garden-options').val(
                     currevent.packageList[j].packageCode
-                );
+                ).change();
             else if (currevent.packageList[j].packageVenue === 'Sunroom')
                 $('#sunroom-options').val(
                     currevent.packageList[j].packageCode
-                );
+                ).change();
             else if (currevent.packageList[j].packageVenue === 'Terrace')
                 $('#terrace-options').val(
                     currevent.packageList[j].packageCode
-                );
+                ).change();
         }
 
         // set additional pax checkbox
@@ -2087,24 +2085,23 @@ function addExistingFields() {
         updateBreakdownTable();
 
         // set payment details
-        console.log(currevent.downpaymentDate)
         if (currevent.downpaymentDate) {
             $('#downpayment-date').val(new Date(currevent.downpaymentDate).toISOString().substr(0, 10));
-            $('#downpayment-mode').val(currevent.downpaymentMode);
+            $('#downpayment-mode').val(currevent.downpaymentMode).change();
             $('#downpayment').prop('checked', true);
-            $(downpayment)
+            $('#downpayment')
                 .parent()
                 .siblings()
                 .children()
                 .children('input:not(.static), select')
                 .prop('disabled', false);
         }
-
+        
         if (currevent.finalPaymentDate) {
-            $('#downpayment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
-            $('#downpayment-mode').val(currevent.finalPaymentMode);
-            $('#downpayment').prop('checked', true);
-            $(downpayment)
+            $('#final-payment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
+            $('#final-payment-mode').val(currevent.finalPaymentMode).change();
+            $('#final-payment').prop('checked', true);
+            $('#final-payment')
                 .parent()
                 .siblings()
                 .children()
