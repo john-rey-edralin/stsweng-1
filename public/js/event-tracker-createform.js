@@ -1550,7 +1550,7 @@ function submitForm() {
             transactionCharges.push({
                 chargeName: $(this).children('.extra-charges-item-name').text(),
                 chargeQuantity: $(this).children('.extra-charges-item-quantity').text(),
-                chargePrice: $(this).children('.extra-charges-item-price').text()
+                chargePrice: formatAsNumber($(this).children('.extra-charges-item-price').text())
             });
         });
 
@@ -1559,7 +1559,7 @@ function submitForm() {
         $('.discount-item').each(function () {
             transactionDiscounts.push({
                 discountName: $(this).children('.discount-item-name').text(),
-                discountPrice: $(this).children('.discount-item-amt').text()
+                discountPrice: formatAsNumber($(this).children('.discount-item-amt').text())
             });
         });
 

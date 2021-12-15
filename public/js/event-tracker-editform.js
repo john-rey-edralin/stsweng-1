@@ -1665,7 +1665,11 @@ function getPackageIndex(list, code) {
 }
 
 function getMenuItemPrice(name) {
-    return foodList[foodNameList.indexOf($('#additional-name').val())].price;
+    return foodList[foodNameList.indexOf(name)].price;
+}
+
+function getFoodID(name) {
+    return foodList[foodNameList.indexOf(name)]._id;
 }
 
 function getExtraChargePrice(name) {
@@ -1776,12 +1780,8 @@ function submitForm() {
         $('.extra-charges-item').each(function () {
             transactionCharges.push({
                 chargeName: $(this).children('.extra-charges-item-name').text(),
-                chargeQuantity: $(this)
-                    .children('.extra-charges-item-quantity')
-                    .text(),
-                chargePrice: $(this)
-                    .children('.extra-charges-item-price')
-                    .text(),
+                chargeQuantity: $(this).children('.extra-charges-item-quantity').text(),
+                chargePrice: formatAsNumber($(this).children('.extra-charges-item-price').text())
             });
         });
 
@@ -1790,7 +1790,7 @@ function submitForm() {
         $('.discount-item').each(function () {
             transactionDiscounts.push({
                 discountName: $(this).children('.discount-item-name').text(),
-                discountPrice: $(this).children('.discount-item-amt').text(),
+                discountPrice: formatAsNumber($(this).children('.discount-item-amt').text())
             });
         });
 
