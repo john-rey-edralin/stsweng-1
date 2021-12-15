@@ -13,13 +13,14 @@
 
     <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.bundle.js"></script>
-    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.js"></script>
     <script type="text/javascript" src="/js/intlTelInput-jquery.min.js"></script>
     <script type="text/javascript" src="/js/validator.min.js"></script>
-    <script type="text/javascript" src="/js/event-tracker-createform.js"></script>
+    <script type="text/javascript" src="/js/event-tracker-editform.js"></script>
 </head>
 
-<body class="d-flex flex-column position-relative" data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="50" tabindex="0">
+<body class="d-flex flex-column position-relative" data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="50"
+    tabindex="0">
     <nav class="navbar navbar-expand-xl bg-dark sticky-top shadow-sm" id="navbar">
         <div class="container-fluid">
             <div class="me-auto">
@@ -56,6 +57,8 @@
                 </div>
             </div>
 
+            <p id="event-id" hidden>{{event._id}}</p>
+
             <br>
             <form>
                 {{!-- EVENT DETAILS --}}
@@ -75,14 +78,14 @@
                         <div class="col px-4">
                             <div class="form-group my-3">
                                 <label for="client-name">Client Name</label>
-                                <input type="text" class="form-control" id="client-name" name="client-name" required>
+                                <input type="text" class="form-control" id="client-name" name="client-name" value="{{event.clientName}}" required>
                                 <div id="client-name-help" class="form-text">Can be the client's given name or Facebook
                                     name.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="client-mobile-number">Client Mobile Number</label>
                                 <input type="tel" class="form-control" id="client-mobile-number"
-                                    name="client-mobile-number" required>
+                                    name="client-mobile-number" value="{{event.clientMobileNumber}}" required>
                                 <div id="client-mobile-number-help" class="form-text">Country code can be changed if
                                     needed.
                                 </div>
@@ -90,14 +93,14 @@
                             <div class="form-group my-3">
                                 <label for="representative-name">Representative Name</label>
                                 <input type="text" class="form-control" id="representative-name"
-                                    name="representative-name">
+                                    name="representative-name" value="{{event.repName}}">
                                 <div id="representative-name-help" class="form-text">Authorized representative of the
                                     client.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="representative-contact-number">Representative Mobile Number</label>
                                 <input type="tel" class="form-control" id="representative-mobile-number"
-                                    name="representative-mobile-number">
+                                    name="representative-mobile-number" value="{{event.repMobileNumber}}">
                                 <div id="representative-mobile-number-help" class="form-text">Country code can be
                                     changed if needed.
                                 </div>
@@ -108,20 +111,20 @@
                         <div class="col px-4">
                             <div class="form-group my-3">
                                 <label for="event-type">Type of Event</label>
-                                <input type="text" class="form-control autocomplete" id="event-type" name="event-type"
+                                <input type="text" class="form-control autocomplete" id="event-type" name="event-type" value="{{event.eventType}}"
                                     required>
                                 <div id="event-type-help" class="form-text">Start typing for suggestions or input a new
                                     type.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-date">Date of Event</label>
-                                <input type="date" class="form-control" id="event-date" name="event-date" required>
+                                <input type="date" class="form-control w-75" id="event-date" name="event-date" required>
                                 <div id="event-date-help" class="form-text">Choose a date from the date picker.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-time">Time of Event</label>
                                 <select class="form-control form-select" id="event-time" name="event-time" required>
-                                    <option value="" selected value>Select an option...</option>
+                                    <option value="">Select an option...</option>
                                     <option value="Afternoon">Afternoon (11:00 AM - 02:00 PM)</option>
                                     <option value="Evening">Evening (04:00 PM - 07:00 PM)</option>
                                 </select>
@@ -130,7 +133,7 @@
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-pax">Number of Pax</label>
-                                <input type="number" class="form-control w-50" id="event-pax" name="event-pax" required>
+                                <input type="number" class="form-control w-50" id="event-pax" name="event-pax" value="{{event.numOfPax}}" required>
                                 <div id="event-pax-help" class="form-text">Input by typing or using the spinner.
                                 </div>
                             </div>
@@ -192,7 +195,7 @@
 
                             <div class="form-group my-3">
                                 <label for="event-notes">Notes</label>
-                                <textarea class="form-control" id="event-notes" name="event-notes" rows="4"></textarea>
+                                <textarea class="form-control" id="event-notes" name="event-notes" rows="4" value="{{event.eventNotes}}"></textarea>
                                 <div id="event-notes-help" name class="form-text">Additional details about the event, if
                                     any.
                                     The box can be resized by dragging the lower-right corner.
@@ -205,11 +208,8 @@
                     <div id="form-event-errors">
                         <strong>
                             <div class="text-center text-danger error" id="missing-error"></div>
-                            <div class="text-center text-danger error" id="client-name-error"></div>
                             <div class="text-center text-danger error" id="client-number-error"></div>
-                            <div class="text-center text-danger error" id="rep-name-error"></div>
                             <div class="text-center text-danger error" id="rep-number-error"></div>
-                            <div class="text-center text-danger error" id="event-type-error"></div>
                             <div class="text-center text-danger error" id="event-date-error"></div>
                             <div class="text-center text-danger error" id="event-time-error"></div>
                             <div class="text-center text-danger error" id="event-pax-error"></div>
@@ -236,165 +236,167 @@
                             respective button. Clicking again will deselect the option. Additional food
                             options may also be added below.</div>
 
-                        <div id="menu-package">
-    
-                            {{!-- MENU BUTTONS --}}
-                            <div class="d-flex flex-row flex-wrap justify-content-center">
-                                <button id="menu-salad-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#menu-salad-contents">
-                                    SALAD
-                                </button>
-                                <button id="menu-pasta-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#menu-pasta-contents">
-                                    PASTA
-                                </button>
-                                <button id="menu-beef-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#menu-beef-contents">
-                                    BEEF
-                                </button>
-                                <button id="menu-pork-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#menu-pork-contents">
-                                    PORK
-                                </button>
-                                <button id="menu-chicken-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#menu-chicken-contents">
-                                    CHICKEN
-                                </button>
-                                <button id="menu-fish-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#menu-fish-contents">
-                                    FISH
-                                </button>
-                            </div>
+                        {{!-- MENU BUTTONS --}}
+                        <div class="d-flex flex-row flex-wrap justify-content-center">
+                            <button id="menu-salad-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-salad-contents"
+                                aria-expanded="false" aria-controls="menu-salad-contents">
+                                SALAD
+                            </button>
+                            <button id="menu-pasta-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-pasta-contents"
+                                aria-expanded="false" aria-controls="menu-pasta-contents">
+                                PASTA
+                            </button>
+                            <button id="menu-beef-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-beef-contents"
+                                aria-expanded="false" aria-controls="menu-beef-contents">
+                                BEEF
+                            </button>
+                            <button id="menu-pork-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-pork-contents"
+                                aria-expanded="false" aria-controls="menu-pork-contents">
+                                PORK
+                            </button>
+                            <button id="menu-chicken-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-chicken-contents"
+                                aria-expanded="false" aria-controls="menu-chicken-contents">
+                                CHICKEN
+                            </button>
+                            <button id="menu-fish-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#menu-fish-contents"
+                                aria-expanded="false" aria-controls="menu-fish-contents">
+                                FISH
+                            </button>
+                        </div>
 
-                            {{!-- SALAD PACKAGE ITEMS --}}
-                            <div id="menu-salad-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Salad</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="salad-options" id="salad-1"
-                                            value="Chicken Caesar Salad">
-                                        <label class="form-check-label" for="salad-1">Chicken Caesar Salad</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="salad-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="salad-quantity" disabled>
-                                        </div>
+                        {{!-- SALAD PACKAGE ITEMS --}}
+                        <div id="menu-salad-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Salad</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="salad-options" id="salad-1"
+                                        value="Chicken Caesar Salad">
+                                    <label class="form-check-label" for="salad-1">Chicken Caesar Salad</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="salad-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="salad-quantity" value="{{event.menuPackage.saladQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {{!-- PASTA PACKAGE ITEMS --}}
-                            <div id="menu-pasta-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Pasta</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="pasta-options" id="pasta-1"
-                                            value="Creamy Chicken Pesto">
-                                        <label class="form-check-label" for="pasta-1">Creamy Chicken Pesto</label>
-                                    </div>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="pasta-options" id="pasta-2"
-                                            value="Shirmp and Squid Marinara">
-                                        <label class="form-check-label" for="pasta-2">Shirmp and Squid Marinara</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="pasta-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="pasta-quantity" disabled>
-                                        </div>
+                        {{!-- PASTA PACKAGE ITEMS --}}
+                        <div id="menu-pasta-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Pasta</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="pasta-options" id="pasta-1"
+                                        value="Creamy Chicken Pesto">
+                                    <label class="form-check-label" for="pasta-1">Creamy Chicken Pesto</label>
+                                </div>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="pasta-options" id="pasta-2"
+                                        value="Shirmp and Squid Marinara">
+                                    <label class="form-check-label" for="pasta-2">Shirmp and Squid Marinara</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="pasta-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="pasta-quantity" value="{{event.menuPackage.pastaQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {{!-- BEEF PACKAGE ITEMS --}}
-                            <div id="menu-beef-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Beef</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="beef-options" id="beef-1"
-                                            value="Balai Yllana Kare Kare">
-                                        <label class="form-check-label" for="beef-1">Balai Yllana Kare Kare</label>
-                                    </div>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="beef-options" id="beef-2"
-                                            value="Caldereta">
-                                        <label class="form-check-label" for="beef-2">Caldereta</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="beef-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="beef-quantity" disabled>
-                                        </div>
+                        {{!-- BEEF PACKAGE ITEMS --}}
+                        <div id="menu-beef-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Beef</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="beef-options" id="beef-1"
+                                        value="Balai Yllana Kare Kare">
+                                    <label class="form-check-label" for="beef-1">Balai Yllana Kare Kare</label>
+                                </div>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="beef-options" id="beef-2"
+                                        value="Caldereta">
+                                    <label class="form-check-label" for="beef-2">Caldereta</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="beef-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="beef-quantity" value="{{event.menuPackage.beefQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {{!-- PORK PACKAGE ITEMS --}}
-                            <div id="menu-pork-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Pork</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="pork-options" id="pork-1"
-                                            value="Sisig Ihaw">
-                                        <label class="form-check-label" for="pork-1">Sisig Ihaw</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="pork-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="pork-quantity" disabled>
-                                        </div>
+                        {{!-- PORK PACKAGE ITEMS --}}
+                        <div id="menu-pork-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Pork</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="pork-options" id="pork-1"
+                                        value="Sisig Ihaw">
+                                    <label class="form-check-label" for="pork-1">Sisig Ihaw</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="pork-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="pork-quantity" value="{{event.menuPackage.porkQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {{!-- CHICKEN PACKAGE ITEMS --}}
-                            <div id="menu-chicken-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Chicken</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="chicken-options" id="chicken-1"
-                                            value="Buttered Chicken">
-                                        <label class="form-check-label" for="chicken-1">Buttered Chicken</label>
-                                    </div>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="chicken-options" id="chicken-2"
-                                            value="Balai Yllana Fried Chicken">
-                                        <label class="form-check-label" for="chicken-2">Balai Yllana Fried Chicken</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="chicken-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="chicken-quantity" disabled>
-                                        </div>
+                        {{!-- CHICKEN PACKAGE ITEMS --}}
+                        <div id="menu-chicken-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Chicken</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="chicken-options" id="chicken-1"
+                                        value="Buttered Chicken">
+                                    <label class="form-check-label" for="chicken-1">Buttered Chicken</label>
+                                </div>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="chicken-options" id="chicken-2"
+                                        value="Balai Yllana Fried Chicken">
+                                    <label class="form-check-label" for="chicken-2">Balai Yllana Fried Chicken</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="chicken-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="chicken-quantity" value="{{event.menuPackage.chickenQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {{!-- FISH PACKAGE ITEMS --}}
-                            <div id="menu-fish-contents" class="menu-item-content collapse">
-                                <hr>
-                                <div class="d-flex flex-row justify-content-start">
-                                    <h2 class="menu-item-header mx-4 align-self-center">Fish</h2>
-                                    <div class="form-check mx-5 align-self-center">
-                                        <input class="form-check-input" type="radio" name="fish-options" id="fish-1"
-                                            value="Parmesan Crusted Fish">
-                                        <label class="form-check-label" for="fish-1">Parmesan Crusted Fish</label>
-                                    </div>
-                                    <div class="form-group row my-3 ms-auto">
-                                        <label for="fish-quantity" class="col col-form-label">Quantity</label>
-                                        <div class="col-8">
-                                            <input type="number" class="form-control w-75" id="fish-quantity" disabled>
-                                        </div>
+                        {{!-- FISH PACKAGE ITEMS --}}
+                        <div id="menu-fish-contents" class="menu-item-content collapse">
+                            <hr>
+                            <div class="d-flex flex-row justify-content-start">
+                                <h2 class="menu-item-header mx-4 align-self-center">Fish</h2>
+                                <div class="form-check mx-5 align-self-center">
+                                    <input class="form-check-input" type="radio" name="fish-options" id="fish-1"
+                                        value="Parmesan Crusted Fish">
+                                    <label class="form-check-label" for="fish-1">Parmesan Crusted Fish</label>
+                                </div>
+                                <div class="form-group row my-3 ms-auto">
+                                    <label for="fish-quantity" class="col col-form-label">Quantity</label>
+                                    <div class="col-8">
+                                        <input type="number" class="form-control w-75" id="fish-quantity" value="{{event.menuPackage.fishQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
                         {{!-- RICE AND ICED TEA --}}
@@ -406,7 +408,7 @@
                                     <label for="icedtea-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
                                         <input type="number" class="form-control w-75" id="icedtea-quantity"
-                                            name="icedtea-quantity" disabled>
+                                            name="icedtea-quantity" value="{{event.menuPackage.icedTeaQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -417,7 +419,7 @@
                                     <label for="rice-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
                                         <input type="number" class="form-control w-75" id="rice-quantity"
-                                            name="rice-quantity" disabled>
+                                            name="rice-quantity" value="{{event.menuPackage.riceQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -668,7 +670,7 @@
                                 <div class="col form-group my-3">
                                     <label for="downpayment-date">Date of Payment</label>
                                     <input type="date" class="form-control" id="downpayment-date"
-                                        name="downpayment-date" disabled>
+                                        name="downpayment-date" value={{event.downpaymentDate}} disabled>
                                     <div id="downpayment-date-help" class="form-text">Choose a date from the date
                                         picker.</div>
                                 </div>
@@ -689,17 +691,10 @@
                                 <div class="col form-group my-3">
                                     <label for="downpayment-amount">Amount Paid</label>
                                     <input type="number" class="form-control" id="downpayment-amount"
-                                        name="downpayment-amount" disabled>
+                                        name="downpayment-amount" value={{event.downpaymentAmount}} disabled>
                                     <div id="downpayment-amount-help" class="form-text">Input by typing or using the
                                         spinner.</div>
                                 </div>
-                            </div>
-                            <div id="form-event-errors">
-                                <strong>
-                                    <div class="text-center text-danger error" id="downpayment-error"></div>
-                                    <div class="text-center text-danger error" id="downpayment-mode-error"></div>
-                                    <div class="text-center text-danger error" id="downpayment-amount-error"></div>
-                                </strong>
                             </div>
                         </div>
 
@@ -736,18 +731,11 @@
                                 <div class="col form-group my-3">
                                     <label for="final-payment-amount">Amount Paid</label>
                                     <input type="number" class="form-control" id="final-payment-amount"
-                                        name="final-payment-amount" disabled>
+                                        name="final-payment-amount" value={{event.finalPaymentAmount}} disabled>
                                     <div id="final-payment-amount-help" class="form-text">Input by typing or using the
                                         spinner.</div>
                                 </div>
                             </div>
-                        <div id="form-event-errors">
-                            <strong>
-                                <div class="text-center text-danger error" id="final-payment-error"></div>
-                                <div class="text-center text-danger error" id="final-payment-mode-error"></div>
-                                <div class="text-center text-danger error" id="final-payment-amount-error"></div>
-                            </strong>
-                        </div>
                         </div>
 
                         <hr>
@@ -768,11 +756,6 @@
                                     <div id="payment-balance-help" class="form-text">Amount owed by the client.</div>
                                 </div>
                             </div>
-                        <div id="form-event-errors">
-                            <strong>
-                                <div class="text-center text-danger error" id="payment-error"></div>
-                            </strong>
-                        </div>
                         </div>
 
                     </div>
@@ -782,9 +765,8 @@
                 {{!-- SUBMIT BUTTON --}}
                 <div class="d-flex flex-row">
                     <div id="submit-button" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-auto">
-                        <a data-bs-toggle="tooltip" data-placement="left" title="Tip: Double check the required* fields"> 
                         <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-submit-modal"
-                            class="btn btn-light" id="submit">Submit</button></a>
+                            class="btn btn-light" id="submit">Submit</button>
                     </div>
                 </div>
 
@@ -821,7 +803,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" onclick="window.location='/event-tracker/home'"
+                                <button type="button" onclick="window.location='/event-tracker/reservations'"
                                     class="btn btn-danger">Exit</button>
                             </div>
                         </div>

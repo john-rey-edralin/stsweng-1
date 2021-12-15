@@ -9,6 +9,8 @@ let terracePackageList = [];
 let additionalPackageList = [];
 let variantCount = 0;
 
+let curreventID;
+
 let additionalFoodTableHeader =
     '<h4 class="col-5 mb-0 mt-1"><strong>Food Item Name</strong></h4>' +
     '<h4 class="col mb-0 mt-1 text-center"><strong>Quantity</strong></h4>' +
@@ -30,169 +32,11 @@ let discountsTableHeader =
     '<h4 class="col mb-0 mt-1 text-center"><strong>Amount</strong></h4>' +
     '<div class="col"></div>';
 
-let menuPackageHTML =
-    '<div class="d-flex flex-row flex-wrap justify-content-center">' +
-    '<button id="menu-salad-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
-    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-salad-contents">' +
-    'SALAD' +
-    '</button>' +
-    '<button id="menu-pasta-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
-    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-pasta-contents">' +
-    'PASTA' +
-    '</button> ' +
-    '<button id="menu-beef-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
-    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-beef-contents">' +
-    'BEEF' +
-    '</button> ' +
-    '<button id="menu-pork-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
-    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-pork-contents">' +
-    'PORK' +
-    '</button> ' +
-    '<button id="menu-chicken-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
-    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-chicken-contents">' +
-    'CHICKEN' +
-    '</button> ' +
-    '<button id="menu-fish-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
-    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-fish-contents">' +
-    'FISH' +
-    '</button> ' +
-    '</div> ' +
-
-    '<div id="menu-salad-contents" class="menu-item-content collapse">' +
-    '<hr>' +
-    '<div class="d-flex flex-row justify-content-start">' +
-    '<h2 class="menu-item-header mx-4 align-self-center">Salad</h2>' +
-    '<div class="form-check mx-5 align-self-center">' +
-    '<input class="form-check-input" type="radio" name="salad-options" id="salad-1"' +
-    'value="Chicken Caesar Salad">' +
-    '<label class="form-check-label" for="salad-1">Chicken Caesar Salad</label>' +
-    '</div>' +
-    '<div class="form-group row my-3 ms-auto">' +
-    '<label for="salad-quantity" class="col col-form-label">Quantity</label>' +
-    '<div class="col-8">' +
-    '<input type="number" class="form-control w-75" id="salad-quantity" disabled>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-
-    '<div id="menu-pasta-contents" class="menu-item-content collapse">' +
-    '<hr>' +
-    '<div class="d-flex flex-row justify-content-start">' +
-    '<h2 class="menu-item-header mx-4 align-self-center">Pasta</h2>' +
-    '<div class="form-check mx-5 align-self-center">' +
-    '<input class="form-check-input" type="radio" name="pasta-options" id="pasta-1"' +
-    'value="Creamy Chicken Pesto">' +
-    '<label class="form-check-label" for="pasta-1">Creamy Chicken Pesto</label>' +
-    '</div>' +
-    '<div class="form-check mx-5 align-self-center">' +
-    '<input class="form-check-input" type="radio" name="pasta-options" id="pasta-2"' +
-    'value="Shirmp and Squid Marinara">' +
-    '<label class="form-check-label" for="pasta-2">Shirmp and Squid Marinara</label>' +
-    '</div>' +
-    '<div class="form-group row my-3 ms-auto">' +
-    '<label for="pasta-quantity" class="col col-form-label">Quantity</label>' +
-    '<div class="col-8">' +
-    '<input type="number" class="form-control w-75" id="pasta-quantity" disabled>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-
-    '<div id="menu-beef-contents" class="menu-item-content collapse">' +
-    '<hr>' +
-    '<div class="d-flex flex-row justify-content-start">' +
-    '<h2 class="menu-item-header mx-4 align-self-center">Beef</h2>' +
-    '<div class="form-check mx-5 align-self-center">' +
-    '<input class="form-check-input" type="radio" name="beef-options" id="beef-1"' +
-    'value="Balai Yllana Kare Kare">' +
-    '<label class="form-check-label" for="beef-1">Balai Yllana Kare Kare</label>' +
-    '</div>' +
-    '<div class="form-check mx-5 align-self-center">' +
-    '<input class="form-check-input" type="radio" name="beef-options" id="beef-2"' +
-    'value="Caldereta">' +
-    '<label class="form-check-label" for="beef-2">Caldereta</label>' +
-    '</div>' +
-    '<div class="form-group row my-3 ms-auto">' +
-    '<label for="beef-quantity" class="col col-form-label">Quantity</label>' +
-    '<div class="col-8">' +
-    '<input type="number" class="form-control w-75" id="beef-quantity" disabled>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-
-    '<div id="menu-pork-contents" class="menu-item-content collapse">' +
-    '<hr>' +
-    '<div class="d-flex flex-row justify-content-start">' +
-    '<h2 class="menu-item-header mx-4 align-self-center">Pork</h2>' +
-    '<div class="form-check mx-5 align-self-center">' +
-    '<input class="form-check-input" type="radio" name="pork-options" id="pork-1"' +
-    'value="Sisig Ihaw">' +
-    '<label class="form-check-label" for="pork-1">Sisig Ihaw</label>' +
-    '</div>' +
-    '<div class="form-group row my-3 ms-auto">' +
-    '<label for="pork-quantity" class="col col-form-label">Quantity</label>' +
-    '<div class="col-8">' +
-    '<input type="number" class="form-control w-75" id="pork-quantity" disabled>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-
-    '<div id="menu-chicken-contents" class="menu-item-content collapse">' +
-    '<hr>' +
-    '<div class="d-flex flex-row justify-content-start">' +
-    '<h2 class="menu-item-header mx-4 align-self-center">Chicken</h2>' +
-    '<div class="form-check mx-5 align-self-center">' +
-    '<input class="form-check-input" type="radio" name="chicken-options" id="chicken-1"' +
-    'value="Buttered Chicken">' +
-    '<label class="form-check-label" for="chicken-1">Buttered Chicken</label>' +
-    '</div>' +
-    '<div class="form-check mx-5 align-self-center">' +
-    '<input class="form-check-input" type="radio" name="chicken-options" id="chicken-2"' +
-    'value="Balai Yllana Fried Chicken">' +
-    '<label class="form-check-label" for="chicken-2">Balai Yllana Fried Chicken</label>' +
-    '</div>' +
-    '<div class="form-group row my-3 ms-auto">' +
-    '<label for="chicken-quantity" class="col col-form-label">Quantity</label>' +
-    '<div class="col-8">' +
-    '<input type="number" class="form-control w-75" id="chicken-quantity" disabled>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-
-    '<div id="menu-fish-contents" class="menu-item-content collapse">' +
-    '<hr>' +
-    '<div class="d-flex flex-row justify-content-start">' +
-    '<h2 class="menu-item-header mx-4 align-self-center">Fish</h2>' +
-    '<div class="form-check mx-5 align-self-center">' +
-    '<input class="form-check-input" type="radio" name="fish-options" id="fish-1"' +
-    'value="Parmesan Crusted Fish">' +
-    '<label class="form-check-label" for="fish-1">Parmesan Crusted Fish</label>' +
-    '</div>' +
-    '<div class="form-group row my-3 ms-auto">' +
-    '<label for="fish-quantity" class="col col-form-label">Quantity</label>' +
-    '<div class="col-8">' +
-    '<input type="number" class="form-control w-75" id="fish-quantity" disabled>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>';
-
 $(document).ready(function () {
-    $('#submit').attr("disabled", true);
-
-    $('[data-bs-toggle="tooltip"]').tooltip({
-        placement: 'left'
-    });
-    $('[data-toggle="popover"]').popover();
-
     retrieveInfoFromDB();
 
     setRequiredFields();
-    initializeTooltips()
+    initializeTooltips();
 
     initializeEventFields();
     initializeMenuFields();
@@ -200,6 +44,9 @@ $(document).ready(function () {
     initializePaymentFields();
 
     initializeRealTimeValidation();
+
+    
+
     submitForm();
 });
 
@@ -225,44 +72,68 @@ function retrieveInfoFromDB() {
 
     $.get('/event-tracker/get/packages', function (result) {
         for (let j = 0; j < result.length; j++) {
-            if (result[j].packageVenue === "Garden")
+            if (result[j].packageVenue === 'Garden')
                 gardenPackageList.push(result[j]);
-            else if (result[j].packageVenue === "Sunroom")
+            else if (result[j].packageVenue === 'Sunroom')
                 sunroomPackageList.push(result[j]);
-            else if (result[j].packageVenue === "Terrace")
+            else if (result[j].packageVenue === 'Terrace')
                 terracePackageList.push(result[j]);
-            else
-                additionalPackageList.push(result[j]);
+            else additionalPackageList.push(result[j]);
             packageList.push(result[j]);
         }
 
         // initialize package options
         $.each(gardenPackageList, function (i, package) {
-            $('#garden-options').append($('<option>', {
-                value: package.packageCode,
-                text: package.packageName + ' - ' + package.variantCount + ' Variants (Php ' + package.packagePrice + ')'
-            }));
+            $('#garden-options').append(
+                $('<option>', {
+                    value: package.packageCode,
+                    text:
+                        package.packageName +
+                        ' - ' +
+                        package.variantCount +
+                        ' Variants (Php ' +
+                        package.packagePrice +
+                        ')',
+                })
+            );
         });
 
         $.each(sunroomPackageList, function (i, package) {
-            $('#sunroom-options').append($('<option>', {
-                value: package.packageCode,
-                text: package.packageName + ' - ' + package.variantCount + ' Variants (Php ' + package.packagePrice + ')'
-            }));
+            $('#sunroom-options').append(
+                $('<option>', {
+                    value: package.packageCode,
+                    text:
+                        package.packageName +
+                        ' - ' +
+                        package.variantCount +
+                        ' Variants (Php ' +
+                        package.packagePrice +
+                        ')',
+                })
+            );
         });
 
         $.each(terracePackageList, function (i, package) {
-            $('#terrace-options').append($('<option>', {
-                value: package.packageCode,
-                text: package.packageName + ' - ' + package.variantCount + ' Variants (Php ' + package.packagePrice + ')'
-            }));
+            $('#terrace-options').append(
+                $('<option>', {
+                    value: package.packageCode,
+                    text:
+                        package.packageName +
+                        ' - ' +
+                        package.variantCount +
+                        ' Variants (Php ' +
+                        package.packagePrice +
+                        ')',
+                })
+            );
         });
+        addExistingFields();
     });
 }
 
 function initializeTooltips() {
     $('[data-toggle="tooltip"]').tooltip({
-        placement: 'left'
+        placement: 'left',
     });
     $('[data-toggle="popover"]').popover();
 }
@@ -271,44 +142,48 @@ function initializeEventFields() {
     //initialize event date
     setDefaultDate('event-date');
     // initialize contact number fields
-    let settings = { autoPlaceholder: "aggressive", preferredCountries: ["ph"], separateDialCode: true, utilsScript: "/js/utils.js" };
-    $("#client-mobile-number").intlTelInput(settings);
-    $("#representative-mobile-number").intlTelInput(settings);
+    let settings = {
+        autoPlaceholder: 'aggressive',
+        preferredCountries: ['ph'],
+        separateDialCode: true,
+        utilsScript: '/js/utils.js',
+    };
+    $('#client-mobile-number').intlTelInput(settings);
+    $('#representative-mobile-number').intlTelInput(settings);
 
     // initialize event type autocomplete options
     let eventTypeTags = [
-        "Birthday",
-        "1st Birthday",
-        "7th Birthday",
-        "Debut",
-        "Wedding",
-        "Anniversary",
-        "10th Anniversary",
-        "25th Anniversary",
-        "50th Anniversary",
-        "Baptism",
-        "Dedication",
-        "Proposal",
-        "Baby Shower",
-        "Bridal Shower",
-        "Bachelor Party",
-        "Bachelorette Party",
-        "Christmas Party",
-        "Reunion"
+        'Birthday',
+        '1st Birthday',
+        '7th Birthday',
+        'Debut',
+        'Wedding',
+        'Anniversary',
+        '10th Anniversary',
+        '25th Anniversary',
+        '50th Anniversary',
+        'Baptism',
+        'Dedication',
+        'Proposal',
+        'Baby Shower',
+        'Bridal Shower',
+        'Bachelor Party',
+        'Bachelorette Party',
+        'Christmas Party',
+        'Reunion',
     ];
-    $("#event-type").autocomplete({
+    $('#event-type').autocomplete({
         minLength: 0,
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(eventTypeTags, request.term);
             response(results.slice(0, 5));
-        }
+        },
     });
 
     // initialize venue + package fields
     $('.venue-checkbox').on('change', function () {
         if ($(this).is(':checked')) {
             $(this).parent().siblings('select').prop('disabled', false);
-
         } else {
             $(this).parent().siblings('select').prop('disabled', true);
             $(this).parent().siblings('select').val('');
@@ -318,26 +193,22 @@ function initializeEventFields() {
 
     // initialize food quantity amount
     $('.package').on('change', function () {
-        if (getVariantCount() > $('.menu-button-active').length) {
-            $('.menu-button').prop('disabled', false);
-        }
-        else if (getVariantCount() == $('.menu-button-active').length) {
-            $('.menu-button:not(.menu-button-active)').prop('disabled', true);
-        }
-        else if (getVariantCount() < $('.menu-button-active').length) {
-            $('#menu-package').empty();
-            $('#menu-package').append(menuPackageHTML);
-            initializeMenuFields();
-        }
         updateFoodQuantity();
         updateBreakdownTable();
     });
-    $('#additional-pax').on('change', function () { updateFoodQuantity(); updateBreakdownTable(); });
+    $('#additional-pax').on('change', function () {
+        updateFoodQuantity();
+        updateBreakdownTable();
+    });
 }
 
 function initializeMenuFields() {
-    $('.menu-item-content').on('hidden.bs.collapse', function () { hideMenuItemInfo($(this)) });
-    $('.menu-item-content').on('show.bs.collapse', function () { showMenuItemInfo($(this)) });
+    $('.menu-item-content').on('hidden.bs.collapse', function () {
+        hideMenuItemInfo($(this));
+    });
+    $('.menu-item-content').on('show.bs.collapse', function () {
+        showMenuItemInfo($(this));
+    });
 
     $('.menu-button').on('click', function () {
         if ($(this).hasClass('menu-button-active')) {
@@ -348,25 +219,31 @@ function initializeMenuFields() {
             $(this).addClass('menu-button-active');
             variantCount++;
             if (getVariantCount() <= $('.menu-button-active').length) {
-                $('.menu-button:not(.menu-button-active)').prop('disabled', true);
+                $('.menu-button:not(.menu-button-active)').prop(
+                    'disabled',
+                    true
+                );
             }
         }
-
     });
 
-    $(".menu-item-autocomplete").autocomplete({
+    $('.menu-item-autocomplete').autocomplete({
         minLength: 0,
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(foodNameList, request.term);
             response(results.slice(0, 5));
-        }
+        },
     });
 
-    $('.additional-add-button').click(function () { addAdditionalItem(); });
+    $('.additional-add-button').click(function () {
+        addAdditionalItem();
+    });
 
     $('#additional-name').change(function () {
         if (foodNameList.includes($('#additional-name').val()))
-            $('#additional-price').val(getMenuItemPrice($('#additional-name').val()));
+            $('#additional-price').val(
+                getMenuItemPrice($('#additional-name').val())
+            );
     });
 
     $('#additional-item-modal').on('hidden.bs.modal', function () {
@@ -378,29 +255,40 @@ function initializeMenuFields() {
 }
 
 function initializeTransactionFields() {
-    $(".extra-charges-autocomplete").autocomplete({
+    $('.extra-charges-autocomplete').autocomplete({
         minLength: 0,
         source: function (request, response) {
-            var results = $.ui.autocomplete.filter(chargeNameList, request.term);
+            var results = $.ui.autocomplete.filter(
+                chargeNameList,
+                request.term
+            );
             response(results.slice(0, 5));
-        }
+        },
     });
 
-    $('.extra-charges-add-button').click(function () { addExtraCharge(); });
+    $('.extra-charges-add-button').click(function () {
+        addExtraCharge();
+    });
 
     $('#extra-charges-name').change(function () {
         if (chargeNameList.indexOf($('#extra-charges-name').val()) != -1)
-            $('#extra-charges-price').val(getExtraChargePrice($('#extra-charges-name').val()));
+            $('#extra-charges-price').val(
+                getExtraChargePrice($('#extra-charges-name').val())
+            );
     });
 
     $('#extra-charges-modal').on('hidden.bs.modal', function () {
-        $('#extra-charges-name, #extra-charges-quantity, #extra-charges-price').val('');
+        $(
+            '#extra-charges-name, #extra-charges-quantity, #extra-charges-price'
+        ).val('');
         resetField($('#extra-charges-name'), $('#extra-charges-error'));
         resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
         resetField($('#extra-charges-price'), $('#extra-charges-error'));
     });
 
-    $('.discount-add-button').click(function () { addDiscount(); });
+    $('.discount-add-button').click(function () {
+        addDiscount();
+    });
 
     $('#discounts-modal').on('hidden.bs.modal', function () {
         $('#discount-name, #discount-quantity, #discount-price').val('');
@@ -411,154 +299,158 @@ function initializeTransactionFields() {
 }
 
 function initializePaymentFields() {
-    $('#downpayment-date').val("");
-    $('#final-payment-date').val("");
-    document.getElementById("final-payment").disabled = true;
+    $('#downpayment-date').val('');
+    $('#final-payment-date').val('');
     var downp = 0;
     var finalp = 0;
     $('.payment-checkbox').on('change', function () {
         if ($(this).is(':checked')) {
-            $('#submit').attr("disabled", true);
-            $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', false);
-            if (document.getElementById("downpayment").checked) {
-                document.getElementById("final-payment").disabled = false;
-                $('#downpayment-date').siblings("label").addClass('required');
-                $('#downpayment-mode').siblings("label").addClass('required');
-                $('#downpayment-amount').siblings("label").addClass('required');
-
-                $('#downpayment-amount').on('keyup', function () {
-                    if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '')
-                        displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
-                    else
-                        resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
+            $('#submit').attr('disabled', true);
+            $(this)
+                .parent()
+                .siblings()
+                .children()
+                .children('input:not(.static), select')
+                .prop('disabled', false);
+            if (document.getElementById('downpayment').checked) {
+                $('#downpayment-amount').on('change', function () {
+                    if ($('#downpayment-amount').val() == '')
+                        $('#downpayment-amount').val(0);
                     downp = parseFloat($('#downpayment-amount').val());
                     $('#payment-amount-total').val(downp + finalp);
                     $('#final-payment-amount').on('change', function () {
                         finalp = parseFloat($('#final-payment-amount').val());
                         $('#payment-amount-total').val(downp + finalp);
                     });
-                    $('#payment-balance').val(calculateTotal() - $('#payment-amount-total').val());
-                    $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
-                    $('#submit').attr("disabled", checkIfFilledEventFields());
-                    if ($('#payment-balance').val() < 0) {
-                        $('#payment-error').text('Customer payment is greater than the total price.');
-                        $('#payment-amount-total').addClass('is-invalid');
-                        $('#payment-balance').addClass('is-invalid');
-                    }
-                    else {
-                        $('#payment-error').text('');
-                        $('#payment-amount-total').removeClass('is-invalid');
-                        $('#payment-balance').removeClass('is-invalid');
-                    }
+                    $('#payment-balance').val(
+                        calculateTotal() - $('#payment-amount-total').val()
+                    );
+                    $('#final-payment-amount').attr(
+                        'placeholder',
+                        $('#payment-balance').val()
+                    );
+                    $('#submit').attr('disabled', checkIfFilledEventFields());
                 });
 
                 $('#downpayment-mode').change(function () {
                     if ($('#downpayment-mode').val() == '')
-                        displayError($('#downpayment-mode'), $('#downpayment-mode-error'), 'Select 1 payment mode.');
+                        displayError(
+                            $('#downpayment-mode'),
+                            $('#downpayment-mode-error'),
+                            'Select 1 payment mode.'
+                        );
                     else
-                        resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
+                        resetField(
+                            $('#downpayment-mode'),
+                            $('#downpayment-mode-error')
+                        );
                 });
-                $('#submit').attr("disabled", checkIfFilledEventFields());
+                $('#submit').attr('disabled', checkIfFilledEventFields());
             }
-            if (document.getElementById("final-payment").checked) {
-                $('#final-payment-date').siblings("label").addClass('required');
-                $('#final-payment-mode').siblings("label").addClass('required');
-                $('#final-payment-amount').siblings("label").addClass('required');
-                $('#final-payment-amount').on('keyup', function () {
-                    // if($('#final-payment-amount').val() == '')
-                    //     $('#final-payment-amount').val(0); 
-                    if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '')
-                        displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
-                    else
-                        resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
+            if (document.getElementById('final-payment').checked) {
+                $('#final-payment-amount').on('change', function () {
+                    if ($('#final-payment-amount').val() == '')
+                        $('#final-payment-amount').val(0);
                     finalp = parseFloat($('#final-payment-amount').val());
                     $('#payment-amount-total').val(downp + finalp);
                     $('#downpayment-amount').on('change', function () {
                         downp = parseFloat($('#downpayment-amount').val());
                         $('#payment-amount-total').val(downp + finalp);
                     });
-                    $('#payment-balance').val(calculateTotal() - $('#payment-amount-total').val());
-                    $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
-                    $('#submit').attr("disabled", checkIfFilledEventFields());
-                    if ($('#payment-balance').val() < 0) {
-                        console.log($('#payment-balance').val());
-                        $('#payment-error').text('Customer payment is greater than the total price.');
-                        $('#payment-amount-total').addClass('is-invalid');
-                        $('#payment-balance').addClass('is-invalid');
-                    }
-                    else {
-                        $('#payment-error').text('');
-                        $('#payment-amount-total').removeClass('is-invalid');
-                        $('#payment-balance').removeClass('is-invalid');
-                    }
+                    $('#payment-balance').val(
+                        calculateTotal() - $('#payment-amount-total').val()
+                    );
+                    $('#final-payment-amount').attr(
+                        'placeholder',
+                        $('#payment-balance').val()
+                    );
+                    $('#submit').attr('disabled', checkIfFilledEventFields());
                 });
 
                 $('#final-payment-mode').change(function () {
                     if ($('#final-payment-mode').val() == '')
-                        displayError($('#final-payment-mode'), $('#final-payment-mode-error'), 'Select 1 payment mode.');
+                        displayError(
+                            $('#final-payment-mode'),
+                            $('#final-payment-mode-error'),
+                            'Select 1 payment mode.'
+                        );
                     else
-                        resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
+                        resetField(
+                            $('#final-payment-mode'),
+                            $('#final-payment-mode-error')
+                        );
                 });
-                $('#submit').attr("disabled", checkIfFilledEventFields());
+                $('#submit').attr('disabled', checkIfFilledEventFields());
             }
-        }
-        else {
+        } else {
             var amt1 = 0;
             if ($('#payment-amount-total').val() != '')
                 amt1 = parseFloat($('#payment-amount-total').val());
-            if (!document.getElementById("downpayment").checked) {
-                document.getElementById("final-payment").checked = false;
-                document.getElementById("final-payment").disabled = true;
-                $('#downpayment-date').siblings("label").removeClass('required');
-                $('#downpayment-mode').siblings("label").removeClass('required');
-                $('#downpayment-amount').siblings("label").removeClass('required');
-
+            if (!document.getElementById('downpayment').checked) {
+                //console.log("AAAAAAAAA");
                 downp = 0;
-                $('#payment-amount-total').val(amt1 - parseFloat($('#downpayment-amount').val()));
-                $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#downpayment-amount').val()));
-                $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+                $('#payment-amount-total').val(
+                    amt1 - parseFloat($('#downpayment-amount').val())
+                );
+                $('#payment-balance').val(
+                    parseFloat($('#payment-balance').val()) +
+                    parseFloat($('#downpayment-amount').val())
+                );
+                $('#final-payment-amount').attr(
+                    'placeholder',
+                    $('#payment-balance').val()
+                );
 
                 setDefaultDate('downpayment-date');
                 resetField($('#downpayment-date'), $('#downpayment-error'));
-                resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
-                resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
-                $('#downpayment-mode').val("");
-                $('#downpayment-amount').val("");
-                $('#downpayment-date').val("");
-                $('#submit').attr("disabled", checkIfFilledEventFields());
+                resetField(
+                    $('#downpayment-mode'),
+                    $('#downpayment-mode-error')
+                );
+                $('#downpayment-mode').val('');
+                $('#downpayment-amount').val('');
+                $('#downpayment-date').val('');
+                $('#submit').attr('disabled', checkIfFilledEventFields());
             }
             var amt2 = 0;
             if ($('#payment-amount-total').val() != '')
                 amt2 = parseFloat($('#payment-amount-total').val());
-            if (!document.getElementById("final-payment").checked) {
-                $("#final-payment").parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
-                $('#final-payment-date').siblings("label").removeClass('required');
-                $('#final-payment-mode').siblings("label").removeClass('required');
-                $('#final-payment-amount').siblings("label").removeClass('required');
+            if (!document.getElementById('final-payment').checked) {
+                //console.log("WEEEEEEEEE");
                 finalp = 0;
-                $('#payment-amount-total').val(amt2 - parseFloat($('#final-payment-amount').val()));
-                $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#final-payment-amount').val()));
-                $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+                $('#payment-amount-total').val(
+                    amt2 - parseFloat($('#final-payment-amount').val())
+                );
+                $('#payment-balance').val(
+                    parseFloat($('#payment-balance').val()) +
+                    parseFloat($('#final-payment-amount').val())
+                );
+                $('#final-payment-amount').attr(
+                    'placeholder',
+                    $('#payment-balance').val()
+                );
                 setDefaultDate('final-payment-date');
                 resetField($('#final-payment-date'), $('#final-payment-error'));
-                resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
-                resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
-                $('#final-payment-mode').val("");
-                $('#final-payment-amount').val("");
-                $('#final-payment-date').val("");
-                $('#submit').attr("disabled", checkIfFilledEventFields());
+                resetField(
+                    $('#final-payment-mode'),
+                    $('#final-payment-mode-error')
+                );
+                $('#final-payment-mode').val('');
+                $('#final-payment-amount').val('');
+                $('#final-payment-date').val('');
+                $('#submit').attr('disabled', checkIfFilledEventFields());
             }
-
-            if (!document.getElementById("final-payment").checked && !document.getElementById("downpayment").checked) {
-                $('#payment-amount-total').val("")
-                $('#payment-balance').val("")
-            }
-            $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
+            $(this)
+                .parent()
+                .siblings()
+                .children()
+                .children('input:not(.static), select')
+                .prop('disabled', true);
         }
     });
 }
 
-/**  
+/**
  * Sets default date to today
  */
 function setDefaultDate(datefield) {
@@ -566,13 +458,11 @@ function setDefaultDate(datefield) {
     var dd = today.getDate();
     var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
-    if (dd < 10)
-        dd = '0' + dd;
-    if (mm < 10)
-        mm = '0' + mm;
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
     today = yyyy + '-' + mm + '-' + dd;
 
-    var field = "#" + datefield;
+    var field = '#' + datefield;
     $(field).val(today);
 }
 
@@ -580,16 +470,23 @@ function setDefaultDate(datefield) {
  * Adds the required class to required fields.
  */
 function setRequiredFields() {
-    $("input[required]").siblings("label").addClass("required");
-    $("select[required]").siblings("label").addClass("required");
+    $('input[required]').siblings('label').addClass('required');
+    $('select[required]').siblings('label').addClass('required');
 }
 
 function showMenuItemInfo(div) {
-    div.children("div").children("div").find("input[type='radio']").first().prop('checked', true);
+    div.children('div')
+        .children('div')
+        .find("input[type='radio']")
+        .first()
+        .prop('checked', true);
 }
 
 function hideMenuItemInfo(div) {
-    div.children("div").children("div").children("input").prop("checked", false);
+    div.children('div')
+        .children('div')
+        .children('input')
+        .prop('checked', false);
 }
 
 function updateFoodQuantity() {
@@ -604,7 +501,11 @@ function updateFoodQuantity() {
 }
 
 function addAdditionalItem() {
-    if (!$('#additional-name').val() || !$('#additional-quantity').val() || !$('#additional-price').val()) {
+    if (
+        !$('#additional-name').val() ||
+        !$('#additional-quantity').val() ||
+        !$('#additional-price').val()
+    ) {
         $('#additional-items-error').text('Please fill up all fields.');
     } else if ($('#additional-quantity').val() < 0) {
         $('#additional-items-error').text('Quantity cannot be negative.');
@@ -621,10 +522,18 @@ function addAdditionalItem() {
             '<div>' +
             '<hr class="mx-5">' +
             '<div class="row px-4 py-2 mx-5 additional-item">' +
-            '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' + name + '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' + quantity + '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' + formatAsDecimal(price) + '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' + formatAsDecimal(quantity * price) + '</h6>' +
+            '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
+            name +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
+            quantity +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
+            formatAsDecimal(price) +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
+            formatAsDecimal(quantity * price) +
+            '</h6>' +
             '<span class="col material-icons-two-tone text-end md-btn"' +
             'onclick="removeAdditionalItem(this)">close</span>' +
             '</div>' +
@@ -645,7 +554,9 @@ function addAdditionalItem() {
 
         $('#additional-items-total').empty();
         $('#additional-items-total').append(
-            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' + formatAsDecimal(calculateItemTotal($('.additional-item-amt'))) + '</h4>'
+            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
+            formatAsDecimal(calculateItemTotal($('.additional-item-amt'))) +
+            '</h4>'
         );
         updateBreakdownTable();
     }
@@ -662,12 +573,21 @@ function removeAdditionalItem(elem) {
         );
     }
 
-    $('#additional-items-total').children('h4').text('Php ' + formatAsDecimal(calculateItemTotal($('.additional-item-amt'))));
+    $('#additional-items-total')
+        .children('h4')
+        .text(
+            'Php ' +
+            formatAsDecimal(calculateItemTotal($('.additional-item-amt')))
+        );
     updateBreakdownTable();
 }
 
 function addExtraCharge() {
-    if (!$('#extra-charges-name').val() || !$('#extra-charges-quantity').val() || !$('#extra-charges-price').val()) {
+    if (
+        !$('#extra-charges-name').val() ||
+        !$('#extra-charges-quantity').val() ||
+        !$('#extra-charges-price').val()
+    ) {
         $('#extra-charges-error').text('Please fill up all fields.');
     } else if ($('#extra-charges-quantity').val() < 0) {
         $('#extra-charges-error').text('Quantity cannot be negative.');
@@ -684,10 +604,18 @@ function addExtraCharge() {
             '<div>' +
             '<hr class="mx-5">' +
             '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
-            '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' + name + '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' + quantity + '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' + formatAsDecimal(price) + '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' + formatAsDecimal(quantity * price) + '</h6>' +
+            '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
+            name +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
+            quantity +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
+            formatAsDecimal(price) +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
+            formatAsDecimal(quantity * price) +
+            '</h6>' +
             '<span class="col material-icons-two-tone text-end md-btn"' +
             'onclick="removeExtraCharge(this)">close</span>' +
             '</div>' +
@@ -704,11 +632,14 @@ function addExtraCharge() {
         if ($('.extra-charges-item-amt').length === 1) {
             $('#extra-charges-header').empty();
             $('#extra-charges-header').append(extraChargesTableHeader);
-
         }
         $('#extra-charges-total').empty();
         $('#extra-charges-total').append(
-            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' + formatAsDecimal(calculateItemTotal($('.extra-charges-item-amt'))) + '</h4>'
+            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
+            formatAsDecimal(
+                calculateItemTotal($('.extra-charges-item-amt'))
+            ) +
+            '</h4>'
         );
         updateBreakdownTable();
     }
@@ -725,7 +656,14 @@ function removeExtraCharge(elem) {
         );
     }
 
-    $('#extra-charges-total').children('h4').text('Php ' + formatAsDecimal(calculateItemTotal($('.extra-charges-item-amt'))));
+    $('#extra-charges-total')
+        .children('h4')
+        .text(
+            'Php ' +
+            formatAsDecimal(
+                calculateItemTotal($('.extra-charges-item-amt'))
+            )
+        );
     updateBreakdownTable();
 }
 
@@ -742,10 +680,14 @@ function addDiscount() {
             '<div>' +
             '<hr class="mx-5">' +
             '<div class="row px-4 py-2 mx-5 discount-item">' +
-            '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' + name + '</h6>' +
+            '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
+            name +
+            '</h6>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' + formatAsDecimal(price) + '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
+            formatAsDecimal(price) +
+            '</h6>' +
             '<span class="col material-icons-two-tone text-end md-btn"' +
             'onclick="removeDiscount(this)">close</span>' +
             '</div>' +
@@ -766,7 +708,9 @@ function addDiscount() {
 
         $('#discounts-total').empty();
         $('#discounts-total').append(
-            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' + formatAsDecimal(calculateItemTotal($('.discount-item-amt'))) + '</h4>'
+            '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
+            formatAsDecimal(calculateItemTotal($('.discount-item-amt'))) +
+            '</h4>'
         );
         updateBreakdownTable();
     }
@@ -782,7 +726,12 @@ function removeDiscount(elem) {
         );
     }
 
-    $('#discounts-total').children('h4').text('Php ' + formatAsDecimal(calculateItemTotal($('.discount-item-amt'))));
+    $('#discounts-total')
+        .children('h4')
+        .text(
+            'Php ' +
+            formatAsDecimal(calculateItemTotal($('.discount-item-amt')))
+        );
     updateBreakdownTable();
 }
 
@@ -802,7 +751,9 @@ function updateBreakdownTable() {
             '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Package/s</strong></h3>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h3 class="col mb-0 mt-1 text-end number"><strong>' + formatAsDecimal(package) + '</strong></h3>' +
+            '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
+            formatAsDecimal(package) +
+            '</strong></h3>' +
             '</div>' +
             '</div>'
         );
@@ -812,10 +763,14 @@ function updateBreakdownTable() {
                 $('#breakdown-list').append(
                     '<div class="ms-4">' +
                     '<div class="row px-4 py-2 mx-4">' +
-                    '<h6 class="col-5 mb-0 mt-1 text-start number">' + getPackageName($(this).val()) + '</h6>' +
+                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                    getPackageName($(this).val()) +
+                    '</h6>' +
                     '<h6 class="col mb-0 mt-1 text-center"></h6>' +
                     '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-end number">' + formatAsDecimal(getPackagePrice($(this).val())) + '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-end number">' +
+                    formatAsDecimal(getPackagePrice($(this).val())) +
+                    '</h6>' +
                     '</div>' +
                     '</div>'
                 );
@@ -825,10 +780,14 @@ function updateBreakdownTable() {
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
                 '<div class="row px-4 py-2 mx-4">' +
-                '<h6 class="col-5 mb-0 mt-1 text-start number">' + 'Additional 5 Pax' + '</h6>' +
+                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                'Additional 5 Pax' +
+                '</h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-end number">' + formatAsDecimal(2000) + '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-end number">' +
+                formatAsDecimal(getPackagePrice('add5')) +
+                '</h6>' +
                 '</div>' +
                 '</div>'
             );
@@ -841,7 +800,9 @@ function updateBreakdownTable() {
             '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Additional Food</strong></h3>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h3 class="col mb-0 mt-1 text-end number"><strong>' + formatAsDecimal(additional) + '</strong></h3>' +
+            '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
+            formatAsDecimal(additional) +
+            '</strong></h3>' +
             '</div>' +
             '</div>'
         );
@@ -849,15 +810,23 @@ function updateBreakdownTable() {
         $('.additional-item').each(function () {
             let name = $(this).children('.additional-item-name').text();
             let qty = $(this).children('.additional-item-quantity').text();
-            let amt = formatAsNumber($(this).children('.additional-item-amt').text());
+            let amt = formatAsNumber(
+                $(this).children('.additional-item-amt').text()
+            );
 
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
                 '<div class="row px-4 py-2 mx-4">' +
-                '<h6 class="col-5 mb-0 mt-1 text-start number">' + name + ' (' + qty + ' Serving/s)</h6>' +
+                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                name +
+                ' (' +
+                qty +
+                ' Serving/s)</h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-end number">' + formatAsDecimal(amt) + '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-end number">' +
+                formatAsDecimal(amt) +
+                '</h6>' +
                 '</div>' +
                 '</div>'
             );
@@ -871,7 +840,9 @@ function updateBreakdownTable() {
             '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Extra Charges</strong></h3>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h3 class="col mb-0 mt-1 text-end number"><strong>' + formatAsDecimal(charges) + '</strong></h3>' +
+            '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
+            formatAsDecimal(charges) +
+            '</strong></h3>' +
             '</div>' +
             '</div>'
         );
@@ -879,15 +850,23 @@ function updateBreakdownTable() {
         $('.extra-charges-item').each(function () {
             let name = $(this).children('.extra-charges-item-name').text();
             let qty = $(this).children('.extra-charges-item-quantity').text();
-            let amt = formatAsNumber($(this).children('.extra-charges-item-amt').text());
+            let amt = formatAsNumber(
+                $(this).children('.extra-charges-item-amt').text()
+            );
 
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
                 '<div class="row px-4 py-2 mx-4">' +
-                '<h6 class="col-5 mb-0 mt-1 text-start number">' + name + ' (x' + qty + ')</h6>' +
+                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                name +
+                ' (x' +
+                qty +
+                ')</h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-end number">' + formatAsDecimal(amt) + '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-end number">' +
+                formatAsDecimal(amt) +
+                '</h6>' +
                 '</div>' +
                 '</div>'
             );
@@ -901,22 +880,30 @@ function updateBreakdownTable() {
             '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Discount/s</strong></h3>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h3 class="col mb-0 mt-1 text-end number"><strong>-' + formatAsDecimal(discounts) + '</strong></h3>' +
+            '<h3 class="col mb-0 mt-1 text-end number"><strong>-' +
+            formatAsDecimal(discounts) +
+            '</strong></h3>' +
             '</div>' +
             '</div>'
         );
 
         $('.discount-item').each(function () {
             let name = $(this).children('.discount-item-name').text();
-            let amt = formatAsNumber($(this).children('.discount-item-amt').text());
+            let amt = formatAsNumber(
+                $(this).children('.discount-item-amt').text()
+            );
 
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
                 '<div class="row px-4 py-2 mx-4">' +
-                '<h6 class="col-5 mb-0 mt-1 text-start number">' + name + '</h6>' +
+                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                name +
+                '</h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
                 '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-end number">-' + formatAsDecimal(amt) + '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-end number">-' +
+                formatAsDecimal(amt) +
+                '</h6>' +
                 '</div>' +
                 '</div>'
             );
@@ -927,19 +914,35 @@ function updateBreakdownTable() {
 
     if (total) {
         $('#breakdown-total').append(
-            '<h2 class="mb-0 mt-5 text-end me-5 number"><strong>Total: </strong>Php ' + formatAsDecimal(total) + '</h2>'
+            '<h2 class="mb-0 mt-5 text-end me-5 number"><strong>Total: </strong>Php ' +
+            formatAsDecimal(total) +
+            '</h2>'
         );
-    }
-
-    else {
+    } else {
         $('#breakdown-list').append(
             '<h6 class="mb-0 mt-1 text-center">Please fill out the information above.</h6>'
         );
     }
-    $('#payment-balance').val("");
-    $('#payment-amount-total').val("");
-    $('#downpayment-amount').val("");
-    $('#final-payment-amount').val("");
+
+    if ($('#downpayment-amount').val() != '') {
+        $('#payment-balance').val(
+            calculateTotal() - $('#downpayment-amount').val()
+        );
+        $('#final-payment-amount').attr(
+            'placeholder',
+            calculateTotal() - $('#downpayment-amount').val()
+        );
+    }
+
+    if ($('#final-payment-amount').val() != '') {
+        $('#payment-amount-total').val(
+            parseFloat($('#downpayment-amount').val()) +
+            parseFloat($(this).val())
+        );
+        $('#payment-balance').val(
+            calculateTotal() - $('#payment-amount-total').val()
+        );
+    }
 }
 
 function initializeRealTimeValidation() {
@@ -1300,23 +1303,51 @@ function checkIfFilledEventFields() {
 }
 
 function checkStringInput(input) {
-    const blacklist = ["~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")",
-        "_", "=", "+", "{", "}", "[", "]", "|", "\\", ";", ":", "\'",
-        "\"", ".", ",", "<", ">", "/", "?"];
+    const blacklist = [
+        '~',
+        '`',
+        '!',
+        '@',
+        '#',
+        '$',
+        '%',
+        '^',
+        '&',
+        '*',
+        '(',
+        ')',
+        '_',
+        '=',
+        '+',
+        '{',
+        '}',
+        '[',
+        ']',
+        '|',
+        '\\',
+        ';',
+        ':',
+        "'",
+        '"',
+        '.',
+        ',',
+        '<',
+        '>',
+        '/',
+        '?',
+    ];
     var flag = false;
 
-    for (const item of blacklist)
-        if (input.indexOf(item) != -1)
-            flag = true;
+    for (const item of blacklist) if (input.indexOf(item) != -1) flag = true;
 
     return flag;
 }
 
 /**
  * Gets and returns the time (millisecond) equivalent of a date
- * 
+ *
  * @param {String}  input   The date in String format to be converted
-*/
+ */
 function getDateTime(input) {
     var day = parseInt(input.slice(8, 10));
     var month = parseInt(input.slice(5, 7));
@@ -1327,11 +1358,11 @@ function getDateTime(input) {
 
 /**
  * Checks date fields if they are not set at most today (YYYY-MM-DD)
- * 
+ *
  * @param {String} input        The user input for a specific field in the form
  * @param {String} errorfield   The ID of the error field in the form to display the errormsg in
  * @param {String} id           The ID of the field in the form with discrepancies
-*/
+ */
 function validDate(input, errorfield, id) {
     var idfield = '#' + id;
     if (input.length > 10)
@@ -1341,31 +1372,30 @@ function validDate(input, errorfield, id) {
         var dd = 1;
         var mm = 1;
         var yyyy = 2032;
-        var dateMax = getDateTime(yyyy + "-" + ("0" + mm) + "-" + ("0" + dd));
+        var dateMax = getDateTime(yyyy + '-' + ('0' + mm) + '-' + ('0' + dd));
 
         var today = new Date();
         var td = today.getDate();
         var tm = today.getMonth() + 1;
         var tyyy = today.getFullYear();
-        if (td < 10)
-            td = '0' + td;
-        if (tm < 10)
-            tm = '0' + tm;
+        if (td < 10) td = '0' + td;
+        if (tm < 10) tm = '0' + tm;
         var dateMin = getDateTime(tyyy + '-' + tm + '-' + td);
 
-        if (input == "") {
+        if (input == '') {
             displayError($(idfield), errorfield, 'Date cannot be empty.');
             return true;
-        }
-        else if ((dateInput - dateMin < 0) || isNaN(dateInput)) {
+        } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
             displayError($(idfield), errorfield, 'Date cannot be in the past.');
             return true;
-        }
-        else if ((dateInput - dateMax >= 0) || isNaN(dateInput)) {
-            displayError($(idfield), errorfield, 'Date cannot be later than 2031.');
+        } else if (dateInput - dateMax >= 0 || isNaN(dateInput)) {
+            displayError(
+                $(idfield),
+                errorfield,
+                'Date cannot be later than 2031.'
+            );
             return true;
-        }
-        else {
+        } else {
             resetField($(idfield), errorfield);
             return false;
         }
@@ -1375,18 +1405,25 @@ function validDate(input, errorfield, id) {
 function displayError(inputField, errorField, errorText) {
     errorField.text(errorText);
     inputField.addClass('is-invalid');
-    $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
 function resetField(inputField, errorField) {
     errorField.text('');
     inputField.removeClass('is-invalid');
-    $('#submit').attr("disabled", checkIfFilledEventFields());
+}
+
+function enableSubmitButton() {
+    $('#submit-button').prop('hidden', true);
 }
 
 function checkEventAvailability() {
-    if ($('#event-date').val() != '' && $('#event-time').val() != '' &&
-        ($('#garden-options').val() != '' || $('#sunroom-options').val() != '' || $('#terrace-options').val() != '')) {
+    if (
+        $('#event-date').val() != '' &&
+        $('#event-time').val() != '' &&
+        ($('#garden-options').val() != '' ||
+            $('#sunroom-options').val() != '' ||
+            $('#terrace-options').val() != '')
+    ) {
         let eventVenues = [];
         $('.venue-checkbox').each(function () {
             if ($(this).is(':checked')) {
@@ -1398,21 +1435,28 @@ function checkEventAvailability() {
             status: 'reserved',
             eventDate: $('#event-date').val(),
             eventTime: $('#event-time').val(),
-            eventVenues: eventVenues
-        }
+            eventVenues: eventVenues,
+        };
 
-        $.get('/event-tracker/check/event-availability', data, function (result) {
-            if (result)
-                displayError($('#event-time'), $('#event-time-error'), 'Date and time is unavailable.');
-            else
-                resetField($('#event-time'), $('#event-time-error'));
-        });
+        $.get(
+            '/event-tracker/check/event-availability',
+            data,
+            function (result) {
+                if (result._id != curreventID)
+                    displayError(
+                        $('#event-time'),
+                        $('#event-time-error'),
+                        'Date and time is unavailable.'
+                    );
+                else resetField($('#event-time'), $('#event-time-error'));
+            }
+        );
     }
 }
 
 function formatAsDecimal(value) {
     return Number(parseFloat(value).toFixed(2)).toLocaleString('en', {
-        minimumFractionDigits: 2
+        minimumFractionDigits: 2,
     });
 }
 
@@ -1421,19 +1465,29 @@ function formatAsNumber(value) {
 }
 
 function calculatePackageTotal() {
-    let gardenIndex = getPackageIndex(gardenPackageList, $('#garden-options').val());
-    let sunroomIndex = getPackageIndex(sunroomPackageList, $('#sunroom-options').val());
-    let terraceIndex = getPackageIndex(terracePackageList, $('#terrace-options').val());
+    let gardenIndex = -1, 
+        sunroomIndex = -1, 
+        terraceIndex = -1;
+    console.log($('#garden-options').val());
+    console.log($('#sunroom-options').val());
+    console.log($('#terrace-options').val());
+
+    if ($('#garden-options').val() != '')
+        gardenIndex = getPackageIndex(gardenPackageList, $('#garden-options').val());
+    if ($('#sunroom-options').val() != '')
+        sunroomIndex = getPackageIndex(sunroomPackageList, $('#sunroom-options').val());
+    if ($('#terrace-options').val() != '')
+        terraceIndex = getPackageIndex(terracePackageList, $('#terrace-options').val());
+    
     let add5paxIndex = getPackageIndex(additionalPackageList, 'add5');
 
     let sum = 0;
-    if (gardenIndex != -1)
-        sum += gardenPackageList[gardenIndex].packagePrice;
+    if (gardenIndex != -1) sum += gardenPackageList[gardenIndex].packagePrice;
     if (sunroomIndex != -1)
         sum += sunroomPackageList[sunroomIndex].packagePrice;
     if (terraceIndex != -1)
         sum += terracePackageList[terraceIndex].packagePrice;
-    if ($('#additional-pax').is(":checked"))
+    if ($('#additional-pax').is(':checked'))
         sum += additionalPackageList[add5paxIndex].packagePrice;
     return sum;
 }
@@ -1449,44 +1503,52 @@ function calculateItemTotal(field) {
 }
 
 function calculateTotal() {
-    return calculatePackageTotal() +
+    return (
+        calculatePackageTotal() +
         calculateItemTotal($('.additional-item-amt')) +
         calculateItemTotal($('.extra-charges-item-amt')) -
-        calculateItemTotal($('.discount-item-amt'));
+        calculateItemTotal($('.discount-item-amt'))
+    );
 }
 
 function getPackageIndex(list, code) {
-    return list.map(e => e.packageCode).indexOf(code);
+    return list.map((e) => e.packageCode).indexOf(code);
 }
 
 function getMenuItemPrice(name) {
-    return foodList[foodNameList.indexOf(name)].price
-}
-
-function getFoodID(name) {
-    return foodList[foodNameList.indexOf(name)]._id;
+    return foodList[foodNameList.indexOf($('#additional-name').val())].price;
 }
 
 function getExtraChargePrice(name) {
-    return chargeList[chargeNameList.indexOf($('#extra-charges-name').val())].price
+    return chargeList[chargeNameList.indexOf($('#extra-charges-name').val())]
+        .price;
 }
 
 function getPackageID(code) {
-    return packageList[packageList.map(e => e.packageCode).indexOf(code)]._id;
+    return packageList[packageList.map((e) => e.packageCode).indexOf(code)]._id;
 }
 
 function getPackageName(code) {
-    return packageList[packageList.map(e => e.packageCode).indexOf(code)].packageName;
+    return packageList[packageList.map((e) => e.packageCode).indexOf(code)].packageName;
 }
 
 function getPackagePrice(code) {
-    return packageList[packageList.map(e => e.packageCode).indexOf(code)].packagePrice;
+    return packageList[packageList.map((e) => e.packageCode).indexOf(code)].packagePrice;
 }
 
 function getVariantCount(code) {
-    let gardenIndex = getPackageIndex(gardenPackageList, $('#garden-options').val());
-    let sunroomIndex = getPackageIndex(sunroomPackageList, $('#sunroom-options').val());
-    let terraceIndex = getPackageIndex(terracePackageList, $('#terrace-options').val());
+    let gardenIndex = getPackageIndex(
+        gardenPackageList,
+        $('#garden-options').val()
+    );
+    let sunroomIndex = getPackageIndex(
+        sunroomPackageList,
+        $('#sunroom-options').val()
+    );
+    let terraceIndex = getPackageIndex(
+        terracePackageList,
+        $('#terrace-options').val()
+    );
 
     let count = 4;
     if (gardenIndex != -1 && count == 4)
@@ -1499,44 +1561,54 @@ function getVariantCount(code) {
 }
 
 function getFoodQuantity(food) {
-    let gardenIndex = getPackageIndex(gardenPackageList, $('#garden-options').val());
-    let sunroomIndex = getPackageIndex(sunroomPackageList, $('#sunroom-options').val());
-    let terraceIndex = getPackageIndex(terracePackageList, $('#terrace-options').val());
+    let gardenIndex = getPackageIndex(
+        gardenPackageList,
+        $('#garden-options').val()
+    );
+    let sunroomIndex = getPackageIndex(
+        sunroomPackageList,
+        $('#sunroom-options').val()
+    );
+    let terraceIndex = getPackageIndex(
+        terracePackageList,
+        $('#terrace-options').val()
+    );
     let add5paxIndex = getPackageIndex(additionalPackageList, 'add5');
 
     let sum = 0;
     if (gardenIndex != -1)
-        sum += gardenPackageList[gardenIndex].foodQuantities[food]
+        sum += gardenPackageList[gardenIndex].foodQuantities[food];
     if (sunroomIndex != -1)
-        sum += sunroomPackageList[sunroomIndex].foodQuantities[food]
+        sum += sunroomPackageList[sunroomIndex].foodQuantities[food];
     if (terraceIndex != -1)
-        sum += terracePackageList[terraceIndex].foodQuantities[food]
-    if ($('#additional-pax').is(":checked"))
-        sum += additionalPackageList[add5paxIndex].foodQuantities[food]
+        sum += terracePackageList[terraceIndex].foodQuantities[food];
+    if ($('#additional-pax').is(':checked'))
+        sum += additionalPackageList[add5paxIndex].foodQuantities[food];
     return sum;
 }
 
 function getEventStatus() {
-    if ($('#downpayment').is(':checked'))
-        return 'reserved';
-    else
-        return 'booked';
+    if ($('#downpayment-amount').val('') != '') return 'reserved';
+    else return 'booked';
 }
 
 /**
  * Retrieves all the data from the form and stores it into an object. The object will be converted into a String before it is sent with the POST request.
  */
 function submitForm() {
-    $("form").on("submit", function (event) {
+    $('form').on('submit', function (event) {
         event.preventDefault();
+
         // stores the venues and packages into an array of strings
         let eventVenues = [];
-        let eventPackages = []
+        let eventPackages = [];
         $('.venue-checkbox').each(function () {
             if ($(this).is(':checked')) {
                 eventVenues.push($(this).val());
                 if ($(this).parent().siblings('select').val())
-                    eventPackages.push(getPackageID($(this).parent().siblings('select').val()));
+                    eventPackages.push(
+                        getPackageID($(this).parent().siblings('select').val())
+                    );
             }
         });
 
@@ -1555,8 +1627,12 @@ function submitForm() {
         $('.extra-charges-item').each(function () {
             transactionCharges.push({
                 chargeName: $(this).children('.extra-charges-item-name').text(),
-                chargeQuantity: $(this).children('.extra-charges-item-quantity').text(),
-                chargePrice: $(this).children('.extra-charges-item-price').text()
+                chargeQuantity: $(this)
+                    .children('.extra-charges-item-quantity')
+                    .text(),
+                chargePrice: $(this)
+                    .children('.extra-charges-item-price')
+                    .text(),
             });
         });
 
@@ -1565,7 +1641,7 @@ function submitForm() {
         $('.discount-item').each(function () {
             transactionDiscounts.push({
                 discountName: $(this).children('.discount-item-name').text(),
-                discountPrice: $(this).children('.discount-item-amt').text()
+                discountPrice: $(this).children('.discount-item-amt').text(),
             });
         });
 
@@ -1583,26 +1659,24 @@ function submitForm() {
         let chickenQuantity;
         let fishQuantity;
 
-        if (saladName)
-            saladQuantity = $('#salad-quantity').val();
-        if (pastaName)
-            pastaQuantity = $('#pasta-quantity').val();
-        if (beefName)
-            beefQuantity = $('#beef-quantity').val();
-        if (porkName)
-            porkQuantity = $('#pork-quantity').val();
-        if (chickenName)
-            chickenQuantity = $('#chicken-quantity').val();
-        if (fishName)
-            fishQuantity = $('#fish-quantity').val();
+        if (saladName) saladQuantity = $('#salad-quantity').val();
+        if (pastaName) pastaQuantity = $('#pasta-quantity').val();
+        if (beefName) beefQuantity = $('#beef-quantity').val();
+        if (porkName) porkQuantity = $('#pork-quantity').val();
+        if (chickenName) chickenQuantity = $('#chicken-quantity').val();
+        if (fishName) fishQuantity = $('#fish-quantity').val();
 
         // stores all information as an object
         let data = {
             status: getEventStatus(),
             clientName: $('#client-name').val(),
-            clientMobileNumber: $('#client-mobile-number').intlTelInput('getNumber'),
+            clientMobileNumber: $('#client-mobile-number').intlTelInput(
+                'getNumber'
+            ),
             repName: $('#representative-name').val(),
-            repMobileNumber: $('#representative-mobile-number').intlTelInput('getNumber'),
+            repMobileNumber: $('#representative-mobile-number').intlTelInput(
+                'getNumber'
+            ),
             eventType: $('#event-type').val(),
             eventDate: $('#event-date').val(),
             eventTime: $('#event-time').val(),
@@ -1610,7 +1684,9 @@ function submitForm() {
             eventNotes: $('#event-notes').val(),
             eventVenues: eventVenues,
             eventPackages: eventPackages,
-            packageAdditionalPax: ($('#additional-pax').is(":checked")) ? true : false,
+            packageAdditionalPax: $('#additional-pax').is(':checked')
+                ? true
+                : false,
 
             menuPackage: {
                 saladName: saladName,
@@ -1626,7 +1702,7 @@ function submitForm() {
                 fishName: fishName,
                 fishQuantity: fishQuantity,
                 icedTeaQuantity: $('#icedtea-quantity').val(),
-                riceQuantity: $('#rice-quantity').val()
+                riceQuantity: $('#rice-quantity').val(),
             },
 
             menuAdditional: menuAdditional,
@@ -1638,7 +1714,7 @@ function submitForm() {
                 food: calculateItemTotal($('.additional-item-amt')),
                 charges: calculateItemTotal($('.extra-charges-item-amt')),
                 discounts: calculateItemTotal($('.discount-item-amt')),
-                all: calculateTotal()
+                all: calculateTotal(),
             },
 
             downpaymentDate: $('#downpayment-date').val(),
@@ -1651,17 +1727,236 @@ function submitForm() {
         };
 
         // converts the JSON object into a String
-        let json = {
-            data: JSON.stringify(data)
-        };
+        let json = JSON.stringify({
+            id: curreventID,
+            data: data
+        });
 
         // makes a POST request using AJAX to store the data and returns the user to the reservation page
-        $.post("/event-tracker/submit", json, function (result) {
-            if (getEventStatus() == 'reserved')
-                window.location.href = '/event-tracker/reservations';
-            else
-                window.location.href = '/event-tracker/pencilbookings';
+        $.ajax({
+            type: 'PUT',
+            url: '/event-tracker/reservations',
+            data: json,
+            contentType: 'application/json',
+            success: function (result) {
+                if (getEventStatus() == 'reserved')
+                    window.location.href = '/event-tracker/reservations';
+                else
+                    window.location.href = '/event-tracker/pencilbookings';
+            },
         });
     });
 }
 
+function addExistingFields() {
+    let currevent;
+    $.get('/event-tracker/get/event', { id: $('#event-id').text() }, function (result) {
+        currevent = result[0];
+        curreventID = currevent._id;
+
+        // set event time
+        $('#event-time').val(currevent.eventTime);
+
+        // set event date
+        $('#event-date').val(new Date(currevent.eventDate).toISOString().substr(0, 10));
+
+        // set event venue checkboxes
+        $('#venue-garden').prop(
+            'checked',
+            currevent.eventVenues.includes('Garden')
+        );
+        $('#venue-sunroom').prop(
+            'checked',
+            currevent.eventVenues.includes('Sunroom')
+        );
+        $('#venue-terrace').prop(
+            'checked',
+            currevent.eventVenues.includes('Terrace')
+        );
+
+        $('.venue-checkbox').each(function () {
+            if ($(this).is(':checked'))
+                $(this).parent().siblings('select').prop('disabled', false);
+        });
+
+        // set event packages dropdowns
+        for (let j = 0; j < currevent.packageList.length; j++) {
+            if (currevent.packageList[j].packageVenue === 'Garden')
+                $('#garden-options').val(
+                    currevent.packageList[j].packageCode
+                );
+            else if (currevent.packageList[j].packageVenue === 'Sunroom')
+                $('#sunroom-options').val(
+                    currevent.packageList[j].packageCode
+                );
+            else if (currevent.packageList[j].packageVenue === 'Terrace')
+                $('#terrace-options').val(
+                    currevent.packageList[j].packageCode
+                );
+        }
+
+        // set additional pax checkbox
+        $('#additional-pax').prop(
+            'checked',
+            currevent.packageAdditionalPax
+        );
+
+        // set menu items
+        if (currevent.menuPackage.saladName) {
+            $('#menu-salad-button').trigger('click');
+            //$('#menu-salad-contents').collapse('toggle');
+            $('input[name="salad-options"][value="' + currevent.menuPackage.saladName + '"]').prop('checked', true);
+        }
+
+        if (currevent.menuPackage.pastaName) {
+            $('#menu-pasta-button').trigger('click');
+            $('input[name="pasta-options"][value="' + currevent.menuPackage.pastaName + '"]').prop('checked', true);
+        }
+
+        if (currevent.menuPackage.beefName) {
+            $('#menu-beef-button').trigger('click');
+            $('input[name="beef-options"][value="' + currevent.menuPackage.beefName + '"]').prop('checked', true);
+        }
+
+        if (currevent.menuPackage.porkName) {
+            $('#menu-pork-button').trigger('click');
+            $('input[name="pork-options"][value="' + currevent.menuPackage.porkName + '"]').prop('checked', true);
+        }
+
+        if (currevent.menuPackage.chickenName) {
+            $('#menu-chicken-button').trigger('click');
+            $('input[name="chicken-options"][value="' + currevent.menuPackage.chickenName + '"]').prop('checked', true);
+        }
+
+        if (currevent.menuPackage.fishName) {
+            $('#menu-fish-button').trigger('click');
+            $('input[name="fish-options"][value="' + currevent.menuPackage.fishName + '"]').prop('checked', true);
+        }
+
+        // set additional items table
+        if (currevent.foodList.length != 0) {
+            $('#additional-items-header').empty();
+            $('#additional-items-header').append(additionalFoodTableHeader);
+        }
+        for (let j = 0; j < currevent.foodList.length; j++) {
+            let name = currevent.foodList[j].name;
+            let quantity = currevent.menuAdditional[j].foodQuantity;
+            let price = currevent.foodList[j].price;
+            let cost = currevent.menuAdditional[j].foodCost;
+
+            $('#additional-items-list').append(
+                '<div>' +
+                '<hr class="mx-5">' +
+                '<div class="row px-4 py-2 mx-5 additional-item">' +
+                '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
+                name +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
+                quantity +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
+                formatAsDecimal(price) +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
+                formatAsDecimal(cost) +
+                '</h6>' +
+                '<span class="col material-icons-two-tone text-end md-btn"' +
+                'onclick="removeAdditionalItem(this)">close</span>' +
+                '</div>' +
+                '</div>'
+            );
+        }
+
+        // set extra charges table
+        if (currevent.transactionCharges.length != 0) {
+            $('#extra-charges-header').empty();
+            $('#extra-charges-header').append(extraChargesTableHeader);
+        }
+            
+        for (let j = 0; j < currevent.transactionCharges.length; j++) {
+            let name = currevent.transactionCharges[j].chargeName;
+            let quantity = currevent.transactionCharges[j].chargeQuantity;
+            let price = currevent.transactionCharges[j].chargePrice;
+
+            $('#extra-charges-list').append(
+                '<div>' +
+                '<hr class="mx-5">' +
+                '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
+                '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
+                name +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
+                quantity +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
+                formatAsDecimal(price) +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
+                formatAsDecimal(quantity * price) +
+                '</h6>' +
+                '<span class="col material-icons-two-tone text-end md-btn"' +
+                'onclick="removeExtraCharge(this)">close</span>' +
+                '</div>' +
+                '</div>'
+            );
+        }
+
+        // set discounts table
+        if (currevent.transactionDiscounts.length != 0) {
+            $('#discounts-header').empty();
+            $('#discounts-header').append(discountsTableHeader);
+        }
+        for (let j = 0; j < currevent.transactionDiscounts.length; j++) {
+            let name = currevent.transactionDiscounts[j].discountName;
+            let price = currevent.transactionDiscounts[j].discountPrice;
+
+            $('#discounts-list').append(
+                '<div>' +
+                '<hr class="mx-5">' +
+                '<div class="row px-4 py-2 mx-5 discount-item">' +
+                '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
+                name +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
+                formatAsDecimal(price) +
+                '</h6>' +
+                '<span class="col material-icons-two-tone text-end md-btn"' +
+                'onclick="removeDiscount(this)">close</span>' +
+                '</div>' +
+                '</div>'
+            );
+        }
+
+        // set breakdown table
+        updateBreakdownTable();
+
+        // set payment details
+        console.log(currevent.downpaymentDate)
+        if (currevent.downpaymentDate) {
+            $('#downpayment-date').val(new Date(currevent.downpaymentDate).toISOString().substr(0, 10));
+            $('#downpayment-mode').val(currevent.downpaymentMode);
+            $('#downpayment').prop('checked', true);
+            $(downpayment)
+                .parent()
+                .siblings()
+                .children()
+                .children('input:not(.static), select')
+                .prop('disabled', false);
+        }
+
+        if (currevent.finalPaymentDate) {
+            $('#downpayment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
+            $('#downpayment-mode').val(currevent.finalPaymentMode);
+            $('#downpayment').prop('checked', true);
+            $(downpayment)
+                .parent()
+                .siblings()
+                .children()
+                .children('input:not(.static), select')
+                .prop('disabled', false);
+        }
+
+    });
+}
