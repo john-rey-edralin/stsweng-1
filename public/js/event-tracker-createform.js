@@ -256,7 +256,7 @@ function retrieveInfoFromDB() {
 }
 
 function initializeTooltips() {
-    $('[data-toggle="tooltip"]').tooltip({
+    $('[data-bs-toggle="tooltip"]').tooltip({
         placement: 'left'
     });
     $('[data-toggle="popover"]').popover();
