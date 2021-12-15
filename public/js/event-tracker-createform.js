@@ -32,18 +32,12 @@ let discountsTableHeader =
 
 $(document).ready(function () {
     $('#submit').attr("disabled", true);
-    // if($('#submit').is(':disabled'))
-    // {
-    //     $('#submit').popover('enable');
-    //     console.log('AAAAAayoo');
-    //     $('#submit').attr('data-trigger', 'hover');
-    //     $('#submit').attr('data-bs-toggle', 'popover');
-    //     var msg = 'rawr';
-    //     $('#submit').attr('data-content', msg);
-    //     $('#submit').attr('data-placement', 'left');
-    //     $('#submit').attr('data-container', 'body');
 
-    // }
+    $('[data-bs-toggle="tooltip"]').tooltip({
+        placement: 'left'
+    });
+    $('[data-toggle="popover"]').popover();
+
     retrieveInfoFromDB();
 
     setRequiredFields();
