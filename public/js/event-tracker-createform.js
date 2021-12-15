@@ -30,6 +30,157 @@ let discountsTableHeader =
     '<h4 class="col mb-0 mt-1 text-center"><strong>Amount</strong></h4>' +
     '<div class="col"></div>';
 
+let menuPackageHTML =
+    '<div class="d-flex flex-row flex-wrap justify-content-center">' +
+    '<button id="menu-salad-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-salad-contents">' +
+    'SALAD' +
+    '</button>' +
+    '<button id="menu-pasta-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-pasta-contents">' +
+    'PASTA' +
+    '</button> ' +
+    '<button id="menu-beef-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-beef-contents">' +
+    'BEEF' +
+    '</button> ' +
+    '<button id="menu-pork-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-pork-contents">' +
+    'PORK' +
+    '</button> ' +
+    '<button id="menu-chicken-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-chicken-contents">' +
+    'CHICKEN' +
+    '</button> ' +
+    '<button id="menu-fish-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"' +
+    'type="button" data-bs-toggle="collapse" data-bs-target="#menu-fish-contents">' +
+    'FISH' +
+    '</button> ' +
+    '</div> ' +
+
+    '<div id="menu-salad-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Salad</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="salad-options" id="salad-1"' +
+    'value="Chicken Caesar Salad">' +
+    '<label class="form-check-label" for="salad-1">Chicken Caesar Salad</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="salad-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="salad-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div id="menu-pasta-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Pasta</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="pasta-options" id="pasta-1"' +
+    'value="Creamy Chicken Pesto">' +
+    '<label class="form-check-label" for="pasta-1">Creamy Chicken Pesto</label>' +
+    '</div>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="pasta-options" id="pasta-2"' +
+    'value="Shirmp and Squid Marinara">' +
+    '<label class="form-check-label" for="pasta-2">Shirmp and Squid Marinara</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="pasta-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="pasta-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div id="menu-beef-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Beef</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="beef-options" id="beef-1"' +
+    'value="Balai Yllana Kare Kare">' +
+    '<label class="form-check-label" for="beef-1">Balai Yllana Kare Kare</label>' +
+    '</div>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="beef-options" id="beef-2"' +
+    'value="Caldereta">' +
+    '<label class="form-check-label" for="beef-2">Caldereta</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="beef-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="beef-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div id="menu-pork-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Pork</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="pork-options" id="pork-1"' +
+    'value="Sisig Ihaw">' +
+    '<label class="form-check-label" for="pork-1">Sisig Ihaw</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="pork-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="pork-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div id="menu-chicken-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Chicken</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="chicken-options" id="chicken-1"' +
+    'value="Buttered Chicken">' +
+    '<label class="form-check-label" for="chicken-1">Buttered Chicken</label>' +
+    '</div>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="chicken-options" id="chicken-2"' +
+    'value="Balai Yllana Fried Chicken">' +
+    '<label class="form-check-label" for="chicken-2">Balai Yllana Fried Chicken</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="chicken-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="chicken-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div id="menu-fish-contents" class="menu-item-content collapse">' +
+    '<hr>' +
+    '<div class="d-flex flex-row justify-content-start">' +
+    '<h2 class="menu-item-header mx-4 align-self-center">Fish</h2>' +
+    '<div class="form-check mx-5 align-self-center">' +
+    '<input class="form-check-input" type="radio" name="fish-options" id="fish-1"' +
+    'value="Parmesan Crusted Fish">' +
+    '<label class="form-check-label" for="fish-1">Parmesan Crusted Fish</label>' +
+    '</div>' +
+    '<div class="form-group row my-3 ms-auto">' +
+    '<label for="fish-quantity" class="col col-form-label">Quantity</label>' +
+    '<div class="col-8">' +
+    '<input type="number" class="form-control w-75" id="fish-quantity" disabled>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '</div>';
+
 $(document).ready(function () {
     $('#submit').attr("disabled", true);
     // if($('#submit').is(':disabled'))
@@ -53,8 +204,8 @@ $(document).ready(function () {
     initializeMenuFields();
     initializeTransactionFields();
     initializePaymentFields();
-    
-    initializeRealTimeValidation(); 
+
+    initializeRealTimeValidation();
     submitForm();
 });
 
@@ -172,7 +323,21 @@ function initializeEventFields() {
     });
 
     // initialize food quantity amount
-    $('.package').on('change', function () { updateFoodQuantity(); updateBreakdownTable(); });
+    $('.package').on('change', function () {
+        if (getVariantCount() > $('.menu-button-active').length) {
+            $('.menu-button').prop('disabled', false);
+        }
+        else if (getVariantCount() == $('.menu-button-active').length) {
+            $('.menu-button:not(.menu-button-active)').prop('disabled', true);
+        }
+        else if (getVariantCount() < $('.menu-button-active').length) {
+            $('#menu-package').empty();
+            $('#menu-package').append(menuPackageHTML);
+            initializeMenuFields();
+        }
+        updateFoodQuantity();
+        updateBreakdownTable();
+    });
     $('#additional-pax').on('change', function () { updateFoodQuantity(); updateBreakdownTable(); });
 }
 
@@ -254,23 +419,23 @@ function initializeTransactionFields() {
 function initializePaymentFields() {
     $('#downpayment-date').val("");
     $('#final-payment-date').val("");
-    document.getElementById("final-payment").disabled= true;
+    document.getElementById("final-payment").disabled = true;
     var downp = 0;
     var finalp = 0;
     $('.payment-checkbox').on('change', function () {
         if ($(this).is(':checked')) {
             $('#submit').attr("disabled", true);
             $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', false);
-            if(document.getElementById("downpayment").checked) {
-                document.getElementById("final-payment").disabled= false;
+            if (document.getElementById("downpayment").checked) {
+                document.getElementById("final-payment").disabled = false;
                 $('#downpayment-date').siblings("label").addClass('required');
                 $('#downpayment-mode').siblings("label").addClass('required');
                 $('#downpayment-amount').siblings("label").addClass('required');
-                
+
                 $('#downpayment-amount').on('keyup', function () {
                     if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '')
                         displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
-                    else 
+                    else
                         resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
                     downp = parseFloat($('#downpayment-amount').val());
                     $('#payment-amount-total').val(downp + finalp);
@@ -281,18 +446,18 @@ function initializePaymentFields() {
                     $('#payment-balance').val(calculateTotal() - $('#payment-amount-total').val());
                     $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
                     $('#submit').attr("disabled", checkIfFilledEventFields());
-                    if($('#payment-balance').val() < 0) {
+                    if ($('#payment-balance').val() < 0) {
                         $('#payment-error').text('Customer payment is greater than the total price.');
                         $('#payment-amount-total').addClass('is-invalid');
-                        $('#payment-balance').addClass('is-invalid');            
-                    } 
+                        $('#payment-balance').addClass('is-invalid');
+                    }
                     else {
                         $('#payment-error').text('');
                         $('#payment-amount-total').removeClass('is-invalid');
-                        $('#payment-balance').removeClass('is-invalid');  
+                        $('#payment-balance').removeClass('is-invalid');
                     }
                 });
-                
+
                 $('#downpayment-mode').change(function () {
                     if ($('#downpayment-mode').val() == '')
                         displayError($('#downpayment-mode'), $('#downpayment-mode-error'), 'Select 1 payment mode.');
@@ -301,7 +466,7 @@ function initializePaymentFields() {
                 });
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
-            if(document.getElementById("final-payment").checked) {
+            if (document.getElementById("final-payment").checked) {
                 $('#final-payment-date').siblings("label").addClass('required');
                 $('#final-payment-mode').siblings("label").addClass('required');
                 $('#final-payment-amount').siblings("label").addClass('required');
@@ -310,27 +475,27 @@ function initializePaymentFields() {
                     //     $('#final-payment-amount').val(0); 
                     if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '')
                         displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
-                    else 
+                    else
                         resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
                     finalp = parseFloat($('#final-payment-amount').val());
                     $('#payment-amount-total').val(downp + finalp);
                     $('#downpayment-amount').on('change', function () {
-                        downp = parseFloat($('#downpayment-amount').val()); 
+                        downp = parseFloat($('#downpayment-amount').val());
                         $('#payment-amount-total').val(downp + finalp);
                     });
                     $('#payment-balance').val(calculateTotal() - $('#payment-amount-total').val());
                     $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
                     $('#submit').attr("disabled", checkIfFilledEventFields());
-                    if($('#payment-balance').val() < 0) {
+                    if ($('#payment-balance').val() < 0) {
                         console.log($('#payment-balance').val());
                         $('#payment-error').text('Customer payment is greater than the total price.');
                         $('#payment-amount-total').addClass('is-invalid');
-                        $('#payment-balance').addClass('is-invalid');            
-                    } 
+                        $('#payment-balance').addClass('is-invalid');
+                    }
                     else {
                         $('#payment-error').text('');
                         $('#payment-amount-total').removeClass('is-invalid');
-                        $('#payment-balance').removeClass('is-invalid');  
+                        $('#payment-balance').removeClass('is-invalid');
                     }
                 });
 
@@ -342,23 +507,23 @@ function initializePaymentFields() {
                 });
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
-        } 
+        }
         else {
             var amt1 = 0;
-            if($('#payment-amount-total').val() != '')
+            if ($('#payment-amount-total').val() != '')
                 amt1 = parseFloat($('#payment-amount-total').val());
-            if(!document.getElementById("downpayment").checked) {
-                document.getElementById("final-payment").checked= false;
-                document.getElementById("final-payment").disabled= true;
+            if (!document.getElementById("downpayment").checked) {
+                document.getElementById("final-payment").checked = false;
+                document.getElementById("final-payment").disabled = true;
                 $('#downpayment-date').siblings("label").removeClass('required');
                 $('#downpayment-mode').siblings("label").removeClass('required');
                 $('#downpayment-amount').siblings("label").removeClass('required');
-                
+
                 downp = 0;
                 $('#payment-amount-total').val(amt1 - parseFloat($('#downpayment-amount').val()));
                 $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#downpayment-amount').val()));
                 $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
-                
+
                 setDefaultDate('downpayment-date');
                 resetField($('#downpayment-date'), $('#downpayment-error'));
                 resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
@@ -369,9 +534,9 @@ function initializePaymentFields() {
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
             var amt2 = 0;
-            if($('#payment-amount-total').val() != '')
+            if ($('#payment-amount-total').val() != '')
                 amt2 = parseFloat($('#payment-amount-total').val());
-            if(!document.getElementById("final-payment").checked) {
+            if (!document.getElementById("final-payment").checked) {
                 $("#final-payment").parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
                 $('#final-payment-date').siblings("label").removeClass('required');
                 $('#final-payment-mode').siblings("label").removeClass('required');
@@ -389,11 +554,11 @@ function initializePaymentFields() {
                 $('#final-payment-date').val("");
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
-            
-            if(!document.getElementById("final-payment").checked && !document.getElementById("downpayment").checked) {
+
+            if (!document.getElementById("final-payment").checked && !document.getElementById("downpayment").checked) {
                 $('#payment-amount-total').val("")
                 $('#payment-balance').val("")
-            } 
+            }
             $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
         }
     });
@@ -402,17 +567,17 @@ function initializePaymentFields() {
 /**  
  * Sets default date to today
  */
-function setDefaultDate (datefield) {
+function setDefaultDate(datefield) {
     var today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth()+1;
+    var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
-    if(dd < 10)
-        dd='0'+dd;
-    if(mm < 10)
-        mm='0'+mm; 
-    today = yyyy+'-'+mm+'-'+dd;
-    
+    if (dd < 10)
+        dd = '0' + dd;
+    if (mm < 10)
+        mm = '0' + mm;
+    today = yyyy + '-' + mm + '-' + dd;
+
     var field = "#" + datefield;
     $(field).val(today);
 }
@@ -791,22 +956,22 @@ function initializeRealTimeValidation() {
             displayError($('#client-name'), $('#client-name-error'), 'Client name should be filled.');
         else if (checkStringInput(clientname))
             displayError($('#client-name'), $('#client-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
-        else resetField($('#client-name'), $('#client-name-error'));   
+        else resetField($('#client-name'), $('#client-name-error'));
     });
-    
+
     $('#client-mobile-number').keyup(function () {
-        if(validator.isEmpty($(this).val()))
-            displayError($('#client-mobile-number'), $('#client-number-error'), 'Client mobile number should be filled.'); 
+        if (validator.isEmpty($(this).val()))
+            displayError($('#client-mobile-number'), $('#client-number-error'), 'Client mobile number should be filled.');
         else if ($(this).intlTelInput('isValidNumber'))
             resetField($('#client-mobile-number'), $('#client-number-error'));
         else
             displayError($('#client-mobile-number'), $('#client-number-error'), 'Invalid client mobile number.');
     });
 
-    $('#event-type').keyup(function() {
+    $('#event-type').keyup(function () {
         var eventtype = validator.trim($(this).val());
-        if(validator.isEmpty(eventtype))
-            displayError($(this), $('#event-type-error'), 'Event type should be filled.');  
+        if (validator.isEmpty(eventtype))
+            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
         else resetField($(this), $('#event-type-error'));
 
     });
@@ -814,7 +979,7 @@ function initializeRealTimeValidation() {
         var eventdate = document.getElementById("event-date").value;
         validDate(eventdate, $('#event-date-error'), "event-date");
         checkEventAvailability();
-    });    
+    });
 
     $('#event-time').change(function () {
         if ($('#event-time').val() == '')
@@ -824,7 +989,7 @@ function initializeRealTimeValidation() {
         checkEventAvailability();
     });
 
-    $('#event-pax').on("change",function () {
+    $('#event-pax').on("change", function () {
         if ($('#event-pax').val() < 0) {
             displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be negative.');
         } else if ($('#event-pax').val() == 0) {
@@ -837,12 +1002,12 @@ function initializeRealTimeValidation() {
         }
     });
 
-    $('.venue-checkbox').change(function() {
+    $('.venue-checkbox').change(function () {
         var checked = $("input[type=checkbox]:checked").length;
         if (checked <= 0)
             displayError($('.venue-checkbox'), $('#missing-error'), 'At least 1 venue should be checked.');
-        else 
-            resetField($('.venue-checkbox'), $('#missing-error'));                      
+        else
+            resetField($('.venue-checkbox'), $('#missing-error'));
     });
 
     $('.package').change(function () {
@@ -853,7 +1018,7 @@ function initializeRealTimeValidation() {
         if (package == 0) {
             displayError($('.package'), $('#missing-error'), 'At least 1 Package should be selected.');
             $('#submit').attr("disabled", true);
-        }          
+        }
         else
             resetField($('.package'), $('#missing-error'));
         checkEventAvailability();
@@ -863,7 +1028,7 @@ function initializeRealTimeValidation() {
         var repname = validator.trim($('#representative-name').val());
         if (checkStringInput(repname))
             displayError($('#representative-name'), $('#rep-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
-        else resetField($('#representative-name'), $('#rep-name-error')); 
+        else resetField($('#representative-name'), $('#rep-name-error'));
     });
 
     $('#representative-mobile-number').keyup(function () {
@@ -920,12 +1085,12 @@ function initializeRealTimeValidation() {
     $("#downpayment-date").on("change", function () {
         var downpaydate = document.getElementById("downpayment-date").value;
         validDate(downpaydate, $('#downpayment-error'), "downpayment-date");
-    }); 
+    });
 
     $("#final-payment-date").on("change", function () {
         var finalpaydate = document.getElementById("final-payment-date").value;
         validDate(finalpaydate, $('#final-payment-error'), "final-payment-date");
-    }); 
+    });
 }
 
 /* validation */
@@ -941,21 +1106,21 @@ function checkIfFilledEventFields() {
     let sunroom = $('#sunroom-options').val();
     let terrace = $('#terrace-options').val();
     let package = (garden || sunroom || terrace);
- 
+
     var dd = 1;
     var mm = 1;
     var yyyy = 2032;
-    var dateMax = getDateTime(yyyy + "-" + ("0" + mm) + "-" + ("0" +dd));
+    var dateMax = getDateTime(yyyy + "-" + ("0" + mm) + "-" + ("0" + dd));
 
     var today = new Date();
     var td = today.getDate();
     var tm = today.getMonth() + 1;
     var tyyy = today.getFullYear();
-    if(td < 10)
-        td='0'+td;
-    if(tm < 10)
-        tm='0'+tm; 
-    var dateMin = getDateTime(tyyy+'-'+tm+'-'+td);
+    if (td < 10)
+        td = '0' + td;
+    if (tm < 10)
+        tm = '0' + tm;
+    var dateMin = getDateTime(tyyy + '-' + tm + '-' + td);
 
     if (validator.isEmpty(name)) {
         //console.log("aaaaaaa");
@@ -985,12 +1150,12 @@ function checkIfFilledEventFields() {
         $('#missing-error').val('Invalid cellphone number.');
         return true;
     }
-    else if (!validator.isEmpty($('#representative-mobile-number').val())){
+    else if (!validator.isEmpty($('#representative-mobile-number').val())) {
         if (!($('#representative-mobile-number').intlTelInput('isValidNumber'))) {
             //console.log("a rep ph number")
             $('#missing-error').val('Invalid cellphone number.');
             return true;
-        }    
+        }
     }
     else if (validator.isEmpty(type)) {
         $('#missing-error').val('Event type should be filled.');
@@ -999,14 +1164,14 @@ function checkIfFilledEventFields() {
 
     else if (validator.isEmpty(date)) {
         //console.log('no event date')
-        $('#missing-error').val('Event date should be filled.'); 
+        $('#missing-error').val('Event date should be filled.');
         return true;
     }
-    else if(!validator.isEmpty(date)) {
+    else if (!validator.isEmpty(date)) {
         var eventdate = getDateTime(date);
-        if($('#event-date').val().length > 10) {
+        if ($('#event-date').val().length > 10) {
             $('#missing-error').val('Invalid date.');
-            return true; 
+            return true;
         }
         else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
             //console.log('event date behind')
@@ -1017,7 +1182,7 @@ function checkIfFilledEventFields() {
             //console.log('event date later')
             $('#missing-error').val('Date cannot be later than 2031.');
             return true;
-        }            
+        }
     }
 
     if (validator.isEmpty(time)) {
@@ -1040,35 +1205,35 @@ function checkIfFilledEventFields() {
         $('#missing-error').val('Number of pax should not be more than 120.');
         return true;
     }
-    else if($("input[type=checkbox]:checked").length <= 0) {
+    else if ($("input[type=checkbox]:checked").length <= 0) {
         $('#missing-error').val('At least 1 venue should be selected.');
-        return true;       
+        return true;
     }
     else if (package == 0) {
         $('#missing-error').val('At least 1 package should be selected.');
         return true;
     }
-    if(document.getElementById("downpayment").checked) {
+    if (document.getElementById("downpayment").checked) {
         //console.log("HERE HERE");
         if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '') {
             $('#downpayment-amount-error').val('Invalid payment.');
             return true;
         }
-        else if (validator.isEmpty($('#downpayment-mode').val())){
+        else if (validator.isEmpty($('#downpayment-mode').val())) {
             $('#downpayment-mode-error').val('Select 1 payment mode.');
             //console.log("HERE HERE HERE");
             return true;
         }
-        else if(validator.isEmpty($('#downpayment-date').val())) {
+        else if (validator.isEmpty($('#downpayment-date').val())) {
             $('#downpayment-error').val('Date should be filled.');
             //console.log("HERE RAWR");
-            return true; 
+            return true;
         }
-        else if(!validator.isEmpty($('#downpayment-date').val())) {
+        else if (!validator.isEmpty($('#downpayment-date').val())) {
             var dpaydate = getDateTime($('#downpayment-date').val());
-            if($('#downpayment-date').val().length > 10) {
+            if ($('#downpayment-date').val().length > 10) {
                 $('#downpayment-error').val('Invalid date.');
-                return true; 
+                return true;
             }
             else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
                 //console.log('downpayment date behind')
@@ -1079,31 +1244,31 @@ function checkIfFilledEventFields() {
                 //console.log('downpayment date later')
                 $('#downpayment-error').val('Date cannot be later than 2031.');
                 return true;
-            }            
+            }
         }
     }
-    if(document.getElementById("final-payment").checked) {
+    if (document.getElementById("final-payment").checked) {
         console.log("HEHEHE")
         var totalpayment = parseFloat($('#downpayment-amount').val()) + parseFloat($('#final-payment-amount').val());
         if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '') {
             $('#final-payment-amount-error').val('Invalid payment.');
             return true;
         }
-        else if(validator.isEmpty($('#final-payment-mode').val())){
+        else if (validator.isEmpty($('#final-payment-mode').val())) {
             //console.log("HEHE HEHE")
             $('#final-payment-mode-error').val('Select 1 payment mode.');
             return true;
         }
-        else if(validator.isEmpty($('#final-payment-date').val())) {
+        else if (validator.isEmpty($('#final-payment-date').val())) {
             //console.log("EHE")
             $('#final-payment-error').val('Date should be filled.');
-            return true; 
+            return true;
         }
-        else if(!validator.isEmpty($('#final-payment-date').val())) {
+        else if (!validator.isEmpty($('#final-payment-date').val())) {
             var fpaydate = getDateTime($('#final-payment-date').val());
-            if($('#final-payment-date').val().length > 10) {
+            if ($('#final-payment-date').val().length > 10) {
                 $('#final-payment-error').val('Invalid date.');
-                return true; 
+                return true;
             }
             else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
                 //console.log('final payment date behind')
@@ -1114,9 +1279,9 @@ function checkIfFilledEventFields() {
                 //console.log('final payment date later')
                 $('#final-payment-error').val('Date cannot be later than 2031.');
                 return true;
-            }            
+            }
         }
-        
+
         // if(totalpayment < calculateTotal()) {
         //     console.log("NOT FULLY PAID")
         //     $('#payment-error').text('Insuffcient payment.');
@@ -1125,31 +1290,31 @@ function checkIfFilledEventFields() {
         //     return true;             
         // }   
     }
-    if($('#payment-balance').val() < 0) {
+    if ($('#payment-balance').val() < 0) {
         console.log("FULLY PAID BUT HAS CHANGE")
         $('#payment-error').text('Customer payment is greater than the total price.');
         $('#payment-amount-total').addClass('is-invalid');
         $('#payment-balance').addClass('is-invalid');
-        return true;             
-    }  
-        //console.log("HEHEHE VALID")
-        $('#payment-error').text('');
-        $('#payment-amount-total').removeClass('is-invalid');
-        $('#payment-balance').removeClass('is-invalid');  
-        $('#missing-error').val('');
-        return false;
+        return true;
+    }
+    //console.log("HEHEHE VALID")
+    $('#payment-error').text('');
+    $('#payment-amount-total').removeClass('is-invalid');
+    $('#payment-balance').removeClass('is-invalid');
+    $('#missing-error').val('');
+    return false;
 }
 
 function checkStringInput(input) {
     const blacklist = ["~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")",
-    "_", "=", "+", "{", "}", "[", "]", "|", "\\", ";", ":", "\'",
-    "\"", ".", ",", "<", ">", "/", "?"];
+        "_", "=", "+", "{", "}", "[", "]", "|", "\\", ";", ":", "\'",
+        "\"", ".", ",", "<", ">", "/", "?"];
     var flag = false;
 
     for (const item of blacklist)
         if (input.indexOf(item) != -1)
             flag = true;
-    
+
     return flag;
 }
 
@@ -1158,12 +1323,12 @@ function checkStringInput(input) {
  * 
  * @param {String}  input   The date in String format to be converted
 */
-function getDateTime (input) {
+function getDateTime(input) {
     var day = parseInt(input.slice(8, 10));
     var month = parseInt(input.slice(5, 7));
     var year = parseInt(input.slice(0, 4));
 
-    return new Date (year, month, day).getTime();
+    return new Date(year, month, day).getTime();
 }
 
 /**
@@ -1173,29 +1338,29 @@ function getDateTime (input) {
  * @param {String} errorfield   The ID of the error field in the form to display the errormsg in
  * @param {String} id           The ID of the field in the form with discrepancies
 */
-function validDate (input, errorfield, id) {
+function validDate(input, errorfield, id) {
     var idfield = '#' + id;
-    if(input.length > 10)
-        displayError($(idfield), errorfield, 'Invalid date.');        
+    if (input.length > 10)
+        displayError($(idfield), errorfield, 'Invalid date.');
     else {
         var dateInput = getDateTime(input);
         var dd = 1;
         var mm = 1;
         var yyyy = 2032;
-        var dateMax = getDateTime(yyyy + "-" + ("0" + mm) + "-" + ("0" +dd));
+        var dateMax = getDateTime(yyyy + "-" + ("0" + mm) + "-" + ("0" + dd));
 
         var today = new Date();
         var td = today.getDate();
         var tm = today.getMonth() + 1;
         var tyyy = today.getFullYear();
-        if(td < 10)
-            td='0'+td;
-        if(tm < 10)
-            tm='0'+tm; 
-        var dateMin = getDateTime(tyyy+'-'+tm+'-'+td);
-    
+        if (td < 10)
+            td = '0' + td;
+        if (tm < 10)
+            tm = '0' + tm;
+        var dateMin = getDateTime(tyyy + '-' + tm + '-' + td);
+
         if (input == "") {
-            displayError($(idfield), errorfield, 'Date cannot be empty.'); 
+            displayError($(idfield), errorfield, 'Date cannot be empty.');
             return true;
         }
         else if ((dateInput - dateMin < 0) || isNaN(dateInput)) {
@@ -1206,7 +1371,7 @@ function validDate (input, errorfield, id) {
             displayError($(idfield), errorfield, 'Date cannot be later than 2031.');
             return true;
         }
-        else{
+        else {
             resetField($(idfield), errorfield);
             return false;
         }
@@ -1495,12 +1660,12 @@ function submitForm() {
         let json = {
             data: JSON.stringify(data)
         };
-        
+
         // makes a POST request using AJAX to store the data and returns the user to the reservation page
         $.post("/event-tracker/submit", json, function (result) {
             if (getEventStatus() == 'reserved')
                 window.location.href = '/event-tracker/reservations';
-            else 
+            else
                 window.location.href = '/event-tracker/pencilbookings';
         });
     });
