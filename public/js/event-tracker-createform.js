@@ -184,11 +184,6 @@ let menuPackageHTML =
 $(document).ready(function () {
     $('#submit').attr("disabled", true);
 
-    $('[data-bs-toggle="tooltip"]').tooltip({
-        placement: 'left'
-    });
-    $('[data-toggle="popover"]').popover();
-
     retrieveInfoFromDB();
 
     setRequiredFields();
@@ -261,7 +256,7 @@ function retrieveInfoFromDB() {
 }
 
 function initializeTooltips() {
-    $('[data-toggle="tooltip"]').tooltip({
+    $('[data-bs-toggle="tooltip"]').tooltip({
         placement: 'left'
     });
     $('[data-toggle="popover"]').popover();
