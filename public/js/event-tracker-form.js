@@ -194,9 +194,9 @@ $(document).ready(function () {
     initializeMenuFields();
     initializeTransactionFields();
     initializePaymentFields();
-    
+
     initializeRealTimeValidation();
-    
+
     submitForm();
 });
 
@@ -278,6 +278,7 @@ function retrieveInfoFromDB() {
             );
         });
     });
+
     addExistingFields();
 }
 
@@ -495,7 +496,7 @@ function initializePaymentFields() {
                     finalp = parseFloat($('#final-payment-amount').val());
                     $('#payment-amount-total').val(downp + finalp);
                     $('#downpayment-amount').on('change', function () {
-                        downp = parseFloat($('#downpayment-amount').val()); 
+                        downp = parseFloat($('#downpayment-amount').val());
                         $('#payment-amount-total').val(downp + finalp);
                     });
                     $('#payment-balance').val(calculateTotal() - $('#payment-amount-total').val());
@@ -525,29 +526,29 @@ function initializePaymentFields() {
         }
         else {
             var amt1 = 0;
-            if($('#payment-amount-total').val() != '')
+            if ($('#payment-amount-total').val() != '')
                 amt1 = parseFloat($('#payment-amount-total').val());
             if (!document.getElementById("downpayment").checked) {
                 $('#downpayment')
-                .parent()
-                .siblings()
-                .children()
-                .children('input:not(.static), select')
-                .prop('disabled', true);
+                    .parent()
+                    .siblings()
+                    .children()
+                    .children('input:not(.static), select')
+                    .prop('disabled', true);
                 document.getElementById("final-payment").checked = false;
                 document.getElementById("final-payment").disabled = true;
                 $('#final-payment')
-                .parent()
-                .siblings()
-                .children()
-                .children('input:not(.static), select')
-                .prop('disabled', true);
+                    .parent()
+                    .siblings()
+                    .children()
+                    .children('input:not(.static), select')
+                    .prop('disabled', true);
                 $('#downpayment-date').siblings("label").removeClass('required');
                 $('#downpayment-mode').siblings("label").removeClass('required');
                 $('#downpayment-amount').siblings("label").removeClass('required');
 
                 downp = 0;
-                if($('#downpayment-amount').val() == '')
+                if ($('#downpayment-amount').val() == '')
                     $('#downpayment-amount').val(0);
                 $('#payment-amount-total').val(amt1 - parseFloat($('#downpayment-amount').val()));
                 $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#downpayment-amount').val()));
@@ -564,7 +565,7 @@ function initializePaymentFields() {
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
             var amt2 = 0;
-            if($('#payment-amount-total').val() != '')
+            if ($('#payment-amount-total').val() != '')
                 amt2 = parseFloat($('#payment-amount-total').val());
             if (!document.getElementById("final-payment").checked) {
                 $("#final-payment").parent().siblings().children().children('input:not(.static), select').prop('disabled', true);
@@ -572,7 +573,7 @@ function initializePaymentFields() {
                 $('#final-payment-mode').siblings("label").removeClass('required');
                 $('#final-payment-amount').siblings("label").removeClass('required');
                 finalp = 0;
-                if($('#final-payment-amount').val() == '')
+                if ($('#final-payment-amount').val() == '')
                     $('#final-payment-amount').val(0);
                 $('#payment-amount-total').val(amt2 - parseFloat($('#final-payment-amount').val()));
                 $('#payment-balance').val(parseFloat($('#payment-balance').val()) + parseFloat($('#final-payment-amount').val()));
@@ -1614,8 +1615,8 @@ function formatAsNumber(value) {
 }
 
 function calculatePackageTotal() {
-    let gardenIndex = -1, 
-        sunroomIndex = -1, 
+    let gardenIndex = -1,
+        sunroomIndex = -1,
         terraceIndex = -1;
     console.log($('#garden-options').val());
     console.log($('#sunroom-options').val());
@@ -1627,7 +1628,7 @@ function calculatePackageTotal() {
         sunroomIndex = getPackageIndex(sunroomPackageList, $('#sunroom-options').val());
     if ($('#terrace-options').val() != '')
         terraceIndex = getPackageIndex(terracePackageList, $('#terrace-options').val());
-    
+
     let add5paxIndex = getPackageIndex(additionalPackageList, 'add5');
 
     let sum = 0;
@@ -1751,7 +1752,7 @@ function getEventStatus() {
 function submitForm() {
     $('form').on('submit', function (event) {
         event.preventDefault();
-        
+
         // stores the venues and packages into an array of strings
         let eventVenues = [];
         let eventPackages = [];
@@ -1866,7 +1867,7 @@ function submitForm() {
                 discounts: calculateItemTotal($('.discount-item-amt')),
                 all: calculateTotal(),
             },
-            
+
             downpaymentDate: $('#downpayment-date').val(),
             downpaymentMode: $('#downpayment-mode').val(),
             downpaymentAmount: downpaymentAmount,
@@ -1877,237 +1878,257 @@ function submitForm() {
         };
         $('#downpayment-amount').val(downpaymentAmount);
         //alert("WEEWOOO " + $('#downpayment-amount').val());
-        
-        // converts the JSON object into a String
-        let json = JSON.stringify({
-            id: curreventID,
-            data: data
-        });
 
-        // makes a POST request using AJAX to store the data and returns the user to the reservation page
-        $.ajax({
-            type: 'PUT',
-            url: '/event-tracker/reservations',
-            data: json,
-            contentType: 'application/json',
-            success: function (result) {
+        // converts the JSON object into a String
+
+
+        if (curreventID) {
+            let json = JSON.stringify({
+                id: curreventID,
+                data: data
+            });
+            alert(json)
+
+            // makes a PUT request using AJAX to update the event's details
+            $.ajax({
+                type: 'PUT',
+                url: '/event-tracker/reservations',
+                data: json,
+                contentType: 'application/json',
+                success: function (result) {
+                    if (getEventStatus() == 'reserved')
+                        window.location.href = '/event-tracker/reservations';
+                    else
+                        window.location.href = '/event-tracker/pencilbookings';
+                },
+            });
+        } else {
+            let json = JSON.stringify({
+                data: data
+            });
+
+            // makes a POST request using AJAX to add the event to the database
+            $.post("/event-tracker/submit", json, function (result) {
                 if (getEventStatus() == 'reserved')
                     window.location.href = '/event-tracker/reservations';
                 else
                     window.location.href = '/event-tracker/pencilbookings';
-            },
-        });
+            });
+        }
     });
 }
 
 function addExistingFields() {
     let currevent;
     $.get('/event-tracker/get/event', { id: $('#event-id').text() }, function (result) {
-        currevent = result[0];
-        curreventID = currevent._id;
+        if (result) {
+            currevent = result[0];
+            curreventID = currevent._id;
 
-        // set event time
-        $('#event-time').val(currevent.eventTime);
+            // set event time
+            $('#event-time').val(currevent.eventTime);
 
-        // set event date
-        $('#event-date').val(new Date(currevent.eventDate).toISOString().substr(0, 10));
+            // set event date
+            $('#event-date').val(new Date(currevent.eventDate).toISOString().substr(0, 10));
 
-        // set event venue checkboxes
-        $('#venue-garden').prop(
-            'checked',
-            currevent.eventVenues.includes('Garden')
-        );
-        $('#venue-sunroom').prop(
-            'checked',
-            currevent.eventVenues.includes('Sunroom')
-        );
-        $('#venue-terrace').prop(
-            'checked',
-            currevent.eventVenues.includes('Terrace')
-        );
-
-        $('.venue-checkbox').each(function () {
-            if ($(this).is(':checked'))
-                $(this).parent().siblings('select').prop('disabled', false);
-        });
-
-        // set event packages dropdowns
-        for (let j = 0; j < currevent.packageList.length; j++) {
-            if (currevent.packageList[j].packageVenue === 'Garden')
-                $('#garden-options').val(
-                    currevent.packageList[j].packageCode
-                ).change();
-            else if (currevent.packageList[j].packageVenue === 'Sunroom')
-                $('#sunroom-options').val(
-                    currevent.packageList[j].packageCode
-                ).change();
-            else if (currevent.packageList[j].packageVenue === 'Terrace')
-                $('#terrace-options').val(
-                    currevent.packageList[j].packageCode
-                ).change();
-        }
-
-        // set additional pax checkbox
-        $('#additional-pax').prop(
-            'checked',
-            currevent.packageAdditionalPax
-        );
-
-        // set menu items
-        if (currevent.menuPackage.saladName) {
-            $('#menu-salad-button').trigger('click');
-            //$('#menu-salad-contents').collapse('toggle');
-            $('input[name="salad-options"][value="' + currevent.menuPackage.saladName + '"]').prop('checked', true);
-        }
-
-        if (currevent.menuPackage.pastaName) {
-            $('#menu-pasta-button').trigger('click');
-            $('input[name="pasta-options"][value="' + currevent.menuPackage.pastaName + '"]').prop('checked', true);
-        }
-
-        if (currevent.menuPackage.beefName) {
-            $('#menu-beef-button').trigger('click');
-            $('input[name="beef-options"][value="' + currevent.menuPackage.beefName + '"]').prop('checked', true);
-        }
-
-        if (currevent.menuPackage.porkName) {
-            $('#menu-pork-button').trigger('click');
-            $('input[name="pork-options"][value="' + currevent.menuPackage.porkName + '"]').prop('checked', true);
-        }
-
-        if (currevent.menuPackage.chickenName) {
-            $('#menu-chicken-button').trigger('click');
-            $('input[name="chicken-options"][value="' + currevent.menuPackage.chickenName + '"]').prop('checked', true);
-        }
-
-        if (currevent.menuPackage.fishName) {
-            $('#menu-fish-button').trigger('click');
-            $('input[name="fish-options"][value="' + currevent.menuPackage.fishName + '"]').prop('checked', true);
-        }
-
-        // set additional items table
-        if (currevent.foodList.length != 0) {
-            $('#additional-items-header').empty();
-            $('#additional-items-header').append(additionalFoodTableHeader);
-        }
-        for (let j = 0; j < currevent.foodList.length; j++) {
-            let name = currevent.foodList[j].name;
-            let quantity = currevent.menuAdditional[j].foodQuantity;
-            let price = currevent.foodList[j].price;
-            let cost = currevent.menuAdditional[j].foodCost;
-
-            $('#additional-items-list').append(
-                '<div>' +
-                '<hr class="mx-5">' +
-                '<div class="row px-4 py-2 mx-5 additional-item">' +
-                '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
-                name +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
-                quantity +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
-                formatAsDecimal(price) +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
-                formatAsDecimal(cost) +
-                '</h6>' +
-                '<span class="col material-icons-two-tone text-end md-btn"' +
-                'onclick="removeAdditionalItem(this)">close</span>' +
-                '</div>' +
-                '</div>'
+            // set event venue checkboxes
+            $('#venue-garden').prop(
+                'checked',
+                currevent.eventVenues.includes('Garden')
             );
-        }
-
-        // set extra charges table
-        if (currevent.transactionCharges.length != 0) {
-            $('#extra-charges-header').empty();
-            $('#extra-charges-header').append(extraChargesTableHeader);
-        }
-            
-        for (let j = 0; j < currevent.transactionCharges.length; j++) {
-            let name = currevent.transactionCharges[j].chargeName;
-            let quantity = currevent.transactionCharges[j].chargeQuantity;
-            let price = currevent.transactionCharges[j].chargePrice;
-
-            $('#extra-charges-list').append(
-                '<div>' +
-                '<hr class="mx-5">' +
-                '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
-                '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
-                name +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
-                quantity +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
-                formatAsDecimal(price) +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
-                formatAsDecimal(quantity * price) +
-                '</h6>' +
-                '<span class="col material-icons-two-tone text-end md-btn"' +
-                'onclick="removeExtraCharge(this)">close</span>' +
-                '</div>' +
-                '</div>'
+            $('#venue-sunroom').prop(
+                'checked',
+                currevent.eventVenues.includes('Sunroom')
             );
-        }
-
-        // set discounts table
-        if (currevent.transactionDiscounts.length != 0) {
-            $('#discounts-header').empty();
-            $('#discounts-header').append(discountsTableHeader);
-        }
-        for (let j = 0; j < currevent.transactionDiscounts.length; j++) {
-            let name = currevent.transactionDiscounts[j].discountName;
-            let price = currevent.transactionDiscounts[j].discountPrice;
-
-            $('#discounts-list').append(
-                '<div>' +
-                '<hr class="mx-5">' +
-                '<div class="row px-4 py-2 mx-5 discount-item">' +
-                '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
-                name +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
-                formatAsDecimal(price) +
-                '</h6>' +
-                '<span class="col material-icons-two-tone text-end md-btn"' +
-                'onclick="removeDiscount(this)">close</span>' +
-                '</div>' +
-                '</div>'
+            $('#venue-terrace').prop(
+                'checked',
+                currevent.eventVenues.includes('Terrace')
             );
+
+            $('.venue-checkbox').each(function () {
+                if ($(this).is(':checked'))
+                    $(this).parent().siblings('select').prop('disabled', false);
+            });
+
+            // set event packages dropdowns
+            for (let j = 0; j < currevent.packageList.length; j++) {
+                if (currevent.packageList[j].packageVenue === 'Garden')
+                    $('#garden-options').val(
+                        currevent.packageList[j].packageCode
+                    ).change();
+                else if (currevent.packageList[j].packageVenue === 'Sunroom')
+                    $('#sunroom-options').val(
+                        currevent.packageList[j].packageCode
+                    ).change();
+                else if (currevent.packageList[j].packageVenue === 'Terrace')
+                    $('#terrace-options').val(
+                        currevent.packageList[j].packageCode
+                    ).change();
+            }
+
+            // set additional pax checkbox
+            $('#additional-pax').prop(
+                'checked',
+                currevent.packageAdditionalPax
+            );
+
+            // set menu items
+            if (currevent.menuPackage.saladName) {
+                $('#menu-salad-button').trigger('click');
+                //$('#menu-salad-contents').collapse('toggle');
+                $('input[name="salad-options"][value="' + currevent.menuPackage.saladName + '"]').prop('checked', true);
+            }
+
+            if (currevent.menuPackage.pastaName) {
+                $('#menu-pasta-button').trigger('click');
+                $('input[name="pasta-options"][value="' + currevent.menuPackage.pastaName + '"]').prop('checked', true);
+            }
+
+            if (currevent.menuPackage.beefName) {
+                $('#menu-beef-button').trigger('click');
+                $('input[name="beef-options"][value="' + currevent.menuPackage.beefName + '"]').prop('checked', true);
+            }
+
+            if (currevent.menuPackage.porkName) {
+                $('#menu-pork-button').trigger('click');
+                $('input[name="pork-options"][value="' + currevent.menuPackage.porkName + '"]').prop('checked', true);
+            }
+
+            if (currevent.menuPackage.chickenName) {
+                $('#menu-chicken-button').trigger('click');
+                $('input[name="chicken-options"][value="' + currevent.menuPackage.chickenName + '"]').prop('checked', true);
+            }
+
+            if (currevent.menuPackage.fishName) {
+                $('#menu-fish-button').trigger('click');
+                $('input[name="fish-options"][value="' + currevent.menuPackage.fishName + '"]').prop('checked', true);
+            }
+
+            // set additional items table
+            if (currevent.foodList.length != 0) {
+                $('#additional-items-header').empty();
+                $('#additional-items-header').append(additionalFoodTableHeader);
+            }
+            for (let j = 0; j < currevent.foodList.length; j++) {
+                let name = currevent.foodList[j].name;
+                let quantity = currevent.menuAdditional[j].foodQuantity;
+                let price = currevent.foodList[j].price;
+                let cost = currevent.menuAdditional[j].foodCost;
+
+                $('#additional-items-list').append(
+                    '<div>' +
+                    '<hr class="mx-5">' +
+                    '<div class="row px-4 py-2 mx-5 additional-item">' +
+                    '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
+                    name +
+                    '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
+                    quantity +
+                    '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
+                    formatAsDecimal(price) +
+                    '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
+                    formatAsDecimal(cost) +
+                    '</h6>' +
+                    '<span class="col material-icons-two-tone text-end md-btn"' +
+                    'onclick="removeAdditionalItem(this)">close</span>' +
+                    '</div>' +
+                    '</div>'
+                );
+            }
+
+            // set extra charges table
+            if (currevent.transactionCharges.length != 0) {
+                $('#extra-charges-header').empty();
+                $('#extra-charges-header').append(extraChargesTableHeader);
+            }
+
+            for (let j = 0; j < currevent.transactionCharges.length; j++) {
+                let name = currevent.transactionCharges[j].chargeName;
+                let quantity = currevent.transactionCharges[j].chargeQuantity;
+                let price = currevent.transactionCharges[j].chargePrice;
+
+                $('#extra-charges-list').append(
+                    '<div>' +
+                    '<hr class="mx-5">' +
+                    '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
+                    '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
+                    name +
+                    '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
+                    quantity +
+                    '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
+                    formatAsDecimal(price) +
+                    '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
+                    formatAsDecimal(quantity * price) +
+                    '</h6>' +
+                    '<span class="col material-icons-two-tone text-end md-btn"' +
+                    'onclick="removeExtraCharge(this)">close</span>' +
+                    '</div>' +
+                    '</div>'
+                );
+            }
+
+            // set discounts table
+            if (currevent.transactionDiscounts.length != 0) {
+                $('#discounts-header').empty();
+                $('#discounts-header').append(discountsTableHeader);
+            }
+            for (let j = 0; j < currevent.transactionDiscounts.length; j++) {
+                let name = currevent.transactionDiscounts[j].discountName;
+                let price = currevent.transactionDiscounts[j].discountPrice;
+
+                $('#discounts-list').append(
+                    '<div>' +
+                    '<hr class="mx-5">' +
+                    '<div class="row px-4 py-2 mx-5 discount-item">' +
+                    '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
+                    name +
+                    '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
+                    formatAsDecimal(price) +
+                    '</h6>' +
+                    '<span class="col material-icons-two-tone text-end md-btn"' +
+                    'onclick="removeDiscount(this)">close</span>' +
+                    '</div>' +
+                    '</div>'
+                );
+            }
+
+            // set breakdown table
+            updateBreakdownTable();
+
+            // set payment details
+            if (currevent.downpaymentDate) {
+                $('#downpayment-date').val(new Date(currevent.downpaymentDate).toISOString().substr(0, 10));
+                $('#downpayment-mode').val(currevent.downpaymentMode).change();
+                $('#downpayment').prop('checked', true);
+                $('#downpayment')
+                    .parent()
+                    .siblings()
+                    .children()
+                    .children('input:not(.static), select')
+                    .prop('disabled', false);
+            }
+
+            if (currevent.finalPaymentDate) {
+                $('#final-payment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
+                $('#final-payment-mode').val(currevent.finalPaymentMode).change();
+                $('#final-payment').prop('checked', true);
+                $('#final-payment')
+                    .parent()
+                    .siblings()
+                    .children()
+                    .children('input:not(.static), select')
+                    .prop('disabled', false);
+            }
         }
 
-        // set breakdown table
-        updateBreakdownTable();
-
-        // set payment details
-        if (currevent.downpaymentDate) {
-            $('#downpayment-date').val(new Date(currevent.downpaymentDate).toISOString().substr(0, 10));
-            $('#downpayment-mode').val(currevent.downpaymentMode).change();
-            $('#downpayment').prop('checked', true);
-            $('#downpayment')
-                .parent()
-                .siblings()
-                .children()
-                .children('input:not(.static), select')
-                .prop('disabled', false);
-        }
-        
-        if (currevent.finalPaymentDate) {
-            $('#final-payment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
-            $('#final-payment-mode').val(currevent.finalPaymentMode).change();
-            $('#final-payment').prop('checked', true);
-            $('#final-payment')
-                .parent()
-                .siblings()
-                .children()
-                .children('input:not(.static), select')
-                .prop('disabled', false);
-        }
 
     });
 }

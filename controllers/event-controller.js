@@ -329,7 +329,7 @@ const eventController = {
             let data = {
                 event: result
             }
-            res.render('event-tracker-editform', data);
+            res.render('event-tracker-form', data);
         });
     },
 
