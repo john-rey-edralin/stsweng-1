@@ -41,7 +41,7 @@ app.route('/event-tracker/reservations')
     .get(eventController.getReservations)
     .put(eventController.putReservations);
 
-app.get('/event-tracker/reservations/edit/:id', eventController.getEditReservation);
+app.get('/event-tracker/edit/:id', eventController.getEditEvent);
 
 app.get(
     '/event-tracker/reservations/search',
