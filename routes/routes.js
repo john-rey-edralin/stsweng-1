@@ -25,8 +25,6 @@ app.get(
 app.get('/event-tracker/pencilbookings', eventController.getPencilBookings);
 
 
-
-// temporary might break create event, uncommnet ⬇ below
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get(
     '/event-tracker/pencilbookings/search',
@@ -41,7 +39,7 @@ app.route('/event-tracker/reservations')
     .get(eventController.getReservations)
     .put(eventController.putReservations);
 
-app.get('/event-tracker/reservations/edit/:id', eventController.getEditReservation);
+app.get('/event-tracker/edit/:id', eventController.getEditEvent);
 
 app.get(
     '/event-tracker/reservations/search',
