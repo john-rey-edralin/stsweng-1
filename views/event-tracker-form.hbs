@@ -95,14 +95,14 @@
                                 <input type="text" class="form-control" id="representative-name"
                                     name="representative-name" value="{{event.repName}}">
                                 <div id="representative-name-help" class="form-text">Authorized representative of the
-                                    client.</div>
+                                    client. <span class="fw-bold">Optional.</span></div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="representative-contact-number">Representative Mobile Number</label>
                                 <input type="tel" class="form-control" id="representative-mobile-number"
                                     name="representative-mobile-number" value="{{event.repMobileNumber}}">
                                 <div id="representative-mobile-number-help" class="form-text">Country code can be
-                                    changed if needed.
+                                    changed if needed. <span class="fw-bold">Optional.</span>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +141,7 @@
 
                         {{!-- PACKAGE AND NOTES --}}
                         <div class="col-5 px-4 d-flex flex-column">
-                            <label class="mt-3 required" for="">Event Venue and Package</label>
+                            <label class="mt-3 required package" for="">Event Venue and Package</label>
 
                             {{!-- GARDEN OPTIONS --}}
                             <div class="input-group mb-1">
@@ -198,7 +198,7 @@
                                 <textarea class="form-control" id="event-notes" name="event-notes" rows="4" value="{{event.eventNotes}}"></textarea>
                                 <div id="event-notes-help" name class="form-text">Additional details about the event, if
                                     any.
-                                    The box can be resized by dragging the lower-right corner.
+                                    The box can be resized by dragging the lower-right corner. <span class="fw-bold">Optional.</span>
                                 </div>
                             </div>
                         </div>
