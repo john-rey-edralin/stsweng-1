@@ -46,7 +46,7 @@ const eventController = {
     },
 
     getCreateEvent: function (req, res) {
-        res.render('event-tracker-createform');
+        res.render('event-tracker-form');
     },
 
     postCreateEvent: function (req, res) {

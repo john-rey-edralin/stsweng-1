@@ -1746,6 +1746,12 @@ function getEventStatus() {
     else return 'booked';
 }
 
+function getRoute() {
+    if (getEventStatus() == 'reserved')
+        return '/event-tracker/reservations'
+    else '/event-tracker/pencilbookings'
+}
+
 /**
  * Retrieves all the data from the form and stores it into an object. The object will be converted into a String before it is sent with the POST request.
  */
@@ -1815,8 +1821,9 @@ function submitForm() {
         if (porkName) porkQuantity = $('#pork-quantity').val();
         if (chickenName) chickenQuantity = $('#chicken-quantity').val();
         if (fishName) fishQuantity = $('#fish-quantity').val();
-        //alert("YYOOOOOOO " + $('#downpayment-amount').val());
-        var downpaymentAmount = $('#downpayment-amount').val();
+
+        let downpaymentAmount = $('#downpayment-amount').val();
+        
         // stores all information as an object
         let data = {
             status: getEventStatus(),
@@ -1877,42 +1884,34 @@ function submitForm() {
             finalPaymentAmount: $('#final-payment-amount').val(),
         };
         $('#downpayment-amount').val(downpaymentAmount);
-        //alert("WEEWOOO " + $('#downpayment-amount').val());
 
-        // converts the JSON object into a String
-
-
+        // check if event is to be modified orr inserted into database
         if (curreventID) {
             let json = JSON.stringify({
                 id: curreventID,
                 data: data
             });
-            alert(json)
 
             // makes a PUT request using AJAX to update the event's details
             $.ajax({
                 type: 'PUT',
-                url: '/event-tracker/reservations',
+                url: getRoute(),
                 data: json,
                 contentType: 'application/json',
                 success: function (result) {
-                    if (getEventStatus() == 'reserved')
-                        window.location.href = '/event-tracker/reservations';
-                    else
-                        window.location.href = '/event-tracker/pencilbookings';
+                    window.location.href = getRoute();
                 },
             });
-        } else {
+        }
+
+        else {
             let json = JSON.stringify({
                 data: data
             });
 
             // makes a POST request using AJAX to add the event to the database
             $.post("/event-tracker/submit", json, function (result) {
-                if (getEventStatus() == 'reserved')
-                    window.location.href = '/event-tracker/reservations';
-                else
-                    window.location.href = '/event-tracker/pencilbookings';
+                window.location.href = getRoute();
             });
         }
     });
@@ -1924,6 +1923,8 @@ function addExistingFields() {
         if (result) {
             currevent = result[0];
             curreventID = currevent._id;
+
+            $('#form-title').children('h1').html('<span class="material-icons-two-tone mb-1 md-48">class</span> EDIT EVENT');
 
             // set event time
             $('#event-time').val(currevent.eventTime);
