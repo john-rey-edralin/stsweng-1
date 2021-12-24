@@ -25,8 +25,6 @@ app.get(
 app.get('/event-tracker/pencilbookings', eventController.getPencilBookings);
 
 
-
-// temporary might break create event, uncommnet ⬇ below
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get(
     '/event-tracker/pencilbookings/search',

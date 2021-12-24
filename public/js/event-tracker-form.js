@@ -1742,14 +1742,14 @@ function getFoodQuantity(food) {
 }
 
 function getEventStatus() {
-    if ($('#downpayment-amount').val('') != '') return 'reserved';
+    if ($('#downpayment-amount').val() != '') return 'reserved';
     else return 'booked';
 }
 
 function getRoute() {
     if (getEventStatus() == 'reserved')
         return '/event-tracker/reservations'
-    else '/event-tracker/pencilbookings'
+    else return '/event-tracker/pencilbookings'
 }
 
 /**
@@ -1905,9 +1905,10 @@ function submitForm() {
         }
 
         else {
-            let json = JSON.stringify({
-                data: data
-            });
+            let json = {
+                data: JSON.stringify(data)
+            };
+            alert(json.data)
 
             // makes a POST request using AJAX to add the event to the database
             $.post("/event-tracker/submit", json, function (result) {
@@ -1919,7 +1920,10 @@ function submitForm() {
 
 function addExistingFields() {
     let currevent;
-    $.get('/event-tracker/get/event', { id: $('#event-id').text() }, function (result) {
+    let id = '';
+    if ($('#event-id').text() !=  '')
+        id = $('#event-id').text();
+    $.get('/event-tracker/get/event', { id: id }, function (result) {
         if (result) {
             currevent = result[0];
             curreventID = currevent._id;
@@ -2129,7 +2133,5 @@ function addExistingFields() {
                     .prop('disabled', false);
             }
         }
-
-
     });
 }
