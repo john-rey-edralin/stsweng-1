@@ -18,6 +18,10 @@ app.route('/event-tracker/reservations')
     .put(eventController.putReservations);
 
 app.get('/event-tracker/cancelled-events', eventController.getCancelledEvents);
+app.put(
+    '/event-tracker/cancel-reservation/:reservationId',
+    eventController.putCancelReservation
+);
 
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get(

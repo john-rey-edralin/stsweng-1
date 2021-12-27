@@ -84,6 +84,19 @@ const eventController = {
         res.json(doc);
     },
 
+    putCancelReservation: async function (req, res) {
+        const { reservationId } = req.params;
+        const _id = mongoose.Types.ObjectId(reservationId);
+
+        const doc = await Event.findOneAndUpdate(
+            { _id },
+            { status: 'cancelled' },
+            { returnDocument: 'after' }
+        );
+
+        res.json(doc);
+    },
+
     getEvent: async function (req, res) {
         const { id } = req.query;
         const event = await Event.findOne({ _id: mongoose.Types.ObjectId(id) });
