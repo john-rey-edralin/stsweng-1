@@ -22,8 +22,9 @@ app.get(
     eventController.getCheckEventAvailability
 );
 
-app.get('/event-tracker/pencilbookings', eventController.getPencilBookings);
-
+app.route('/event-tracker/pencilbookings')
+    .get(eventController.getPencilBookings)
+    .put(eventController.putPencilbookings);
 
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get(

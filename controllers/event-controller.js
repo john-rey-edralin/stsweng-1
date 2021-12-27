@@ -184,6 +184,19 @@ const eventController = {
         res.render('event-tracker-pencilbookings', data);
     },
 
+    putPencilbookings: async function (req, res) {
+        const { id, data } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Event.findOneAndUpdate(
+            { _id, status: 'booked' },
+            data,
+            { returnDocument: 'after' }
+        );
+
+        res.send(doc);
+    },
+
     getReservations: async function (req, res) {
         const reservations = await Event.aggregate([
             { $match: { status: 'reserved' } },
