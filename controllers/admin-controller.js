@@ -33,12 +33,13 @@ const controller = {
     },
     /**
      * Returns all employees registered in the database
+     * Only includes 'employee' role
      * @name get/admin/employee
      * @param {express.request} req
      * @param {express.response} res
      */
     getAllEmployees: async function (req, res) {
-        const employees = await Employee.find({});
+        const employees = await Employee.find({ role: 'employee' });
         res.json(employees);
     },
     /**
