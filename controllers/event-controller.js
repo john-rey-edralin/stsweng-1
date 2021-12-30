@@ -8,17 +8,25 @@ const mongoose = require('mongoose');
 const eventController = {
     getHome: async function (req, res) {
         let date = new Date();
-        let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+        let today = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+        let tomorrow = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate() + 1
+        );
 
         const events = await Event.aggregate([
             {
                 $match: {
                     eventDate: {
                         $gte: today,
-                        $lt: tomorrow
-                    }
-                }
+                        $lt: tomorrow,
+                    },
+                },
             },
             {
                 $lookup: {
@@ -39,7 +47,7 @@ const eventController = {
         ]);
 
         let data = {
-            events: events
+            events: events,
         };
 
         res.render('event-tracker-home', data);
@@ -50,10 +58,11 @@ const eventController = {
     },
 
     postCreateEvent: function (req, res) {
-        let event = JSON.parse(req.body.data); 
+        let event = JSON.parse(req.body.data);
         console.log(JSON.stringify(event, null, 4));
         db.insertOne(Event, event, function (result) {
-            if (event.status == 'reserved') res.redirect('/event-tracker/reservations');
+            if (event.status == 'reserved')
+                res.redirect('/event-tracker/reservations');
             else res.redirect('/event-tracker/pencilbookings');
         });
     },
@@ -62,13 +71,13 @@ const eventController = {
         const bookings = await Event.aggregate([
             {
                 $match: {
-                    status: 'booked'
-                }
+                    status: 'booked',
+                },
             },
             {
                 $sort: {
-                    eventDate: 1
-                }
+                    eventDate: 1,
+                },
             },
             {
                 $lookup: {
@@ -107,23 +116,30 @@ const eventController = {
         if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
             let date = new Date();
-            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+            let today = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate()
+            );
+            let tomorrow = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate() + 1
+            );
             query.eventDate = {
                 $gte: today,
                 $lt: tomorrow,
             };
         }
         let sort = { eventDate: 1 };
-        if (req.query.sort == "date-dsc")
-            sort = { eventDate: -1 };
+        if (req.query.sort == 'date-dsc') sort = { eventDate: -1 };
 
         const bookings = await Event.aggregate([
             {
-                $match: query
+                $match: query,
             },
             {
-                $sort: sort
+                $sort: sort,
             },
             {
                 $lookup: {
@@ -162,9 +178,9 @@ const eventController = {
 
         const bookings = await Event.aggregate([
             {
-                $match: query
+                $match: query,
             },
-            
+
             {
                 $lookup: {
                     from: 'packages',
@@ -195,13 +211,13 @@ const eventController = {
         const reservations = await Event.aggregate([
             {
                 $match: {
-                    status: 'reserved'
-                }
+                    status: 'reserved',
+                },
             },
             {
                 $sort: {
-                    eventDate: 1
-                }
+                    eventDate: 1,
+                },
             },
             {
                 $lookup: {
@@ -240,8 +256,16 @@ const eventController = {
         if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
             let date = new Date();
-            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+            let today = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate()
+            );
+            let tomorrow = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate() + 1
+            );
             query.eventDate = {
                 $gte: today,
                 $lt: tomorrow,
@@ -249,15 +273,14 @@ const eventController = {
         }
 
         let sort = { eventDate: 1 };
-        if (req.query.sort == "date-dsc")
-            sort = { eventDate: -1 };
+        if (req.query.sort == 'date-dsc') sort = { eventDate: -1 };
 
         const reservations = await Event.aggregate([
             {
-                $match: query
+                $match: query,
             },
             {
-                $sort: sort
+                $sort: sort,
             },
             {
                 $lookup: {
@@ -296,7 +319,7 @@ const eventController = {
 
         const reservations = await Event.aggregate([
             {
-                $match: query
+                $match: query,
             },
             {
                 $lookup: {
@@ -327,8 +350,8 @@ const eventController = {
     getEditReservation: function (req, res) {
         db.findOne(Event, { _id: req.params.id }, '', function (result) {
             let data = {
-                event: result
-            }
+                event: result,
+            };
             res.render('event-tracker-editform', data);
         });
     },
@@ -336,14 +359,14 @@ const eventController = {
     putReservations: async function (req, res) {
         const { id, data } = req.body;
         const _id = mongoose.Types.ObjectId(id);
-        console.log(data)
+        console.log(data);
 
         const doc = await Event.findOneAndUpdate(
             { _id, status: 'reserved' },
             data,
             { returnDocument: 'after' }
         );
-        console.log(doc)
+        console.log(doc);
         res.send(doc);
     },
 
@@ -383,8 +406,8 @@ const eventController = {
         const event = await Event.aggregate([
             {
                 $match: {
-                    _id: mongoose.Types.ObjectId(req.query.id)
-                }
+                    _id: mongoose.Types.ObjectId(req.query.id),
+                },
             },
             {
                 $lookup: {
@@ -403,11 +426,25 @@ const eventController = {
                 },
             },
         ]);
-
-        console.log(event)
-
         res.send(event);
-    }
+    },
+
+    getEventsInMonth: async function (req, res) {
+        const { year, month } = req.params;
+
+        const events = await Event.find({
+            $expr: {
+                $and: [
+                    { $eq: [Number(year), { $year: '$eventDate' }] },
+                    {
+                        $eq: [Number(month), { $month: '$eventDate' }],
+                    },
+                ],
+            },
+        });
+
+        res.json(events);
+    },
 };
 
 module.exports = eventController;
