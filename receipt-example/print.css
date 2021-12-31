@@ -1,0 +1,63 @@
+html {
+    font-family: 'Print' !important;
+    background-color: #ffffff;
+}
+
+body {
+    font-family: 'Print' !important;
+    background-color: #ffffff;
+
+    display: grid !important;
+    place-items: center !important;
+    min-height: 100vh;
+}
+
+#receipt-message {
+    font-size: 0.7rem;
+}
+
+#receipt {
+    width: 76mm;
+    border: 1px solid black;
+}
+
+p,
+span {
+    font-size: 0.8rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+.btn {
+    font-family: 'Print';
+    text-transform: uppercase;
+}
+
+.text-value {
+    color: #007bff !important;
+}
+
+.text-secondary {
+    font-size: 0.9rem;
+}
+
+@page {
+    margin: 7.5mm;
+}
+
+@media print {
+    #print-it,
+    #save-it {
+        display: none;
+    }
+}

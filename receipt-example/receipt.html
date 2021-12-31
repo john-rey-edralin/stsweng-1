@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="sanitize.css" />
+        <link rel="stylesheet" type="text/css" href="print.css" />
+
+        <script>
+            if (typeof module === 'object') {
+                window.module = module;
+                module = undefined;
+            }
+        </script>
+
+        <script
+            type="text/javascript"
+            src="../public/js/jquery-3.4.1.min.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="../public/js/bootstrap.bundle.js"
+        ></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js"></script>
+        <script type="text/javascript" src="print.js" defer></script>
+        <title>Jaelle Residences Management System</title>
+    </head>
+    <body>
+        <div>
+            <div
+                id="receipt-container"
+                style="width: 100%; display: grid; place-items: center"
+            >
+                <div class="mt-5 p-3" id="receipt">
+                    <!--RECEIPT HEADER-->
+                    <h5 class="text-center mb-2">
+                        Welcome to Jaelle Residences
+                    </h5>
+                    <p class="text-center text-value" id="receipt-message">
+                        We hope to serve you well
+                    </p>
+
+                    <!--RECEIPT INFO AND BREAKDOWN-->
+                    <div class="pb-2 mb-3 border-bottom">
+                        <h6 class="text-secondary mb-1">
+                            Guest: <span class="text-value">{{guest}}</span>
+                        </h6>
+                        <h6 class="text-secondary mb-1">
+                            Check-in Date:
+                            <span class="text-value">{{checkin}}</span>
+                        </h6>
+                        <h6 class="text-secondary mb-1">
+                            Check-out Date:
+                            <span class="text-value">{{checkout}}</span>
+                        </h6>
+                        <h6 class="text-secondary mb-1">
+                            Receptionist:
+                            <span class="text-value">{{receptionist}}</span>
+                        </h6>
+                        <h6 class="text-secondary mb-1">Room Cost:</h6>
+                        <p class="text-value mb-1 ms-2">{{roomCost}} Php</p>
+                        {{#if extraCharges}}
+                        <h6 class="text-secondary mb-1">Extra Charges:</h6>
+                        <p class="text-value mb-1 ms-2">{{extraCharges}} Php</p>
+                        {{/if}} {{#if otherCharges}}
+                        <h6 class="text-secondary mb-1">Other Charges:</h6>
+                        {{/if}} {{#each otherCharges}}
+                        <p class="text-value mb-1 ms-2">
+                            {{reason}} - {{amount}} Php
+                        </p>
+                        {{/each}}
+                        <h6 class="text-secondary mb-1">Subtotal:</h6>
+                        <p class="text-value mb-1 ms-2">{{subtotal}} Php</p>
+                    </div>
+
+                    {{#if appliedDiscount}}
+                    <h6>DISCOUNT APPLIED</h6>
+                    <div class="ps-2 mb-4">
+                        <h6 class="text-secondary mb-1">{{appliedDiscount}}</h6>
+                    </div>
+                    {{/if}}
+
+                    <!--RECEIPT TOTAL-->
+                    <div class="ps-2 mb-3">
+                        <h6 class="text-secondary mb-1">Total Discount:</h6>
+                        <p class="text-value mb-1 ms-2">
+                            {{totalDiscount}} Php
+                        </p>
+                        <h6 class="text-secondary mb-1">Total:</h6>
+                        <p class="text-value mb-1 ms-2">{{total}} Php</p>
+                        <h6 class="text-secondary mb-1">Payment:</h6>
+                        <p class="text-value mb-1 ms-2">{{payment}} Php</p>
+                        <h6 class="text-secondary mb-1">Change:</h6>
+                        <p class="text-value mb-1 ms-2">{{change}} Php</p>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-evenly">
+                <!--PRINT BUTTON-->
+                <button
+                    type="button"
+                    class="mt-4 mx-1 btn btn-primary rounded-pill"
+                    id="print-it"
+                >
+                    print
+                </button>
+                <button
+                    type="button"
+                    class="mt-4 mx-1 btn btn-primary rounded-pill"
+                    id="save-it"
+                >
+                    save
+                </button>
+            </div>
+        </div>
+    </body>
+</html>
