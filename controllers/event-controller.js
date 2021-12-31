@@ -435,9 +435,9 @@ const eventController = {
         const events = await Event.find({
             $expr: {
                 $and: [
-                    { $eq: [Number(year), { $year: '$eventDate' }] },
+                    { $eq: [year, { $year: '$eventDate' }] },
                     {
-                        $eq: [Number(month), { $month: '$eventDate' }],
+                        $eq: [month, { $month: '$eventDate' }],
                     },
                 ],
             },
