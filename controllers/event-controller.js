@@ -66,6 +66,19 @@ const eventController = {
         });
     },
 
+    putReservations: async function (req, res) {
+        const { id, data } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Event.findOneAndUpdate(
+            { _id, status: 'reserved' },
+            data,
+            { returnDocument: 'after' }
+        );
+
+        res.send(doc);
+    },
+
     getPencilBookings: async function (req, res) {
         const bookings = await Event.aggregate([
             { $match: { status: 'booked' } },
@@ -303,18 +316,7 @@ const eventController = {
         res.render('event-tracker-reservations', data);
     },
 
-    putReservations: async function (req, res) {
-        const { id, data } = req.body;
-        const _id = mongoose.Types.ObjectId(id);
-
-        const doc = await Event.findOneAndUpdate(
-            { _id, status: 'reserved' },
-            data,
-            { returnDocument: 'after' }
-        );
-
-        res.send(doc);
-    },
+    
 
     getFood: function (req, res) {
         let projection = 'name price';
