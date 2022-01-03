@@ -8,46 +8,29 @@ const app = express.Router();
 // login
 app.get('/', controller.getIndex);
 
-// event-tracker
+// event-tracker home
 app.get('/event-tracker/home', eventController.getHome);
 
+// event-tracker form
 app.get('/event-tracker/create', eventController.getCreateEvent);
 app.post('/event-tracker/submit', eventController.postCreateEvent);
+app.get('/event-tracker/edit/:id', eventController.getEditEvent);
+
+// event-tracker form data retrieval
 app.get('/event-tracker/get/food', eventController.getFood);
 app.get('/event-tracker/get/event', eventController.getEvent);
 app.get('/event-tracker/get/charges', eventController.getCharges);
 app.get('/event-tracker/get/packages', eventController.getPackages);
-app.get(
-    '/event-tracker/check/event-availability',
-    eventController.getCheckEventAvailability
-);
+app.get('/event-tracker/check/event-availability', eventController.getCheckEventAvailability);
 
-app.route('/event-tracker/pencilbookings')
-    .get(eventController.getPencilBookings)
-    .put(eventController.putPencilbookings);
+// event-tracker pencilbooking list
+app.route('/event-tracker/pencilbookings').get(eventController.getPencilBookings).put(eventController.putPencilbookings);
+app.get('/event-tracker/pencilbookings/search', eventController.getPencilBookingsSearch);
+app.get('/event-tracker/pencilbookings/filter', eventController.getPencilBookingsFilter);
 
-app.post('/event-tracker/submit', eventController.postCreateEvent);
-app.get(
-    '/event-tracker/pencilbookings/search',
-    eventController.getPencilBookingsSearch
-);
-app.get(
-    '/event-tracker/pencilbookings/filter',
-    eventController.getPencilBookingsFilter
-);
+// event-tracker reservation list
+app.get('/event-tracker/reservations', eventController.getReservations);
+app.get('/event-tracker/reservations/search', eventController.getReservationsSearch);
+app.get('/event-tracker/reservations/filter', eventController.getReservationsFilter);
 
-app.route('/event-tracker/reservations')
-    .get(eventController.getReservations)
-    .put(eventController.putReservations);
-
-app.get('/event-tracker/edit/:id', eventController.getEditEvent);
-
-app.get(
-    '/event-tracker/reservations/search',
-    eventController.getReservationsSearch
-);
-app.get(
-    '/event-tracker/reservations/filter',
-    eventController.getReservationsFilter
-);
 module.exports = app;
