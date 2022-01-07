@@ -55,6 +55,12 @@ label {
   font-weight: 600;
 }
 
+.nav-link.active {
+  background-color: #FFFFFF !important; 
+  color: #000000 !important;
+  font-weight: 700;
+}
+
 .menu-item-header,
 .transaction-item-header {
   font-weight: 600;
@@ -89,9 +95,19 @@ label {
 }
 
 .required:after {
-  content: "*";
+  content: "[required]";
   color: red;
-  font-weight: bold;
+  font-weight: light;
+  font-size: small;
+  margin-left: 10px;
+}
+
+.required.package:after {
+  content: "[at least 1 package required]";
+  color: red;
+  font-weight: light;
+  font-size: small;
+  margin-left: 10px;
 }
 
 #submit {

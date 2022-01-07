@@ -1,17 +1,30 @@
 var mongoose = require('mongoose');
 
 var PackageSchema = new mongoose.Schema({
-    name: {
+
+    packageCode: {
         type: String,
     },
 
-    price: {
-        type: Number,
-    },
-
-    venue: {
+    packageName: {
         type: String,
     },
+
+    packagePrice: {
+        type: Number
+    },
+
+    packageVenue: {
+        type: String,
+    },
+
+    variantCount: {
+        type: Number
+    },
+
+    foodQuantities: {
+        type: [Number]
+    }
 });
 
 module.exports = mongoose.model('Package', PackageSchema);

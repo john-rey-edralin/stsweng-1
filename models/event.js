@@ -47,7 +47,7 @@ var EventSchema = new mongoose.Schema({
     },
 
     eventPackages: {
-        type: [String],
+        type: [mongoose.ObjectId],
     },
 
     packageAdditionalPax: {
@@ -105,11 +105,14 @@ var EventSchema = new mongoose.Schema({
         type: [
             {
                 foodItem: {
-                    type: String,
+                    type: mongoose.ObjectId,
                 },
                 foodQuantity: {
                     type: Number,
                 },
+                foodCost: {
+                    type: Number
+                }
             },
         ],
     },
@@ -141,6 +144,26 @@ var EventSchema = new mongoose.Schema({
                 },
             },
         ],
+    },
+
+    totalPrices: {
+        type:{
+            packages: {
+                type: Number,
+            },
+            food: {
+                type: Number,
+            },
+            charges: {
+                type: Number,
+            },
+            discounts: {
+                type: Number,
+            },
+            all: {
+                type: Number,
+            }
+        }
     },
 
     downpaymentDate: {
