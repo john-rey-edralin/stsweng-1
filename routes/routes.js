@@ -15,7 +15,7 @@ app.get('/event-tracker/home', eventController.getHome);
 app.get('/event-tracker/create', eventController.getCreateEvent);
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get('/event-tracker/edit/:id', eventController.getEditEvent);
-app.put('/event-tracker/reservations/cancel', eventController.putCancelReservation);
+app.put('/event-tracker/cancel', eventController.putCancelEvent);
 
 // event-tracker form data retrieval
 app.get('/event-tracker/get/food', eventController.getFood);
