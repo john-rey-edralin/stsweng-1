@@ -481,10 +481,7 @@ function finalPaymentChecked() {
  */
 function downpaymentNotChecked() {
     //Sets the value of other payment details fields
-    var paid = "" + calculateTotalAmountPaid();
-    var balance = "" + calculateBalance();
-    $('#payment-amount-total').val(paid);
-    $('#payment-balance').val(balance);
+    updatePaymentAndBalance();
 
     //Disables downpayment-related fields
     $('#downpayment-date').siblings("label").removeClass('required');
@@ -552,11 +549,8 @@ function finalPaymentNotChecked() {
     resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
 
     //Updates other payment details fields
-    var paid = "" + calculateTotalAmountPaid();
-    var balance = "" + calculateBalance();
-    $('#payment-amount-total').val(paid);
-    $('#payment-balance').val(balance);
-    $('#final-payment-amount').attr("placeholder", balance);
+    updatePaymentAndBalance();
+    $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
     
     //Sets the status of the submit button
     $('#submit').attr("disabled", checkIfFilledEventFields());
@@ -566,12 +560,11 @@ function finalPaymentNotChecked() {
  *  Checks the current values in downpayment-related fields
  */
 function downpaymentCheckFields() {
-    var downp1 = 0;
-    var finalp1 = 0;
     //Checks the downpayment date field value
     $("#downpayment-date").on("change", function () {
         var downpaydate = document.getElementById("downpayment-date").value;
         validDate(downpaydate, $('#downpayment-error'), "downpayment-date");
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     //Checks the current chosen downpayment mode option
@@ -580,6 +573,7 @@ function downpaymentCheckFields() {
             displayError($('#downpayment-mode'), $('#downpayment-mode-error'), 'Select 1 payment mode.');
         else
             resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     //Checks the downpayment amount value
@@ -590,15 +584,11 @@ function downpaymentCheckFields() {
             resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
         
         //Updates the total payment amount and the final payment amount 
-        var paid1 = "" + calculateTotalAmountPaid();
-        $('#payment-amount-total').val(paid1);
         $('#final-payment-amount').on('change', function () {
-            var paid2 = "" + calculateTotalAmountPaid();
-            $('#payment-amount-total').val(paid2);
+            updatePaymentAndBalance();
+            $('#submit').attr("disabled", checkIfFilledEventFields());
         });
-        var balance = "" + calculateBalance(); 
-        $('#payment-balance').val(balance);
-        $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+        updatePaymentAndBalance();
         
         //Disables/Enables the Submit button
         $('#submit').attr("disabled", checkIfFilledEventFields());
@@ -615,6 +605,7 @@ function downpaymentCheckFields() {
             $('#payment-balance').removeClass('is-invalid');
         }
     });
+    $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
 /**
@@ -625,6 +616,7 @@ function finalPaymentCheckFields() {
     $("#final-payment-date").on("change", function () {
         var finalpaydate = document.getElementById("final-payment-date").value;
         validDate(finalpaydate, $('#final-payment-error'), "final-payment-date");
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     //Checks the current chosen final payment mode option
@@ -633,6 +625,7 @@ function finalPaymentCheckFields() {
             displayError($('#final-payment-mode'), $('#final-payment-mode-error'), 'Select 1 payment mode.');
         else
             resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     //Checks the final payment amount value
@@ -642,20 +635,15 @@ function finalPaymentCheckFields() {
         else
             resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
 
-        var paid1 = "" + calculateTotalAmountPaid();
-        $('#payment-amount-total').val(paid1);
         $('#downpayment-amount').on('change', function () {
-            var paid2 = "" + calculateTotalAmountPaid();
-            $('#payment-amount-total').val(paid2);
+            updatePaymentAndBalance();
+            $('#submit').attr("disabled", checkIfFilledEventFields());
         });
-        var balance = "" + calculateBalance();
-        $('#payment-balance').val(balance);
-        $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+        updatePaymentAndBalance();
         
         $('#submit').attr("disabled", checkIfFilledEventFields());
         
         if (parseFloat($('#payment-balance').val()) < 0) {
-            console.log($('#payment-balance').val());
             $('#payment-error').text('Customer payment is greater than the total price.');
             $('#payment-amount-total').addClass('is-invalid');
             $('#payment-balance').addClass('is-invalid');
@@ -666,6 +654,7 @@ function finalPaymentCheckFields() {
             $('#payment-balance').removeClass('is-invalid');
         }
     });
+    $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
 /**
@@ -1141,11 +1130,9 @@ function updateBreakdownTable() {
             '<h6 class="mb-0 mt-1 text-center">Please fill out the information above.</h6>'
         );
     }
-    //Updates the Values of Total Amount Paid field and Balance field
-    var paid = "" + calculateTotalAmountPaid();
-    $('#payment-amount-total').val(paid);
-    var balance = "" + calculateBalance();
-    $('#payment-balance').val(balance);
+    
+    //Updates values of Total Amount Paid field and Balance field
+    updatePaymentAndBalance();
 }
 
 function initializeRealTimeValidation() {
@@ -1281,8 +1268,11 @@ function initializeRealTimeValidation() {
             $('#discount-error').text('');
         }
     });
-    
+
     //Payment Details
+    downpaymentCheckFields();
+    finalPaymentCheckFields();
+
     $('.payment-checkbox').on('change', function () {
         initializePaymentFields();
         if ($(this).is(':checked')) {
@@ -1308,11 +1298,11 @@ function initializeRealTimeValidation() {
             }
         }
     });
+    
+    $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
-/* validation */
 function checkIfFilledEventFields() {
-    //console.log("here!");
     let name = validator.trim($('#client-name').val());
     let cp = $('#client-mobile-number').val();
     let type = validator.trim($('#event-type').val());
@@ -1340,36 +1330,29 @@ function checkIfFilledEventFields() {
     var dateMin = getDateTime(tyyy + '-' + tm + '-' + td);
 
     if (validator.isEmpty(name)) {
-        //console.log("aaaaaaa");
         $('#missing-error').val('Client name should be filled.');
         return true;
     }
-
     else if (checkStringInput(name)) {
-        //console.log("huhu")
         $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         return true;
     }
-
+    
     else if (checkStringInput($('#representative-name').val())) {
-        //console.log("rawrrawr")
         $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         return true;
     }
-
+    
     else if (validator.isEmpty(cp)) {
-        //console.log("empty cp")
         $('#missing-error').val('Client mobile number should be filled.');
         return true;
     }
     else if (!($('#client-mobile-number').intlTelInput('isValidNumber'))) {
-        //console.log("a ph number")
         $('#missing-error').val('Invalid cellphone number.');
         return true;
     }
     else if (!validator.isEmpty($('#representative-mobile-number').val())) {
         if (!($('#representative-mobile-number').intlTelInput('isValidNumber'))) {
-            //console.log("a rep ph number")
             $('#missing-error').val('Invalid cellphone number.');
             return true;
         }
@@ -1380,7 +1363,6 @@ function checkIfFilledEventFields() {
     }
 
     else if (validator.isEmpty(date)) {
-        //console.log('no event date')
         $('#missing-error').val('Event date should be filled.');
         return true;
     }
@@ -1391,12 +1373,10 @@ function checkIfFilledEventFields() {
             return true;
         }
         else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
-            //console.log('event date behind')
             $('#missing-error').val('Date cannot be in the past.');
             return true;
         }
         else if ((eventdate - dateMax >= 0) || isNaN(eventdate)) {
-            //console.log('event date later')
             $('#missing-error').val('Date cannot be later than 2031.');
             return true;
         }
@@ -1408,17 +1388,14 @@ function checkIfFilledEventFields() {
     }
 
     else if (validator.isEmpty(pax)) {
-        //console.log('MAAM THATS EMPTY PAX');
         $('#missing-error').val('Number of pax should be filled.');
         return true;
     }
     else if (pax <= 0) {
-        //console.log('MAAM THATS NEGATIVE PAX');
         $('#missing-error').val('Number of pax should not be less than or equal to zero.');
         return true;
     }
     else if (pax > 120) {
-        //console.log('MAAM THATS A LOT OF PAX');
         $('#missing-error').val('Number of pax should not be more than 120.');
         return true;
     }
@@ -1431,19 +1408,16 @@ function checkIfFilledEventFields() {
         return true;
     }
     if (document.getElementById("downpayment").checked) {
-        //console.log("HERE HERE");
         if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '') {
             $('#downpayment-amount-error').val('Invalid payment.');
             return true;
         }
         else if (validator.isEmpty($('#downpayment-mode').val())) {
             $('#downpayment-mode-error').val('Select 1 payment mode.');
-            //console.log("HERE HERE HERE");
             return true;
         }
         else if (validator.isEmpty($('#downpayment-date').val())) {
             $('#downpayment-error').val('Date should be filled.');
-            //console.log("HERE RAWR");
             return true;
         }
         else if (!validator.isEmpty($('#downpayment-date').val())) {
@@ -1453,12 +1427,10 @@ function checkIfFilledEventFields() {
                 return true;
             }
             else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
-                //console.log('downpayment date behind')
                 $('#downpayment-error').val('Date cannot be in the past.');
                 return true;
             }
             else if ((dpaydate - dateMax >= 0) || isNaN(dpaydate)) {
-                //console.log('downpayment date later')
                 $('#downpayment-error').val('Date cannot be later than 2031.');
                 return true;
             }
@@ -1470,12 +1442,10 @@ function checkIfFilledEventFields() {
             return true;
         }
         else if (validator.isEmpty($('#final-payment-mode').val())) {
-            //console.log("HEHE HEHE")
             $('#final-payment-mode-error').val('Select 1 payment mode.');
             return true;
         }
         else if (validator.isEmpty($('#final-payment-date').val())) {
-            //console.log("EHE")
             $('#final-payment-error').val('Date should be filled.');
             return true;
         }
@@ -1486,25 +1456,22 @@ function checkIfFilledEventFields() {
                 return true;
             }
             else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
-                //console.log('final payment date behind')
                 $('#final-payment-error').val('Date cannot be in the past.');
                 return true;
             }
             else if ((fpaydate - dateMax >= 0) || isNaN(fpaydate)) {
-                //console.log('final payment date later')
                 $('#final-payment-error').val('Date cannot be later than 2031.');
                 return true;
             }
         }  
     }
     if (parseFloat($('#payment-balance').val()) < 0) {
-        //console.log("FULLY PAID BUT HAS CHANGE")
         $('#payment-error').text('Customer payment is greater than the total price.');
         $('#payment-amount-total').addClass('is-invalid');
         $('#payment-balance').addClass('is-invalid');
         return true;
     }
-    //console.log("HEHEHE VALID")
+
     $('#payment-error').text('');
     $('#payment-amount-total').removeClass('is-invalid');
     $('#payment-balance').removeClass('is-invalid');
@@ -1652,13 +1619,24 @@ function checkEventAvailability() {
             '/event-tracker/check/event-availability',
             data,
             function (result) {
-                if (result._id != curreventID)
-                    displayError(
-                        $('#event-time'),
-                        $('#event-time-error'),
-                        'Date and time is unavailable.'
-                    );
-                else resetField($('#event-time'), $('#event-time-error'));
+                if (result._id != curreventID) {
+                    if(!(typeof result._id == 'undefined')) { 
+                        $('#event-date').addClass('is-invalid');
+                        displayError(
+                            $('#event-time'),
+                            $('#event-time-error'),
+                            'Date and time is unavailable.'
+                        );
+                    }
+                    else {
+                        resetField($('#event-date'), $('#event-time-error'));
+                        resetField($('#event-time'), $('#event-time-error'));
+                    }
+                }
+                else {
+                    resetField($('#event-date'), $('#event-time-error'));
+                    resetField($('#event-time'), $('#event-time-error'));
+                } 
             }
         );
     }
@@ -1678,9 +1656,6 @@ function calculatePackageTotal() {
     let gardenIndex = -1,
         sunroomIndex = -1,
         terraceIndex = -1;
-    console.log($('#garden-options').val());
-    console.log($('#sunroom-options').val());
-    console.log($('#terrace-options').val());
 
     if ($('#garden-options').val() != '')
         gardenIndex = getPackageIndex(gardenPackageList, $('#garden-options').val());
@@ -1736,6 +1711,14 @@ function calculateTotalAmountPaid() {
 function calculateBalance() {
     var balance = calculateTotal() - calculateTotalAmountPaid();
     return balance;
+}
+
+function updatePaymentAndBalance() {
+    var paid = "" + calculateTotalAmountPaid();
+    $('#payment-amount-total').val(paid);
+    var balance = "" + calculateBalance();
+    $('#payment-balance').val(balance);
+    $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
 }
 
 function getPackageIndex(list, code) {
@@ -2187,9 +2170,12 @@ function addExistingFields() {
 
             // set payment details
             if (currevent.downpaymentDate) {
+                downpaymentChecked()
                 $('#downpayment-date').val(new Date(currevent.downpaymentDate).toISOString().substr(0, 10));
                 $('#downpayment-mode').val(currevent.downpaymentMode).change();
+                $('#downpayment-amount').val(currevent.downpaymentAmount);
                 $('#downpayment').prop('checked', true);
+                document.getElementById("final-payment").disabled = false;
                 $('#downpayment')
                     .parent()
                     .siblings()
@@ -2199,8 +2185,10 @@ function addExistingFields() {
             }
 
             if (currevent.finalPaymentDate) {
+                finalPaymentChecked()
                 $('#final-payment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
                 $('#final-payment-mode').val(currevent.finalPaymentMode).change();
+                $('#final-payment-amount').val(currevent.finalPaymentAmount);
                 $('#final-payment').prop('checked', true);
                 $('#final-payment')
                     .parent()
@@ -2209,6 +2197,10 @@ function addExistingFields() {
                     .children('input:not(.static), select')
                     .prop('disabled', false);
             }
+
+            //set the values of Total Amount Paid field and Balance field
+            updatePaymentAndBalance();
         }
     });
 }
+
