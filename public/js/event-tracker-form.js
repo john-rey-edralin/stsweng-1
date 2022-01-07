@@ -436,9 +436,9 @@ function initializeTransactionFields() {
  */
 function initializePaymentFields() {
     //Sets the downpayment and final payment related fields
-    if(document.getElementById("downpayment").checked) {
+    if (document.getElementById("downpayment").checked) {
         downpaymentChecked();
-        if(document.getElementById("final-payment").checked)
+        if (document.getElementById("final-payment").checked)
             finalPaymentChecked();
         else
             finalPaymentNotChecked();
@@ -488,22 +488,22 @@ function downpaymentNotChecked() {
     $('#downpayment-mode').siblings("label").removeClass('required');
     $('#downpayment-amount').siblings("label").removeClass('required');
     $('#downpayment')
-    .parent()
-    .siblings()
-    .children()
-    .children('input:not(.static), select')
-    .prop('disabled', true);
-    
+        .parent()
+        .siblings()
+        .children()
+        .children('input:not(.static), select')
+        .prop('disabled', true);
+
     //Empties the downpayment-related fields
     $('#downpayment-date').val("");
     $('#downpayment-mode').val("");
     $('#downpayment-amount').val("");
-    
+
     //Removes the Error CSS in the downpayment-related fields
     resetField($('#downpayment-date'), $('#downpayment-error'));
     resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
     resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
-    
+
     //Disables the whole final payment section
     document.getElementById("final-payment").checked = false;
     document.getElementById("final-payment").disabled = true;
@@ -517,7 +517,7 @@ function downpaymentNotChecked() {
     //Empties the final-payment-related fields
     finalPaymentNotChecked();
     $('#final-payment-amount').attr("placeholder", "");
-    
+
     //Sets the status of the submit button
     $('#submit').attr("disabled", checkIfFilledEventFields());
 }
@@ -532,11 +532,11 @@ function finalPaymentNotChecked() {
     $('#final-payment-mode').siblings("label").removeClass('required');
     $('#final-payment-amount').siblings("label").removeClass('required');
     $("#final-payment")
-    .parent()
-    .siblings()
-    .children()
-    .children('input:not(.static), select')
-    .prop('disabled', true);
+        .parent()
+        .siblings()
+        .children()
+        .children('input:not(.static), select')
+        .prop('disabled', true);
 
     //Empties the final-payment-related fields
     $('#final-payment-mode').val("");
@@ -551,7 +551,7 @@ function finalPaymentNotChecked() {
     //Updates other payment details fields
     updatePaymentAndBalance();
     $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
-    
+
     //Sets the status of the submit button
     $('#submit').attr("disabled", checkIfFilledEventFields());
 }
@@ -582,17 +582,17 @@ function downpaymentCheckFields() {
             displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
         else
             resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
-        
+
         //Updates the total payment amount and the final payment amount 
         $('#final-payment-amount').on('change', function () {
             updatePaymentAndBalance();
             $('#submit').attr("disabled", checkIfFilledEventFields());
         });
         updatePaymentAndBalance();
-        
+
         //Disables/Enables the Submit button
         $('#submit').attr("disabled", checkIfFilledEventFields());
-        
+
         //Checks if the customer payment is greater than the needed payment (total amount) 
         if (parseFloat($('#payment-balance').val()) < 0) {
             $('#payment-error').text('Customer payment is greater than the total price.');
@@ -640,9 +640,9 @@ function finalPaymentCheckFields() {
             $('#submit').attr("disabled", checkIfFilledEventFields());
         });
         updatePaymentAndBalance();
-        
+
         $('#submit').attr("disabled", checkIfFilledEventFields());
-        
+
         if (parseFloat($('#payment-balance').val()) < 0) {
             $('#payment-error').text('Customer payment is greater than the total price.');
             $('#payment-amount-total').addClass('is-invalid');
@@ -1130,7 +1130,7 @@ function updateBreakdownTable() {
             '<h6 class="mb-0 mt-1 text-center">Please fill out the information above.</h6>'
         );
     }
-    
+
     //Updates values of Total Amount Paid field and Balance field
     updatePaymentAndBalance();
 }
@@ -1292,13 +1292,13 @@ function initializeRealTimeValidation() {
         else {
             if (!document.getElementById("final-payment").checked) {
                 finalPaymentNotChecked();
-            }            
+            }
             if (!document.getElementById("downpayment").checked) {
                 downpaymentNotChecked();
             }
         }
     });
-    
+
     $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
@@ -1337,12 +1337,12 @@ function checkIfFilledEventFields() {
         $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         return true;
     }
-    
+
     else if (checkStringInput($('#representative-name').val())) {
         $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         return true;
     }
-    
+
     else if (validator.isEmpty(cp)) {
         $('#missing-error').val('Client mobile number should be filled.');
         return true;
@@ -1463,7 +1463,7 @@ function checkIfFilledEventFields() {
                 $('#final-payment-error').val('Date cannot be later than 2031.');
                 return true;
             }
-        }  
+        }
     }
     if (parseFloat($('#payment-balance').val()) < 0) {
         $('#payment-error').text('Customer payment is greater than the total price.');
@@ -1620,7 +1620,7 @@ function checkEventAvailability() {
             data,
             function (result) {
                 if (result._id != curreventID) {
-                    if(!(typeof result._id == 'undefined')) { 
+                    if (!(typeof result._id == 'undefined')) {
                         $('#event-date').addClass('is-invalid');
                         displayError(
                             $('#event-time'),
@@ -1636,7 +1636,7 @@ function checkEventAvailability() {
                 else {
                     resetField($('#event-date'), $('#event-time-error'));
                     resetField($('#event-time'), $('#event-time-error'));
-                } 
+                }
             }
         );
     }
@@ -1699,9 +1699,9 @@ function calculateTotal() {
 function calculateTotalAmountPaid() {
     var dpay = 0;
     var fpay = 0;
-    if($("#downpayment-amount").val() != '')
+    if ($("#downpayment-amount").val() != '')
         dpay = parseFloat($("#downpayment-amount").val());
-    if($("#final-payment-amount").val() != '')
+    if ($("#final-payment-amount").val() != '')
         fpay = parseFloat($("#final-payment-amount").val());
 
     var paid = dpay + fpay;
@@ -1883,7 +1883,7 @@ function submitForm() {
         if (fishName) fishQuantity = $('#fish-quantity').val();
 
         let downpaymentAmount = $('#downpayment-amount').val();
-        
+
         // stores all information as an object
         let data = {
             status: getEventStatus(),
@@ -1981,226 +1981,228 @@ function submitForm() {
 function addExistingFields() {
     let currevent;
     let id = '';
-    if ($('#event-id').text() !=  '')
+    if ($('#event-id').text() != '') {
         id = $('#event-id').text();
-    $.get('/event-tracker/get/event', { id: id }, function (result) {
-        if (result) {
-            currevent = result[0];
-            curreventID = currevent._id;
+        $.get('/event-tracker/get/event', { id: id }, function (result) {
+            if (result) {
+                currevent = result[0];
+                curreventID = currevent._id;
 
-            $('#form-title').children('h1').html('<span class="material-icons-two-tone mb-1 md-48">class</span> EDIT EVENT');
+                $('#form-title').children('h1').html('<span class="material-icons-two-tone mb-1 md-48">class</span> EDIT EVENT');
 
-            // set event time
-            $('#event-time').val(currevent.eventTime);
+                // set event time
+                $('#event-time').val(currevent.eventTime);
 
-            // set event date
-            $('#event-date').val(new Date(currevent.eventDate).toISOString().substr(0, 10));
+                // set event date
+                $('#event-date').val(new Date(currevent.eventDate).toISOString().substr(0, 10));
 
-            // set event venue checkboxes
-            $('#venue-garden').prop(
-                'checked',
-                currevent.eventVenues.includes('Garden')
-            );
-            $('#venue-sunroom').prop(
-                'checked',
-                currevent.eventVenues.includes('Sunroom')
-            );
-            $('#venue-terrace').prop(
-                'checked',
-                currevent.eventVenues.includes('Terrace')
-            );
-
-            $('.venue-checkbox').each(function () {
-                if ($(this).is(':checked'))
-                    $(this).parent().siblings('select').prop('disabled', false);
-            });
-
-            // set event packages dropdowns
-            for (let j = 0; j < currevent.packageList.length; j++) {
-                if (currevent.packageList[j].packageVenue === 'Garden')
-                    $('#garden-options').val(
-                        currevent.packageList[j].packageCode
-                    ).change();
-                else if (currevent.packageList[j].packageVenue === 'Sunroom')
-                    $('#sunroom-options').val(
-                        currevent.packageList[j].packageCode
-                    ).change();
-                else if (currevent.packageList[j].packageVenue === 'Terrace')
-                    $('#terrace-options').val(
-                        currevent.packageList[j].packageCode
-                    ).change();
-            }
-
-            // set additional pax checkbox
-            $('#additional-pax').prop(
-                'checked',
-                currevent.packageAdditionalPax
-            );
-
-            // set menu items
-            if (currevent.menuPackage.saladName) {
-                $('#menu-salad-button').trigger('click');
-                //$('#menu-salad-contents').collapse('toggle');
-                $('input[name="salad-options"][value="' + currevent.menuPackage.saladName + '"]').prop('checked', true);
-            }
-
-            if (currevent.menuPackage.pastaName) {
-                $('#menu-pasta-button').trigger('click');
-                $('input[name="pasta-options"][value="' + currevent.menuPackage.pastaName + '"]').prop('checked', true);
-            }
-
-            if (currevent.menuPackage.beefName) {
-                $('#menu-beef-button').trigger('click');
-                $('input[name="beef-options"][value="' + currevent.menuPackage.beefName + '"]').prop('checked', true);
-            }
-
-            if (currevent.menuPackage.porkName) {
-                $('#menu-pork-button').trigger('click');
-                $('input[name="pork-options"][value="' + currevent.menuPackage.porkName + '"]').prop('checked', true);
-            }
-
-            if (currevent.menuPackage.chickenName) {
-                $('#menu-chicken-button').trigger('click');
-                $('input[name="chicken-options"][value="' + currevent.menuPackage.chickenName + '"]').prop('checked', true);
-            }
-
-            if (currevent.menuPackage.fishName) {
-                $('#menu-fish-button').trigger('click');
-                $('input[name="fish-options"][value="' + currevent.menuPackage.fishName + '"]').prop('checked', true);
-            }
-
-            // set additional items table
-            if (currevent.foodList.length != 0) {
-                $('#additional-items-header').empty();
-                $('#additional-items-header').append(additionalFoodTableHeader);
-            }
-            for (let j = 0; j < currevent.foodList.length; j++) {
-                let name = currevent.foodList[j].name;
-                let quantity = currevent.menuAdditional[j].foodQuantity;
-                let price = currevent.foodList[j].price;
-                let cost = currevent.menuAdditional[j].foodCost;
-
-                $('#additional-items-list').append(
-                    '<div>' +
-                    '<hr class="mx-5">' +
-                    '<div class="row px-4 py-2 mx-5 additional-item">' +
-                    '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
-                    name +
-                    '</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
-                    quantity +
-                    '</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
-                    formatAsDecimal(price) +
-                    '</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
-                    formatAsDecimal(cost) +
-                    '</h6>' +
-                    '<span class="col material-icons-two-tone text-end md-btn"' +
-                    'onclick="removeAdditionalItem(this)">close</span>' +
-                    '</div>' +
-                    '</div>'
+                // set event venue checkboxes
+                $('#venue-garden').prop(
+                    'checked',
+                    currevent.eventVenues.includes('Garden')
                 );
-            }
-
-            // set extra charges table
-            if (currevent.transactionCharges.length != 0) {
-                $('#extra-charges-header').empty();
-                $('#extra-charges-header').append(extraChargesTableHeader);
-            }
-
-            for (let j = 0; j < currevent.transactionCharges.length; j++) {
-                let name = currevent.transactionCharges[j].chargeName;
-                let quantity = currevent.transactionCharges[j].chargeQuantity;
-                let price = currevent.transactionCharges[j].chargePrice;
-
-                $('#extra-charges-list').append(
-                    '<div>' +
-                    '<hr class="mx-5">' +
-                    '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
-                    '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
-                    name +
-                    '</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
-                    quantity +
-                    '</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
-                    formatAsDecimal(price) +
-                    '</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
-                    formatAsDecimal(quantity * price) +
-                    '</h6>' +
-                    '<span class="col material-icons-two-tone text-end md-btn"' +
-                    'onclick="removeExtraCharge(this)">close</span>' +
-                    '</div>' +
-                    '</div>'
+                $('#venue-sunroom').prop(
+                    'checked',
+                    currevent.eventVenues.includes('Sunroom')
                 );
-            }
-
-            // set discounts table
-            if (currevent.transactionDiscounts.length != 0) {
-                $('#discounts-header').empty();
-                $('#discounts-header').append(discountsTableHeader);
-            }
-            for (let j = 0; j < currevent.transactionDiscounts.length; j++) {
-                let name = currevent.transactionDiscounts[j].discountName;
-                let price = currevent.transactionDiscounts[j].discountPrice;
-
-                $('#discounts-list').append(
-                    '<div>' +
-                    '<hr class="mx-5">' +
-                    '<div class="row px-4 py-2 mx-5 discount-item">' +
-                    '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
-                    name +
-                    '</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
-                    formatAsDecimal(price) +
-                    '</h6>' +
-                    '<span class="col material-icons-two-tone text-end md-btn"' +
-                    'onclick="removeDiscount(this)">close</span>' +
-                    '</div>' +
-                    '</div>'
+                $('#venue-terrace').prop(
+                    'checked',
+                    currevent.eventVenues.includes('Terrace')
                 );
+
+                $('.venue-checkbox').each(function () {
+                    if ($(this).is(':checked'))
+                        $(this).parent().siblings('select').prop('disabled', false);
+                });
+
+                // set event packages dropdowns
+                for (let j = 0; j < currevent.packageList.length; j++) {
+                    if (currevent.packageList[j].packageVenue === 'Garden')
+                        $('#garden-options').val(
+                            currevent.packageList[j].packageCode
+                        ).change();
+                    else if (currevent.packageList[j].packageVenue === 'Sunroom')
+                        $('#sunroom-options').val(
+                            currevent.packageList[j].packageCode
+                        ).change();
+                    else if (currevent.packageList[j].packageVenue === 'Terrace')
+                        $('#terrace-options').val(
+                            currevent.packageList[j].packageCode
+                        ).change();
+                }
+
+                // set additional pax checkbox
+                $('#additional-pax').prop(
+                    'checked',
+                    currevent.packageAdditionalPax
+                );
+
+                // set menu items
+                if (currevent.menuPackage.saladName) {
+                    $('#menu-salad-button').trigger('click');
+                    //$('#menu-salad-contents').collapse('toggle');
+                    $('input[name="salad-options"][value="' + currevent.menuPackage.saladName + '"]').prop('checked', true);
+                }
+
+                if (currevent.menuPackage.pastaName) {
+                    $('#menu-pasta-button').trigger('click');
+                    $('input[name="pasta-options"][value="' + currevent.menuPackage.pastaName + '"]').prop('checked', true);
+                }
+
+                if (currevent.menuPackage.beefName) {
+                    $('#menu-beef-button').trigger('click');
+                    $('input[name="beef-options"][value="' + currevent.menuPackage.beefName + '"]').prop('checked', true);
+                }
+
+                if (currevent.menuPackage.porkName) {
+                    $('#menu-pork-button').trigger('click');
+                    $('input[name="pork-options"][value="' + currevent.menuPackage.porkName + '"]').prop('checked', true);
+                }
+
+                if (currevent.menuPackage.chickenName) {
+                    $('#menu-chicken-button').trigger('click');
+                    $('input[name="chicken-options"][value="' + currevent.menuPackage.chickenName + '"]').prop('checked', true);
+                }
+
+                if (currevent.menuPackage.fishName) {
+                    $('#menu-fish-button').trigger('click');
+                    $('input[name="fish-options"][value="' + currevent.menuPackage.fishName + '"]').prop('checked', true);
+                }
+
+                // set additional items table
+                if (currevent.foodList.length != 0) {
+                    $('#additional-items-header').empty();
+                    $('#additional-items-header').append(additionalFoodTableHeader);
+                }
+                for (let j = 0; j < currevent.foodList.length; j++) {
+                    let name = currevent.foodList[j].name;
+                    let quantity = currevent.menuAdditional[j].foodQuantity;
+                    let price = currevent.foodList[j].price;
+                    let cost = currevent.menuAdditional[j].foodCost;
+
+                    $('#additional-items-list').append(
+                        '<div>' +
+                        '<hr class="mx-5">' +
+                        '<div class="row px-4 py-2 mx-5 additional-item">' +
+                        '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
+                        name +
+                        '</h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
+                        quantity +
+                        '</h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
+                        formatAsDecimal(price) +
+                        '</h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
+                        formatAsDecimal(cost) +
+                        '</h6>' +
+                        '<span class="col material-icons-two-tone text-end md-btn"' +
+                        'onclick="removeAdditionalItem(this)">close</span>' +
+                        '</div>' +
+                        '</div>'
+                    );
+                }
+
+                // set extra charges table
+                if (currevent.transactionCharges.length != 0) {
+                    $('#extra-charges-header').empty();
+                    $('#extra-charges-header').append(extraChargesTableHeader);
+                }
+
+                for (let j = 0; j < currevent.transactionCharges.length; j++) {
+                    let name = currevent.transactionCharges[j].chargeName;
+                    let quantity = currevent.transactionCharges[j].chargeQuantity;
+                    let price = currevent.transactionCharges[j].chargePrice;
+
+                    $('#extra-charges-list').append(
+                        '<div>' +
+                        '<hr class="mx-5">' +
+                        '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
+                        '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
+                        name +
+                        '</h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
+                        quantity +
+                        '</h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
+                        formatAsDecimal(price) +
+                        '</h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
+                        formatAsDecimal(quantity * price) +
+                        '</h6>' +
+                        '<span class="col material-icons-two-tone text-end md-btn"' +
+                        'onclick="removeExtraCharge(this)">close</span>' +
+                        '</div>' +
+                        '</div>'
+                    );
+                }
+
+                // set discounts table
+                if (currevent.transactionDiscounts.length != 0) {
+                    $('#discounts-header').empty();
+                    $('#discounts-header').append(discountsTableHeader);
+                }
+                for (let j = 0; j < currevent.transactionDiscounts.length; j++) {
+                    let name = currevent.transactionDiscounts[j].discountName;
+                    let price = currevent.transactionDiscounts[j].discountPrice;
+
+                    $('#discounts-list').append(
+                        '<div>' +
+                        '<hr class="mx-5">' +
+                        '<div class="row px-4 py-2 mx-5 discount-item">' +
+                        '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
+                        name +
+                        '</h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
+                        formatAsDecimal(price) +
+                        '</h6>' +
+                        '<span class="col material-icons-two-tone text-end md-btn"' +
+                        'onclick="removeDiscount(this)">close</span>' +
+                        '</div>' +
+                        '</div>'
+                    );
+                }
+
+                // set breakdown table
+                updateBreakdownTable();
+
+                // set payment details
+                if (currevent.downpaymentDate) {
+                    downpaymentChecked()
+                    $('#downpayment-date').val(new Date(currevent.downpaymentDate).toISOString().substr(0, 10));
+                    $('#downpayment-mode').val(currevent.downpaymentMode).change();
+                    $('#downpayment-amount').val(currevent.downpaymentAmount);
+                    $('#downpayment').prop('checked', true);
+                    document.getElementById("final-payment").disabled = false;
+                    $('#downpayment')
+                        .parent()
+                        .siblings()
+                        .children()
+                        .children('input:not(.static), select')
+                        .prop('disabled', false);
+                }
+
+                if (currevent.finalPaymentDate) {
+                    finalPaymentChecked()
+                    $('#final-payment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
+                    $('#final-payment-mode').val(currevent.finalPaymentMode).change();
+                    $('#final-payment-amount').val(currevent.finalPaymentAmount);
+                    $('#final-payment').prop('checked', true);
+                    $('#final-payment')
+                        .parent()
+                        .siblings()
+                        .children()
+                        .children('input:not(.static), select')
+                        .prop('disabled', false);
+                }
+
+                //set the values of Total Amount Paid field and Balance field
+                updatePaymentAndBalance();
             }
+        });
+    }
 
-            // set breakdown table
-            updateBreakdownTable();
-
-            // set payment details
-            if (currevent.downpaymentDate) {
-                downpaymentChecked()
-                $('#downpayment-date').val(new Date(currevent.downpaymentDate).toISOString().substr(0, 10));
-                $('#downpayment-mode').val(currevent.downpaymentMode).change();
-                $('#downpayment-amount').val(currevent.downpaymentAmount);
-                $('#downpayment').prop('checked', true);
-                document.getElementById("final-payment").disabled = false;
-                $('#downpayment')
-                    .parent()
-                    .siblings()
-                    .children()
-                    .children('input:not(.static), select')
-                    .prop('disabled', false);
-            }
-
-            if (currevent.finalPaymentDate) {
-                finalPaymentChecked()
-                $('#final-payment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
-                $('#final-payment-mode').val(currevent.finalPaymentMode).change();
-                $('#final-payment-amount').val(currevent.finalPaymentAmount);
-                $('#final-payment').prop('checked', true);
-                $('#final-payment')
-                    .parent()
-                    .siblings()
-                    .children()
-                    .children('input:not(.static), select')
-                    .prop('disabled', false);
-            }
-
-            //set the values of Total Amount Paid field and Balance field
-            updatePaymentAndBalance();
-        }
-    });
 }
 
