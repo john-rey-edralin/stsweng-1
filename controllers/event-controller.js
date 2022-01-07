@@ -80,8 +80,8 @@ const eventController = {
     },
 
     putCancelReservation: async function (req, res) {
-        const { reservationId } = req.params;
-        const _id = mongoose.Types.ObjectId(reservationId);
+        const { id } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
 
         const doc = await Event.findOneAndUpdate(
             { _id },
@@ -330,8 +330,32 @@ const eventController = {
     },
 
     getCancelledEvents: async function (req, res) {
-        const cancelledEvents = await Event.find({ status: 'cancelled' });
-        res.json(cancelledEvents);
+        const cancelled = await Event.aggregate([
+            { $match: { status: 'cancelled' } },
+            { $sort: { eventDate: 1 } },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        let data = {
+            cancelled: cancelled,
+        };
+
+        res.render('event-tracker-cancelled', data);
     },
 
     getFood: function (req, res) {
