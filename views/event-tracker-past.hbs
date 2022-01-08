@@ -57,7 +57,7 @@
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <form action="/event-tracker/reservations/search" method="get">
+                    <form action="/event-tracker/pastevents/search" method="get">
                         <h5 class="fw-bold">SEARCH BY CLIENT NAME</h5>
                         <div class="form-group m-3">
                             <input type="search" class="form-control autocomplete" id="name" name="name"
@@ -67,7 +67,7 @@
                             <button type="submit" class="btn button">Search</button>
                         </div>
                     </form>
-                    <form action="/event-tracker/reservations/filter" method="get">
+                    <form action="/event-tracker/pastevents/filter" method="get">
                         <hr class="my-4">
                         <h5 class="fw-bold">FILTER</h5>
                         <div class="form-group m-3">
@@ -101,7 +101,7 @@
                         <br>
                         <div class="m-3 d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn button"
-                                onclick="window.location='/event-tracker/reservations';">Reset</button>
+                                onclick="window.location='/event-tracker/pastevents';">Reset</button>
                             <button type="submit" class="btn button">Filter and Sort</button>
                         </div>
                     </form>
