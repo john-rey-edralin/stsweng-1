@@ -33,4 +33,8 @@ app.route('/event-tracker/reservations').get(eventController.getReservations).pu
 app.get('/event-tracker/reservations/search', eventController.getReservationsSearch);
 app.get('/event-tracker/reservations/filter', eventController.getReservationsFilter);
 
+// event-tracker past events list
+app.route('/event-tracker/pastevents').get(eventController.getPastEvents);
+app.get('/event-tracker/pastevents/search', eventController.getPastEventsSearch);
+app.get('/event-tracker/pastevents/filter', eventController.getPastEventsFilter);
 module.exports = app;
