@@ -519,6 +519,7 @@ function downpaymentNotChecked() {
     $('#final-payment-amount').attr("placeholder", "");
 
     //Sets the status of the submit button
+    console.log("1" + checkIfFilledEventFields());
     $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
@@ -553,6 +554,7 @@ function finalPaymentNotChecked() {
     $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
 
     //Sets the status of the submit button
+    console.log("2" + checkIfFilledEventFields());
     $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
@@ -564,6 +566,7 @@ function downpaymentCheckFields() {
     $("#downpayment-date").on("change", function () {
         var downpaydate = document.getElementById("downpayment-date").value;
         validDate(downpaydate, $('#downpayment-error'), "downpayment-date");
+        console.log("3" + checkIfFilledEventFields());
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -573,6 +576,7 @@ function downpaymentCheckFields() {
             displayError($('#downpayment-mode'), $('#downpayment-mode-error'), 'Select 1 payment mode.');
         else
             resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
+        console.log("4" + checkIfFilledEventFields());
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -586,11 +590,13 @@ function downpaymentCheckFields() {
         //Updates the total payment amount and the final payment amount 
         $('#final-payment-amount').on('change', function () {
             updatePaymentAndBalance();
+            console.log("5" + checkIfFilledEventFields());
             $('#submit').attr("disabled", checkIfFilledEventFields());
         });
         updatePaymentAndBalance();
 
         //Disables/Enables the Submit button
+        console.log("6" + checkIfFilledEventFields());
         $('#submit').attr("disabled", checkIfFilledEventFields());
 
         //Checks if the customer payment is greater than the needed payment (total amount) 
@@ -605,6 +611,7 @@ function downpaymentCheckFields() {
             $('#payment-balance').removeClass('is-invalid');
         }
     });
+    console.log("7" + checkIfFilledEventFields());
     $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
@@ -616,6 +623,7 @@ function finalPaymentCheckFields() {
     $("#final-payment-date").on("change", function () {
         var finalpaydate = document.getElementById("final-payment-date").value;
         validDate(finalpaydate, $('#final-payment-error'), "final-payment-date");
+        console.log("8" + checkIfFilledEventFields());
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -625,6 +633,7 @@ function finalPaymentCheckFields() {
             displayError($('#final-payment-mode'), $('#final-payment-mode-error'), 'Select 1 payment mode.');
         else
             resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
+        console.log("9" + checkIfFilledEventFields());
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -637,10 +646,11 @@ function finalPaymentCheckFields() {
 
         $('#downpayment-amount').on('change', function () {
             updatePaymentAndBalance();
+            console.log("10" + checkIfFilledEventFields());
             $('#submit').attr("disabled", checkIfFilledEventFields());
         });
         updatePaymentAndBalance();
-
+        console.log("11" + checkIfFilledEventFields());
         $('#submit').attr("disabled", checkIfFilledEventFields());
 
         if (parseFloat($('#payment-balance').val()) < 0) {
@@ -654,6 +664,7 @@ function finalPaymentCheckFields() {
             $('#payment-balance').removeClass('is-invalid');
         }
     });
+    console.log("3" + checkIfFilledEventFields());
     $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
@@ -1144,6 +1155,7 @@ function initializeRealTimeValidation() {
         else if (checkStringInput(clientname))
             displayError($('#client-name'), $('#client-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         else resetField($('#client-name'), $('#client-name-error'));
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#client-mobile-number').keyup(function () {
@@ -1153,6 +1165,7 @@ function initializeRealTimeValidation() {
             resetField($('#client-mobile-number'), $('#client-number-error'));
         else
             displayError($('#client-mobile-number'), $('#client-number-error'), 'Invalid client mobile number.');
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#event-type').keyup(function () {
@@ -1160,12 +1173,13 @@ function initializeRealTimeValidation() {
         if (validator.isEmpty(eventtype))
             displayError($(this), $('#event-type-error'), 'Event type should be filled.');
         else resetField($(this), $('#event-type-error'));
-
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
     $("#event-date").on("change", function () {
         var eventdate = document.getElementById("event-date").value;
         validDate(eventdate, $('#event-date-error'), "event-date");
         checkEventAvailability();
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#event-time').change(function () {
@@ -1174,6 +1188,7 @@ function initializeRealTimeValidation() {
         else
             resetField($('#event-time'), $('#event-time-error'));
         checkEventAvailability();
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#event-pax').on("change", function () {
@@ -1187,6 +1202,7 @@ function initializeRealTimeValidation() {
         else {
             resetField($('#event-pax'), $('#event-pax-error'));
         }
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('.venue-checkbox').change(function () {
@@ -1195,6 +1211,7 @@ function initializeRealTimeValidation() {
             displayError($('.venue-checkbox'), $('#missing-error'), 'At least 1 venue should be checked.');
         else
             resetField($('.venue-checkbox'), $('#missing-error'));
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('.package').change(function () {
@@ -1204,11 +1221,11 @@ function initializeRealTimeValidation() {
         let package = (garden || sunroom || terrace);
         if (package == 0) {
             displayError($('.package'), $('#missing-error'), 'At least 1 Package should be selected.');
-            $('#submit').attr("disabled", true);
         }
         else
             resetField($('.package'), $('#missing-error'));
         checkEventAvailability();
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#representative-name').keyup(function () {
@@ -1216,6 +1233,7 @@ function initializeRealTimeValidation() {
         if (checkStringInput(repname))
             displayError($('#representative-name'), $('#rep-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         else resetField($('#representative-name'), $('#rep-name-error'));
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#representative-mobile-number').keyup(function () {
@@ -1223,6 +1241,7 @@ function initializeRealTimeValidation() {
             resetField($('#representative-mobile-number'), $('#rep-number-error'));
         else
             displayError($('#representative-mobile-number'), $('#rep-number-error'), 'Invalid representative mobile number.');
+            $('#submit').attr("disabled", checkIfFilledEventFields());    
     });
 
     $('#additional-quantity').change(function () {
@@ -1233,6 +1252,7 @@ function initializeRealTimeValidation() {
         } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
         }
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
     //menu details
     $('#additional-price').change(function () {
@@ -1241,6 +1261,7 @@ function initializeRealTimeValidation() {
         } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
         }
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
     //transactional details
     $('#extra-charges-quantity').change(function () {
@@ -1251,6 +1272,7 @@ function initializeRealTimeValidation() {
         } else {
             $('#extra-charges-error').text('');
         }
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#extra-charges-price').change(function () {
@@ -1259,6 +1281,7 @@ function initializeRealTimeValidation() {
         } else {
             $('#extra-charges-error').text('');
         }
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#discount-price').change(function () {
@@ -1267,6 +1290,7 @@ function initializeRealTimeValidation() {
         } else {
             $('#discount-error').text('');
         }
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     //Payment Details
@@ -1274,18 +1298,18 @@ function initializeRealTimeValidation() {
     finalPaymentCheckFields();
 
     $('.payment-checkbox').on('change', function () {
-        initializePaymentFields();
         if ($(this).is(':checked')) {
-            $('#submit').attr("disabled", true);
             $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', false);
             if (document.getElementById("downpayment").checked) {
                 downpaymentChecked();
                 downpaymentCheckFields();
+                console.log("14" + checkIfFilledEventFields());
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
             if (document.getElementById("final-payment").checked) {
                 finalPaymentChecked();
                 finalPaymentCheckFields();
+                console.log("15" + checkIfFilledEventFields());
                 $('#submit').attr("disabled", checkIfFilledEventFields());
             }
         }
@@ -1296,9 +1320,11 @@ function initializeRealTimeValidation() {
             if (!document.getElementById("downpayment").checked) {
                 downpaymentNotChecked();
             }
+            console.log("16" + checkIfFilledEventFields());
+            $('#submit').attr("disabled", checkIfFilledEventFields());
         }
     });
-
+    console.log("17" + checkIfFilledEventFields());
     $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
@@ -1330,84 +1356,104 @@ function checkIfFilledEventFields() {
     var dateMin = getDateTime(tyyy + '-' + tm + '-' + td);
 
     if (validator.isEmpty(name)) {
+        console.log("client name!!")
         $('#missing-error').val('Client name should be filled.');
         return true;
     }
     else if (checkStringInput(name)) {
+        console.log("client name!")
         $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         return true;
     }
 
     else if (checkStringInput($('#representative-name').val())) {
+        console.log("rep name!!")
         $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
         return true;
     }
 
     else if (validator.isEmpty(cp)) {
+        console.log("client number!!")
         $('#missing-error').val('Client mobile number should be filled.');
         return true;
     }
     else if (!($('#client-mobile-number').intlTelInput('isValidNumber'))) {
+        console.log("client number!")
         $('#missing-error').val('Invalid cellphone number.');
         return true;
     }
     else if (!validator.isEmpty($('#representative-mobile-number').val())) {
+        console.log("rep number not empty!")
         if (!($('#representative-mobile-number').intlTelInput('isValidNumber'))) {
+            console.log("rep number!!")
             $('#missing-error').val('Invalid cellphone number.');
             return true;
         }
     }
     else if (validator.isEmpty(type)) {
+        console.log("event type!")
         $('#missing-error').val('Event type should be filled.');
         return true;
     }
 
     else if (validator.isEmpty(date)) {
+        console.log("event date!")
         $('#missing-error').val('Event date should be filled.');
         return true;
     }
     else if (!validator.isEmpty(date)) {
+        console.log("event date not empty!!")
         var eventdate = getDateTime(date);
         if ($('#event-date').val().length > 10) {
+            console.log("event date!!")
             $('#missing-error').val('Invalid date.');
             return true;
         }
         else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
+            console.log("event date!!!")
             $('#missing-error').val('Date cannot be in the past.');
             return true;
         }
         else if ((eventdate - dateMax >= 0) || isNaN(eventdate)) {
+            console.log("event date!!!")
             $('#missing-error').val('Date cannot be later than 2031.');
             return true;
         }
     }
 
     if (validator.isEmpty(time)) {
+        console.log("event time!")
         $('#missing-error').val('Event time should be filled.');
         return true;
     }
 
     else if (validator.isEmpty(pax)) {
+        console.log("event pax!")
         $('#missing-error').val('Number of pax should be filled.');
         return true;
     }
     else if (pax <= 0) {
+        console.log("event pax!!")
         $('#missing-error').val('Number of pax should not be less than or equal to zero.');
         return true;
     }
     else if (pax > 120) {
+        console.log("event pax!!!")
         $('#missing-error').val('Number of pax should not be more than 120.');
         return true;
     }
     else if ($("input[type=checkbox]:checked").length <= 0) {
+        console.log("select venue pls!")
         $('#missing-error').val('At least 1 venue should be selected.');
         return true;
     }
     else if (package == 0) {
+        console.log("select package pls!")
         $('#missing-error').val('At least 1 package should be selected.');
         return true;
     }
     if (document.getElementById("downpayment").checked) {
+        console.log("ror");
         if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '') {
             $('#downpayment-amount-error').val('Invalid payment.');
             return true;
@@ -1437,6 +1483,7 @@ function checkIfFilledEventFields() {
         }
     }
     if (document.getElementById("final-payment").checked) {
+        console.log("hoy");
         if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '') {
             $('#final-payment-amount-error').val('Invalid payment.');
             return true;
