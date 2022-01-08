@@ -13,17 +13,18 @@
 
     <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.bundle.js"></script>
-    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.js"></script>
     <script type="text/javascript" src="/js/intlTelInput-jquery.min.js"></script>
     <script type="text/javascript" src="/js/validator.min.js"></script>
-    <script type="text/javascript" src="/js/event-tracker-createform.js"></script>
+    <script type="text/javascript" src="/js/event-tracker-form.js"></script>
 </head>
 
-<body class="d-flex flex-column position-relative" data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="50" tabindex="0">
+<body class="d-flex flex-column position-relative" data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="50"
+    tabindex="0">
     <nav class="navbar navbar-expand-xl bg-dark sticky-top shadow-sm" id="navbar">
         <div class="container-fluid">
             <div class="me-auto">
-                <span class="material-icons-two-tone md-light md-btn md-24" data-bs-toggle="modal"
+                <span class="material-icons-two-tone md-light md-btsn md-24" data-bs-toggle="modal"
                     data-bs-target="#confirm-exit-modal">arrow_back_ios</span>
             </div>
             <ul class="nav nav-pills">
@@ -56,6 +57,8 @@
                 </div>
             </div>
 
+            <p id="event-id" hidden>{{event._id}}</p>
+
             <br>
             <form>
                 {{!-- EVENT DETAILS --}}
@@ -75,14 +78,14 @@
                         <div class="col px-4">
                             <div class="form-group my-3">
                                 <label for="client-name">Client Name</label>
-                                <input type="text" class="form-control" id="client-name" name="client-name" required>
+                                <input type="text" class="form-control" id="client-name" name="client-name" value="{{event.clientName}}" required>
                                 <div id="client-name-help" class="form-text">Can be the client's given name or Facebook
                                     name.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="client-mobile-number">Client Mobile Number</label>
                                 <input type="tel" class="form-control" id="client-mobile-number"
-                                    name="client-mobile-number" maxlength="10" required>
+                                    name="client-mobile-number" value="{{event.clientMobileNumber}}" required>
                                 <div id="client-mobile-number-help" class="form-text">Country code can be changed if
                                     needed.
                                 </div>
@@ -90,16 +93,16 @@
                             <div class="form-group my-3">
                                 <label for="representative-name">Representative Name</label>
                                 <input type="text" class="form-control" id="representative-name"
-                                    name="representative-name">
+                                    name="representative-name" value="{{event.repName}}">
                                 <div id="representative-name-help" class="form-text">Authorized representative of the
-                                    client.</div>
+                                    client. <span class="fw-bold">Optional.</span></div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="representative-contact-number">Representative Mobile Number</label>
                                 <input type="tel" class="form-control" id="representative-mobile-number"
-                                    name="representative-mobile-number" maxlength="10">
+                                    name="representative-mobile-number" value="{{event.repMobileNumber}}">
                                 <div id="representative-mobile-number-help" class="form-text">Country code can be
-                                    changed if needed.
+                                    changed if needed. <span class="fw-bold">Optional.</span>
                                 </div>
                             </div>
                         </div>
@@ -108,20 +111,20 @@
                         <div class="col px-4">
                             <div class="form-group my-3">
                                 <label for="event-type">Type of Event</label>
-                                <input type="text" class="form-control autocomplete" id="event-type" name="event-type"
+                                <input type="text" class="form-control autocomplete" id="event-type" name="event-type" value="{{event.eventType}}"
                                     required>
                                 <div id="event-type-help" class="form-text">Start typing for suggestions or input a new
                                     type.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-date">Date of Event</label>
-                                <input type="date" class="form-control" id="event-date" name="event-date" required>
+                                <input type="date" class="form-control w-75" id="event-date" name="event-date" required>
                                 <div id="event-date-help" class="form-text">Choose a date from the date picker.</div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-time">Time of Event</label>
                                 <select class="form-control form-select" id="event-time" name="event-time" required>
-                                    <option value="" selected value>Select an option...</option>
+                                    <option value="">Select an option...</option>
                                     <option value="Afternoon">Afternoon (11:00 AM - 02:00 PM)</option>
                                     <option value="Evening">Evening (04:00 PM - 07:00 PM)</option>
                                 </select>
@@ -130,7 +133,7 @@
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-pax">Number of Pax</label>
-                                <input type="number" class="form-control w-50" id="event-pax" name="event-pax" required>
+                                <input type="number" class="form-control w-50" id="event-pax" name="event-pax" value="{{event.numOfPax}}" required>
                                 <div id="event-pax-help" class="form-text">Input by typing or using the spinner.
                                 </div>
                             </div>
@@ -138,7 +141,7 @@
 
                         {{!-- PACKAGE AND NOTES --}}
                         <div class="col-5 px-4 d-flex flex-column">
-                            <label class="mt-3 required" for="">Event Venue and Package</label>
+                            <label class="mt-3 required package" for="">Event Venue and Package</label>
 
                             {{!-- GARDEN OPTIONS --}}
                             <div class="input-group mb-1">
@@ -192,10 +195,10 @@
 
                             <div class="form-group my-3">
                                 <label for="event-notes">Notes</label>
-                                <textarea class="form-control" id="event-notes" name="event-notes" rows="4"></textarea>
+                                <textarea class="form-control" id="event-notes" name="event-notes" rows="4" value="{{event.eventNotes}}"></textarea>
                                 <div id="event-notes-help" name class="form-text">Additional details about the event, if
                                     any.
-                                    The box can be resized by dragging the lower-right corner.
+                                    The box can be resized by dragging the lower-right corner. <span class="fw-bold">Optional.</span>
                                 </div>
                             </div>
                         </div>
@@ -283,7 +286,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="salad-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="salad-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="salad-quantity" value="{{event.menuPackage.saladQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -307,7 +310,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="pasta-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="pasta-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="pasta-quantity" value="{{event.menuPackage.pastaQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -331,7 +334,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="beef-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="beef-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="beef-quantity" value="{{event.menuPackage.beefQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -350,7 +353,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="pork-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="pork-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="pork-quantity" value="{{event.menuPackage.porkQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -374,7 +377,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="chicken-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="chicken-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="chicken-quantity" value="{{event.menuPackage.chickenQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -393,7 +396,7 @@
                                 <div class="form-group row my-3 ms-auto">
                                     <label for="fish-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
-                                        <input type="number" class="form-control w-75" id="fish-quantity" disabled>
+                                        <input type="number" class="form-control w-75" id="fish-quantity" value="{{event.menuPackage.fishQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -408,7 +411,7 @@
                                     <label for="icedtea-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
                                         <input type="number" class="form-control w-75" id="icedtea-quantity"
-                                            name="icedtea-quantity" disabled>
+                                            name="icedtea-quantity" value="{{event.menuPackage.icedTeaQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -419,7 +422,7 @@
                                     <label for="rice-quantity" class="col col-form-label">Quantity</label>
                                     <div class="col-8">
                                         <input type="number" class="form-control w-75" id="rice-quantity"
-                                            name="rice-quantity" disabled>
+                                            name="rice-quantity" value="{{event.menuPackage.riceQuantity}}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -670,7 +673,7 @@
                                 <div class="col form-group my-3">
                                     <label for="downpayment-date">Date of Payment</label>
                                     <input type="date" class="form-control" id="downpayment-date"
-                                        name="downpayment-date" disabled>
+                                        name="downpayment-date" value={{event.downpaymentDate}} disabled>
                                     <div id="downpayment-date-help" class="form-text">Choose a date from the date
                                         picker.</div>
                                 </div>
@@ -691,7 +694,7 @@
                                 <div class="col form-group my-3">
                                     <label for="downpayment-amount">Amount Paid</label>
                                     <input type="number" class="form-control" id="downpayment-amount"
-                                        name="downpayment-amount" disabled>
+                                        name="downpayment-amount" value={{event.downpaymentAmount}} disabled>
                                     <div id="downpayment-amount-help" class="form-text">Input by typing or using the
                                         spinner.</div>
                                 </div>
@@ -700,8 +703,9 @@
                                 <strong>
                                     <div class="text-center text-danger error" id="downpayment-error"></div>
                                     <div class="text-center text-danger error" id="downpayment-mode-error"></div>
+                                    <div class="text-center text-danger error" id="downpayment-amount-error"></div>
                                 </strong>
-                            </div>
+                            </div>                        
                         </div>
 
                         <hr>
@@ -737,7 +741,7 @@
                                 <div class="col form-group my-3">
                                     <label for="final-payment-amount">Amount Paid</label>
                                     <input type="number" class="form-control" id="final-payment-amount"
-                                        name="final-payment-amount" disabled>
+                                        name="final-payment-amount" value={{event.finalPaymentAmount}} disabled>
                                     <div id="final-payment-amount-help" class="form-text">Input by typing or using the
                                         spinner.</div>
                                 </div>
@@ -746,8 +750,9 @@
                             <strong>
                                 <div class="text-center text-danger error" id="final-payment-error"></div>
                                 <div class="text-center text-danger error" id="final-payment-mode-error"></div>
+                                <div class="text-center text-danger error" id="final-payment-amount-error"></div>
                             </strong>
-                        </div>
+                        </div>   
                         </div>
 
                         <hr>
@@ -756,19 +761,19 @@
                                 <div class="col-4"></div>
                                 <div class="col form-group my-3">
                                     <label for="payment-amount-total">Total Amount Paid</label>
-                                    <input type="number" class="form-control static" id="payment-amount-total"
+                                    <input type="text" class="form-control static" id="payment-amount-total"
                                         name="payment-amount-total" disabled>
                                     <div id="payment-amount-total-help" class="form-text">Total amount paid by the
                                         client.</div>
                                 </div>
                                 <div class="col form-group my-3">
                                     <label for="payment-balance">Balance</label>
-                                    <input type="number" class="form-control static" id="payment-balance"
+                                    <input type="text" class="form-control static" id="payment-balance"
                                         name="payment-balance" disabled>
                                     <div id="payment-balance-help" class="form-text">Amount owed by the client.</div>
                                 </div>
                             </div>
-                         <div id="form-event-errors">
+                        <div id="form-event-errors">
                             <strong>
                                 <div class="text-center text-danger error" id="payment-error"></div>
                             </strong>
@@ -782,8 +787,9 @@
                 {{!-- SUBMIT BUTTON --}}
                 <div class="d-flex flex-row">
                     <div id="submit-button" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-auto">
+                        <a data-bs-toggle="tooltip" data-placement="left" title="Tip: Double check the [required] fields">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-submit-modal"
-                            class="btn btn-light" id="submit">Submit</button>
+                            class="btn btn-light" id="submit">Submit</button></a>
                     </div>
                 </div>
 
@@ -820,7 +826,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" onclick="window.location='/event-tracker/home'"
+                                <button type="button" onclick="window.location='/event-tracker/reservations'"
                                     class="btn btn-danger">Exit</button>
                             </div>
                         </div>

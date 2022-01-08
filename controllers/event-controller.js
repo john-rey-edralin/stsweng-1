@@ -3,6 +3,7 @@ const Food = require('../models/food.js');
 const Event = require('../models/event.js');
 const Charge = require('../models/charge.js');
 const Package = require('../models/package.js');
+const mongoose = require('mongoose');
 
 const eventController = {
     getHome: async function (req, res) {
@@ -13,7 +14,6 @@ const eventController = {
         const events = await Event.aggregate([
             {
                 $match: {
-                    status: 'reserved',
                     eventDate: {
                         $gte: today,
                         $lt: tomorrow
@@ -46,23 +46,43 @@ const eventController = {
     },
 
     getCreateEvent: function (req, res) {
-        res.render('event-tracker-createform');
+        res.render('event-tracker-form');
     },
 
-    postCreateEvent: function (req, res) {
-        let event = JSON.parse(req.body.data);
-        db.insertOne(Event, event, function (result) {
-            if (result) res.redirect('/event-tracker/pencilbookings');
+    postCreateEvent: async function (req, res) {
+        const doc = await Event.create(
+            JSON.parse(req.body.data)
+        );
+
+        res.send(doc);
+    },
+
+    getEditEvent: function (req, res) {
+        db.findOne(Event, { _id: req.params.id }, '', function (result) {
+            let data = {
+                event: result
+            }
+            res.render('event-tracker-form', data);
         });
+    },
+
+    putReservations: async function (req, res) {
+        const { id, data } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Event.findOneAndUpdate(
+            { _id, status: 'reserved' },
+            data,
+            { returnDocument: 'after' }
+        );
+
+        res.send(doc);
     },
 
     getPencilBookings: async function (req, res) {
         const bookings = await Event.aggregate([
-            {
-                $match: {
-                    status: 'booked'
-                }
-            },
+            { $match: { status: 'booked' } },
+            { $sort: { eventDate: 1 } },
             {
                 $lookup: {
                     from: 'packages',
@@ -107,11 +127,13 @@ const eventController = {
                 $lt: tomorrow,
             };
         }
+        let sort = { eventDate: 1 };
+        if (req.query.sort == "date-dsc")
+            sort = { eventDate: -1 };
 
         const bookings = await Event.aggregate([
-            {
-                $match: query
-            },
+            { $match: query },
+            { $sort: sort },
             {
                 $lookup: {
                     from: 'packages',
@@ -148,9 +170,7 @@ const eventController = {
         if (req.query.name) query.clientName = req.query.name;
 
         const bookings = await Event.aggregate([
-            {
-                $match: query
-            },
+            { $match: query },
             {
                 $lookup: {
                     from: 'packages',
@@ -180,6 +200,7 @@ const eventController = {
     getReservations: async function (req, res) {
         const reservations = await Event.aggregate([
             { $match: { status: 'reserved' } },
+            { $sort: { eventDate: 1 } },
             {
                 $lookup: {
                     from: 'packages',
@@ -197,7 +218,7 @@ const eventController = {
                 },
             },
         ]);
-        console.log(reservations)
+
         let data = {
             reservations: reservations,
         };
@@ -225,10 +246,13 @@ const eventController = {
             };
         }
 
+        let sort = { eventDate: 1 };
+        if (req.query.sort == "date-dsc")
+            sort = { eventDate: -1 };
+
         const reservations = await Event.aggregate([
-            {
-                $match: query
-            },
+            { $match: query },
+            { $sort: sort },
             {
                 $lookup: {
                     from: 'packages',
@@ -265,9 +289,7 @@ const eventController = {
         if (req.query.name) query.clientName = req.query.name;
 
         const reservations = await Event.aggregate([
-            {
-                $match: query
-            },
+            { $match: query },
             {
                 $lookup: {
                     from: 'packages',
@@ -290,9 +312,11 @@ const eventController = {
             reservations: reservations,
             search: req.query.name,
         };
-        
+
         res.render('event-tracker-reservations', data);
     },
+
+    
 
     getFood: function (req, res) {
         let projection = 'name price';
@@ -325,6 +349,30 @@ const eventController = {
             res.send(result);
         });
     },
+
+    getEvent: async function (req, res) {
+        const event = await Event.aggregate([
+            { $match: { _id: mongoose.Types.ObjectId(req.query.id) } },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        res.send(event);
+    }
 };
 
 module.exports = eventController;
