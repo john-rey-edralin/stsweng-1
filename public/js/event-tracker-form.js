@@ -1974,7 +1974,6 @@ function submitForm() {
             let json = {
                 data: JSON.stringify(data)
             };
-            alert(json.data)
 
             // makes a POST request using AJAX to add the event to the database
             $.post("/event-tracker/submit", json, function (result) {
