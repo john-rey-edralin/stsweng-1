@@ -248,6 +248,7 @@
                     </div>
                 </div>
             </div>
+            {{#ifNotEquals status "finished"}}
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger me-auto" data-bs-target="#modal-{{_id}}-cancel"
                     data-bs-toggle="modal" data-bs-dismiss="modal">Cancel Event</button>
@@ -255,6 +256,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mark as
                     Done</button>
             </div>
+            {{/ifNotEquals}}
         </div>
     </div>
 </div>
