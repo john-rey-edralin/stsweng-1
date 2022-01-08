@@ -14,6 +14,9 @@ const eventController = {
         const events = await Event.aggregate([
             {
                 $match: {
+                    status: {
+                        $ne: 'cancelled'
+                    },
                     eventDate: {
                         $gte: today,
                         $lt: tomorrow
