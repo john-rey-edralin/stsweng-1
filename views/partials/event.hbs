@@ -253,9 +253,11 @@
                 <button type="button" class="btn btn-danger me-auto" data-bs-target="#modal-{{_id}}-cancel"
                     data-bs-toggle="modal" data-bs-dismiss="modal">Cancel Event</button>
                 <a class="btn btn-secondary" href="/event-tracker/edit/{{_id}}" role="button">Edit</a>
+                {{#ifEquals status "reserved"}}
                 <button type="button" class="btn btn-secondary" data-bs-target="#modal-{{_id}}-finish"
                     data-bs-toggle="modal" data-bs-dismiss="modal">Mark as
                     Done</button>
+                {{/ifEquals}}
             </div>
             {{/ifNotEquals}}
         </div>
