@@ -1621,15 +1621,16 @@ function checkEventAvailability() {
                     else {
                         resetField($('#event-date'), $('#event-time-error'));
                         resetField($('#event-time'), $('#event-time-error'));
+                        if ($('#event-id').text() == '')
+                            validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date"); 
                     }
                 }
                 else {
                     resetField($('#event-date'), $('#event-time-error'));
                     resetField($('#event-time'), $('#event-time-error'));
-                }
-
-                if ($('#event-id').text() == '')
-                    validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");                   
+                    if ($('#event-id').text() == '')
+                        validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date"); 
+                }                  
             }
         );
     }
