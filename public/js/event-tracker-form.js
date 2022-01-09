@@ -1621,18 +1621,15 @@ function checkEventAvailability() {
                     else {
                         resetField($('#event-date'), $('#event-time-error'));
                         resetField($('#event-time'), $('#event-time-error'));
+                        if ($('#event-id').text() == '')
+                            validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
                     }
                 }
                 else {
                     resetField($('#event-date'), $('#event-time-error'));
                     resetField($('#event-time'), $('#event-time-error'));
-                }
-
-                if ($('#event-id').text() == '') {
-                    var dateInput = getDateTime(document.getElementById("event-date").value);
-                    var dateMin = getDateTime(getDateToday());
-                    if(dateInput - dateMin < 0 || isNaN(dateInput))
-                        displayError($('#event-date'), $('#event-date-error'), 'Date cannot be in the past.');
+                    if ($('#event-id').text() == '')
+                        validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
                 }
             }
         );
