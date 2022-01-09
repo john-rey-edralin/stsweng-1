@@ -432,7 +432,20 @@ const eventController = {
         };
 
         res.render('event-tracker-pastevents', data);
-    },    
+    },  
+    
+    putFinishEvent: async function (req, res) {
+        const { id } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Event.findOneAndUpdate(
+            { _id },
+            { status: 'finished' },
+            { returnDocument: 'after' }
+        );
+
+        res.json(doc);
+    },
 
     getFood: function (req, res) {
         let projection = 'name price';

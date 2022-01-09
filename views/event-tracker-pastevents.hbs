@@ -34,11 +34,11 @@
 
             <br>
             {{!-- WITH EVENT --}}
-            {{#if past}}
+            {{#if pastevents}}
             <div id="today-main"
                 class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
                 <div class="p-4">
-                    {{#each past}}
+                    {{#each pastevents}}
                     {{>event}}
                     {{/each}}
                 </div>
