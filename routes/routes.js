@@ -33,4 +33,6 @@ app.route('/event-tracker/reservations').get(eventController.getReservations).pu
 app.get('/event-tracker/reservations/search', eventController.getReservationsSearch);
 app.get('/event-tracker/reservations/filter', eventController.getReservationsFilter);
 
+// event-tracker calendar
+app.get('/event-tracker/calendar/:year/:month', eventController.getEventsInMonth);
 module.exports = app;

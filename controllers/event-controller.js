@@ -4,21 +4,30 @@ const Event = require('../models/event.js');
 const Charge = require('../models/charge.js');
 const Package = require('../models/package.js');
 const mongoose = require('mongoose');
+const getEventsInMonth = require('../helpers/eventsInMonth.js');
 
 const eventController = {
     getHome: async function (req, res) {
         let date = new Date();
-        let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+        let today = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+        let tomorrow = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate() + 1
+        );
 
         const events = await Event.aggregate([
             {
                 $match: {
                     eventDate: {
                         $gte: today,
-                        $lt: tomorrow
-                    }
-                }
+                        $lt: tomorrow,
+                    },
+                },
             },
             {
                 $lookup: {
@@ -39,7 +48,7 @@ const eventController = {
         ]);
 
         let data = {
-            events: events
+            events: events,
         };
 
         res.render('event-tracker-home', data);
@@ -120,16 +129,23 @@ const eventController = {
         if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
             let date = new Date();
-            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+            let today = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate()
+            );
+            let tomorrow = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate() + 1
+            );
             query.eventDate = {
                 $gte: today,
                 $lt: tomorrow,
             };
         }
         let sort = { eventDate: 1 };
-        if (req.query.sort == "date-dsc")
-            sort = { eventDate: -1 };
+        if (req.query.sort == 'date-dsc') sort = { eventDate: -1 };
 
         const bookings = await Event.aggregate([
             { $match: query },
@@ -238,8 +254,16 @@ const eventController = {
         if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
             let date = new Date();
-            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+            let today = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate()
+            );
+            let tomorrow = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate() + 1
+            );
             query.eventDate = {
                 $gte: today,
                 $lt: tomorrow,
@@ -247,8 +271,7 @@ const eventController = {
         }
 
         let sort = { eventDate: 1 };
-        if (req.query.sort == "date-dsc")
-            sort = { eventDate: -1 };
+        if (req.query.sort == 'date-dsc') sort = { eventDate: -1 };
 
         const reservations = await Event.aggregate([
             { $match: query },
@@ -316,8 +339,6 @@ const eventController = {
         res.render('event-tracker-reservations', data);
     },
 
-    
-
     getFood: function (req, res) {
         let projection = 'name price';
         db.findMany(Food, {}, projection, function (result) {
@@ -370,9 +391,29 @@ const eventController = {
                 },
             },
         ]);
-
         res.send(event);
-    }
+    },
+
+    getEventsInMonth: async function (req, res) {
+        const { year, month } = req.params;
+
+        const events = await Event.find({
+            $expr: {
+                $and: [
+                    { $ne: ['$status', 'cancelled'] },
+                    { $ne: ['$status', 'finished'] },
+                    { $eq: [Number(year), { $year: '$eventDate' }] },
+                    {
+                        $eq: [Number(month), { $month: '$eventDate' }],
+                    },
+                ],
+            },
+        });
+
+        const eventsInMonth = getEventsInMonth(month, year, events);
+
+        res.render('event-tracker-calendar', eventsInMonth);
+    },
 };
 
 module.exports = eventController;
