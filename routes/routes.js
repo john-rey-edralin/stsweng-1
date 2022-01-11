@@ -15,6 +15,7 @@ app.get('/event-tracker/home', eventController.getHome);
 app.get('/event-tracker/create', eventController.getCreateEvent);
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get('/event-tracker/edit/:id', eventController.getEditEvent);
+app.get('/event-tracker/print/:id', eventController.getPrintEvent);
 
 // event-tracker form data retrieval
 app.get('/event-tracker/get/food', eventController.getFood);
