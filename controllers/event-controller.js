@@ -4,6 +4,7 @@ const Event = require('../models/event.js');
 const Charge = require('../models/charge.js');
 const Package = require('../models/package.js');
 const mongoose = require('mongoose');
+const getEventsInMonth = require('../helpers/eventsInMonth.js');
 
 const eventController = {
     getHome: async function (req, res) {
@@ -435,6 +436,8 @@ const eventController = {
         const events = await Event.find({
             $expr: {
                 $and: [
+                    { $ne: ['$status', 'cancelled'] },
+                    { $ne: ['$status', 'finished'] },
                     { $eq: [Number(year), { $year: '$eventDate' }] },
                     {
                         $eq: [Number(month), { $month: '$eventDate' }],
@@ -443,7 +446,10 @@ const eventController = {
             },
         });
 
-        res.json(events);
+        const eventsInMonth = getEventsInMonth(month, year, events);
+
+        //TODO: change to res.render for the appropriate template file
+        res.json(eventsInMonth);
     },
 };
 
