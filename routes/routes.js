@@ -7,6 +7,9 @@ const app = express.Router();
 // login
 app.get('/', controller.getIndex);
 
+// admin menu
+app.get('/admin', controller.getAdminMenu);
+
 app.post('/home', async function (req, res) {
     const { username, password } = req.body;
     const user = await Employee.findOne({
