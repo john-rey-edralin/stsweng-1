@@ -46,7 +46,7 @@ hbs.registerHelper('getPrevMonth', function (date) {
     } else {
         current = new Date(date.getFullYear(), date.getMonth() - 1, 1);
     }
-    return `${(current.getMonth() + 1).toString().padStart(2, 0)}-${current.getFullYear()}`;
+    return `${current.getFullYear()}/${(current.getMonth() + 1).toString().padStart(2, 0)}`;
 });
 
 //returns the next month
@@ -58,5 +58,5 @@ hbs.registerHelper('getNextMonth', function (date) {
         current = new Date(date.getFullYear(), date.getMonth() + 1, 1);
     }
 
-    return `${(current.getMonth() + 1).toString().padStart(2, 0)}-${current.getFullYear()}`;
+    return `${current.getFullYear()}/${(current.getMonth() + 1).toString().padStart(2, 0)}`;
 });

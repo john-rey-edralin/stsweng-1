@@ -1,18 +1,18 @@
 .withEvent {
-  background-color: #9f0e31 !important;
+  background-color: #902D41 !important;
 }
 
 .calendar-day {
-    background-color: #EAEAEA;
+    background-color: #F0F0F0;
     transition: 0.3s;
 }
 
 .calendar-day:hover {
-    background-color: #DADADA;
+    background-color: #EAEAEA;
 }
 
 .border-gray {
-  border-color: #708293 !important;
+  border-color: #323232 !important;
 }
 
 .w-20 {
