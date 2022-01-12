@@ -60,3 +60,9 @@ hbs.registerHelper('getNextMonth', function (date) {
 
     return `${current.getFullYear()}/${(current.getMonth() + 1).toString().padStart(2, 0)}`;
 });
+
+//returns the next month
+hbs.registerHelper('getToday', function () {
+    let today = new Date()
+    return `${today.getFullYear()}/${(today.getMonth() + 1).toString().padStart(2, 0)}`;
+});
