@@ -1,29 +1,24 @@
 const express = require('express');
-const controller = require('../controllers/controller.js');
-const bcrypt = require('bcrypt');
-const Employee = require('../models/employee.js');
+
+const authController = require('../controllers/auth-controller.js');
+const adminController = require('../controllers/admin-controller.js');
+const eventController = require('../controllers/event-controller.js');
+
 const app = express.Router();
 
 // login
-app.get('/', controller.getIndex);
+app.get('/login', authController.getLogin);
 
-// admin menu
-app.get('/admin', controller.getAdminMenu);
+// authenticate user
+app.post('/authenticate', authController.authenticate);
 
-app.post('/home', async function (req, res) {
-    const { username, password } = req.body;
-    const user = await Employee.findOne({
-        username: username,
-    });
-
-    if (user && bcrypt.compareSync(password, user.password)) {
-        res.render('event-tracker-home');
-    } else {
-        res.send('Not registered');
-    }
-});
+// admin
+app.get('/admin/home', adminController.getAdminHome);
+app.post('/admin/register', adminController.registerEmployee);
+app.get('/admin/employee', adminController.getAllEmployees);
+app.get('/admin/employee/:id', adminController.getEmployee);
 
 // event-tracker
-// app.get('/event-tracker/home', eventController.getHome);
+app.get('/event-tracker/home', eventController.getHome);
 
 module.exports = app;
