@@ -9,6 +9,12 @@ const employeeSchema = new Schema({
         type: String,
         enum: ['admin', 'employee'],
     },
+    
+    name: String,
+    contactNum: String,
+    emergencyContactName: String,
+    emergencyContactNum: String,
+    dateRegistered: Date
 });
 
 module.exports = mongoose.model('employee', employeeSchema);
