@@ -13,7 +13,7 @@ app.get('/login', authController.getLogin);
 app.post('/authenticate', authController.authenticate);
 
 // admin
-app.get('/admin/home', adminController.getAdminHome);
+app.get('/admin', adminController.getAdminHome);
 app.post('/admin/register', adminController.registerEmployee);
 app.get('/admin/employee', adminController.getAllEmployees);
 app.get('/admin/employee/:id', adminController.getEmployee);

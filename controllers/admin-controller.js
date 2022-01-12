@@ -3,6 +3,16 @@ const Employee = require('../models/employee.js');
 const saltRounds = 10;
 
 const controller = {
+    getAdminHome: async function (req, res) {
+        const employees = await Employee.find({ role: 'employee' });
+
+        let data = {
+            employees : employees
+        };
+
+        res.render('admin-home', data);
+    },
+
     /**
      * Registers an employee
      * Does not register an employee if the username provided is already in the database
