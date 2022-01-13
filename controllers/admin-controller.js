@@ -88,6 +88,20 @@ const controller = {
         const status = employee ? 200 : 404;
         res.status(status).json(employee);
     },
+
+    putEmployeeInfo: async function (req, res) {
+        const { username } = req.params;
+        const { contactNum, emergencyContactName, emergencyContactNum } =
+            req.body;
+
+        console.log(contactNum, emergencyContactName, emergencyContactNum);
+        const result = await Employee.findOneAndUpdate(
+            { username },
+            { contactNum, emergencyContactName, emergencyContactNum },
+            { new: true }
+        );
+        res.json(result);
+    },
 };
 
 module.exports = controller;
