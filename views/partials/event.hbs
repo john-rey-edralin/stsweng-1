@@ -248,12 +248,38 @@
                     </div>
                 </div>
             </div>
+            {{#ifNotEquals status "finished"}}
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger me-auto" data-bs-target="#modal-{{_id}}-cancel"
                     data-bs-toggle="modal" data-bs-dismiss="modal">Cancel Event</button>
                 <a class="btn btn-secondary" href="/event-tracker/edit/{{_id}}" role="button">Edit</a>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mark as
+                {{#ifEquals status "reserved"}}
+                <button type="button" class="btn btn-secondary" data-bs-target="#modal-{{_id}}-finish"
+                    data-bs-toggle="modal" data-bs-dismiss="modal">Mark as
                     Done</button>
+                {{/ifEquals}}
+            </div>
+            {{/ifNotEquals}}
+        </div>
+    </div>
+</div>
+
+{{!-- MARK AS DONE MODAL --}}
+<div class="modal fade" id="modal-{{_id}}-finish" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>Mark this Event as Done</strong></h5>
+            </div>
+            <div class="modal-body p-4">
+                <div class="fw-bold">Are you sure you want to mark this event as done?</div> <br> This will move
+                the event to the past events list. This action cannot be reversed.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary me-auto" data-bs-toggle="modal"
+                    data-bs-target="#modal-{{_id}}" data-bs-dismiss="modal">Back</button>
+                <button type="button" class="btn btn-success " data-bs-dismiss="modal"
+                    onclick="finishEvent('{{_id}}')">Continue</button>
             </div>
         </div>
     </div>
