@@ -79,6 +79,19 @@ const eventController = {
         res.send(doc);
     },
 
+    putPencilbookings: async function (req, res) {
+        const { id, data } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Event.findOneAndUpdate(
+            { _id, status: 'booked' },
+            data,
+            { returnDocument: 'after' }
+        );
+
+        res.send(doc);
+    },
+
     getPencilBookings: async function (req, res) {
         const bookings = await Event.aggregate([
             { $match: { status: 'booked' } },
