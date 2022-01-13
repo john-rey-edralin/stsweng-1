@@ -1995,6 +1995,15 @@ function addExistingFields() {
                 // set event date
                 $('#event-date').val(new Date(currevent.eventDate).toISOString().substr(0, 10));
 
+
+                $('#form-title').children('h1').html('<span class="material-icons-two-tone mb-1 md-48">class</span> EDIT EVENT');
+
+                // set event time
+                $('#event-time').val(currevent.eventTime);
+
+                // set event date
+                $('#event-date').val(new Date(currevent.eventDate).toISOString().substr(0, 10));
+
                 // set event venue checkboxes
                 $('#venue-garden').prop(
                     'checked',
