@@ -7,8 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/css/intlTelInput.min.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css">
-    <link rel="stylesheet" type="text/css" href="/css/event-tracker.css">
-    <link rel="stylesheet" type="text/css" href="/css/event-tracker-form.css">
+    <link rel="stylesheet" type="text/css" href="/css/admin.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone">
 
     <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
@@ -19,7 +18,7 @@
     <script type="text/javascript" src="/js/admin-employee-form.js"></script>
 </head>
 
-<body>
+<body class="d-flex flex-column flex-fill">
     <nav class="navbar navbar-expand-xl bg-dark sticky-top shadow-sm" id="navbar">
         <div class="container-fluid">
             <div class="me-auto">
@@ -34,7 +33,7 @@
             {{!-- FORM TITLE --}}
             <div class="d-flex flex-row">
                 <div id="form-title" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-2">
-                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">class</span> CREATE EMPLOYEE
+                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">class</span> REGISTER EMPLOYEE
                     </h1>
                 </div>
             </div>
@@ -67,7 +66,7 @@
                                 </div>
                                 <div class="form-group my-3">
                                     <label for="employee-mobile-number">Employee Mobile Number</label>
-                                    <input type="tel" class="form-control" id="employee-mobile-number"
+                                    <input type="tel" class="form-control w-100" id="employee-mobile-number"
                                         name="employee-mobile-number" required>
                                     <div id="employee-mobile-number-help" class="form-text">Country code can be changed
                                         if
@@ -83,7 +82,7 @@
                                 </div>
                                 <div class="form-group my-3">
                                     <label for="emergency-contact-mobile-number">Emergency Contact Mobile Number</label>
-                                    <input type="tel" class="form-control" id="emergency-contact-mobile-number"
+                                    <input type="tel" class="form-control w-100" id="emergency-contact-mobile-number"
                                         name="emergency-contact-mobile-number">
                                     <div id="emergency-contact-mobile-number-help" class="form-text">Country code can be
                                         changed if needed.
@@ -105,7 +104,7 @@
                     </div>
 
                     {{!-- ACCOUNT DETAILS --}}
-                    <div id="form-account-info" class="container-fluid shadow-sm bg-light rounded-sm p-5 col mx-3">
+                    <div id="form-account-info" class="container-fluid shadow-sm bg-light rounded-sm p-5 col-7 mx-3">
 
                         {{!-- ACCOUNT HEADER --}}
                         <div class="d-flex flex-row align-items-center">

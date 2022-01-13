@@ -8,7 +8,6 @@ $(document).ready(function () {
     initializeAccountFields();
 
     initializeRealTimeValidation();
-    submitForm();
 });
 
 function initializeTooltips() {
