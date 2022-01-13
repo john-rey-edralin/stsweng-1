@@ -15,6 +15,7 @@ app.get('/event-tracker/home', eventController.getHome);
 app.get('/event-tracker/create', eventController.getCreateEvent);
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get('/event-tracker/edit/:id', eventController.getEditEvent);
+app.put('/event-tracker/finish', eventController.putFinishEvent);
 
 // event-tracker form data retrieval
 app.get('/event-tracker/get/food', eventController.getFood);
@@ -33,4 +34,8 @@ app.route('/event-tracker/reservations').get(eventController.getReservations).pu
 app.get('/event-tracker/reservations/search', eventController.getReservationsSearch);
 app.get('/event-tracker/reservations/filter', eventController.getReservationsFilter);
 
+// event-tracker past events list
+app.route('/event-tracker/pastevents').get(eventController.getPastEvents);
+app.get('/event-tracker/pastevents/search', eventController.getPastEventsSearch);
+app.get('/event-tracker/pastevents/filter', eventController.getPastEventsFilter);
 module.exports = app;
