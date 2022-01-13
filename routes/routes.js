@@ -36,7 +36,5 @@ app.get('/event-tracker/reservations/filter', eventController.getReservationsFil
 
 // event-tracker cancelled events list
 app.get('/event-tracker/cancelled', eventController.getCancelledEvents);
-app.get('/event-tracker/cancelled/search', eventController.getCancelledEventsSearch);
-app.get('/event-tracker/cancelled/filter', eventController.getCancelledEventsFilter);
 
 module.exports = app;
