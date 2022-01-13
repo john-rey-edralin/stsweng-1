@@ -14,7 +14,8 @@ app.post('/authenticate', authController.authenticate);
 
 // admin
 app.get('/admin', adminController.getAdminHome);
-app.post('/admin/register', adminController.registerEmployee);
+app.get('/admin/register', adminController.getRegisterEmployee);
+app.post('/admin/register', adminController.postRegisterEmployee);
 app.get('/admin/employee', adminController.getAllEmployees);
 app.get('/admin/employee/:id', adminController.getEmployee);
 

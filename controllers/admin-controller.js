@@ -13,15 +13,19 @@ const controller = {
         res.render('admin-home', data);
     },
 
+    getRegisterEmployee: function (req, res) {
+        res.render('admin-employee-form');
+    },
+
     /**
      * Registers an employee
      * Does not register an employee if the username provided is already in the database
      * responds with 406(Not Acceptable) status code
      * @name post/admin/register
-     * @param {express.request} req request object, must have username and passowrd in its body
+     * @param {express.request} req request object, must have username and password in its body
      * @param {express.response} res response object
      */
-    registerEmployee: async function (req, res) {
+    postRegisterEmployee: async function (req, res) {
         const { username, password } = req.body;
         const hash = await bcrypt.hash(password, saltRounds);
 
@@ -34,7 +38,7 @@ const controller = {
                 role: 'employee',
                 hasAccess: true,
             });
-            res.json(employee);
+            res.redirect('/admin');
         } else {
             res.status(406).json({
                 msg: 'Account already exists for username: ' + username,
