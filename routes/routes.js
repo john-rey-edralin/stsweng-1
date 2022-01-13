@@ -16,7 +16,6 @@ app.get('/event-tracker/create', eventController.getCreateEvent);
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get('/event-tracker/edit/:id', eventController.getEditEvent);
 app.put('/event-tracker/cancel', eventController.putCancelEvent);
-app.put('/event-tracker/finish', eventController.putFinishEvent);
 
 // event-tracker form data retrieval
 app.get('/event-tracker/get/food', eventController.getFood);
@@ -37,11 +36,5 @@ app.get('/event-tracker/reservations/filter', eventController.getReservationsFil
 
 // event-tracker cancelled events list
 app.get('/event-tracker/cancelled', eventController.getCancelledEvents);
-app.get('/event-tracker/cancelled/search', eventController.getCancelledEventsSearch);
-app.get('/event-tracker/cancelled/filter', eventController.getCancelledEventsFilter);
 
-// event-tracker past events list
-app.route('/event-tracker/pastevents').get(eventController.getPastEvents);
-app.get('/event-tracker/pastevents/search', eventController.getPastEventsSearch);
-app.get('/event-tracker/pastevents/filter', eventController.getPastEventsFilter);
 module.exports = app;

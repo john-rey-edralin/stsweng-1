@@ -7,22 +7,16 @@ $(document).ready(function () {
 });
 
 function deleteReservation(id) {
-function finishEvent(id) {
     let json = JSON.stringify({
         id: id,
     });
     $.ajax({
         type: 'PUT',
-        url: '/event-tracker/cancel',
+        url: '/event-tracker/reservations/cancel',
         data: json,
         contentType: 'application/json',
         success: function (result) {
             window.location.href = '/event-tracker/cancelled';
-        url: '/event-tracker/finish',
-        data: json,
-        contentType: 'application/json',
-        success: function (result) {
-            window.location.href = '/event-tracker/pastevents';
         },
     });
 }
