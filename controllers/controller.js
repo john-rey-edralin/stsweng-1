@@ -1,6 +1,6 @@
 const controller = {
     getIndex: function (req, res) {
-        res.render('login');
+        res.redirect('/event-tracker/home');
     }
 };
 

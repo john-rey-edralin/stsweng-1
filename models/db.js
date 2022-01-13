@@ -8,11 +8,14 @@ const options = {
 };
 
 const database = {
-    connect: function () {
-        mongoose.connect(url, options, function (error) {
-            if (error) console.log(error);
-            console.log('Connected!');
-        });
+    connect: async function () {
+        await mongoose.connect(url, options);
+        console.log('Connected!');
+    },
+
+    disconnect: async function () {
+        await mongoose.disconnect();
+        console.log('Disconnected!');
     },
 
     insertOne: function (model, doc, callback) {
