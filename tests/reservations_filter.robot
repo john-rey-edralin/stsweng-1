@@ -10,24 +10,21 @@ Filter Venue With Garden
     Go To Reservations
     Select From List By Value       name:venue      Garden
     Click Filter And Sort Button
-    Should Not Have           Sunroom 
-    Should Not Have           Terrace 
+    Should Have           Garden
     [Teardown]      Close Browser
 
 Filter Venue With Sunroom
     Go To Reservations
     Select From List By Value       name:venue      Sunroom
     Click Filter And Sort Button
-    Should Not Have           Garden 
-    Should Not Have           Terrace 
+    Should Have           Sunroom 
     [Teardown]      Close Browser
 
 Filter Venue With Terrace
     Go To Reservations
     Select From List By Value       name:venue      Terrace
     Click Filter And Sort Button
-    Should Not Have           Sunroom 
-    Should Not Have           Garden 
+    Should Have           Terrace
     [Teardown]      Close Browser
 
 Filter Afternoon Time
