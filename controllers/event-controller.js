@@ -79,17 +79,17 @@ const eventController = {
         res.send(doc);
     },
 
-    putPencilbookings: async function (req, res) {
-        const { id, data } = req.body;
+    putCancelEvent: async function (req, res) {
+        const { id } = req.body;
         const _id = mongoose.Types.ObjectId(id);
 
         const doc = await Event.findOneAndUpdate(
-            { _id, status: 'booked' },
-            data,
+            { _id },
+            { status: 'cancelled' },
             { returnDocument: 'after' }
         );
 
-        res.send(doc);
+        res.json(doc);
     },
 
     getPencilBookings: async function (req, res) {
@@ -293,7 +293,7 @@ const eventController = {
 
         res.render('event-tracker-reservations', data);
     },
-
+    
     getReservationsSearch: async function (req, res) {
         let query = {
             status: 'reserved',
@@ -329,6 +329,10 @@ const eventController = {
         res.render('event-tracker-reservations', data);
     },
 
+    getCancelledEvents: async function (req, res) {
+        const cancelled = await Event.aggregate([
+            { $match: { status: 'cancelled' } },
+            { $sort: { eventDate: 1 } },
     getPastEvents: async function (req, res) {
         const pastevents = await Event.aggregate([
             { $match: { status: 'finished' } },
@@ -352,6 +356,15 @@ const eventController = {
         ]);
 
         let data = {
+            cancelled: cancelled,
+        };
+
+        res.render('event-tracker-cancelled', data);
+    },
+
+    getCancelledEventsFilter: async function (req, res) {
+        let query = {
+            status: 'cancelled',
             pastevents: pastevents,
         };
 
@@ -381,6 +394,7 @@ const eventController = {
         if (req.query.sort == "date-dsc")
             sort = { eventDate: -1 };
 
+        const bookings = await Event.aggregate([
         const pastevents = await Event.aggregate([
             { $match: query },
             { $sort: sort },
@@ -403,12 +417,19 @@ const eventController = {
         ]);
 
         let data = {
+            bookings: bookings,
             pastevents: pastevents,
             venue: req.query.venue,
             time: req.query.time,
             date: req.query.date,
         };
 
+        res.render('event-tracker-cancelled', data);
+    },
+
+    getCancelledEventsSearch: async function (req, res) {
+        let query = {
+            status: 'cancelled',
         res.render('event-tracker-pastevents', data);
     },
 
@@ -419,6 +440,7 @@ const eventController = {
 
         if (req.query.name) query.clientName = req.query.name;
 
+        const bookings = await Event.aggregate([
         const pastevents = await Event.aggregate([
             { $match: query },
             {
@@ -440,6 +462,11 @@ const eventController = {
         ]);
 
         let data = {
+            bookings: bookings,
+            search: req.query.name,
+        };
+
+        res.render('event-tracker-cancelled', data);
             pastevents: pastevents,
             search: req.query.name,
         };

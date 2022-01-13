@@ -1365,6 +1365,8 @@ function checkIfFilledEventFields() {
             return true;
         }
         else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
+            $('#missing-error').val('Date cannot be in the past.');
+            return true;
             if($('#event-id').text() == '') {
                 $('#missing-error').val('Date cannot be in the past.');
                 return true;
@@ -1421,6 +1423,8 @@ function checkIfFilledEventFields() {
                 return true;
             }
             else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
+                $('#downpayment-error').val('Date cannot be in the past.');
+                return true;
                 if($('#event-id').text() == '') {
                     $('#downpayment-error').val('Date cannot be in the past.');
                     return true;
@@ -1452,6 +1456,8 @@ function checkIfFilledEventFields() {
                 return true;
             }
             else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
+                $('#final-payment-error').val('Date cannot be in the past.');
+                return true;
                 if($('#event-id').text() == '') {
                     $('#final-payment-error').val('Date cannot be in the past.');
                     return true;

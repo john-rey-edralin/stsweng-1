@@ -15,6 +15,7 @@ app.get('/event-tracker/home', eventController.getHome);
 app.get('/event-tracker/create', eventController.getCreateEvent);
 app.post('/event-tracker/submit', eventController.postCreateEvent);
 app.get('/event-tracker/edit/:id', eventController.getEditEvent);
+app.put('/event-tracker/cancel', eventController.putCancelEvent);
 app.put('/event-tracker/finish', eventController.putFinishEvent);
 
 // event-tracker form data retrieval
@@ -25,7 +26,7 @@ app.get('/event-tracker/get/packages', eventController.getPackages);
 app.get('/event-tracker/check/event-availability', eventController.getCheckEventAvailability);
 
 // event-tracker pencilbooking list
-app.route('/event-tracker/pencilbookings').get(eventController.getPencilBookings).put(eventController.putPencilbookings);
+app.route('/event-tracker/pencilbookings').get(eventController.getPencilBookings);
 app.get('/event-tracker/pencilbookings/search', eventController.getPencilBookingsSearch);
 app.get('/event-tracker/pencilbookings/filter', eventController.getPencilBookingsFilter);
 
@@ -33,6 +34,11 @@ app.get('/event-tracker/pencilbookings/filter', eventController.getPencilBooking
 app.get('/event-tracker/reservations', eventController.getReservations);
 app.get('/event-tracker/reservations/search', eventController.getReservationsSearch);
 app.get('/event-tracker/reservations/filter', eventController.getReservationsFilter);
+
+// event-tracker cancelled events list
+app.get('/event-tracker/cancelled', eventController.getCancelledEvents);
+app.get('/event-tracker/cancelled/search', eventController.getCancelledEventsSearch);
+app.get('/event-tracker/cancelled/filter', eventController.getCancelledEventsFilter);
 
 // event-tracker past events list
 app.route('/event-tracker/pastevents').get(eventController.getPastEvents);
