@@ -290,7 +290,7 @@ function initializeTooltips() {
 
 function initializeEventFields() {
     //initialize event date
-    $('#event-date').val(getDateToday());
+    setDefaultDate('event-date');
     // initialize contact number fields
     let settings = { autoPlaceholder: "aggressive", preferredCountries: ["ph"], separateDialCode: true, utilsScript: "/js/utils.js" };
     $("#client-mobile-number").intlTelInput(settings);
@@ -452,7 +452,8 @@ function initializePaymentFields() {
  */
 function downpaymentChecked() {
     //Sets the default downpayment date to today
-    $('#downpayment-date').val(getDateToday());
+    setDefaultDate('downpayment-date');
+
     //Marks the downpayment related fields as required
     $('#downpayment-date').siblings("label").addClass('required');
     $('#downpayment-mode').siblings("label").addClass('required');
@@ -468,7 +469,7 @@ function downpaymentChecked() {
  */
 function finalPaymentChecked() {
     //Sets the default final payment date to today
-    $('#final-payment-date').val(getDateToday());
+    setDefaultDate('final-payment-date');
     //Marks the final payment related fields as required
     $('#final-payment-date').siblings("label").addClass('required');
     $('#final-payment-mode').siblings("label").addClass('required');
@@ -654,9 +655,9 @@ function finalPaymentCheckFields() {
 }
 
 /**
- *  Returns the date today
+ * Sets default date to today
  */
-function getDateToday() {
+function setDefaultDate(datefield) {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1;
@@ -664,8 +665,9 @@ function getDateToday() {
     if (dd < 10) dd = '0' + dd;
     if (mm < 10) mm = '0' + mm;
     today = yyyy + '-' + mm + '-' + dd;
-    
-    return today;
+
+    var field = '#' + datefield;
+    $(field).val(today);
 }
 
 /**
@@ -1318,8 +1320,20 @@ function checkIfFilledEventFields() {
     let terrace = $('#terrace-options').val();
     let package = (garden || sunroom || terrace);
 
-    var dateMax = getDateTime("2032-01-01");
-    var dateMin = getDateTime(getDateToday());
+    var dd = 1;
+    var mm = 1;
+    var yyyy = 2032;
+    var dateMax = getDateTime(yyyy + "-" + ("0" + mm) + "-" + ("0" + dd));
+
+    var today = new Date();
+    var td = today.getDate();
+    var tm = today.getMonth() + 1;
+    var tyyy = today.getFullYear();
+    if (td < 10)
+        td = '0' + td;
+    if (tm < 10)
+        tm = '0' + tm;
+    var dateMin = getDateTime(tyyy + '-' + tm + '-' + td);
 
     if (validator.isEmpty(name)) {
         $('#missing-error').val('Client name should be filled.');
@@ -1367,10 +1381,6 @@ function checkIfFilledEventFields() {
         else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
             $('#missing-error').val('Date cannot be in the past.');
             return true;
-            if($('#event-id').text() == '') {
-                $('#missing-error').val('Date cannot be in the past.');
-                return true;
-            }
         }
         else if ((eventdate - dateMax >= 0) || isNaN(eventdate)) {
             $('#missing-error').val('Date cannot be later than 2031.');
@@ -1425,10 +1435,6 @@ function checkIfFilledEventFields() {
             else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
                 $('#downpayment-error').val('Date cannot be in the past.');
                 return true;
-                if($('#event-id').text() == '') {
-                    $('#downpayment-error').val('Date cannot be in the past.');
-                    return true;
-                }
             }
             else if ((dpaydate - dateMax >= 0) || isNaN(dpaydate)) {
                 $('#downpayment-error').val('Date cannot be later than 2031.');
@@ -1458,10 +1464,6 @@ function checkIfFilledEventFields() {
             else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
                 $('#final-payment-error').val('Date cannot be in the past.');
                 return true;
-                if($('#event-id').text() == '') {
-                    $('#final-payment-error').val('Date cannot be in the past.');
-                    return true;
-                }
             }
             else if ((fpaydate - dateMax >= 0) || isNaN(fpaydate)) {
                 $('#final-payment-error').val('Date cannot be later than 2031.');
@@ -1550,17 +1552,25 @@ function validDate(input, errorfield, id) {
         displayError($(idfield), errorfield, 'Invalid date.');
     else {
         var dateInput = getDateTime(input);
-        var dateMax = getDateTime("2032-01-01");
-        var dateMin = getDateTime(getDateToday());
+        var dd = 1;
+        var mm = 1;
+        var yyyy = 2032;
+        var dateMax = getDateTime(yyyy + '-' + ('0' + mm) + '-' + ('0' + dd));
+
+        var today = new Date();
+        var td = today.getDate();
+        var tm = today.getMonth() + 1;
+        var tyyy = today.getFullYear();
+        if (td < 10) td = '0' + td;
+        if (tm < 10) tm = '0' + tm;
+        var dateMin = getDateTime(tyyy + '-' + tm + '-' + td);
 
         if (input == '') {
             displayError($(idfield), errorfield, 'Date cannot be empty.');
             return true;
         } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
-            if($('#event-id').text() == '') {
-                displayError($(idfield), errorfield, 'Date cannot be in the past.');
-                return true;
-            }
+            displayError($(idfield), errorfield, 'Date cannot be in the past.');
+            return true;
         } else if (dateInput - dateMax >= 0 || isNaN(dateInput)) {
             displayError(
                 $(idfield),
@@ -1627,15 +1637,11 @@ function checkEventAvailability() {
                     else {
                         resetField($('#event-date'), $('#event-time-error'));
                         resetField($('#event-time'), $('#event-time-error'));
-                        if ($('#event-id').text() == '')
-                            validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
                     }
                 }
                 else {
                     resetField($('#event-date'), $('#event-time-error'));
                     resetField($('#event-time'), $('#event-time-error'));
-                    if ($('#event-id').text() == '')
-                        validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
                 }
             }
         );
