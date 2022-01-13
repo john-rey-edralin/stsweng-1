@@ -246,6 +246,14 @@ Go To Reservations
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[2]/a
     Click Element       css:*[data-bs-toggle="tooltip"]
 
+Go To Past Events
+    Open Browser    ${HOME URL}     ${BROWSER}
+    Maximize Browser Window
+    Set Selenium Speed      ${DELAY}
+    Click Element       css:*[data-bs-toggle="dropdown"]
+    Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[3]/a
+    Click Element       css:*[data-bs-toggle="tooltip"]
+
 Click Filter And Sort Button
     Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[2]/div[5]/button[2]
 
