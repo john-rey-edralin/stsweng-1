@@ -35,9 +35,14 @@ hbs.registerHelper('ifEquals', function (arg1, arg2, options) {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });
 
+hbs.registerHelper('ifNotEquals', function (arg1, arg2, options) {
+    return (arg1 != arg2) ? options.fn(this) : options.inverse(this);
+});
+
 hbs.registerHelper('multiply', function (a, b) {
     return Number(a) * Number(b);
 });
+
 
 hbs.registerHelper('getPrevMonth', function (date) {
     let current;
@@ -65,4 +70,8 @@ hbs.registerHelper('getNextMonth', function (date) {
 hbs.registerHelper('getToday', function () {
     let today = new Date()
     return `${today.getFullYear()}/${(today.getMonth() + 1).toString().padStart(2, 0)}`;
+});
+
+hbs.registerHelper('json', function (context) {
+    return JSON.stringify(context);
 });
