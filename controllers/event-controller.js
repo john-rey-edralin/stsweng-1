@@ -4,24 +4,33 @@ const Event = require('../models/event.js');
 const Charge = require('../models/charge.js');
 const Package = require('../models/package.js');
 const mongoose = require('mongoose');
+const logActivity = require('../helpers/activityLogger.js');
 
 const eventController = {
     getHome: async function (req, res) {
         let date = new Date();
-        let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+        let today = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+        let tomorrow = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate() + 1
+        );
 
         const events = await Event.aggregate([
             {
                 $match: {
                     status: {
-                        $ne: 'cancelled'
+                        $ne: 'cancelled',
                     },
                     eventDate: {
                         $gte: today,
-                        $lt: tomorrow
-                    }
-                }
+                        $lt: tomorrow,
+                    },
+                },
             },
             {
                 $lookup: {
@@ -42,7 +51,7 @@ const eventController = {
         ]);
 
         let data = {
-            events: events
+            events: events,
         };
 
         res.render('event-tracker-home', data);
@@ -53,18 +62,17 @@ const eventController = {
     },
 
     postCreateEvent: async function (req, res) {
-        const doc = await Event.create(
-            JSON.parse(req.body.data)
-        );
+        const doc = await Event.create(JSON.parse(req.body.data));
 
+        logActivity(req.user.username || 'Tester', `Created event: ${doc._id}`);
         res.send(doc);
     },
 
     getEditEvent: function (req, res) {
         db.findOne(Event, { _id: req.params.id }, '', function (result) {
             let data = {
-                event: result
-            }
+                event: result,
+            };
             res.render('event-tracker-form', data);
         });
     },
@@ -79,6 +87,11 @@ const eventController = {
             { returnDocument: 'after' }
         );
 
+        logActivity(
+            req.user.username || 'Tester',
+            `Modified reservation: ${doc._id}
+            Using information: ${data}`
+        );
         res.send(doc);
     },
 
@@ -92,6 +105,10 @@ const eventController = {
             { returnDocument: 'after' }
         );
 
+        logActivity(
+            req.session.user?.username || 'Tester',
+            `Cancelled event: ${doc._id}`
+        );
         res.json(doc);
     },
 
@@ -136,16 +153,23 @@ const eventController = {
         if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
             let date = new Date();
-            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+            let today = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate()
+            );
+            let tomorrow = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate() + 1
+            );
             query.eventDate = {
                 $gte: today,
                 $lt: tomorrow,
             };
         }
         let sort = { eventDate: 1 };
-        if (req.query.sort == "date-dsc")
-            sort = { eventDate: -1 };
+        if (req.query.sort == 'date-dsc') sort = { eventDate: -1 };
 
         const bookings = await Event.aggregate([
             { $match: query },
@@ -254,8 +278,16 @@ const eventController = {
         if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
             let date = new Date();
-            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+            let today = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate()
+            );
+            let tomorrow = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate() + 1
+            );
             query.eventDate = {
                 $gte: today,
                 $lt: tomorrow,
@@ -263,8 +295,7 @@ const eventController = {
         }
 
         let sort = { eventDate: 1 };
-        if (req.query.sort == "date-dsc")
-            sort = { eventDate: -1 };
+        if (req.query.sort == 'date-dsc') sort = { eventDate: -1 };
 
         const reservations = await Event.aggregate([
             { $match: query },
@@ -296,7 +327,7 @@ const eventController = {
 
         res.render('event-tracker-reservations', data);
     },
-    
+
     getReservationsSearch: async function (req, res) {
         let query = {
             status: 'reserved',
@@ -373,16 +404,23 @@ const eventController = {
         if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
             let date = new Date();
-            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+            let today = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate()
+            );
+            let tomorrow = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate() + 1
+            );
             query.eventDate = {
                 $gte: today,
                 $lt: tomorrow,
             };
         }
         let sort = { eventDate: 1 };
-        if (req.query.sort == "date-dsc")
-            sort = { eventDate: -1 };
+        if (req.query.sort == 'date-dsc') sort = { eventDate: -1 };
 
         const bookings = await Event.aggregate([
             { $match: query },
@@ -504,7 +542,7 @@ const eventController = {
         ]);
 
         res.send(event);
-    }
+    },
 };
 
 module.exports = eventController;
