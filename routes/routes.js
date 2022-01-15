@@ -8,6 +8,7 @@ const app = express.Router();
 
 // login
 app.get('/login', authController.getLogin);
+app.get('/', eventController.getHome);
 
 // authenticate user
 app.post('/authenticate', authController.authenticate);
