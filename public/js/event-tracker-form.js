@@ -10,6 +10,7 @@ let additionalPackageList = [];
 let variantCount = 0;
 
 let curreventID;
+let currevent;
 
 let additionalFoodTableHeader =
     '<h4 class="col-5 mb-0 mt-1"><strong>Food Item Name</strong></h4>' +
@@ -1951,11 +1952,12 @@ function submitForm() {
         };
         $('#downpayment-amount').val(downpaymentAmount);
 
-        // check if event is to be modified orr inserted into database
+        // check if event is to be modified or inserted into database
         if (curreventID) {
             let json = JSON.stringify({
                 id: curreventID,
-                data: data
+                data: data,
+                modified: getModifiedFields(data)
             });
 
             // makes a PUT request using AJAX to update the event's details
@@ -1983,8 +1985,59 @@ function submitForm() {
     });
 }
 
+function getModifiedFields(data) {
+    let modified = []
+    if (currevent.clientName != data.clientName) modified.push('Client Name');
+    if (currevent.clientMobileNumber != data.clientMobileNumber) modified.push('Client Mobile Number');
+    if (currevent.repName != data.repName) modified.push('Representative Name');
+    if (currevent.repMobileNumber != data.repMobileNumber) modified.push('Representative Mobile Number');
+    if (currevent.eventType != data.eventType) modified.push('Event Type');
+
+    let newDate = new Date(data.eventDate);
+    let oldDate = new Date(currevent.eventDate);
+    if (Number(newDate) != Number(oldDate)) modified.push('Event Date');
+    if (currevent.eventTime != data.eventTime) modified.push('Event Time');
+    if (currevent.numOfPax != data.numOfPax) modified.push('Number of Pax');
+    if (currevent.eventNotes != data.eventNotes)   modified.push('Event Notes');
+    if (JSON.stringify(currevent.eventVenues) != JSON.stringify(data.eventVenues)) modified.push('Event Venues');
+    if (JSON.stringify(currevent.eventPackages) != JSON.stringify(data.eventPackages)) modified.push('Event Packages');
+    if (currevent.packageAdditionalPax != data.packageAdditionalPax) modified.push('Additional Pax');
+
+    if (currevent.saladName != data.saladName) modified.push('Salad Name');
+    if (currevent.saladQuantity != data.saladQuantity) modified.push('Salad Quantity');
+    if (currevent.pastaName != data.pastaName) modified.push('Pasta Name');
+    if (currevent.pastaQuantity != data.pastaQuantity) modified.push('Pasta Quantity');
+    if (currevent.beefName != data.beefName) modified.push('Beef Name');
+    if (currevent.beefQuantity != data.beefQuantity) modified.push('Beef Quantity');
+    if (currevent.porkName != data.porkName) modified.push('Pork Name');
+    if (currevent.porkQuantity != data.saladQuantity) modified.push('Pork Quantity');
+    if (currevent.chickenName != data.chickenName) modified.push('Chicken Name');
+    if (currevent.chickenQuantity != data.chickenQuantity) modified.push('Chicken Quantity');
+    if (currevent.fishName != data.fishName) modified.push('Fish Name');
+    if (currevent.fishQuantity != data.fishQuantity) modified.push('Fish Quantity');
+    if (currevent.icedTeaQuantity != data.icedTeaQuantity) modified.push('Iced Tea Quantity');
+    if (currevent.riceQuantity != data.riceQuantity) modified.push('Rice Quantity');
+
+    // if (JSON.stringify(currevent.menuAdditional) != JSON.stringify(data.menuAdditional)) modified.push('Additional Food'); // TODO:
+    // if (JSON.stringify(currevent.transactionCharges) != JSON.stringify(data.transactionCharges)) modified.push('Charges'); // TODO:
+    // if (JSON.stringify(currevent.transactionDiscounts) != JSON.stringify(data.transactionDiscounts)) modified.push('Discounts'); // TODO:
+
+    newDate = new Date(data.downpaymentDate);
+    oldDate = new Date(currevent.downpaymentDate);
+    if (Number(newDate) != Number(oldDate)) modified.push('Downpayment Date');
+    if (currevent.downpaymentMode != data.downpaymentMode) modified.push('Downpayment Mode'); 
+    if (currevent.downpaymentAmount != data.downpaymentAmount) modified.push('Downpayment Amount');
+
+    newDate = new Date(data.finalPaymentDate);
+    oldDate = new Date(currevent.finalPaymentDate);
+    if (Number(newDate) != Number(oldDate)) modified.push('Final Payment Date');
+    if (currevent.finalPaymentMode != data.finalPaymentMode) modified.push('Final Payment Mode');
+    if (currevent.finalPaymentAmount != data.finalPaymentAmount) modified.push('Final Payment Amount');
+
+    return modified;
+}
+
 function addExistingFields() {
-    let currevent;
     let id = '';
     if ($('#event-id').text() != '') {
         id = $('#event-id').text();

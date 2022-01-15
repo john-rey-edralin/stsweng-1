@@ -61,3 +61,11 @@ body > .d-flex.flex-row.justify-content-center {
   background-color: #2E2E2E !important;
   color: #FFFFFF !important;
 }
+
+.booked {
+    background-color: #EEF9F3 !important;
+}
+
+.reserved {
+    background-color: #F9EEF0 !important;
+}
