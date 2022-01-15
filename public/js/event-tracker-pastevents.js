@@ -7,7 +7,7 @@ $(document).ready(function () {
 });
 
 function finishEvent(id) {
-    let json = JSON.stringify({
+    let json = JSON.stringify ({
         id: id,
     });
     $.ajax({
@@ -15,7 +15,7 @@ function finishEvent(id) {
         url: '/event-tracker/finish',
         data: json,
         contentType: 'application/json',
-        success: function (result) {
+        success: function(result) {
             window.location.href = '/event-tracker/pastevents';
         },
     });
