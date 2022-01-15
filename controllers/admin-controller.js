@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const Employee = require('../models/employee.js');
+const Activity = require('../models/activity.js');
 const saltRounds = 10;
 
 const controller = {
@@ -64,6 +65,7 @@ const controller = {
             });
         }
     },
+
     /**
      * Returns all employees registered in the database
      * Only includes 'employee' role
@@ -75,16 +77,47 @@ const controller = {
         const employees = await Employee.find({ role: 'employee' });
         res.json(employees);
     },
+
+    /**
+     * Returns all current employees registered in the database
+     * Only includes 'employee' role
+     * @name get/admin/employee/current
+     * @param {express.request} req
+     * @param {express.response} res
+     */
+    getAllCurrentEmployees: async function (req, res) {
+        const employees = await Employee.find({
+            role: 'employee',
+            hasAccess: true,
+        });
+        res.json(employees);
+    },
+
+    /**
+     * Returns all former employees registered in the database
+     * Only includes 'employee' role
+     * @name get/admin/employee/former
+     * @param {express.request} req
+     * @param {express.response} res
+     */
+    getAllFormerEmployees: async function (req, res) {
+        const employees = await Employee.find({
+            role: 'employee',
+            hasAccess: false,
+        });
+        res.json(employees);
+    },
+
     /**
      * Returns the information of the employee
      * associated with the id in the url
-     * @name get/admin/employee/:id
+     * @name get/admin/employee/:username
      * @param {express.request} req request object, must have id in its params
      * @param {express.response} res response object
      */
     getEmployee: async function (req, res) {
-        const { id } = req.params;
-        const employee = await Employee.findById(id);
+        const { username } = req.params;
+        const employee = await Employee.findOne({ username });
         const status = employee ? 200 : 404;
         res.status(status).json(employee);
     },
@@ -101,6 +134,12 @@ const controller = {
             { new: true }
         );
         res.json(result);
+    },
+
+    getEmployeeActivity: async function (req, res) {
+        const { username } = req.params;
+        const activity = await Activity.find({ username });
+        res.json(activity);
     },
 };
 
