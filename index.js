@@ -33,7 +33,6 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 //check if current user has logged in
 app.use('/', (req, res, next) => {
-    console.log(req.session);
     if (
         req.session.loggedIn ||
         req.path === '/login' ||
