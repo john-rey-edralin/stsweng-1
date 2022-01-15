@@ -42,3 +42,7 @@ hbs.registerHelper('ifNotEquals', function (arg1, arg2, options) {
 hbs.registerHelper('multiply', function (a, b) {
     return Number(a) * Number(b);
 });
+
+hbs.registerHelper('json', function (context) {
+    return JSON.stringify(context);
+});
