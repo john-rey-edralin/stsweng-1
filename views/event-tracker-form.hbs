@@ -16,7 +16,7 @@
     <script type="text/javascript" src="/js/jquery-ui.js"></script>
     <script type="text/javascript" src="/js/intlTelInput-jquery.min.js"></script>
     <script type="text/javascript" src="/js/validator.min.js"></script>
-    <script type="text/javascript" src="/js/event-tracker-editform.js"></script>
+    <script type="text/javascript" src="/js/event-tracker-form.js"></script>
 </head>
 
 <body class="d-flex flex-column position-relative" data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="50"
@@ -24,7 +24,7 @@
     <nav class="navbar navbar-expand-xl bg-dark sticky-top shadow-sm" id="navbar">
         <div class="container-fluid">
             <div class="me-auto">
-                <span class="material-icons-two-tone md-light md-btn md-24" data-bs-toggle="modal"
+                <span class="material-icons-two-tone md-light md-btsn md-24" data-bs-toggle="modal"
                     data-bs-target="#confirm-exit-modal">arrow_back_ios</span>
             </div>
             <ul class="nav nav-pills">
@@ -52,7 +52,7 @@
             {{!-- FORM TITLE --}}
             <div class="d-flex flex-row">
                 <div id="form-title" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-2">
-                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">class</span> EDIT EVENT
+                    <h1 class="mb-0 mt-1"><span class="material-icons-two-tone mb-1 md-48">class</span> CREATE EVENT
                     </h1>
                 </div>
             </div>
@@ -95,14 +95,14 @@
                                 <input type="text" class="form-control" id="representative-name"
                                     name="representative-name" value="{{event.repName}}">
                                 <div id="representative-name-help" class="form-text">Authorized representative of the
-                                    client.</div>
+                                    client. <span class="fw-bold">Optional.</span></div>
                             </div>
                             <div class="form-group my-3">
                                 <label for="representative-contact-number">Representative Mobile Number</label>
                                 <input type="tel" class="form-control" id="representative-mobile-number"
                                     name="representative-mobile-number" value="{{event.repMobileNumber}}">
                                 <div id="representative-mobile-number-help" class="form-text">Country code can be
-                                    changed if needed.
+                                    changed if needed. <span class="fw-bold">Optional.</span>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +118,7 @@
                             </div>
                             <div class="form-group my-3">
                                 <label for="event-date">Date of Event</label>
-                                <input type="date" class="form-control w-75" id="event-date" name="event-date" required>
+                                <input type="date" class="form-control w-100" id="event-date" name="event-date" required>
                                 <div id="event-date-help" class="form-text">Choose a date from the date picker.</div>
                             </div>
                             <div class="form-group my-3">
@@ -141,7 +141,7 @@
 
                         {{!-- PACKAGE AND NOTES --}}
                         <div class="col-5 px-4 d-flex flex-column">
-                            <label class="mt-3 required" for="">Event Venue and Package</label>
+                            <label class="mt-3 required package" for="">Event Venue and Package</label>
 
                             {{!-- GARDEN OPTIONS --}}
                             <div class="input-group mb-1">
@@ -198,7 +198,7 @@
                                 <textarea class="form-control" id="event-notes" name="event-notes" rows="4" value="{{event.eventNotes}}"></textarea>
                                 <div id="event-notes-help" name class="form-text">Additional details about the event, if
                                     any.
-                                    The box can be resized by dragging the lower-right corner.
+                                    The box can be resized by dragging the lower-right corner. <span class="fw-bold">Optional.</span>
                                 </div>
                             </div>
                         </div>
@@ -761,14 +761,14 @@
                                 <div class="col-4"></div>
                                 <div class="col form-group my-3">
                                     <label for="payment-amount-total">Total Amount Paid</label>
-                                    <input type="number" class="form-control static" id="payment-amount-total"
+                                    <input type="text" class="form-control static" id="payment-amount-total"
                                         name="payment-amount-total" disabled>
                                     <div id="payment-amount-total-help" class="form-text">Total amount paid by the
                                         client.</div>
                                 </div>
                                 <div class="col form-group my-3">
                                     <label for="payment-balance">Balance</label>
-                                    <input type="number" class="form-control static" id="payment-balance"
+                                    <input type="text" class="form-control static" id="payment-balance"
                                         name="payment-balance" disabled>
                                     <div id="payment-balance-help" class="form-text">Amount owed by the client.</div>
                                 </div>
@@ -787,7 +787,7 @@
                 {{!-- SUBMIT BUTTON --}}
                 <div class="d-flex flex-row">
                     <div id="submit-button" class="shadow-sm bg-light rounded-lg py-3 px-4 ms-auto">
-                        <a data-bs-toggle="tooltip" data-placement="left" title="Tip: Double check the required* fields">
+                        <a data-bs-toggle="tooltip" data-placement="left" title="Tip: Double check the [required] fields">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-submit-modal"
                             class="btn btn-light" id="submit">Submit</button></a>
                     </div>
