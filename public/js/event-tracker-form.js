@@ -277,9 +277,9 @@ function retrieveInfoFromDB() {
                 })
             );
         });
+        
+        addExistingFields();
     });
-
-    addExistingFields();
 }
 
 function initializeTooltips() {
