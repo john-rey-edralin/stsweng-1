@@ -665,7 +665,7 @@ function getDateToday() {
     if (dd < 10) dd = '0' + dd;
     if (mm < 10) mm = '0' + mm;
     today = yyyy + '-' + mm + '-' + dd;
-    
+
     return today;
 }
 
@@ -1227,7 +1227,7 @@ function initializeRealTimeValidation() {
             resetField($('#representative-mobile-number'), $('#rep-number-error'));
         else
             displayError($('#representative-mobile-number'), $('#rep-number-error'), 'Invalid representative mobile number.');
-        $('#submit').attr("disabled", checkIfFilledEventFields());    
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#additional-quantity').change(function () {
@@ -1366,7 +1366,7 @@ function checkIfFilledEventFields() {
             return true;
         }
         else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
-            if($('#event-id').text() == '') {
+            if ($('#event-id').text() == '') {
                 $('#missing-error').val('Date cannot be in the past.');
                 return true;
             }
@@ -1422,7 +1422,7 @@ function checkIfFilledEventFields() {
                 return true;
             }
             else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
-                if($('#event-id').text() == '') {
+                if ($('#event-id').text() == '') {
                     $('#downpayment-error').val('Date cannot be in the past.');
                     return true;
                 }
@@ -1453,7 +1453,7 @@ function checkIfFilledEventFields() {
                 return true;
             }
             else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
-                if($('#event-id').text() == '') {
+                if ($('#event-id').text() == '') {
                     $('#final-payment-error').val('Date cannot be in the past.');
                     return true;
                 }
@@ -1552,7 +1552,7 @@ function validDate(input, errorfield, id) {
             displayError($(idfield), errorfield, 'Date cannot be empty.');
             return true;
         } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
-            if($('#event-id').text() == '') {
+            if ($('#event-id').text() == '') {
                 displayError($(idfield), errorfield, 'Date cannot be in the past.');
                 return true;
             }
@@ -1832,7 +1832,7 @@ function submitForm() {
         $('.additional-item').each(function () {
             menuAdditional.push({
                 foodItem: getFoodID($(this).children('.additional-item-name').text()),
-                foodQuantity: $(this).children('.additional-item-quantity').text(),
+                foodQuantity: Number($(this).children('.additional-item-quantity').text()),
                 foodCost: parseFloat($(this).children('.additional-item-quantity').text()) * getMenuItemPrice($(this).children('.additional-item-name').text())
             });
         });
@@ -1842,7 +1842,7 @@ function submitForm() {
         $('.extra-charges-item').each(function () {
             transactionCharges.push({
                 chargeName: $(this).children('.extra-charges-item-name').text(),
-                chargeQuantity: $(this).children('.extra-charges-item-quantity').text(),
+                chargeQuantity: Number($(this).children('.extra-charges-item-quantity').text()),
                 chargePrice: formatAsNumber($(this).children('.extra-charges-item-price').text())
             });
         });
@@ -1986,7 +1986,7 @@ function getModifiedFields(data) {
     if (Number(newDate) != Number(oldDate)) modified.push('Event Date');
     if (currevent.eventTime != data.eventTime) modified.push('Event Time');
     if (currevent.numOfPax != data.numOfPax) modified.push('Number of Pax');
-    if (currevent.eventNotes != data.eventNotes)   modified.push('Event Notes');
+    if (currevent.eventNotes != data.eventNotes) modified.push('Event Notes');
     if (JSON.stringify(currevent.eventVenues) != JSON.stringify(data.eventVenues)) modified.push('Event Venues');
     if (JSON.stringify(currevent.eventPackages) != JSON.stringify(data.eventPackages)) modified.push('Event Packages');
     if (currevent.packageAdditionalPax != data.packageAdditionalPax) modified.push('Additional Pax');
@@ -2006,21 +2006,26 @@ function getModifiedFields(data) {
     if (currevent.icedTeaQuantity != data.icedTeaQuantity) modified.push('Iced Tea Quantity');
     if (currevent.riceQuantity != data.riceQuantity) modified.push('Rice Quantity');
 
-    // if (JSON.stringify(currevent.menuAdditional) != JSON.stringify(data.menuAdditional)) modified.push('Additional Food'); // TODO:
-    // if (JSON.stringify(currevent.transactionCharges) != JSON.stringify(data.transactionCharges)) modified.push('Charges'); // TODO:
-    // if (JSON.stringify(currevent.transactionDiscounts) != JSON.stringify(data.transactionDiscounts)) modified.push('Discounts'); // TODO:
+    if (JSON.stringify(currevent.menuAdditional, ['foodItem', 'foodQuantity', 'foodCost'])
+        != JSON.stringify(data.menuAdditional, ['foodItem', 'foodQuantity', 'foodCost'])) modified.push('Additional Food');
+    if (JSON.stringify(currevent.transactionCharges, ['chargeName', 'chargeQuantity', 'chargePrice'])
+        != JSON.stringify(data.transactionCharges, ['chargeName', 'chargeQuantity', 'chargePrice'])) modified.push('Charges');
+    if (JSON.stringify(currevent.transactionDiscounts, ['discountName', 'discountPrice'])
+        != JSON.stringify(data.transactionDiscounts, ['discountName', 'discountPrice'])) modified.push('Discounts');
 
     newDate = new Date(data.downpaymentDate);
     oldDate = new Date(currevent.downpaymentDate);
     if (Number(newDate) != Number(oldDate)) modified.push('Downpayment Date');
-    if (currevent.downpaymentMode != data.downpaymentMode) modified.push('Downpayment Mode'); 
+    if (currevent.downpaymentMode != data.downpaymentMode) modified.push('Downpayment Mode');
     if (currevent.downpaymentAmount != data.downpaymentAmount) modified.push('Downpayment Amount');
 
-    newDate = new Date(data.finalPaymentDate);
-    oldDate = new Date(currevent.finalPaymentDate);
-    if (Number(newDate) != Number(oldDate)) modified.push('Final Payment Date');
-    if (currevent.finalPaymentMode != data.finalPaymentMode) modified.push('Final Payment Mode');
-    if (currevent.finalPaymentAmount != data.finalPaymentAmount) modified.push('Final Payment Amount');
+    if (currevent.finalPaymentDate != null) {
+        newDate = new Date(data.finalPaymentDate);
+        oldDate = new Date(currevent.finalPaymentDate);
+        if (Number(newDate) != Number(oldDate)) modified.push('Final Payment Date');
+        if (currevent.finalPaymentMode != data.finalPaymentMode) modified.push('Final Payment Mode');
+        if (currevent.finalPaymentAmount != data.finalPaymentAmount) modified.push('Final Payment Amount');
+    }
 
     return modified;
 }
