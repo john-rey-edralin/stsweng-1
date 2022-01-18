@@ -8,7 +8,7 @@
         {{#ifEquals eventTime "Evening"}}
         <span class="event-icon material-icons-two-tone md-36 navy-icon">dark_mode</span>
         {{/ifEquals}}
-        {{formatDate eventDate}}: {{eventVenues}}
+        {{formatDate eventDate}}: {{formatArray eventVenues}}
     </h1>
     <h1 class="mb-0 mt-1">{{clientName}}</h1>
 </div>
@@ -44,7 +44,7 @@
                     <div class="rounded-pill bg-gray p-2 me-2">
                         <h4 class="fw-bold text-white mx-2 mb-0 mt-1"><span
                                 class="event-icon material-icons-two-tone md-36 white-icon">location_on</span>
-                            {{eventVenues}}
+                            {{formatArray eventVenues}}
                         </h4>
                     </div>
                 </div>
