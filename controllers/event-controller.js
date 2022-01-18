@@ -66,6 +66,35 @@ const eventController = {
         });
     },
 
+    getPrintEvent: async function (req, res) {
+        const _id = mongoose.Types.ObjectId(req.params.id);
+        const event = await Event.aggregate([
+            { $match: { _id} },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        let data = {
+            event: event
+        }
+        console.log(data)
+        res.render('event-tracker-receipt', data);
+    },
+
     putReservations: async function (req, res) {
         const { id, data } = req.body;
         const _id = mongoose.Types.ObjectId(id);
@@ -79,6 +108,7 @@ const eventController = {
         res.send(doc);
     },
 
+
     putCancelEvent: async function (req, res) {
         const { id } = req.body;
         const _id = mongoose.Types.ObjectId(id);
@@ -90,6 +120,19 @@ const eventController = {
         );
 
         res.json(doc);
+    },
+      
+    putPencilbookings: async function (req, res) {
+        const { id, data } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Event.findOneAndUpdate(
+            { _id, status: 'booked' },
+            data,
+            { returnDocument: 'after' }
+        );
+
+        res.send(doc);
     },
 
     getPencilBookings: async function (req, res) {

@@ -31,6 +31,10 @@ hbs.registerHelper('formatMoney', function (money) {
     });
 });
 
+hbs.registerHelper('formatArray', function (array) {
+    return array.join(', ');
+});
+
 hbs.registerHelper('ifEquals', function (arg1, arg2, options) {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });
@@ -41,4 +45,8 @@ hbs.registerHelper('ifNotEquals', function (arg1, arg2, options) {
 
 hbs.registerHelper('multiply', function (a, b) {
     return Number(a) * Number(b);
+});
+
+hbs.registerHelper('json', function (context) {
+    return JSON.stringify(context);
 });

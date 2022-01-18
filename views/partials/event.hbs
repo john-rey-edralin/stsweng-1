@@ -1,5 +1,5 @@
 {{!-- LIST --}}
-<div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4" data-bs-toggle="modal"
+<div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4 {{status}}" data-bs-toggle="modal"
     data-bs-target="#modal-{{_id}}">
     <h1 class="mb-0 mt-1">
         {{#ifEquals eventTime "Afternoon"}}
@@ -8,7 +8,7 @@
         {{#ifEquals eventTime "Evening"}}
         <span class="event-icon material-icons-two-tone md-36 navy-icon">dark_mode</span>
         {{/ifEquals}}
-        {{formatDate eventDate}}: {{eventVenues}}
+        {{formatDate eventDate}}: {{formatArray eventVenues}}
     </h1>
     <h1 class="mb-0 mt-1">{{clientName}}</h1>
 </div>
@@ -44,7 +44,7 @@
                     <div class="rounded-pill bg-gray p-2 me-2">
                         <h4 class="fw-bold text-white mx-2 mb-0 mt-1"><span
                                 class="event-icon material-icons-two-tone md-36 white-icon">location_on</span>
-                            {{eventVenues}}
+                            {{formatArray eventVenues}}
                         </h4>
                     </div>
                 </div>
@@ -256,6 +256,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger me-auto" data-bs-target="#modal-{{_id}}-cancel"
                     data-bs-toggle="modal">Cancel Event</button>
+                <a class="btn btn-secondary" href="/event-tracker/print/{{_id}}" role="button">Print</a>
                 <a class="btn btn-secondary" href="/event-tracker/edit/{{_id}}" role="button">Edit</a>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mark as
                     Done</button>
