@@ -1,5 +1,5 @@
 {{!-- LIST --}}
-<div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4 {{status}}" data-bs-toggle="modal"
+<div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4 {{status}}" id="list-{{_id}}" data-bs-toggle="modal"
     data-bs-target="#modal-{{_id}}">
     <h1 class="mb-0 mt-1">
         {{#ifEquals eventTime "Afternoon"}}
@@ -254,14 +254,15 @@
             </div>
             {{#ifNotEquals status "finished"}}
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger me-auto" data-bs-target="#modal-{{_id}}-cancel"
+                <button type="button" id="cancel-btn-{{_id}}" class="btn btn-danger me-auto" data-bs-target="#modal-{{_id}}-cancel"
                     data-bs-toggle="modal" data-bs-dismiss="modal">Cancel Event</button>
-                <a class="btn btn-secondary" href="/event-tracker/print/{{_id}}" role="button">Print</a>
-                <a class="btn btn-secondary" href="/event-tracker/edit/{{_id}}" role="button">Edit</a>
+                <a class="btn btn-secondary" id="print-btn-{{_id}}" href="/event-tracker/print/{{_id}}" role="button">Print</a>
+                <a class="btn btn-secondary" id="edit-btn-{{_id}}" href="/event-tracker/edit/{{_id}}" role="button">Edit</a>
                 {{#ifEquals status "reserved"}}
+
                 {{#checkIfFutureDate eventDate}}
                 {{#checkIfFinalPayment finalPaymentAmount}}
-                <button type="button" class="btn btn-secondary" data-bs-target="#modal-{{_id}}-finish"
+                <button type="button" id="finish-btn-{{_id}}"  class="btn btn-secondary" data-bs-target="#modal-{{_id}}-finish"
                     data-bs-toggle="modal" data-bs-dismiss="modal">Mark as
                     Done</button>
                 {{/checkIfFinalPayment}}    
@@ -287,7 +288,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary me-auto" data-bs-toggle="modal"
                     data-bs-target="#modal-{{_id}}" data-bs-dismiss="modal">Back</button>
-                <button type="button" class="btn btn-success " data-bs-dismiss="modal"
+                <button type="button" id="done-btn-yes-{{_id}}" class="btn btn-success " data-bs-dismiss="modal"
                     onclick="finishEvent('{{_id}}')">Continue</button>
             </div>
         </div>
