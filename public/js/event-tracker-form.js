@@ -1969,10 +1969,12 @@ function submitForm() {
                 modified: getModifiedFields(data)
             });
 
+            let url = (currevent.status === 'booked') ? '/event-tracker/pencilbookings' : getRoute()
+            
             // makes a PUT request using AJAX to update the event's details
             $.ajax({
                 type: 'PUT',
-                url: getRoute(),
+                url: url,
                 data: json,
                 contentType: 'application/json',
                 success: function (result) {
