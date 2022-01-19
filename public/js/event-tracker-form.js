@@ -1169,10 +1169,11 @@ function initializeRealTimeValidation() {
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
-    $("#event-date").on("change", function () {
-        var eventdate = document.getElementById("event-date").value;
-        validDate(eventdate, $('#event-date-error'), "event-date");
-        checkEventAvailability();
+    $('#event-type').on("autocompletechange", function () {
+        var eventtype = validator.trim($(this).val());
+        if (validator.isEmpty(eventtype))
+            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
+        else resetField($(this), $('#event-type-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
