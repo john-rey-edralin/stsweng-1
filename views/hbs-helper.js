@@ -16,7 +16,7 @@ hbs.registerHelper('formatDate', function (date) {
 hbs.registerHelper('formatDateShort', function (date) {
     if (date) {
         date = new Date(date);
-        let month = (date.getMonth()+1).toString().padStart(2, 0);
+        let month = (date.getMonth() + 1).toString().padStart(2, 0);
         let day = date.getDate().toString().padStart(2, 0);
         let year = date.getFullYear().toString();
         return `${month}/${day}/${year}`;
@@ -31,12 +31,26 @@ hbs.registerHelper('formatMoney', function (money) {
     });
 });
 
+hbs.registerHelper('formatArray', function (array) {
+    return array.join(', ');
+});
+
 hbs.registerHelper('ifEquals', function (arg1, arg2, options) {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });
 
 hbs.registerHelper('ifNotEquals', function (arg1, arg2, options) {
     return (arg1 != arg2) ? options.fn(this) : options.inverse(this);
+});
+
+hbs.registerHelper('checkIfFutureDate', function (date, options) {
+    date = new Date(date);
+    today = new Date();
+    return (date <= today) ? options.fn(this) : options.inverse(this);
+});
+
+hbs.registerHelper('checkIfFinalPayment', function (payment, options) {
+    return (payment != null) ? options.fn(this) : options.inverse(this);
 });
 
 hbs.registerHelper('multiply', function (a, b) {
