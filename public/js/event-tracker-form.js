@@ -1201,8 +1201,11 @@ function initializeRealTimeValidation() {
     });
 
     $('.venue-checkbox').change(function () {
-        var checked = $("input[type=checkbox]:checked").length;
-        if (checked <= 0)
+        let garden = $('#venue-garden').is(":checked");
+        let sunroom = $('#venue-sunroom').is(":checked");
+        let terrace = $('#venue-terrace').is(":checked");
+        let venue = (garden || sunroom || terrace);
+        if (!venue)
             displayError($('.venue-checkbox'), $('#missing-error'), 'At least 1 venue should be checked.');
         else
             resetField($('.venue-checkbox'), $('#missing-error'));
