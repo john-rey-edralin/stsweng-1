@@ -31,7 +31,7 @@ app.get('/event-tracker/pencilbookings/search', eventController.getPencilBooking
 app.get('/event-tracker/pencilbookings/filter', eventController.getPencilBookingsFilter);
 
 // event-tracker reservation list
-app.route('/event-tracker/reservations'.get(eventController.getReservations).put(eventController.putReservations);
+app.route('/event-tracker/reservations').get(eventController.getReservations).put(eventController.putReservations);
 app.get('/event-tracker/reservations/search', eventController.getReservationsSearch);
 app.get('/event-tracker/reservations/filter',eventController.getReservationsFilter);
 
