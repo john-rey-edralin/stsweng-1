@@ -381,6 +381,14 @@ function initializeMenuFields() {
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(foodNameList, request.term);
             response(results.slice(0, 5));
+        },
+        change: function (event, ui) {
+            if (!ui.item) {
+                $(event.target).val("");
+            }
+        },
+        focus: function (event, ui) {
+            return false;
         }
     });
 
