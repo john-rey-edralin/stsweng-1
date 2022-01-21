@@ -108,6 +108,18 @@ const eventController = {
         res.send(doc);
     },
 
+    putPencilbookings: async function (req, res) {
+        const { id, data } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Event.findOneAndUpdate(
+            { _id, status: 'booked' },
+            data,
+            { returnDocument: 'after' }
+        );
+
+        res.send(doc);
+    },
 
     putCancelEvent: async function (req, res) {
         const { id } = req.body;
@@ -121,18 +133,18 @@ const eventController = {
 
         res.json(doc);
     },
-      
-    putPencilbookings: async function (req, res) {
-        const { id, data } = req.body;
+
+    putFinishEvent: async function (req, res) {
+        const { id } = req.body;
         const _id = mongoose.Types.ObjectId(id);
 
         const doc = await Event.findOneAndUpdate(
-            { _id, status: 'booked' },
-            data,
+            { _id },
+            { status: 'finished' },
             { returnDocument: 'after' }
         );
 
-        res.send(doc);
+        res.json(doc);
     },
 
     getPencilBookings: async function (req, res) {
@@ -489,6 +501,124 @@ const eventController = {
 
         res.render('event-tracker-cancelled', data);
     },
+
+    getPastEvents: async function (req, res) {
+        const pastevents = await Event.aggregate([
+            { $match: { status: 'finished' } },
+            { $sort: { eventDate: -1 } },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        let data = {
+            pastevents: pastevents,
+        };
+
+        res.render('event-tracker-pastevents', data);
+    },
+
+    getPastEventsFilter: async function (req, res) {
+        let query = {
+            status: 'finished',
+        };
+
+        if (req.query.venue)
+            query.eventVenues = {
+                $in: [req.query.venue],
+            };
+        if (req.query.time) query.eventTime = req.query.time;
+        if (req.query.date) {
+            let date = new Date();
+            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+            query.eventDate = {
+                $gte: today,
+                $lt: tomorrow,
+            };
+        }
+        let sort = { eventDate: 1 };
+        if (req.query.sort == "date-dsc")
+            sort = { eventDate: -1 };
+
+        const pastevents = await Event.aggregate([
+            { $match: query },
+            { $sort: sort },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        let data = {
+            pastevents: pastevents,
+            venue: req.query.venue,
+            time: req.query.time,
+            date: req.query.date,
+        };
+
+        res.render('event-tracker-pastevents', data);
+    },
+
+    getPastEventsSearch: async function (req, res) {
+        let query = {
+            status: 'finished',
+        };
+
+        if (req.query.name) query.clientName = req.query.name;
+
+        const pastevents = await Event.aggregate([
+            { $match: query },
+            {
+                $lookup: {
+                    from: 'packages',
+                    localField: 'eventPackages',
+                    foreignField: '_id',
+                    as: 'packageList',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'foods',
+                    localField: 'menuAdditional.foodItem',
+                    foreignField: '_id',
+                    as: 'foodList',
+                },
+            },
+        ]);
+
+        let data = {
+            pastevents: pastevents,
+            search: req.query.name,
+        };
+
+        res.render('event-tracker-pastevents', data);
+    },  
 
     getFood: function (req, res) {
         let projection = 'name price';
