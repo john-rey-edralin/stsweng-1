@@ -381,14 +381,6 @@ function initializeMenuFields() {
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(foodNameList, request.term);
             response(results.slice(0, 5));
-        },
-        change: function (event, ui) {
-            if (!ui.item) {
-                $(event.target).val("");
-            }
-        },
-        focus: function (event, ui) {
-            return false;
         }
     });
 
@@ -1168,20 +1160,10 @@ function initializeRealTimeValidation() {
         else resetField($(this), $('#event-type-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
-
-    $('#event-type').on("change", function () {
-        var eventtype = validator.trim($(this).val());
-        if (validator.isEmpty(eventtype))
-            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
-        else resetField($(this), $('#event-type-error'));
-        $('#submit').attr("disabled", checkIfFilledEventFields());
-    });
-
-    $('#event-type').on("autocompletechange", function () {
-        var eventtype = validator.trim($(this).val());
-        if (validator.isEmpty(eventtype))
-            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
-        else resetField($(this), $('#event-type-error'));
+    $("#event-date").on("change", function () {
+        var eventdate = document.getElementById("event-date").value;
+        validDate(eventdate, $('#event-date-error'), "event-date");
+        checkEventAvailability();
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -1209,11 +1191,8 @@ function initializeRealTimeValidation() {
     });
 
     $('.venue-checkbox').change(function () {
-        let garden = $('#venue-garden').is(":checked");
-        let sunroom = $('#venue-sunroom').is(":checked");
-        let terrace = $('#venue-terrace').is(":checked");
-        let venue = (garden || sunroom || terrace);
-        if (!venue)
+        var checked = $("input[type=checkbox]:checked").length;
+        if (checked <= 0)
             displayError($('.venue-checkbox'), $('#missing-error'), 'At least 1 venue should be checked.');
         else
             resetField($('.venue-checkbox'), $('#missing-error'));
@@ -1969,12 +1948,10 @@ function submitForm() {
                 modified: getModifiedFields(data)
             });
 
-            let url = (currevent.status === 'booked') ? '/event-tracker/pencilbookings' : getRoute()
-            
             // makes a PUT request using AJAX to update the event's details
             $.ajax({
                 type: 'PUT',
-                url: url,
+                url: getRoute(),
                 data: json,
                 contentType: 'application/json',
                 success: function (result) {

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/material-icons.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css">
@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
 
     <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/js/event-tracker-reservations.js"></script>
 </head>
 
@@ -72,7 +72,7 @@
                         <div class="form-group m-3">
                             <label for="filter-venue">Venue</label>
                             <select class="form-control form-select" id="venue" name="venue">
-                                <option value="" selected value>Select an option...</option>
+                                <option value="" selected value>None</option>
                                 <option value="Garden">Garden</option>
                                 <option value="Sunroom">Sunroom</option>
                                 <option value="Terrace">Terrace</option>
@@ -81,7 +81,7 @@
                         <div class="form-group m-3">
                             <label for="filter-venue">Time</label>
                             <select class="form-control form-select" id="time" name="time">
-                                <option value="" selected value>Select an option...</option>
+                                <option value="" selected value>None</option>
                                 <option value="Afternoon">Afternoon (11:00 AM - 02:00 PM)</option>
                                 <option value="Evening">Evening (04:00 PM - 07:00 PM)</option>
                             </select>
@@ -93,8 +93,7 @@
                         <h5 class="fw-bold mt-5 mb-3">SORT BY</h5>
                         <div class="form-group m-3">
                             <select class="form-control form-select" id="sort" name="sort">
-                                <option value="" selected value>Select an option...</option>
-                                <option value="date-asc">Date (Ascending)</option>
+                                <option value="date-asc" selected value>Date (Ascending)</option>
                                 <option value="date-dsc">Date (Descending)</option>
                             </select>
                         </div>
