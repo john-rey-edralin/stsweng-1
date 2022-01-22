@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   A test suite with a 7 tests for validation in Create Event Page
+Documentation   A test suite with a 7 tests for validation in Edit Event Page for Reservations
 ...             
 ...             This test follows the keywords from
 ...             the resource.robot

@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   A test suite with a 2 tests for saving created event in Create Event Page
+Documentation   A test suite with a 1 tests for checking pencilbookings in Pencilbookings Page
 ...             
 ...             This test follows the keywords from
 ...             the resource.robot
