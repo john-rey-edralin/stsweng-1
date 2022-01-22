@@ -10,6 +10,7 @@ let additionalPackageList = [];
 let variantCount = 0;
 
 let curreventID;
+let currevent;
 
 let additionalFoodTableHeader =
     '<h4 class="col-5 mb-0 mt-1"><strong>Food Item Name</strong></h4>' +
@@ -276,9 +277,9 @@ function retrieveInfoFromDB() {
                 })
             );
         });
+        
+        addExistingFields();
     });
-
-    addExistingFields();
 }
 
 function initializeTooltips() {
@@ -322,6 +323,14 @@ function initializeEventFields() {
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(eventTypeTags, request.term);
             response(results.slice(0, 5));
+        },
+        change: function (event, ui) {
+            if (!ui.item) {
+                $(event.target).val("");
+            }
+        },
+        focus: function (event, ui) {
+            return false;
         }
     });
 
@@ -664,7 +673,7 @@ function getDateToday() {
     if (dd < 10) dd = '0' + dd;
     if (mm < 10) mm = '0' + mm;
     today = yyyy + '-' + mm + '-' + dd;
-    
+
     return today;
 }
 
@@ -1159,6 +1168,22 @@ function initializeRealTimeValidation() {
         else resetField($(this), $('#event-type-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
+
+    $('#event-type').on("change", function () {
+        var eventtype = validator.trim($(this).val());
+        if (validator.isEmpty(eventtype))
+            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
+        else resetField($(this), $('#event-type-error'));
+        $('#submit').attr("disabled", checkIfFilledEventFields());
+    });
+
+    $('#event-type').on("autocompletechange", function () {
+        var eventtype = validator.trim($(this).val());
+        if (validator.isEmpty(eventtype))
+            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
+        else resetField($(this), $('#event-type-error'));
+    });
+
     $("#event-date").on("change", function () {
         var eventdate = document.getElementById("event-date").value;
         validDate(eventdate, $('#event-date-error'), "event-date");
@@ -1190,8 +1215,11 @@ function initializeRealTimeValidation() {
     });
 
     $('.venue-checkbox').change(function () {
-        var checked = $("input[type=checkbox]:checked").length;
-        if (checked <= 0)
+        let garden = $('#venue-garden').is(":checked");
+        let sunroom = $('#venue-sunroom').is(":checked");
+        let terrace = $('#venue-terrace').is(":checked");
+        let venue = (garden || sunroom || terrace);
+        if (!venue)
             displayError($('.venue-checkbox'), $('#missing-error'), 'At least 1 venue should be checked.');
         else
             resetField($('.venue-checkbox'), $('#missing-error'));
@@ -1226,7 +1254,7 @@ function initializeRealTimeValidation() {
             resetField($('#representative-mobile-number'), $('#rep-number-error'));
         else
             displayError($('#representative-mobile-number'), $('#rep-number-error'), 'Invalid representative mobile number.');
-        $('#submit').attr("disabled", checkIfFilledEventFields());    
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#additional-quantity').change(function () {
@@ -1365,7 +1393,7 @@ function checkIfFilledEventFields() {
             return true;
         }
         else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
-            if($('#event-id').text() == '') {
+            if ($('#event-id').text() == '') {
                 $('#missing-error').val('Date cannot be in the past.');
                 return true;
             }
@@ -1421,7 +1449,7 @@ function checkIfFilledEventFields() {
                 return true;
             }
             else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
-                if($('#event-id').text() == '') {
+                if ($('#event-id').text() == '') {
                     $('#downpayment-error').val('Date cannot be in the past.');
                     return true;
                 }
@@ -1452,7 +1480,7 @@ function checkIfFilledEventFields() {
                 return true;
             }
             else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
-                if($('#event-id').text() == '') {
+                if ($('#event-id').text() == '') {
                     $('#final-payment-error').val('Date cannot be in the past.');
                     return true;
                 }
@@ -1551,7 +1579,7 @@ function validDate(input, errorfield, id) {
             displayError($(idfield), errorfield, 'Date cannot be empty.');
             return true;
         } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
-            if($('#event-id').text() == '') {
+            if ($('#event-id').text() == '') {
                 displayError($(idfield), errorfield, 'Date cannot be in the past.');
                 return true;
             }
@@ -1831,7 +1859,7 @@ function submitForm() {
         $('.additional-item').each(function () {
             menuAdditional.push({
                 foodItem: getFoodID($(this).children('.additional-item-name').text()),
-                foodQuantity: $(this).children('.additional-item-quantity').text(),
+                foodQuantity: Number($(this).children('.additional-item-quantity').text()),
                 foodCost: parseFloat($(this).children('.additional-item-quantity').text()) * getMenuItemPrice($(this).children('.additional-item-name').text())
             });
         });
@@ -1841,7 +1869,7 @@ function submitForm() {
         $('.extra-charges-item').each(function () {
             transactionCharges.push({
                 chargeName: $(this).children('.extra-charges-item-name').text(),
-                chargeQuantity: $(this).children('.extra-charges-item-quantity').text(),
+                chargeQuantity: Number($(this).children('.extra-charges-item-quantity').text()),
                 chargePrice: formatAsNumber($(this).children('.extra-charges-item-price').text())
             });
         });
@@ -1939,17 +1967,20 @@ function submitForm() {
         };
         $('#downpayment-amount').val(downpaymentAmount);
 
-        // check if event is to be modified orr inserted into database
+        // check if event is to be modified or inserted into database
         if (curreventID) {
             let json = JSON.stringify({
                 id: curreventID,
-                data: data
+                data: data,
+                modified: getModifiedFields(data)
             });
+
+            let url = (currevent.status === 'booked') ? '/event-tracker/pencilbookings' : getRoute()
 
             // makes a PUT request using AJAX to update the event's details
             $.ajax({
                 type: 'PUT',
-                url: getRoute(),
+                url: url,
                 data: json,
                 contentType: 'application/json',
                 success: function (result) {
@@ -1971,8 +2002,64 @@ function submitForm() {
     });
 }
 
+function getModifiedFields(data) {
+    let modified = []
+    if (currevent.clientName != data.clientName) modified.push('Client Name');
+    if (currevent.clientMobileNumber != data.clientMobileNumber) modified.push('Client Mobile Number');
+    if (currevent.repName != data.repName) modified.push('Representative Name');
+    if (currevent.repMobileNumber != data.repMobileNumber) modified.push('Representative Mobile Number');
+    if (currevent.eventType != data.eventType) modified.push('Event Type');
+
+    let newDate = new Date(data.eventDate);
+    let oldDate = new Date(currevent.eventDate);
+    if (Number(newDate) != Number(oldDate)) modified.push('Event Date');
+    if (currevent.eventTime != data.eventTime) modified.push('Event Time');
+    if (currevent.numOfPax != data.numOfPax) modified.push('Number of Pax');
+    if (currevent.eventNotes != data.eventNotes) modified.push('Event Notes');
+    if (JSON.stringify(currevent.eventVenues) != JSON.stringify(data.eventVenues)) modified.push('Event Venues');
+    if (JSON.stringify(currevent.eventPackages) != JSON.stringify(data.eventPackages)) modified.push('Event Packages');
+    if (currevent.packageAdditionalPax != data.packageAdditionalPax) modified.push('Additional Pax');
+
+    if (currevent.saladName != data.saladName) modified.push('Salad Name');
+    if (currevent.saladQuantity != data.saladQuantity) modified.push('Salad Quantity');
+    if (currevent.pastaName != data.pastaName) modified.push('Pasta Name');
+    if (currevent.pastaQuantity != data.pastaQuantity) modified.push('Pasta Quantity');
+    if (currevent.beefName != data.beefName) modified.push('Beef Name');
+    if (currevent.beefQuantity != data.beefQuantity) modified.push('Beef Quantity');
+    if (currevent.porkName != data.porkName) modified.push('Pork Name');
+    if (currevent.porkQuantity != data.saladQuantity) modified.push('Pork Quantity');
+    if (currevent.chickenName != data.chickenName) modified.push('Chicken Name');
+    if (currevent.chickenQuantity != data.chickenQuantity) modified.push('Chicken Quantity');
+    if (currevent.fishName != data.fishName) modified.push('Fish Name');
+    if (currevent.fishQuantity != data.fishQuantity) modified.push('Fish Quantity');
+    if (currevent.icedTeaQuantity != data.icedTeaQuantity) modified.push('Iced Tea Quantity');
+    if (currevent.riceQuantity != data.riceQuantity) modified.push('Rice Quantity');
+
+    if (JSON.stringify(currevent.menuAdditional, ['foodItem', 'foodQuantity', 'foodCost'])
+        != JSON.stringify(data.menuAdditional, ['foodItem', 'foodQuantity', 'foodCost'])) modified.push('Additional Food');
+    if (JSON.stringify(currevent.transactionCharges, ['chargeName', 'chargeQuantity', 'chargePrice'])
+        != JSON.stringify(data.transactionCharges, ['chargeName', 'chargeQuantity', 'chargePrice'])) modified.push('Charges');
+    if (JSON.stringify(currevent.transactionDiscounts, ['discountName', 'discountPrice'])
+        != JSON.stringify(data.transactionDiscounts, ['discountName', 'discountPrice'])) modified.push('Discounts');
+
+    newDate = new Date(data.downpaymentDate);
+    oldDate = new Date(currevent.downpaymentDate);
+    if (Number(newDate) != Number(oldDate)) modified.push('Downpayment Date');
+    if (currevent.downpaymentMode != data.downpaymentMode) modified.push('Downpayment Mode');
+    if (currevent.downpaymentAmount != data.downpaymentAmount) modified.push('Downpayment Amount');
+
+    if (currevent.finalPaymentDate != null) {
+        newDate = new Date(data.finalPaymentDate);
+        oldDate = new Date(currevent.finalPaymentDate);
+        if (Number(newDate) != Number(oldDate)) modified.push('Final Payment Date');
+        if (currevent.finalPaymentMode != data.finalPaymentMode) modified.push('Final Payment Mode');
+        if (currevent.finalPaymentAmount != data.finalPaymentAmount) modified.push('Final Payment Amount');
+    }
+
+    return modified;
+}
+
 function addExistingFields() {
-    let currevent;
     let id = '';
     if ($('#event-id').text() != '') {
         id = $('#event-id').text();
