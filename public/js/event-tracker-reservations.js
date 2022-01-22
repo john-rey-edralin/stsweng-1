@@ -12,7 +12,7 @@ function deleteReservation(id) {
     });
     $.ajax({
         type: 'PUT',
-        url: '/event-tracker/cancel',
+        url: '/event-tracker/reservations/cancel',
         data: json,
         contentType: 'application/json',
         success: function (result) {
