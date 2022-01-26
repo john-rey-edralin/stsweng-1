@@ -6,6 +6,9 @@ const eventController = require('../controllers/event-controller.js');
 
 const app = express.Router();
 
+app.get('/', (req, res) => {
+    res.redirect('/event-tracker/home');
+});
 // login
 app.get('/login', authController.getLogin);
 app.post('/authenticate', authController.authenticate);
@@ -32,21 +35,46 @@ app.get('/event-tracker/get/food', eventController.getFood);
 app.get('/event-tracker/get/event', eventController.getEvent);
 app.get('/event-tracker/get/charges', eventController.getCharges);
 app.get('/event-tracker/get/packages', eventController.getPackages);
-app.get('/event-tracker/check/event-availability', eventController.getCheckEventAvailability);
+app.get(
+    '/event-tracker/check/event-availability',
+    eventController.getCheckEventAvailability
+);
 
 // event-tracker pencilbooking list
-app.route('/event-tracker/pencilbookings').get(eventController.getPencilBookings).put(eventController.putPencilbookings);
-app.get('/event-tracker/pencilbookings/search', eventController.getPencilBookingsSearch);
-app.get('/event-tracker/pencilbookings/filter', eventController.getPencilBookingsFilter);
+app.route('/event-tracker/pencilbookings')
+    .get(eventController.getPencilBookings)
+    .put(eventController.putPencilbookings);
+app.get(
+    '/event-tracker/pencilbookings/search',
+    eventController.getPencilBookingsSearch
+);
+app.get(
+    '/event-tracker/pencilbookings/filter',
+    eventController.getPencilBookingsFilter
+);
 
 // event-tracker reservation list
-app.route('/event-tracker/reservations').get(eventController.getReservations).put(eventController.putReservations);
-app.get('/event-tracker/reservations/search', eventController.getReservationsSearch);
-app.get('/event-tracker/reservations/filter', eventController.getReservationsFilter);
+app.route('/event-tracker/reservations')
+    .get(eventController.getReservations)
+    .put(eventController.putReservations);
+app.get(
+    '/event-tracker/reservations/search',
+    eventController.getReservationsSearch
+);
+app.get(
+    '/event-tracker/reservations/filter',
+    eventController.getReservationsFilter
+);
 
 // event-tracker past events list
 app.get('/event-tracker/pastevents', eventController.getPastEvents);
-app.get('/event-tracker/pastevents/search', eventController.getPastEventsSearch);
-app.get('/event-tracker/pastevents/filter', eventController.getPastEventsFilter);
+app.get(
+    '/event-tracker/pastevents/search',
+    eventController.getPastEventsSearch
+);
+app.get(
+    '/event-tracker/pastevents/filter',
+    eventController.getPastEventsFilter
+);
 
 module.exports = app;
