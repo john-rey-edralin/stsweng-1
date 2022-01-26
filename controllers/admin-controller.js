@@ -1,6 +1,10 @@
 const bcrypt = require('bcrypt');
 const Employee = require('../models/employee.js');
 const Activity = require('../models/activity.js');
+const {
+    isValidPassword,
+    isOldPasswordSameAsPassword,
+} = require('../helpers/newPasswordValidator.js');
 const saltRounds = 10;
 
 const controller = {
@@ -124,13 +128,57 @@ const controller = {
 
     putEmployeeInfo: async function (req, res) {
         const { username } = req.params;
-        const { contactNum, emergencyContactName, emergencyContactNum } =
-            req.body;
+        const {
+            contactNum,
+            emergencyContactName,
+            emergencyContactNum,
+            oldPassword,
+            newPassword,
+            reenteredPassword,
+        } = req.body;
 
-        console.log(contactNum, emergencyContactName, emergencyContactNum);
+        if (newPassword != '') {
+            var isValidNewPassword = await isValidPassword(
+                newPassword,
+                username
+            );
+            var isOldPasswordCorrect = await isOldPasswordSameAsPassword(
+                oldPassword,
+                username
+            );
+
+            if (!isValidNewPassword) {
+                res.status(406).json({
+                    message:
+                        'New password should not be the same as old password.',
+                });
+                return;
+            }
+
+            if (!isOldPasswordCorrect) {
+                res.status(406).json({ message: 'Invalid old password.' });
+                return;
+            }
+
+            if (reenteredPassword != newPassword) {
+                res.status(406).json({
+                    message:
+                        'New password and re-entered password do not match',
+                });
+                return;
+            }
+
+            var hash = await bcrypt.hash(newPassword, saltRounds);
+        }
+
         const result = await Employee.findOneAndUpdate(
             { username },
-            { contactNum, emergencyContactName, emergencyContactNum },
+            {
+                contactNum,
+                emergencyContactName,
+                emergencyContactNum,
+                password: hash,
+            },
             { new: true }
         );
         res.json(result);
