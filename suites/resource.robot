@@ -7,7 +7,7 @@ Library         SeleniumLibrary
 
 *** Variables ***
 ${SERVER}               localhost:3000
-${BROWSER}              firefox
+${BROWSER}              chrome
 ${DELAY}                0
 ${DELAY_0.3}            0.1
 ${VALID USER}           admin
