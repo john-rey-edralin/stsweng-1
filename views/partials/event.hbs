@@ -1,5 +1,5 @@
 {{!-- LIST --}}
-<div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4" data-bs-toggle="modal"
+<div class="rounded-list-item shadow-sm rounded-lg d-flex justify-content-between p-4 {{status}}" id="list-{{_id}}" data-bs-toggle="modal"
     data-bs-target="#modal-{{_id}}">
     <h1 class="mb-0 mt-1">
         {{#ifEquals eventTime "Afternoon"}}
@@ -8,7 +8,7 @@
         {{#ifEquals eventTime "Evening"}}
         <span class="event-icon material-icons-two-tone md-36 navy-icon">dark_mode</span>
         {{/ifEquals}}
-        {{formatDate eventDate}}: {{eventVenues}}
+        {{formatDate eventDate}}: {{formatArray eventVenues}}
     </h1>
     <h1 class="mb-0 mt-1">{{clientName}}</h1>
 </div>
@@ -27,10 +27,10 @@
                     <div class="rounded-pill bg-gray p-2 me-2">
                         <h4 class="fw-bold text-white mx-2 mb-0 mt-1">
                             {{#ifEquals eventTime "Afternoon"}}
-                                <span class="event-icon material-icons-two-tone md-36 white-icon">light_mode</span>
+                            <span class="event-icon material-icons-two-tone md-36 white-icon">light_mode</span>
                             {{/ifEquals}}
                             {{#ifEquals eventTime "Evening"}}
-                                <span class="event-icon material-icons-two-tone md-36 white-icon">dark_mode</span>
+                            <span class="event-icon material-icons-two-tone md-36 white-icon">dark_mode</span>
                             {{/ifEquals}}
                             {{eventTime}}
                         </h4>
@@ -44,7 +44,7 @@
                     <div class="rounded-pill bg-gray p-2 me-2">
                         <h4 class="fw-bold text-white mx-2 mb-0 mt-1"><span
                                 class="event-icon material-icons-two-tone md-36 white-icon">location_on</span>
-                            {{eventVenues}}
+                            {{formatArray eventVenues}}
                         </h4>
                     </div>
                 </div>
@@ -62,15 +62,15 @@
                             <h6><strong>Client Name: </strong> {{clientName}}</h6>
                             <h6><strong>Client Mobile Number: </strong> {{clientMobileNumber}}</h6>
                             {{#if repName}}
-                                <h6><strong>Representative Name: </strong> {{repName}}</h6>
+                            <h6><strong>Representative Name: </strong> {{repName}}</h6>
                             {{/if}}
                             {{#if repMobileNumber}}
-                                <h6><strong>Representative Mobile Number: </strong> {{repMobileNumber}}</h6>
-                            {{/if}}    
+                            <h6><strong>Representative Mobile Number: </strong> {{repMobileNumber}}</h6>
+                            {{/if}}
                             <h6><strong>Event Type: </strong> {{eventType}}</h6>
                             <h6><strong>Number of Pax: </strong> {{numOfPax}}</h6>
                             {{#if eventNotes}}
-                                <h6><strong>Notes: </strong> {{eventNotes}}</h6>
+                            <h6><strong>Notes: </strong> {{eventNotes}}</h6>
                             {{/if}}
                         </div>
                         <div class="row container-fluid shadow-sm bg-light rounded-sm p-3">
@@ -83,10 +83,10 @@
                             <hr>
                             <div class="p-2">
                                 {{#if menuPackage.saladName}}
-                                    <div class="d-flex">
-                                        <h6 class="number fw-bold fs-6">{{menuPackage.saladName}}</h6>
-                                        <h6 class="number ms-auto fs-6">{{menuPackage.saladQuantity}}</h6>
-                                    </div>
+                                <div class="d-flex">
+                                    <h6 class="number fw-bold fs-6">{{menuPackage.saladName}}</h6>
+                                    <h6 class="number ms-auto fs-6">{{menuPackage.saladQuantity}}</h6>
+                                </div>
                                 {{/if}}
                                 {{#if menuPackage.pastaName}}
                                 <div class="d-flex">
@@ -130,7 +130,7 @@
                                 <div class="d-flex">
                                     <h6 class="number fw-bold fs-6">
                                         {{#with (lookup ../foodList @index)}}
-                                            {{name}}
+                                        {{name}}
                                         {{/with}}
                                     </h6>
                                     <h6 class="number ms-auto fs-6">{{foodQuantity}}</h6>
@@ -155,8 +155,8 @@
                                 </div>
                                 {{#each packageList}}
                                 <div class="d-flex">
-                                        <h6 class="number fw-bold ms-3 fs-6">{{packageName}}</h6>
-                                        <h6 class="number ms-auto fs-6 me-4">{{formatMoney packagePrice}}</h6>
+                                    <h6 class="number fw-bold ms-3 fs-6">{{packageName}}</h6>
+                                    <h6 class="number ms-auto fs-6 me-4">{{formatMoney packagePrice}}</h6>
                                 </div>
                                 {{/each}}
                                 {{#ifEquals packageAdditionalPax true}}
@@ -173,8 +173,8 @@
                                 {{#each menuAdditional}}
                                 <div class="d-flex">
                                     <h6 class="number fw-bold ms-3 fs-6">{{#with (lookup ../foodList @index)}}
-                                    {{name}}
-                                    {{/with}} (x{{foodQuantity}})</h6>
+                                        {{name}}
+                                        {{/with}} (x{{foodQuantity}})</h6>
                                     <h6 class="number ms-auto fs-6 me-4">{{formatMoney foodCost}}</h6>
                                 </div>
                                 {{/each}}
@@ -184,25 +184,25 @@
                                     <h6 class="number fw-bold fs-6">Additional Charges</h6>
                                     <h6 class="number ms-auto fs-6">{{formatMoney totalPrices.charges}}</h6>
                                 </div>
-                                    {{#each transactionCharges}}
-                                    <div class="d-flex">
-                                        <h6 class="number fw-bold ms-3 fs-6">{{chargeName}} (x{{chargeQuantity}})</h6>
-                                        <h6 class="number ms-auto fs-6 me-4">{{formatMoney chargePrice}}</h6>
-                                    </div>
-                                    {{/each}}
+                                {{#each transactionCharges}}
+                                <div class="d-flex">
+                                    <h6 class="number fw-bold ms-3 fs-6">{{chargeName}} (x{{chargeQuantity}})</h6>
+                                    <h6 class="number ms-auto fs-6 me-4">{{formatMoney chargePrice}}</h6>
+                                </div>
+                                {{/each}}
                                 {{/if}}
-                                
+
                                 {{#if transactionDiscounts}}
                                 <div class="d-flex">
                                     <h6 class="number fw-bold fs-6">Discounts</h6>
                                     <h6 class="number ms-auto fs-6">{{formatMoney totalPrices.discounts}}</h6>
                                 </div>
-                                    {{#each transactionDiscounts}}
-                                    <div class="d-flex">
-                                        <h6 class="number fw-bold ms-3 fs-6">{{discountName}}</h6>
-                                        <h6 class="number ms-auto fs-6 me-4">{{formatMoney discountPrice}}</h6>
-                                    </div>
-                                    {{/each}}
+                                {{#each transactionDiscounts}}
+                                <div class="d-flex">
+                                    <h6 class="number fw-bold ms-3 fs-6">{{discountName}}</h6>
+                                    <h6 class="number ms-auto fs-6 me-4">{{formatMoney discountPrice}}</h6>
+                                </div>
+                                {{/each}}
                                 {{/if}}
 
                                 <hr class="mx-1">
@@ -223,8 +223,10 @@
                             <div class="p-2">
                                 {{#if downpaymentDate}}
                                 <div class="d-flex">
-                                    <h6 class="number fw-bold fs-6">Downpayment ({{formatDateShort downpaymentDate}})</h6>
-                                    <h6 class="number ms-auto fs-6">{{formatMoney downpaymentAmount}} via {{downpaymentMode}}</h6>
+                                    <h6 class="number fw-bold fs-6">Downpayment ({{formatDateShort downpaymentDate}})
+                                    </h6>
+                                    <h6 class="number ms-auto fs-6">{{formatMoney downpaymentAmount}} via
+                                        {{downpaymentMode}}</h6>
                                 </div>
                                 {{else}}
                                 <div class="d-flex">
@@ -234,8 +236,10 @@
                                 {{/if}}
                                 {{#if finalPaymentDate}}
                                 <div class="d-flex">
-                                    <h6 class="number fw-bold fs-6">Final Payment ({{formatDateShort finalPaymentDate}})</h6>
-                                    <h6 class="number ms-auto fs-6">{{formatMoney finalPaymentAmount}} via {{finalPaymentMode}}</h6>
+                                    <h6 class="number fw-bold fs-6">Final Payment ({{formatDateShort finalPaymentDate}})
+                                    </h6>
+                                    <h6 class="number ms-auto fs-6">{{formatMoney finalPaymentAmount}} via
+                                        {{finalPaymentMode}}</h6>
                                 </div>
                                 {{else}}
                                 <div class="d-flex">
@@ -248,12 +252,67 @@
                     </div>
                 </div>
             </div>
+            {{#ifNotEquals status "finished"}}
+            {{#ifNotEquals status "cancelled"}}
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger me-auto" data-bs-target="#modal-{{_id}}-cancel"
+                <button type="button" id="cancel-btn-{{_id}}" class="btn btn-danger me-auto" data-bs-target="#modal-{{_id}}-cancel"
                     data-bs-toggle="modal" data-bs-dismiss="modal">Cancel Event</button>
-                <a class="btn btn-secondary" href="/event-tracker/reservations/edit/{{_id}}" role="button">Edit</a>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mark as
+                <a class="btn btn-secondary" id="print-btn-{{_id}}" href="/event-tracker/print/{{_id}}" role="button">Print</a>
+                <a class="btn btn-secondary" id="edit-btn-{{_id}}" href="/event-tracker/edit/{{_id}}" role="button">Edit</a>
+                {{#ifEquals status "reserved"}}
+
+                {{#checkIfFutureDate eventDate}}
+                {{#checkIfFinalPayment finalPaymentAmount}}
+                <button type="button" id="finish-btn-{{_id}}"  class="btn btn-secondary" data-bs-target="#modal-{{_id}}-finish"
+                    data-bs-toggle="modal" data-bs-dismiss="modal">Mark as
                     Done</button>
+                {{/checkIfFinalPayment}}    
+                {{/checkIfFutureDate}}
+                {{/ifEquals}}
+            </div>
+            {{/ifNotEquals}}
+            {{/ifNotEquals}}
+        </div>
+    </div>
+</div>
+
+{{!-- CANCEL EVENT MODAL --}}
+<div class="modal fade" id="modal-{{_id}}-cancel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>Cancel this Event</strong></h5>
+            </div>
+            <div class="modal-body p-4">
+                <div class="fw-bold">Are you sure you want to mark this event as cancelled?</div> <br> This will move
+                the event to the cancelled events list. This action cannot be reversed.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary me-auto" data-bs-toggle="modal"
+                    data-bs-target="#modal-{{_id}}" data-bs-dismiss="modal">Back</button>
+                <button type="button" class="btn btn-danger " data-bs-dismiss="modal"
+                    onclick="deleteReservation('{{_id}}')">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- MARK AS DONE MODAL --}}
+<div class="modal fade" id="modal-{{_id}}-finish" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>Mark this Event as Done</strong></h5>
+            </div>
+            <div class="modal-body p-4">
+                <div class="fw-bold">Are you sure you want to mark this event as done?</div> <br> This will move
+                the event to the past events list. This action cannot be reversed.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary me-auto" data-bs-toggle="modal"
+                    data-bs-target="#modal-{{_id}}" data-bs-dismiss="modal">Back</button>
+                <button type="button" id="done-btn-yes-{{_id}}" class="btn btn-success " data-bs-dismiss="modal"
+                    onclick="finishEvent('{{_id}}')">Continue</button>
             </div>
         </div>
     </div>
