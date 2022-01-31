@@ -76,3 +76,7 @@ textarea {
 .bg-gray {
     background-color: #3b3b3b !important;
 }
+
+.table-xs > :not(caption) > * > * {
+  padding: 0rem 0rem;
+}
