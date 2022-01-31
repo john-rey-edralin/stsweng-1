@@ -1639,6 +1639,7 @@ function checkEventAvailability() {
                             $('#event-time-error'),
                             'Date and time is unavailable.'
                         );
+                        $('#submit').attr("disabled", true);
                     }
                     else {
                         resetField($('#event-date'), $('#event-time-error'));
@@ -1648,6 +1649,7 @@ function checkEventAvailability() {
                     }
                 }
                 else {
+                    $('#submit').attr("disabled", false);
                     resetField($('#event-date'), $('#event-time-error'));
                     resetField($('#event-time'), $('#event-time-error'));
                     if ($('#event-id').text() == '')
