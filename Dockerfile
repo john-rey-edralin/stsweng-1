@@ -23,3 +23,5 @@ RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd6
     && rm chromedriver_linux64.zip \
     && mv chromedriver /usr/local/bin \
     && chmod +x /usr/local/bin/chromedriver
+
+CMD ["/scripts/run_suite.sh"]
