@@ -1529,7 +1529,6 @@ function checkStringInput(input) {
         ':',
         "'",
         '"',
-        '.',
         ',',
         '<',
         '>',
