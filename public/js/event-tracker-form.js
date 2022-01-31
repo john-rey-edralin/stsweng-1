@@ -712,18 +712,23 @@ function updateFoodQuantity() {
 }
 
 function addAdditionalItem() {
+    $('#add-item-btn').attr("disabled", true);
     if (
         !$('#additional-name').val() ||
         !$('#additional-quantity').val() ||
         !$('#additional-price').val()
     ) {
         $('#additional-items-error').text('Please fill up all fields.');
+        $('#add-item-btn').attr("disabled", true);
     } else if ($('#additional-quantity').val() < 0) {
         $('#additional-items-error').text('Quantity cannot be negative.');
-    } else if ($('#additional-quantity').val() === 0) {
+        $('#add-item-btn').attr("disabled", true);
+    } else if ($('#additional-quantity').val() == 0) {
         $('#additional-items-error').text('Quantity cannot be zero.');
-    } else if ($('#additional-price').val() < 0) {
+        $('#add-item-btn').attr("disabled", true);
+    } else if ($('#additional-price').val() < 0) { 
         $('#additional-items-error').text('Price cannot be negative.');
+        $('#add-item-btn').attr("disabled", true);
     } else {
         let name = $('#additional-name').val();
         let quantity = $('#additional-quantity').val();
@@ -1251,15 +1256,35 @@ function initializeRealTimeValidation() {
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
-    $('#additional-quantity').change(function () {
-        if ($('#additional-quantity').val() < 0) {
+    $('#additional-quantity').keyup(function () {
+        if ($('#additional-quantity').val() == "") {
+            displayError($('#additional-quantity'), $('#additional-items-error'), 'Please fill up all fields.');
+            $('#add-item-btn').attr("disabled", true);
+        } else if ($('#additional-quantity').val() < 0) {
             displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
+            $('#add-item-btn').attr("disabled", true);
         } else if ($('#additional-quantity').val() == 0) {
             displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
+            $('#add-item-btn').attr("disabled", true);
         } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
+            $('#add-item-btn').attr("disabled", false);
         }
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+    });
+    $('#additional-quantity').change(function () {
+        if ($('#additional-quantity').val() == "") {
+            displayError($('#additional-quantity'), $('#additional-items-error'), 'Please fill up all fields.');
+            $('#add-item-btn').attr("disabled", true);
+        } else if ($('#additional-quantity').val() < 0) {
+            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
+            $('#add-item-btn').attr("disabled", true);
+        } else if ($('#additional-quantity').val() == 0) {
+            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
+            $('#add-item-btn').attr("disabled", true);
+        } else {
+            resetField($('#additional-quantity'), $('#additional-items-error'));
+            $('#add-item-btn').attr("disabled", false);
+        }
     });
     //menu details
     $('#additional-price').change(function () {
@@ -1268,7 +1293,7 @@ function initializeRealTimeValidation() {
         } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
         }
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        //$('#submit').attr("disabled", checkIfFilledEventFields());
     });
     //transactional details
     $('#extra-charges-quantity').change(function () {
@@ -1339,10 +1364,10 @@ function checkIfFilledEventFields() {
     let sunroom = $('#sunroom-options').val();
     let terrace = $('#terrace-options').val();
     let package = (garden || sunroom || terrace);
-
+    
     var dateMax = getDateTime("2032-01-01");
     var dateMin = getDateTime(getDateToday());
-
+    //Event Details
     if (validator.isEmpty(name)) {
         $('#missing-error').val('Client name should be filled.');
         return true;
@@ -1423,6 +1448,7 @@ function checkIfFilledEventFields() {
         $('#missing-error').val('At least 1 package should be selected.');
         return true;
     }
+    //Payment Details
     if (document.getElementById("downpayment").checked) {
         if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '') {
             $('#downpayment-amount-error').val('Invalid payment.');
