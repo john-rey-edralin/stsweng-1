@@ -21,9 +21,9 @@ function giveAccess(username) {
     });
 }
 
-function removeAccess(id) {
+function removeAccess(username) {
     let json = JSON.stringify({
-        id: id,
+        username: username,
     });
     $.ajax({
         type: 'PUT',
