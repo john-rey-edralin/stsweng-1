@@ -585,7 +585,7 @@ function downpaymentCheckFields() {
 
     //Checks the downpayment amount value
     $('#downpayment-amount').on('keyup', function () {
-        if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '')
+        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '')
             displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
         else
             resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
