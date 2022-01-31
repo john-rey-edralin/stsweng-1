@@ -586,7 +586,36 @@ function downpaymentCheckFields() {
 
     //Checks the downpayment amount value
     $('#downpayment-amount').on('keyup', function () {
-        if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '')
+        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '')
+            displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
+        else
+            resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
+
+        //Updates the total payment amount and the final payment amount 
+        $('#final-payment-amount').on('change', function () {
+            updatePaymentAndBalance();
+            $('#submit').attr("disabled", checkIfFilledEventFields());
+        });
+        updatePaymentAndBalance();
+
+        //Disables/Enables the Submit button
+        $('#submit').attr("disabled", checkIfFilledEventFields());
+
+        //Checks if the customer payment is greater than the needed payment (total amount) 
+        if (parseFloat($('#payment-balance').val()) < 0) {
+            $('#payment-error').text('Customer payment is greater than the total price.');
+            $('#payment-amount-total').addClass('is-invalid');
+            $('#payment-balance').addClass('is-invalid');
+        }
+        else {
+            $('#payment-error').text('');
+            $('#payment-amount-total').removeClass('is-invalid');
+            $('#payment-balance').removeClass('is-invalid');
+        }
+    });
+
+    $('#downpayment-amount').on('change', function () {
+        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '')
             displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
         else
             resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
@@ -637,7 +666,31 @@ function finalPaymentCheckFields() {
 
     //Checks the final payment amount value
     $('#final-payment-amount').on('keyup', function () {
-        if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '')
+        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '')
+            displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
+        else
+            resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
+
+        $('#downpayment-amount').on('change', function () {
+            updatePaymentAndBalance();
+            $('#submit').attr("disabled", checkIfFilledEventFields());
+        });
+        updatePaymentAndBalance();
+        $('#submit').attr("disabled", checkIfFilledEventFields());
+
+        if (parseFloat($('#payment-balance').val()) < 0) {
+            $('#payment-error').text('Customer payment is greater than the total price.');
+            $('#payment-amount-total').addClass('is-invalid');
+            $('#payment-balance').addClass('is-invalid');
+        }
+        else {
+            $('#payment-error').text('');
+            $('#payment-amount-total').removeClass('is-invalid');
+            $('#payment-balance').removeClass('is-invalid');
+        }
+    });
+    $('#final-payment-amount').on('change', function () {
+        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '')
             displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
         else
             resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
@@ -1450,7 +1503,7 @@ function checkIfFilledEventFields() {
     }
     //Payment Details
     if (document.getElementById("downpayment").checked) {
-        if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '') {
+        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '') {
             $('#downpayment-amount-error').val('Invalid payment.');
             return true;
         }
@@ -1481,7 +1534,7 @@ function checkIfFilledEventFields() {
         }
     }
     if (document.getElementById("final-payment").checked) {
-        if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '') {
+        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '') {
             $('#final-payment-amount-error').val('Invalid payment.');
             return true;
         }
