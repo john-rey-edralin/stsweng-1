@@ -28,7 +28,8 @@
         "hbs": "^4.1.2",
         "mongoose": "^6.0.12",
         "nodemon": "^2.0.15",
-        "robotremote": "^1.4.0"
+        "robotremote": "^1.4.0",
+        "validator": "^13.7.0"
     },
     "devDependencies": {
         "jest": "^27.3.1"
