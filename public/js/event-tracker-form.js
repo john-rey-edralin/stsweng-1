@@ -277,7 +277,7 @@ function retrieveInfoFromDB() {
                 })
             );
         });
-        
+
         addExistingFields();
     });
 }
@@ -570,8 +570,7 @@ function finalPaymentNotChecked() {
 function downpaymentCheckFields() {
     //Checks the downpayment date field value
     $("#downpayment-date").on("change", function () {
-        var downpaydate = document.getElementById("downpayment-date").value;
-        validDate(downpaydate, $('#downpayment-error'), "downpayment-date");
+        validDate($('#downpayment-date'), $('#event-date-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -621,8 +620,7 @@ function downpaymentCheckFields() {
 function finalPaymentCheckFields() {
     //Checks the final payment date field value
     $("#final-payment-date").on("change", function () {
-        var finalpaydate = document.getElementById("final-payment-date").value;
-        validDate(finalpaydate, $('#final-payment-error'), "final-payment-date");
+        validDate($("final-payment-date"), $('#final-payment-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -1185,7 +1183,7 @@ function initializeRealTimeValidation() {
 
     $("#event-date").on("change", function () {
         var eventdate = document.getElementById("event-date").value;
-        validDate(eventdate, $('#event-date-error'), "event-date");
+        validDate($('#event-date'), $('#event-date-error'));
         checkEventAvailability();
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
@@ -1565,32 +1563,29 @@ function getDateTime(input) {
  * @param {String} errorfield   The ID of the error field in the form to display the errormsg in
  * @param {String} id           The ID of the field in the form with discrepancies
  */
-function validDate(input, errorfield, id) {
-    var idfield = '#' + id;
-    if (input.length > 10)
-        displayError($(idfield), errorfield, 'Invalid date.');
+function validDate(datefield, errorfield) {
+    var dateNow = new Date(datefield.val())
+    if (datefield.val().length > 10)
+        displayError(datefield, errorfield, 'Invalid date.');
     else {
-        var dateInput = getDateTime(input);
-        var dateMax = getDateTime("2032-01-01");
-        var dateMin = getDateTime(getDateToday());
+        var dateMax = new Date("2032-01-01");
+        var dateMin = new Date();
 
-        if (input == '') {
-            displayError($(idfield), errorfield, 'Date cannot be empty.');
+        console.log(dateNow + ' ' + dateMin + ' ' + dateMax)
+        console.log(isNaN(datefield.val()))
+        if (datefield.val() == '') {
+            displayError(datefield, errorfield, 'Date cannot be empty.');
             return true;
-        } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
+        } else if (dateNow < dateMin) {
             if ($('#event-id').text() == '') {
-                displayError($(idfield), errorfield, 'Date cannot be in the past.');
+                displayError(datefield, errorfield, 'Date cannot be in the past.');
                 return true;
             }
-        } else if (dateInput - dateMax >= 0 || isNaN(dateInput)) {
-            displayError(
-                $(idfield),
-                errorfield,
-                'Date cannot be later than 2031.'
-            );
+        } else if (dateNow >= dateMax) {
+            displayError(datefield, errorfield, 'Date cannot be later than 2031.');
             return true;
         } else {
-            resetField($(idfield), errorfield);
+            resetField(datefield, errorfield);
             return false;
         }
     }
@@ -1611,6 +1606,7 @@ function enableSubmitButton() {
 }
 
 function checkEventAvailability() {
+    
     if (
         $('#event-date').val() != '' &&
         $('#event-time').val() != '' &&
@@ -1632,34 +1628,22 @@ function checkEventAvailability() {
             eventVenues: eventVenues,
         };
 
-        $.get(
-            '/event-tracker/check/event-availability',
-            data,
-            function (result) {
+        console.log(data)
+
+        $.get('/event-tracker/check/event-availability', data, function (result) {
+            if (result) {
                 if (result._id != curreventID) {
-                    if (!(typeof result._id == 'undefined')) {
-                        $('#event-date').addClass('is-invalid');
-                        displayError(
-                            $('#event-time'),
-                            $('#event-time-error'),
-                            'Date and time is unavailable.'
-                        );
-                    }
-                    else {
-                        resetField($('#event-date'), $('#event-time-error'));
-                        resetField($('#event-time'), $('#event-time-error'));
-                        if ($('#event-id').text() == '')
-                            validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
-                    }
-                }
-                else {
-                    resetField($('#event-date'), $('#event-time-error'));
-                    resetField($('#event-time'), $('#event-time-error'));
-                    if ($('#event-id').text() == '')
-                        validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
+                    $('#event-date').addClass('is-invalid');
+                    displayError($('#event-time'), $('#event-time-error'), 'Date and time is unavailable.');
                 }
             }
-        );
+            else {
+                    resetField($('#event-date'), $('#event-time-error'));
+                    resetField($('#event-time'), $('#event-time-error'));
+                    $('#event-date').removeClass('is-invalid');
+                    validDate($('#event-date'), $('#event-date-error'));
+                }
+        });
     }
 }
 
