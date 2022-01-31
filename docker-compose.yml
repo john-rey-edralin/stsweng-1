@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+    test:
+        network_mode: host
+        image: robot
+        shm_size: "256M"
+        environment:
+            USERNAME: teamcity
+        volumes: [
+           "$PWD/suites:/suites",
+           "$PWD/scripts:/scripts",
+           "$PWD/reports:/reports"
+        ]
