@@ -18,7 +18,7 @@ app.get('/admin/register', adminController.getRegisterEmployee);
 app.post('/admin/register', adminController.postRegisterEmployee);
 app.get('/admin/employee', adminController.getAllEmployees);
 app.get('/admin/employee/:id', adminController.getEmployee);
-app.get('/admin/give', adminController.putGiveEmployeeAccess);
+app.put('/admin/give', adminController.putGiveEmployeeAccess);
 
 // event-tracker home
 app.get('/event-tracker/home', eventController.getHome);

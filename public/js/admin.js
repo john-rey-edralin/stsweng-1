@@ -6,9 +6,9 @@ $(document).ready(function () {
     $('[data-toggle="popover"]').popover();
 });
 
-function giveAccess(id) {
+function giveAccess(username) {
     let json = JSON.stringify({
-        id: id,
+        username: username,
     });
     $.ajax({
         type: 'PUT',

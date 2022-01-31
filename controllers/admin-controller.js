@@ -69,6 +69,18 @@ const controller = {
         const status = employee ? 200 : 404;
         res.status(status).json(employee);
     },
+
+    putGiveEmployeeAccess: async function (req, res) {
+        const username = req.body.username;
+        console.log(username)
+        const doc = await Employee.findOneAndUpdate(
+            { username: username },
+            { hasAccess: true },
+            { returnDocument: 'after' }
+        );
+
+        res.json(doc);
+    },
 };
 
 module.exports = controller;
