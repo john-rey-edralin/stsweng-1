@@ -1917,29 +1917,21 @@ function checkEventAvailability() {
             '/event-tracker/check/event-availability',
             data,
             function (result) {
-                if (result._id != curreventID) {
-                    if (!(typeof result._id == 'undefined')) {
-                        $('#event-date').addClass('is-invalid');
-                        displayError(
-                            $('#event-time'),
-                            $('#event-time-error'),
-                            'Date and time is unavailable.'
-                        );
-                        $('#submit').attr("disabled", true);
-                    }
-                    else {
-                        resetField($('#event-date'), $('#event-time-error'));
-                        resetField($('#event-time'), $('#event-time-error'));
-                        if ($('#event-id').text() == '')
-                            validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
-                    }
+                if ((result._id != curreventID) && !(typeof result._id == 'undefined') && (result.status != 'cancelled')){
+                    $('#event-date').addClass('is-invalid');
+                    displayError(
+                        $('#event-time'),
+                        $('#event-time-error'),
+                        'Date and time is unavailable.'
+                    );
+                    $('#submit').attr("disabled", true);
                 }
                 else {
-                    $('#submit').attr("disabled", false);
                     resetField($('#event-date'), $('#event-time-error'));
                     resetField($('#event-time'), $('#event-time-error'));
                     if ($('#event-id').text() == '')
                         validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
+                    $('#submit').attr("disabled", checkIfFilledEventFields());
                 }
             }
         );
