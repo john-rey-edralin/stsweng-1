@@ -1,14 +1,26 @@
 const express = require('express');
 
-const controller = require('../controllers/controller.js');
+const authController = require('../controllers/auth-controller.js');
+const adminController = require('../controllers/admin-controller.js');
 const eventController = require('../controllers/event-controller.js');
 
 const app = express.Router();
 
+app.get('/', (req, res) => {
+    res.redirect('/event-tracker/home');
+});
 // login
-app.get('/', controller.getIndex);
+app.get('/login', authController.getLogin);
+app.post('/authenticate', authController.authenticate);
 
-// event-tracker home
+// admin
+app.get('/admin', adminController.getAdminHome);
+app.get('/admin/register', adminController.getRegisterEmployee);
+app.post('/admin/register', adminController.postRegisterEmployee);
+app.get('/admin/employee', adminController.getAllEmployees);
+app.get('/admin/employee/:id', adminController.getEmployee);
+
+// event-tracker
 app.get('/event-tracker/home', eventController.getHome);
 
 // event-tracker form
