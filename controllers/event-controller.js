@@ -462,7 +462,7 @@ const eventController = {
         if (req.query.sort == "date-dsc")
             sort = { eventDate: -1 };
 
-        const bookings = await Event.aggregate([
+        const cancelled = await Event.aggregate([
             { $match: query },
             { $sort: sort },
             {
@@ -484,7 +484,7 @@ const eventController = {
         ]);
 
         let data = {
-            bookings: bookings,
+            cancelled: cancelled,
             venue: req.query.venue,
             time: req.query.time,
             date: req.query.date,
@@ -500,7 +500,7 @@ const eventController = {
 
         if (req.query.name) query.clientName = req.query.name;
 
-        const bookings = await Event.aggregate([
+        const cancelled = await Event.aggregate([
             { $match: query },
             {
                 $lookup: {
@@ -521,7 +521,7 @@ const eventController = {
         ]);
 
         let data = {
-            bookings: bookings,
+            cancelled: cancelled,
             search: req.query.name,
         };
 
