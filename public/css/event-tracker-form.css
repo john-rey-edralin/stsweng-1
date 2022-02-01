@@ -95,9 +95,19 @@ label {
 }
 
 .required:after {
-  content: "*";
+  content: "[required]";
   color: red;
-  font-weight: bold;
+  font-weight: light;
+  font-size: small;
+  margin-left: 10px;
+}
+
+.required.package:after {
+  content: "[at least 1 package required]";
+  color: red;
+  font-weight: light;
+  font-size: small;
+  margin-left: 10px;
 }
 
 #submit {
