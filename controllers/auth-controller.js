@@ -25,7 +25,7 @@ const controller = {
             req.session.isAdmin = user.role === 'admin';
             res.redirect('/event-tracker/home');
         } else {
-            res.redirect('/login');
+            res.redirect('/');
         }
     },
 

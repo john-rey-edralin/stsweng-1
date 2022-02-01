@@ -7,7 +7,8 @@ const eventController = require('../controllers/event-controller.js');
 const app = express.Router();
 
 // login
-app.get('/', authController.getLogin);
+app.get('/', (req, res) => { res.redirect('/event-tracker/home'); });
+app.get('/login', authController.getLogin);
 
 // authenticate user
 app.post('/authenticate', authController.authenticate);
