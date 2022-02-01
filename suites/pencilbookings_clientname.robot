@@ -8,9 +8,9 @@ Resource        resource.robot
 *** Test Cases ***
 Filter Client Name
     Go To Pencilbookings
-    Input Text      name        JR
+    Input Text      name        DONTMODIFY
     Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
-    Should Not Have           RJ
+    Should Not Have           JR
     [Teardown]      Close Browser
 
 

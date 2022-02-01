@@ -6,11 +6,11 @@ const eventController = require('../controllers/event-controller.js');
 
 const app = express.Router();
 
-app.get('/', (req, res) => {
-    res.redirect('/event-tracker/home');
-});
 // login
+app.get('/', (req, res) => { res.redirect('/event-tracker/home'); });
 app.get('/login', authController.getLogin);
+
+// authenticate user
 app.post('/authenticate', authController.authenticate);
 
 // admin
@@ -23,6 +23,8 @@ app.get('/admin/employee/former', adminController.getAllFormerEmployees);
 app.get('/admin/employee/:id', adminController.getEmployee);
 app.put('/admin/employee/:username', adminController.putEmployeeInfo);
 app.get('/admin/activity/:username', adminController.getEmployeeActivity);
+app.put('/admin/give', adminController.putGiveEmployeeAccess);
+app.put('/admin/remove', adminController.putRemoveEmployeeAccess);
 
 // event-tracker home
 app.get('/event-tracker/home', eventController.getHome);

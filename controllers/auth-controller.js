@@ -27,7 +27,7 @@ const controller = {
 
             res.redirect('/event-tracker/home');
         } else {
-            res.redirect('/login');
+            res.redirect('/');
         }
     },
 

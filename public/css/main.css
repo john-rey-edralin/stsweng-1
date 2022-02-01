@@ -94,5 +94,5 @@ textarea {
 }
 
 .table-xs > :not(caption) > * > * {
-  padding: 0rem 0rem;
+    padding: 0rem 0rem;
 }

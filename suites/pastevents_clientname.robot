@@ -10,7 +10,7 @@ Filter Client Name
     Go To Past Events
     Input Text      name        jiji
     Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
-    Should Not Have           Skup Bap Dip
-    [Teardown]      Close Browser
+    Should Have           jiji
+    # [Teardown]      Close Browser
 
 
