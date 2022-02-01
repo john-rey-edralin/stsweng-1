@@ -10,7 +10,6 @@ const saltRounds = 10;
 const controller = {
     getAdminHome: async function (req, res) {
         const employees = await Employee.find({ role: 'employee' });
-
         const formattedEmployees = employees.map((employee) => ({
             ...employee._doc,
             dateRegistered: employee.dateRegistered.toLocaleDateString(
