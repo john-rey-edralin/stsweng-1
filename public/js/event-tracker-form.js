@@ -1,3 +1,5 @@
+//const e = require("express");
+
 let foodList = [];
 let foodNameList = [];
 let chargeList = [];
@@ -408,6 +410,7 @@ function initializeMenuFields() {
 }
 
 function initializeTransactionFields() {
+    //Extra Charges and Corkage Fees
     $(".extra-charges-autocomplete").autocomplete({
         minLength: 0,
         source: function (request, response) {
@@ -429,7 +432,8 @@ function initializeTransactionFields() {
         resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
         resetField($('#extra-charges-price'), $('#extra-charges-error'));
     });
-
+    
+    //Discount
     $('.discount-add-button').click(function () { addDiscount(); });
 
     $('#discounts-modal').on('hidden.bs.modal', function () {
@@ -765,23 +769,23 @@ function updateFoodQuantity() {
 }
 
 function addAdditionalItem() {
-    $('#add-item-btn').attr("disabled", true);
+    $('.additional-add-button').attr("disabled", true);
     if (
         !$('#additional-name').val() ||
         !$('#additional-quantity').val() ||
         !$('#additional-price').val()
     ) {
         $('#additional-items-error').text('Please fill up all fields.');
-        $('#add-item-btn').attr("disabled", true);
+        $('.additional-add-button').attr("disabled", true);
     } else if ($('#additional-quantity').val() < 0) {
         $('#additional-items-error').text('Quantity cannot be negative.');
-        $('#add-item-btn').attr("disabled", true);
+        $('.additional-add-button').attr("disabled", true);
     } else if ($('#additional-quantity').val() == 0) {
         $('#additional-items-error').text('Quantity cannot be zero.');
-        $('#add-item-btn').attr("disabled", true);
+        $('.additional-add-button').attr("disabled", true);
     } else if ($('#additional-price').val() < 0) { 
         $('#additional-items-error').text('Price cannot be negative.');
-        $('#add-item-btn').attr("disabled", true);
+        $('.additional-add-button').attr("disabled", true);
     } else {
         let name = $('#additional-name').val();
         let quantity = $('#additional-quantity').val();
@@ -852,18 +856,26 @@ function removeAdditionalItem(elem) {
 }
 
 function addExtraCharge() {
+    $('.extra-charges-add-button').attr("disabled", true);
     if (
         !$('#extra-charges-name').val() ||
         !$('#extra-charges-quantity').val() ||
         !$('#extra-charges-price').val()
     ) {
         $('#extra-charges-error').text('Please fill up all fields.');
+        $('.extra-charges-add-button').attr("disabled", true);
     } else if ($('#extra-charges-quantity').val() < 0) {
         $('#extra-charges-error').text('Quantity cannot be negative.');
-    } else if ($('#extra-charges-quantity').val() === 0) {
+        $('.extra-charges-add-button').attr("disabled", true);
+    } else if ($('#extra-charges-quantity').val() == 0) {
         $('#extra-charges-error').text('Quantity cannot be zero.');
+        $('.extra-charges-add-button').attr("disabled", true);
     } else if ($('#extra-charges-price').val() < 0) {
         $('#extra-charges-error').text('Price cannot be negative.');
+        $('.extra-charges-add-button').attr("disabled", true);
+    } else if ($('#extra-charges-price').val() == 0) {
+        $('#extra-charges-error').text('Price cannot be zero.');
+        $('.extra-charges-add-button').attr("disabled", true);
     } else {
         var name = $('#extra-charges-name').val();
         var quantity = $('#extra-charges-quantity').val();
@@ -937,10 +949,16 @@ function removeExtraCharge(elem) {
 }
 
 function addDiscount() {
+    $('.discount-add-button').attr("disabled", true);
     if (!$('#discount-name').val() || !$('#discount-price').val()) {
         $('#discount-error').text('Please fill up all fields.');
+        $('.discount-add-button').attr("disabled", true);
     } else if ($('#discount-price').val() < 0) {
         $('#discount-error').text('Price cannot be negative.');
+        $('.discount-add-button').attr("disabled", true);
+    } else if ($('#discount-price').val() == 0) {
+        $('#discount-error').text('Price cannot be zero.');
+        $('.discount-add-button').attr("disabled", true);
     } else {
         var name = $('#discount-name').val();
         var price = $('#discount-price').val();
@@ -1308,75 +1326,239 @@ function initializeRealTimeValidation() {
             displayError($('#representative-mobile-number'), $('#rep-number-error'), 'Invalid representative mobile number.');
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
-
-    $('#additional-quantity').keyup(function () {
-        if ($('#additional-quantity').val() == "") {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Please fill up all fields.');
-            $('#add-item-btn').attr("disabled", true);
-        } else if ($('#additional-quantity').val() < 0) {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
-            $('#add-item-btn').attr("disabled", true);
-        } else if ($('#additional-quantity').val() == 0) {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-            $('#add-item-btn').attr("disabled", true);
-        } else {
-            resetField($('#additional-quantity'), $('#additional-items-error'));
-            $('#add-item-btn').attr("disabled", false);
-        }
-    });
-    $('#additional-quantity').change(function () {
-        if ($('#additional-quantity').val() == "") {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Please fill up all fields.');
-            $('#add-item-btn').attr("disabled", true);
-        } else if ($('#additional-quantity').val() < 0) {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
-            $('#add-item-btn').attr("disabled", true);
-        } else if ($('#additional-quantity').val() == 0) {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-            $('#add-item-btn').attr("disabled", true);
-        } else {
-            resetField($('#additional-quantity'), $('#additional-items-error'));
-            $('#add-item-btn').attr("disabled", false);
-        }
-    });
+    
     //menu details
+    $('#additional-name').change(function () {
+        var foodname = validator.trim($('#additional-name').val());
+        if (validator.isEmpty(foodname)) {
+            $('#additional-price').val('')
+            if(validator.isEmpty($('#additional-quantity').val())) {
+                resetField($('#additional-quantity'), $('#additional-items-error'));
+                resetField($('#additional-price'), $('#additional-items-error'));
+                resetField($('#additional-name'), $('#additional-items-error'));
+            } else {
+                displayError($('#additional-name'), $('#additional-items-error'), 'Food name cannot be empty.');
+                $('.additional-add-button').attr("disabled", true);
+            }
+        } else {
+            resetField($('#additional-name'), $('#additional-items-error'));
+            if ($('#additional-quantity').val() < 0) {
+                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
+                $('.additional-add-button').attr("disabled", true);
+            } else if ($('#additional-quantity').val() == 0) {
+                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
+                $('.additional-add-button').attr("disabled", true);
+            } else {
+                resetField($('#additional-quantity'), $('#additional-items-error'));
+                $('.additional-add-button').attr("disabled", false);
+            }
+        }
+    });
+
+    $('#additional-quantity').change(function () {
+        var foodname = validator.trim($('#additional-name').val());
+        if (validator.isEmpty($('#additional-quantity').val())) {
+            if(validator.isEmpty(foodname)) {
+                resetField($('#additional-quantity'), $('#additional-items-error'));
+                resetField($('#additional-price'), $('#additional-items-error'));
+                resetField($('#additional-name'), $('#additional-items-error'));
+                $('#additional-price').val('');
+            } else {
+                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
+                $('.additional-add-button').attr("disabled", true);
+            }
+        } else if ($('#additional-quantity').val() < 0) {
+            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
+            $('.additional-add-button').attr("disabled", true);
+        } else if ($('#additional-quantity').val() == 0) {
+            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
+            $('.additional-add-button').attr("disabled", true);
+        } else {
+            resetField($('#additional-quantity'), $('#additional-items-error'));
+            if (validator.isEmpty(foodname)) {
+                displayError($('#additional-name'), $('#additional-items-error'), 'Food name cannot be empty.');
+                $('.additional-add-button').attr("disabled", true);
+            } else {
+                resetField($('#additional-name'), $('#additional-items-error'));
+                $('.additional-add-button').attr("disabled", false);
+            }            
+        }
+    });
+    
     $('#additional-price').change(function () {
         if ($('#additional-price').val() < 0) {
             displayError($('#additional-quantity'), $('#additional-items-error'), 'Price cannot be negative.');
         } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
         }
-        //$('#submit').attr("disabled", checkIfFilledEventFields());
     });
+    
     //transactional details
-    $('#extra-charges-quantity').change(function () {
-        if ($('#extra-charges-quantity').val() < 0) {
-            $('#extra-charges-error').text('Quantity cannot be negative.');
-        } else if ($('#extra-charges-quantity').val() == 0) {
-            $('#extra-charges-error').text('Quantity cannot be zero.');
+    $('#extra-charges-name').change(function () {
+        var echargesname = validator.trim($('#extra-charges-name').val())
+        if (validator.isEmpty(echargesname)) {
+            if (validator.isEmpty($('#extra-charges-quantity').val()) &&
+                validator.isEmpty($('#extra-charges-price').val())) {
+                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
+                resetField($('#extra-charges-price'), $('#extra-charges-error'));
+                resetField($('#extra-charges-name'), $('#extra-charges-error'));
+            } else {
+                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
+                $('.extra-charges-add-button').attr("disabled", true);
+            }
         } else {
-            $('#extra-charges-error').text('');
+            resetField($('#extra-charges-name'), $('#extra-charges-error'));
+            if ($('#extra-charges-price').val() < 0) {
+                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
+                $('.extra-charges-add-button').attr("disabled", true);
+            } else if ($('#extra-charges-price').val() == 0) {
+                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
+                $('.extra-charges-add-button').attr("disabled", true);
+            } else {
+                resetField($('#extra-charges-price'), $('#extra-charges-error'));
+                if ($('#extra-charges-quantity').val() < 0) {
+                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
+                    $('.extra-charges-add-button').attr("disabled", true);
+                } else if ($('#extra-charges-quantity').val() == 0) {
+                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
+                    $('.extra-charges-add-button').attr("disabled", true);
+                } else {
+                    resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
+                    $('.extra-charges-add-button').attr("disabled", false);
+                }
+            }
         }
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+    });
+    $('#extra-charges-quantity').change(function () {
+        var echargesname = validator.trim($('#extra-charges-name').val())
+        if (validator.isEmpty($('#extra-charges-quantity').val())) {
+            if (validator.isEmpty(echargesname) &&
+                validator.isEmpty($('#extra-charges-price').val())) {
+                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
+                resetField($('#extra-charges-price'), $('#extra-charges-error'));
+                resetField($('#extra-charges-name'), $('#extra-charges-error'));
+            } else {
+                displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
+                $('.extra-charges-add-button').attr("disabled", true);
+            }
+        } else if ($('#extra-charges-quantity').val() < 0) {
+            displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
+            $('.extra-charges-add-button').attr("disabled", true);
+        } else if ($('#extra-charges-quantity').val() == 0) {
+            displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
+            $('.extra-charges-add-button').attr("disabled", true);
+        } else {
+            resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
+            if (validator.isEmpty(echargesname)) {
+                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
+                $('.extra-charges-add-button').attr("disabled", true);
+            } else {
+                resetField($('#extra-charges-name'), $('#extra-charges-error'));
+                if ($('#extra-charges-price').val() < 0) {
+                    displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
+                    $('.extra-charges-add-button').attr("disabled", true);
+                } else if ($('#extra-charges-price').val() == 0) {
+                    displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
+                    $('.extra-charges-add-button').attr("disabled", true);
+                } else {
+                    resetField($('#extra-charges-price'), $('#extra-charges-error'));
+                    $('.extra-charges-add-button').attr("disabled", false);
+                }
+            }           
+        }
     });
 
     $('#extra-charges-price').change(function () {
-        if ($('#extra-charges-price').val() < 0) {
-            $('#extra-charges-error').text('Price cannot be negative.');
+        var echargesname = validator.trim($('#extra-charges-name').val())
+        if (validator.isEmpty($('#extra-charges-price').val())) {
+            if (validator.isEmpty($('#extra-charges-quantity').val()) &&
+                validator.isEmpty(echargesname)) {
+                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
+                resetField($('#extra-charges-price'), $('#extra-charges-error'));
+                resetField($('#extra-charges-name'), $('#extra-charges-error'));
+            } else {
+                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
+                $('.extra-charges-add-button').attr("disabled", true);
+            }
+        } else if ($('#extra-charges-price').val() < 0) {
+            displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
+            $('.extra-charges-add-button').attr("disabled", true);
+        } else if ($('#extra-charges-price').val() == 0) {
+            displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
+            $('.extra-charges-add-button').attr("disabled", true);
         } else {
-            $('#extra-charges-error').text('');
+            resetField($('#extra-charges-price'), $('#extra-charges-error'));
+            if (validator.isEmpty(echargesname)) {
+                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
+                $('.extra-charges-add-button').attr("disabled", true);
+            } else {
+                resetField($('#extra-charges-name'), $('#extra-charges-error'));
+                if ($('#extra-charges-quantity').val() < 0) {
+                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
+                    $('.extra-charges-add-button').attr("disabled", true);
+                } else if ($('#extra-charges-quantity').val() == 0) {
+                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
+                    $('.extra-charges-add-button').attr("disabled", true);
+                } else {
+                    resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
+                    $('.extra-charges-add-button').attr("disabled", false);
+                }
+            } 
         }
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+    });
+
+    $('#discount-name').change(function () {
+        var discountname = validator.trim($('#discount-name').val())
+        if (validator.isEmpty(discountname)) {
+            if(validator.isEmpty($('#discount-price').val())) {
+                resetField($('#discount-price'), $('#discount-error'));
+                resetField($('#discount-name'), $('#discount-error'));
+            } else {
+                displayError($('#discount-name'), $('#discount-error'), 'Discount name cannot be empty.');
+                $('.discount-add-button').attr("disabled", true);
+            }
+        } else {
+            resetField($('#discount-name'), $('#discount-error'));
+            if ($('#discount-price').val() < 0) {
+                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be negative.');
+                $('.discount-add-button').attr("disabled", true);
+            } else if ($('#discount-price').val() == 0) {
+                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
+                $('.discount-add-button').attr("disabled", true);
+            } else {
+                resetField($('#discount-price'), $('#discount-error'));
+                $('.discount-add-button').attr("disabled", false);
+            }
+        }
     });
 
     $('#discount-price').change(function () {
-        if ($('#discount-price').val() < 0) {
-            $('#discount-error').text('Price cannot be negative.');
+        var discountname = validator.trim($('#discount-name').val())
+        if (validator.isEmpty($('#discount-price').val())) {
+            if(validator.isEmpty(discountname)) {
+                resetField($('#discount-price'), $('#discount-error'));
+                resetField($('#discount-name'), $('#discount-error'));
+            } else {
+                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
+                $('.discount-add-button').attr("disabled", true);
+            }
+        } else if ($('#discount-price').val() < 0) {
+            displayError($('#discount-price'), $('#discount-error'), 'Price cannot be negative.');
+            $('.discount-add-button').attr("disabled", true);
+        } else if ($('#discount-price').val() == 0) {
+            displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
+            $('.discount-add-button').attr("disabled", true);
         } else {
-            $('#discount-error').text('');
+            resetField($('#discount-price'), $('#discount-error'));
+            if (validator.isEmpty(discountname)) {
+                displayError($('#discount-name'), $('#discount-error'), 'Discount name cannot be empty.');
+                $('.discount-add-button').attr("disabled", true);
+            } else {
+                resetField($('#discount-name'), $('#discount-error'));
+                $('.discount-add-button').attr("disabled", false);
+            }  
         }
-        $('#submit').attr("disabled", checkIfFilledEventFields());
-    });
+    });    
 
     //Payment Details
     downpaymentCheckFields();
