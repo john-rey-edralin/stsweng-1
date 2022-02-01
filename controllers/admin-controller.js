@@ -189,6 +189,17 @@ const controller = {
         const activity = await Activity.find({ username });
         res.json(activity);
     },
+
+    getRecentActivity: async function (req, res) {
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setHours(0, 0, 0, 0); //set to midnight
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        const activity = await Activity.find({
+            timestamp: { $gte: sevenDaysAgo },
+        });
+        res.json(activity);
+    },
     
     putGiveEmployeeAccess: async function (req, res) {
         const username = req.body.username;
