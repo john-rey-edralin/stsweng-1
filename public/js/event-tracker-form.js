@@ -1853,7 +1853,7 @@ function validDate(input, errorfield, id) {
         console.log("yoo "+ input)
         if (validator.isEmpty(input)) {
             console.log("rawr "+ input)
-            displayError($(idfield), errorfield, 'Date cannot be empty!!.');
+            displayError($(idfield), errorfield, 'Invalid date.');
             return true;
         } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
             if ($('#event-id').text() == '') {
