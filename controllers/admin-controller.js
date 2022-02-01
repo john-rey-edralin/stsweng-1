@@ -101,6 +101,18 @@ const controller = {
 
         res.json(doc);
     },
+
+    putRemoveEmployeeAccess: async function (req, res) {
+        const username = req.body.username;
+        console.log(username)
+        const doc = await Employee.findOneAndUpdate(
+            { username: username },
+            { hasAccess: false },
+            { returnDocument: 'after' }
+        );
+
+        res.json(doc);
+    }
 };
 
 module.exports = controller;

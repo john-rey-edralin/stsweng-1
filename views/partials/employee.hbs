@@ -89,3 +89,24 @@
         </div>
     </div>
 </div>
+
+{{!-- REMOVE ACCESS MODAL --}}
+<div class="modal fade" id="employee-{{_id}}-remove" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>Remove Access</strong></h5>
+            </div>
+            <div class="modal-body p-4">
+                <div class="fw-bold">Are you sure you want to remove system access from {{name}} ({{username}})?</div> <br> They
+                would not be able to log in to the system.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary me-auto" data-bs-toggle="modal"
+                    data-bs-target="#employee-{{_id}}" data-bs-dismiss="modal">Back</button>
+                <button type="button" class="btn btn-danger " data-bs-dismiss="modal"
+                    onclick="removeAccess('{{username}}')">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
