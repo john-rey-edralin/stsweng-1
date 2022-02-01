@@ -1,5 +1,3 @@
-//const e = require("express");
-
 let foodList = [];
 let foodNameList = [];
 let chargeList = [];
@@ -187,6 +185,13 @@ let menuPackageHTML =
     '</div>';
 
 $(document).ready(function () {
+    //disable Enter key
+    $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+        }
+    });
     retrieveInfoFromDB();
 
     setRequiredFields();
