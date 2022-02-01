@@ -4,14 +4,19 @@
 <head>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/material-icons.css">
+    <link rel="stylesheet" type="text/css" href="/css/intlTelInput.min.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css">
     <link rel="stylesheet" type="text/css" href="/css/admin.css">
+    <link rel="stylesheet" type="text/css" href="/css/admin-form.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
 
     <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/intlTelInput-jquery.min.js"></script>
+    <script type="text/javascript" src="/js/validator.min.js"></script>
     <script type="text/javascript" src="/js/admin.js"></script>
+    <script type="text/javascript" src="/js/admin-employee-form.js"></script>
 </head>
 
 <body class="d-flex flex-column">
@@ -40,7 +45,6 @@
                 </div>
                 <hr>
                 <div class="p-4">
-                    
                     {{#each employees}}
                     {{>employee}}
                     {{/each}}

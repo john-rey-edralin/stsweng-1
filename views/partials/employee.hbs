@@ -63,8 +63,76 @@
                 <button type="button" class="btn btn-danger me-auto" data-bs-target="#employee-{{_id}}-give"
                     data-bs-toggle="modal" data-bs-dismiss="modal">Give Access</button>
                 {{/ifEquals}}
-                <a class="btn btn-secondary" href="#" role="button">Edit</a>
+                <button type="button" class="btn btn-secondary" data-bs-target="#employee-{{_id}}-edit"
+                    data-bs-toggle="modal" data-bs-dismiss="modal">Edit</button>
             </div>
+        </div>
+    </div>
+</div>
+
+{{!-- EDIT MODAL --}}
+<div class="modal fade" id="employee-{{_id}}-edit" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>Edit Employee Info</strong></h5>
+            </div>
+            <div class="modal-body p-4 ui-front">
+                <form class="edit">
+                    <p id="username" hidden>{{username}}</p>
+                    <div class="form-group my-3">
+                        <label for="employee-mobile-number-{{username}}">Employee Mobile Number</label>
+                        <input type="tel" class="form-control w-100 employee-mobile-number" id="employee-mobile-number-{{username}}" name="contactNum" value="{{contactNum}}">
+                        <div id="employee-mobile-number-help" class="form-text">Country code can be changed if needed.
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="emergency-contact-name-{{username}}">Emergency Contact Name</label>
+                        <input type="text" class="form-control emergency-contact-name" id="emergency-contact-name-{{username}}" name="emergencyContactName" value="{{emergencyContactName}}">
+                        <div id="emergency-contact-name-help" class="form-text">Person to contact in case of emergency.</div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="emergency-contact-mobile-number-{{username}}">Emergency Contact Mobile Number</label>
+                        <input type="tel" class="form-control w-100 emergency-contact-mobile-number" id="emergency-contact-mobile-number-{{username}}" name="emergencyContactNum">
+                        <div id="emergency-contact-mobile-number-help" class="form-text">Country code can be changed if needed.
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="current-password-{{username}}">Current Password</label>
+                        <input type="password" class="form-control current-password" id="current-password-{{username}}" name="oldPassword" required>
+                        <div id="current-password-help" class="form-text">
+                            Input the user's current password.
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="new-password-{{username}}">New Password</label>
+                        <input type="password" class="form-control new-password" id="new-password-{{username}}" name="newPassword">
+                        <div id="new-password-help" class="form-text">Must be at least 8 characters long. A
+                            combination of letters, numbers, and at least one special character is recommended.
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="reenter-password-{{username}}">Confirm New Password</label>
+                        <input type="password" class="form-control reenter-password" id="reenter-password-{{username}}" name="reenteredPassword"
+                            >
+                        <div id="reenter-password-help" class="form-text">Reenter the user's new password.
+                        </div>
+                    </div>
+                
+
+                <strong>
+                    <div class="text-center text-danger error" id="missing-error"></div>
+                    <div class="text-center text-danger error" id="employee-number-error"></div>
+                    <div class="text-center text-danger error" id="ec-name-error"></div>
+                    <div class="text-center text-danger error" id="ec-number-error"></div>
+                    <div class="text-center text-danger error" id="username-error"></div>
+                    <div class="text-center text-danger error" id="password-error"></div>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success">Edit Info</button>
+            </div></form>
         </div>
     </div>
 </div>
@@ -77,7 +145,8 @@
                 <h5 class="modal-title"><strong>Give Access</strong></h5>
             </div>
             <div class="modal-body p-4">
-                <div class="fw-bold">Are you sure you give system access to {{name}} ({{username}})?</div> <br> They would be able to
+                <div class="fw-bold">Are you sure you give system access to {{name}} ({{username}})?</div> <br> They
+                would be able to
                 view, create, modify, and cancel events.
             </div>
             <div class="modal-footer">
@@ -98,7 +167,8 @@
                 <h5 class="modal-title"><strong>Remove Access</strong></h5>
             </div>
             <div class="modal-body p-4">
-                <div class="fw-bold">Are you sure you want to remove system access from {{name}} ({{username}})?</div> <br> They
+                <div class="fw-bold">Are you sure you want to remove system access from {{name}} ({{username}})?</div>
+                <br> They
                 would not be able to log in to the system.
             </div>
             <div class="modal-footer">

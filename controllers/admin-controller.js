@@ -42,12 +42,12 @@ const controller = {
         const {
             username,
             password,
-            ['employee-name']: name,
-            ['employee-mobile-number']: contactNum,
-            ['emergency-contact-name']: emergencyContactName,
-            ['emergency-contact-mobile-number']: emergencyContactNum,
+            name,
+            contactNum,
+            emergencyContactName,
+            emergencyContactNum,
         } = req.body;
-
+        
         const hash = await bcrypt.hash(password, saltRounds);
         const isExistingEmployee = await Employee.findOne({ username });
 
@@ -190,6 +190,7 @@ const controller = {
         const activity = await Activity.find({ username });
         res.json(activity);
     },
+    
     putGiveEmployeeAccess: async function (req, res) {
         const username = req.body.username;
         console.log(username)
