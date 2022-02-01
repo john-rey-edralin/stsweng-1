@@ -7,7 +7,7 @@ Library         SeleniumLibrary
 
 *** Variables ***
 ${SERVER}               localhost:3000
-${BROWSER}              chrome
+${BROWSER}              firefox
 ${DELAY}                0
 ${DELAY_0.3}            0.1
 ${VALID USER}           admin
@@ -85,6 +85,7 @@ Validate Client Mobile Number
 Input Type Of Event
     [Arguments]     ${type}
     Input Text      event-type   ${type}
+    Press Keys      event-type         ENTER
 
 Validate Client Type Of Event
     Clear Element Text      event-type 
@@ -254,6 +255,14 @@ Go To Past Events
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[3]/a
     Click Element       css:*[data-bs-toggle="tooltip"]
 
+Go To Cancelled Events
+    Open Browser    ${HOME URL}     ${BROWSER}
+    Maximize Browser Window
+    Set Selenium Speed      ${DELAY}
+    Click Element       css:*[data-bs-toggle="dropdown"]
+    Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[4]/a
+    Click Element       xpath:/html/body/div/div/div[1]/div[2]/h1/a/span
+
 Click Filter And Sort Button
     Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[2]/div[5]/button[2]
 
@@ -272,7 +281,19 @@ Open Browser To Reservations Event Page
     Click Element       css:*[data-bs-toggle="dropdown"]
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[2]/a
     Click Element        xpath://*[@id="today-main"]/div/div[1]
-    Click Link      xpath://*[@id="modal-61b97af083e394341eb3f4a0"]/div/div/div[3]/a
+    Click Link      xpath://*[@id="edit-btn-61b97f79a092fc0a313d00b3"]
+    Set Selenium Speed      ${DELAY_0.3}
+    Edit Event Page Should Be Open
+    Set Selenium Speed      ${DELAY}
+
+Open Browser To Pencilbookings Event Page
+    Open Browser    ${HOME URL}     ${BROWSER}
+    Maximize Browser Window
+    Set Selenium Speed      ${DELAY}
+    Click Element       css:*[data-bs-toggle="dropdown"]
+    Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[1]/a
+    Click Element        xpath://*[@id="today-main"]/div/div[1]
+    Click Link      xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/a[1]
     Set Selenium Speed      ${DELAY_0.3}
     Edit Event Page Should Be Open
     Set Selenium Speed      ${DELAY}
@@ -285,4 +306,23 @@ Edit Event Page Should Be Open
     Page Should Contain Element     form-transaction-info
     Page Should Contain Element     form-breakdown-info
     Page Should Contain Element     form-payment-info
+
+Go To Receipt
+    Input Text      name        DONTMODIFY
+    Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
+    Should Have           DONTMODIFY
+    Click Element       xpath:/html/body/div/div/div[2]/div/div[1]/h1[2]
+    Click Element       xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/a[1]
+    Element Should Contain      xpath:/html/body/div/div[1]/div/h5      RECEIPT
+    Page Should Contain Element         print-it
+    Page Should Contain Element         save-it
+
+Cancel Event
+    Input Text      name        JR
+    Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
+    Should Have           JR
+    Click Element       xpath:/html/body/div/div/div[2]/div/div[1]/h1[2]
+    click Button        xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/button
+    Click Button        xpath:/html/body/div[1]/div/div[2]/div/div[3]/div/div/div[3]/button[2]
+    Element Should Contain      today-title        CANCELLED
 

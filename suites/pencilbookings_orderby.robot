@@ -10,14 +10,14 @@ Sort By Ascending
     Go To Pencilbookings
     Select From List By Value       name:sort      date-asc
     Click Filter And Sort Button
-    Element Should Contain      xpath://*[@id="today-main"]/div/div[1]      Noelle
+    Element Should Contain      xpath://*[@id="today-main"]/div/div[1]      DONTMODIFY
     [Teardown]      Close Browser
 
 Sort By Descending
     Go To Pencilbookings
     Select From List By Value       name:sort      date-dsc
     Click Filter And Sort Button
-    Element Should Contain      xpath://*[@id="today-main"]/div/div[1]      JR
+    Element Should Contain      xpath://*[@id="today-main"]/div/div[1]      DONTMODIFY
     [Teardown]      Close Browser
 
 
