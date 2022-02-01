@@ -6,6 +6,9 @@ const eventController = require('../controllers/event-controller.js');
 
 const app = express.Router();
 
+app.get('/', (req, res) => {
+    res.redirect('/event-tracker/home');
+});
 // login
 app.get('/', authController.getLogin);
 
@@ -21,7 +24,7 @@ app.get('/admin/employee/:id', adminController.getEmployee);
 app.put('/admin/give', adminController.putGiveEmployeeAccess);
 app.put('/admin/remove', adminController.putRemoveEmployeeAccess);
 
-// event-tracker home
+// event-tracker
 app.get('/event-tracker/home', eventController.getHome);
 
 // event-tracker form

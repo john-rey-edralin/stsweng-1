@@ -6,8 +6,16 @@ const controller = {
     getAdminHome: async function (req, res) {
         const employees = await Employee.find({ role: 'employee' });
 
-        let data = {
-            employees : employees
+        const formattedEmployees = employees.map((employee) => ({
+            ...employee._doc,
+            dateRegistered: employee.dateRegistered.toLocaleDateString(
+                'en-US',
+                { year: 'numeric', month: 'long', day: 'numeric' }
+            ),
+        }));
+
+        const data = {
+            employees: formattedEmployees,
         };
 
         res.render('admin-home', data);
@@ -26,9 +34,16 @@ const controller = {
      * @param {express.response} res response object
      */
     postRegisterEmployee: async function (req, res) {
-        const { username, password } = req.body;
-        const hash = await bcrypt.hash(password, saltRounds);
+        const {
+            username,
+            password,
+            ['employee-name']: name,
+            ['employee-mobile-number']: contactNum,
+            ['emergency-contact-name']: emergencyContactName,
+            ['emergency-contact-mobile-number']: emergencyContactNum,
+        } = req.body;
 
+        const hash = await bcrypt.hash(password, saltRounds);
         const isExistingEmployee = await Employee.findOne({ username });
 
         if (!isExistingEmployee) {
@@ -37,6 +52,11 @@ const controller = {
                 password: hash,
                 role: 'employee',
                 hasAccess: true,
+                name,
+                contactNum,
+                emergencyContactName,
+                emergencyContactNum,
+                dateRegistered: new Date(),
             });
             res.redirect('/admin');
         } else {
