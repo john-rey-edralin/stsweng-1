@@ -1,13 +1,15 @@
-$(document).ready(function () {
-    //$('#submit').attr("disabled", true);
-    setRequiredFields();
-    initializeTooltips();
+if (typeof window != 'undefined') {
+    $(document).ready(function () {
+        //$('#submit').attr("disabled", true);
+        setRequiredFields();
+        initializeTooltips();
 
-    initializeEmployeeFields();
-    initializeAccountFields();
+        initializeEmployeeFields();
+        initializeAccountFields();
 
-    initializeRealTimeValidation();
-});
+        initializeRealTimeValidation();
+    });
+}
 
 function initializeTooltips() {
     $('[data-bs-toggle="tooltip"]').tooltip({
@@ -139,12 +141,16 @@ async function checkUsernameAvailability(usernameField) {
 //#endregion
 
 //#region password validation
+function isPasswordInvalid(password) {
+    return password.length < 8;
+}
+
 function initializePasswordRealTimeValidation() {
     const passwordField = $('#password');
 
     passwordField.keyup(() => {
         const password = passwordField.val();
-        if (password.length < 8) {
+        if (isPasswordInvalid(password)) {
             displayError(
                 passwordField,
                 $('#password-error'),
@@ -217,3 +223,7 @@ function initializeEmergencyNumberRealTimeValidation() {
     });
 }
 //#endregion
+
+if (typeof window == 'undefined') {
+    module.exports = isPasswordInvalid;
+}
