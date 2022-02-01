@@ -58,12 +58,12 @@ Transaction Details Validation
     Validate Discounts Quantity
     [Teardown]      Close Browser
 
-Payment Details Downpayment Validation
-    Open Browser To Create Event Page
-    Check Downpayment
-    [Teardown]      Close Browser
+# Payment Details Downpayment Validation
+#     Open Browser To Create Event Page
+#     Check Downpayment
+#     [Teardown]      Close Browser
 
-Payment Details Final Payment Validation
-    Open Browser To Create Event Page
-    Check Final Payment
-    [Teardown]      Close Browser
+# Payment Details Final Payment Validation
+#     Open Browser To Create Event Page
+#     Check Final Payment
+#     [Teardown]      Close Browser
