@@ -5,6 +5,7 @@ const saltRounds = 10;
 const controller = {
     getAdminHome: async function (req, res) {
         const employees = await Employee.find({ role: 'employee' });
+
         const formattedEmployees = employees.map((employee) => ({
             ...employee._doc,
             dateRegistered: employee.dateRegistered.toLocaleDateString(
@@ -87,6 +88,18 @@ const controller = {
         const employee = await Employee.findById(id);
         const status = employee ? 200 : 404;
         res.status(status).json(employee);
+    },
+
+    putGiveEmployeeAccess: async function (req, res) {
+        const username = req.body.username;
+        console.log(username)
+        const doc = await Employee.findOneAndUpdate(
+            { username: username },
+            { hasAccess: true },
+            { returnDocument: 'after' }
+        );
+
+        res.json(doc);
     },
 };
 

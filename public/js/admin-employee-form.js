@@ -20,6 +20,12 @@ function initializeTooltips() {
 
 function initializeEmployeeFields() {
     // initialize contact number fields
+    let settings = { autoPlaceholder: "aggressive", preferredCountries: ["ph"], separateDialCode: true, utilsScript: "/js/utils.js" };
+    $("#employee-mobile-number").intlTelInput(settings);
+    $("#emergency-contact-mobile-number").intlTelInput(settings);
+}
+
+function initializeAccountFields() {
     let settings = {
         autoPlaceholder: 'aggressive',
         preferredCountries: ['ph'],
@@ -30,12 +36,29 @@ function initializeEmployeeFields() {
     $('#emergency-contact-mobile-number').intlTelInput(settings);
 }
 
-function initializeAccountFields() {}
-
 /**
  * Adds the required class to required fields.
  */
 function setRequiredFields() {
+    $("input[required]").siblings("label").addClass("required");
+    $("select[required]").siblings("label").addClass("required");
+}
+
+
+function initializeRealTimeValidation() {
+    /** TODO: Add validation */
+}
+
+function checkStringInput(input) {
+    const blacklist = ["~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")",
+        "_", "=", "+", "{", "}", "[", "]", "|", "\\", ";", ":", "\'",
+        "\"", ".", ",", "<", ">", "/", "?"];
+    var flag = false;
+
+    for (const item of blacklist)
+        if (input.indexOf(item) != -1)
+            flag = true;
+  
     $('input[required]').siblings('label').addClass('required');
     $('select[required]').siblings('label').addClass('required');
 }
@@ -93,13 +116,17 @@ function checkStringInput(input) {
 function displayError(inputField, errorField, errorText) {
     errorField.text(errorText);
     inputField.addClass('is-invalid');
-    // $('#submit').attr('disabled', checkIfFilledEventFields());
+    $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
 function resetField(inputField, errorField) {
     errorField.text('');
     inputField.removeClass('is-invalid');
-    // $('#submit').attr('disabled', checkIfFilledEventFields());
+    $('#submit').attr("disabled", checkIfFilledEventFields());
+}
+
+function checkUsernameAvailability() {
+    /** TODO: Add ajax call to db */
 }
 
 //#region username validation
@@ -138,9 +165,7 @@ async function checkUsernameAvailability(usernameField) {
         resetField(usernameField, $('#username-error'));
     }
 }
-//#endregion
 
-//#region password validation
 function isPasswordInvalid(password) {
     return password.length < 8;
 }
@@ -161,9 +186,7 @@ function initializePasswordRealTimeValidation() {
         }
     });
 }
-//#endregion
 
-//#region employee name validation
 function initializeEmployeeNameRealTimeValidation() {
     const employeeNameField = $('#employee-name');
 
@@ -180,9 +203,7 @@ function initializeEmployeeNameRealTimeValidation() {
         }
     });
 }
-//#endregion
 
-//#region employee number validation
 function initializeEmployeeNumberRealTimeValidation() {
     $('#employee-mobile-number').keyup(function () {
         if (validator.isEmpty($(this).val()))
@@ -204,9 +225,7 @@ function initializeEmployeeNumberRealTimeValidation() {
             );
     });
 }
-//#endregion
 
-//#region emergency number validation
 function initializeEmergencyNumberRealTimeValidation() {
     $('#emergency-contact-mobile-number').keyup(function () {
         if ($(this).intlTelInput('isValidNumber'))
@@ -222,7 +241,7 @@ function initializeEmergencyNumberRealTimeValidation() {
             );
     });
 }
-//#endregion
+
 
 if (typeof window == 'undefined') {
     module.exports = isPasswordInvalid;

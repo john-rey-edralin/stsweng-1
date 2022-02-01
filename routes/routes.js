@@ -10,7 +10,9 @@ app.get('/', (req, res) => {
     res.redirect('/event-tracker/home');
 });
 // login
-app.get('/login', authController.getLogin);
+app.get('/', authController.getLogin);
+
+// authenticate user
 app.post('/authenticate', authController.authenticate);
 
 // admin
@@ -19,6 +21,7 @@ app.get('/admin/register', adminController.getRegisterEmployee);
 app.post('/admin/register', adminController.postRegisterEmployee);
 app.get('/admin/employee', adminController.getAllEmployees);
 app.get('/admin/employee/:id', adminController.getEmployee);
+app.put('/admin/give', adminController.putGiveEmployeeAccess);
 
 // event-tracker
 app.get('/event-tracker/home', eventController.getHome);
