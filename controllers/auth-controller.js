@@ -21,8 +21,10 @@ const controller = {
             : false;
 
         if (result && user.hasAccess) {
+            req.session.user = user;
             req.session.loggedIn = true;
             req.session.isAdmin = user.role === 'admin';
+
             res.redirect('/event-tracker/home');
         } else {
             res.redirect('/');
