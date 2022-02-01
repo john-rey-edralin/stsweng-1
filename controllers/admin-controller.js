@@ -18,8 +18,17 @@ const controller = {
             ),
         }));
 
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setHours(0, 0, 0, 0); //set to midnight
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        const activities = await Activity.find({
+            timestamp: { $gte: sevenDaysAgo },
+        });
+
         const data = {
             employees: formattedEmployees,
+            activities: activities
         };
 
         res.render('admin-home', data);
