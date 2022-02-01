@@ -20,3 +20,18 @@ function giveAccess(username) {
         },
     });
 }
+
+function removeAccess(username) {
+    let json = JSON.stringify({
+        username: username,
+    });
+    $.ajax({
+        type: 'PUT',
+        url: '/admin/remove',
+        data: json,
+        contentType: 'application/json',
+        success: function (result) {
+            window.location.href = '/admin';
+        },
+    });
+}
