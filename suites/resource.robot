@@ -22,18 +22,16 @@ ${NUMBER PAX}           20
 
 *** Keywords ***
 #not final
-Open Browser To Login Page
-    Open Browser    ${LOGIN URL}    ${BROWSER}
-    Maximize Browser Window
-    Set Selenium Speed      ${DELAY}
+Login Page
     Login Page Should Be Open
+    Input Text      username    admin
+    Input Text      password    admin
+    Click Button        xpath:/html/body/div/div/form/div[3]/button
+
 #not final
 Login Page Should Be Open
     Page Should Contain Element     username
     Page Should Contain Element     password
-    Page Should Contain Element     class:btn
-    Page Should Contain Element     class:btn-dark
-    Page Should Contain Element     class:rounded-lg
 
 Input Username
     [Arguments]     ${username}
@@ -50,6 +48,7 @@ Open Browser To Create Event Page
     Open Browser    ${HOME URL}     ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
+    Login Page
     Click Element    class:align-self-end
     Create Event Page Should Be Open
 
@@ -235,6 +234,7 @@ Go To Pencilbookings
     Open Browser    ${HOME URL}     ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
+    Login Page
     Click Element       css:*[data-bs-toggle="dropdown"]
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[1]/a
     Click Element       today-date
@@ -243,6 +243,7 @@ Go To Reservations
     Open Browser    ${HOME URL}     ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
+    Login Page
     Click Element       css:*[data-bs-toggle="dropdown"]
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[2]/a
     Click Element       css:*[data-bs-toggle="tooltip"]
@@ -251,6 +252,7 @@ Go To Past Events
     Open Browser    ${HOME URL}     ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
+    Login Page
     Click Element       css:*[data-bs-toggle="dropdown"]
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[3]/a
     Click Element       css:*[data-bs-toggle="tooltip"]
@@ -259,9 +261,18 @@ Go To Cancelled Events
     Open Browser    ${HOME URL}     ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
+    Login Page
     Click Element       css:*[data-bs-toggle="dropdown"]
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[4]/a
     Click Element       xpath:/html/body/div/div/div[1]/div[2]/h1/a/span
+
+Go To Admin Menu
+    Open Browser    ${HOME URL}     ${BROWSER}
+    Maximize Browser Window
+    Set Selenium Speed      ${DELAY}
+    Login Page
+    Click Element       xpath:/html/body/nav/div/ul/li
+    Click Link      xpath:/html/body/nav/div/ul/li/ul/li[1]/a
 
 Click Filter And Sort Button
     Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[2]/div[5]/button[2]
@@ -278,6 +289,7 @@ Open Browser To Reservations Event Page
     Open Browser    ${HOME URL}     ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
+    Login Page
     Click Element       css:*[data-bs-toggle="dropdown"]
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[2]/a
     Click Element        xpath://*[@id="today-main"]/div/div[1]
@@ -290,6 +302,7 @@ Open Browser To Pencilbookings Event Page
     Open Browser    ${HOME URL}     ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
+    Login Page
     Click Element       css:*[data-bs-toggle="dropdown"]
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[1]/a
     Click Element        xpath://*[@id="today-main"]/div/div[1]
@@ -303,6 +316,7 @@ Open Browser To Calendar Page
     Open Browser    ${HOME URL}     ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
+    Login Page
     Click Element       xpath:/html/body/nav/div/div/ul/li[2]
 
     
@@ -333,4 +347,10 @@ Cancel Event
     click Button        xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/button
     Click Button        xpath:/html/body/div[1]/div/div[2]/div/div[3]/div/div/div[3]/button[2]
     Element Should Contain      today-title        CANCELLED
+
+Register Employee Page Should Be Open
+    Page Should Contain         Employee Details
+    Page Should Contain         Account Details
+    Page Should Contain Element         submit
+
 
