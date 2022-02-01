@@ -735,6 +735,21 @@ function getDateToday() {
 }
 
 /**
+ *  Returns the date a month ago
+ */
+function getDateAMonthAgo() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth();
+    var yyyy = today.getFullYear();
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    today = yyyy + '-' + mm + '-' + dd;
+
+    return today;
+}
+
+/**
  * Adds the required class to required fields.
  */
 function setRequiredFields() {
@@ -1261,6 +1276,13 @@ function initializeRealTimeValidation() {
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
+    $("#event-date").on("change", function () {
+        var eventdate = document.getElementById("event-date").value;
+        validDate(eventdate, $('#event-date-error'), "event-date");
+        checkEventAvailability();
+        $('#submit').attr("disabled", checkIfFilledEventFields());
+    });
+
     $('#event-time').change(function () {
         if ($('#event-time').val() == '')
             displayError($('#event-time'), $('#event-time-error'), 'Event time cannot be empty.');
@@ -1601,7 +1623,7 @@ function checkIfFilledEventFields() {
     let package = (garden || sunroom || terrace);
     
     var dateMax = getDateTime("2032-01-01");
-    var dateMin = getDateTime(getDateToday());
+    var dateMin = getDateTime(getDateAMonthAgo());
     //Event Details
     if (validator.isEmpty(name)) {
         $('#missing-error').val('Client name should be filled.');
@@ -1642,13 +1664,12 @@ function checkIfFilledEventFields() {
     }
     else if (!validator.isEmpty(date)) {
         var eventdate = getDateTime(date);
-        if ($('#event-date').val().length > 10) {
+        if (date.length > 10) {
             $('#missing-error').val('Invalid date.');
             return true;
-        }
-        else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
+        } else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
             if ($('#event-id').text() == '') {
-                $('#missing-error').val('Date cannot be in the past.');
+                $('#missing-error').val('Date should be at least a month ago.');
                 return true;
             }
         }
@@ -1705,7 +1726,7 @@ function checkIfFilledEventFields() {
             }
             else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
                 if ($('#event-id').text() == '') {
-                    $('#downpayment-error').val('Date cannot be in the past.');
+                    $('#downpayment-error').val('Date should be at least a month ago.');
                     return true;
                 }
             }
@@ -1736,7 +1757,7 @@ function checkIfFilledEventFields() {
             }
             else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
                 if ($('#event-id').text() == '') {
-                    $('#final-payment-error').val('Date cannot be in the past.');
+                    $('#final-payment-error').val('Date should be at least a month ago.');
                     return true;
                 }
             }
@@ -1828,15 +1849,19 @@ function validDate(input, errorfield, id) {
     else {
         var dateInput = getDateTime(input);
         var dateMax = getDateTime("2032-01-01");
-        var dateMin = getDateTime(getDateToday());
-
-        if (input == '') {
-            displayError($(idfield), errorfield, 'Date cannot be empty.');
+        var dateMin = getDateTime(getDateAMonthAgo());
+        console.log("yoo "+ input)
+        if (validator.isEmpty(input)) {
+            console.log("rawr "+ input)
+            displayError($(idfield), errorfield, 'Date cannot be empty!!.');
             return true;
         } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
             if ($('#event-id').text() == '') {
-                displayError($(idfield), errorfield, 'Date cannot be in the past.');
+                displayError($(idfield), errorfield, 'Date should be at least a month ago.');
                 return true;
+            }
+            else {
+                resetField($(idfield), errorfield);
             }
         } else if (dateInput - dateMax >= 0 || isNaN(dateInput)) {
             displayError(
