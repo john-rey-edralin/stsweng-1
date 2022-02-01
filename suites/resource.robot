@@ -293,10 +293,18 @@ Open Browser To Pencilbookings Event Page
     Click Element       css:*[data-bs-toggle="dropdown"]
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[1]/a
     Click Element        xpath://*[@id="today-main"]/div/div[1]
-    Click Link      xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/a[1]
+    Set Selenium Speed      ${DELAY_0.3}
+    Click Link      xpath://*[@id="edit-btn-61d28bbb89aac087e87fb44b"]
     Set Selenium Speed      ${DELAY_0.3}
     Edit Event Page Should Be Open
     Set Selenium Speed      ${DELAY}
+
+Open Browser To Calendar Page
+    Open Browser    ${HOME URL}     ${BROWSER}
+    Maximize Browser Window
+    Set Selenium Speed      ${DELAY}
+    Click Element       xpath:/html/body/nav/div/div/ul/li[2]
+
     
 Edit Event Page Should Be Open
     Page Should Contain Element     form-title 
