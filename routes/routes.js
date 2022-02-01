@@ -3,7 +3,6 @@ const express = require('express');
 const authController = require('../controllers/auth-controller.js');
 const adminController = require('../controllers/admin-controller.js');
 const eventController = require('../controllers/event-controller.js');
-const adminController = require('../controllers/admin-controller.js');
 const app = express.Router();
 
 // login

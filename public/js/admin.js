@@ -4,7 +4,17 @@ $(document).ready(function () {
     });
 
     $('[data-toggle="popover"]').popover();
+
+    filterEmployees()
 });
+
+function filterEmployees() {
+    $('#current-employee-switch').change(function () {
+        if ($(this).prop("checked"))
+            $('.noaccess').addClass("d-none");
+        else $('.noaccess').removeClass("d-none");
+    });
+}
 
 function giveAccess(username) {
     let json = JSON.stringify({
