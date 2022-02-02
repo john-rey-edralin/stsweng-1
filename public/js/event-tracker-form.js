@@ -284,7 +284,7 @@ function retrieveInfoFromDB() {
                 })
             );
         });
-
+        
         addExistingFields();
     });
 }
@@ -330,14 +330,6 @@ function initializeEventFields() {
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(eventTypeTags, request.term);
             response(results.slice(0, 5));
-        },
-        change: function (event, ui) {
-            if (!ui.item) {
-                $(event.target).val("");
-            }
-        },
-        focus: function (event, ui) {
-            return false;
         }
     });
 
@@ -396,6 +388,14 @@ function initializeMenuFields() {
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(foodNameList, request.term);
             response(results.slice(0, 5));
+        },
+        change: function (event, ui) {
+            if (!ui.item) {
+                $(event.target).val("");
+            }
+        },
+        focus: function (event, ui) {
+            return false;
         }
     });
 
@@ -579,7 +579,8 @@ function finalPaymentNotChecked() {
 function downpaymentCheckFields() {
     //Checks the downpayment date field value
     $("#downpayment-date").on("change", function () {
-        validDate($('#downpayment-date'), $('#event-date-error'));
+        var downpaydate = document.getElementById("downpayment-date").value;
+        validDate(downpaydate, $('#downpayment-error'), "downpayment-date");
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -595,7 +596,6 @@ function downpaymentCheckFields() {
     //Checks the downpayment amount value
     $('#downpayment-amount').on('keyup', function () {
         if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '')
-
             displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
         else
             resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
@@ -659,7 +659,8 @@ function downpaymentCheckFields() {
 function finalPaymentCheckFields() {
     //Checks the final payment date field value
     $("#final-payment-date").on("change", function () {
-        validDate($("final-payment-date"), $('#final-payment-error'));
+        var finalpaydate = document.getElementById("final-payment-date").value;
+        validDate(finalpaydate, $('#final-payment-error'), "final-payment-date");
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -734,6 +735,7 @@ function getDateToday() {
     if (dd < 10) dd = '0' + dd;
     if (mm < 10) mm = '0' + mm;
     today = yyyy + '-' + mm + '-' + dd;
+
     return today;
 }
 
@@ -1276,12 +1278,6 @@ function initializeRealTimeValidation() {
         if (validator.isEmpty(eventtype))
             displayError($(this), $('#event-type-error'), 'Event type should be filled.');
         else resetField($(this), $('#event-type-error'));
-    });
-
-    $("#event-date").on("change", function () {
-        var eventdate = document.getElementById("event-date").value;
-        validDate($('#event-date'), $('#event-date-error'));
-        checkEventAvailability();
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -1817,6 +1813,7 @@ function checkStringInput(input) {
         ':',
         "'",
         '"',
+        '.',
         ',',
         '<',
         '>',
@@ -1850,10 +1847,10 @@ function getDateTime(input) {
  * @param {String} errorfield   The ID of the error field in the form to display the errormsg in
  * @param {String} id           The ID of the field in the form with discrepancies
  */
-function validDate(datefield, errorfield) {
-    var dateNow = new Date(datefield.val())
-    if (datefield.val().length > 10)
-        displayError(datefield, errorfield, 'Invalid date.');
+function validDate(input, errorfield, id) {
+    var idfield = '#' + id;
+    if (input.length > 10)
+        displayError($(idfield), errorfield, 'Invalid date.');
     else {
         var dateInput = getDateTime(input);
         var dateMax = getDateTime("2032-01-01");
@@ -1863,7 +1860,7 @@ function validDate(datefield, errorfield) {
             console.log("rawr "+ input)
             displayError($(idfield), errorfield, 'Invalid date.');
             return true;
-        } else if (dateNow < dateMin) {
+        } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
             if ($('#event-id').text() == '') {
                 displayError($(idfield), errorfield, 'Date should be at least a month ago.');
                 return true;
@@ -1879,7 +1876,7 @@ function validDate(datefield, errorfield) {
             );
             return true;
         } else {
-            resetField(datefield, errorfield);
+            resetField($(idfield), errorfield);
             return false;
         }
     }
@@ -1900,7 +1897,6 @@ function enableSubmitButton() {
 }
 
 function checkEventAvailability() {
-    
     if (
         $('#event-date').val() != '' &&
         $('#event-time').val() != '' &&
@@ -1922,7 +1918,6 @@ function checkEventAvailability() {
             eventVenues: eventVenues,
         };
 
-
         $.get(
             '/event-tracker/check/event-availability',
             data,
@@ -1936,15 +1931,15 @@ function checkEventAvailability() {
                     );
                     $('#submit').attr("disabled", true);
                 }
-            }
-            else {
+                else {
                     resetField($('#event-date'), $('#event-time-error'));
                     resetField($('#event-time'), $('#event-time-error'));
                     if ($('#event-id').text() == '')
                         validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
                     $('#submit').attr("disabled", checkIfFilledEventFields());
                 }
-        });
+            }
+        );
     }
 }
 
@@ -2260,7 +2255,7 @@ function submitForm() {
             });
 
             let url = (currevent.status === 'booked') ? '/event-tracker/pencilbookings' : getRoute()
-
+            
             // makes a PUT request using AJAX to update the event's details
             $.ajax({
                 type: 'PUT',
