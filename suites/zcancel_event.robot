@@ -6,14 +6,14 @@ Documentation   A test suite with a 2 tests for cancelling an event for pencilbo
 Resource        resource.robot
 
 *** Test Cases ***
-# Cancel Pencilbooking Event
-#     Go To Pencilbookings
-#     Cancel Event
-#     [Teardown]      Close Browser
+Cancel Pencilbooking Event
+    Go To Pencilbookings
+    Cancel Event
+    [Teardown]      Close Browser
 
-# Cancel Reservation Event
-#     Go To Reservations
-#     Cancel Event
-#     [Teardown]      Close Browser
+Cancel Reservation Event
+    Go To Reservations
+    Cancel Event
+    [Teardown]      Close Browser
 
 

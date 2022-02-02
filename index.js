@@ -1,4 +1,6 @@
 require('dotenv').config();
+hostname = process.env.HOSTNAME
+port = process.env.PORT
 
 //import the necessary modules
 const path = require('path');
@@ -61,10 +63,9 @@ hbs.registerPartials(path.join(__dirname, 'views/partials'));
 db.connect();
 
 //bind the server to a port and a host
-app.listen(process.env.PORT, process.env.HOSTNAME, function () {
-    console.log(
-        `Server is running at http://${process.env.HOSTNAME}:${process.env.PORT}`
-    );
+app.listen(port, function () {
+    console.log('Server is running at: ');
+    console.log('http://' + hostname + ':' + port);
 });
 
 module.exports = app;

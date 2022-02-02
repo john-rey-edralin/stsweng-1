@@ -324,11 +324,6 @@ function initializeEventFields() {
             var results = $.ui.autocomplete.filter(eventTypeTags, request.term);
             response(results.slice(0, 5));
         },
-        change: function (event, ui) {
-            if (!ui.item) {
-                $(event.target).val("");
-            }
-        },
         focus: function (event, ui) {
             return false;
         }
