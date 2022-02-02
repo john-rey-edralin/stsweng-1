@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   A test suite with a 6 tests for checking pencilbookings in Pencilbookings Page
+Documentation   A test suite with a 3 tests for checking pencilbookings in Pencilbookings Page
 ...             
 ...             This test follows the keywords from
 ...             the resource.robot
@@ -11,31 +11,25 @@ Filter Venue With Garden
     Select From List By Value       name:venue      Garden
     Click Filter And Sort Button
     Should Have           Garden
-    [Teardown]      Close Browser
-
-Filter Venue With Sunroom
-    Go To Pencilbookings
+    Wait Until Element Is Visible       today-date
+    Click Element       today-date
     Select From List By Value       name:venue      Sunroom
     Click Filter And Sort Button
     Should Have           Sunroom 
-    [Teardown]      Close Browser
-
-Filter Venue With Terrace
-    Go To Pencilbookings
+    Wait Until Element Is Visible       today-date
+    Click Element       today-date
     Select From List By Value       name:venue      Terrace
     Click Filter And Sort Button
     Should Have           Terrace
     [Teardown]      Close Browser
 
-Filter Afternoon Time
+Filter Time
     Go To Pencilbookings
     Select From List By Value       name:time      Afternoon
     Click Filter And Sort Button
     Should Not Have           dark_mode
-    [Teardown]      Close Browser
-
-Filter Night Time
-    Go To Pencilbookings
+    Wait Until Element Is Visible       today-date
+    Click Element       today-date
     Select From List By Value       name:time      Evening
     Click Filter And Sort Button
     Should Not Have           light_mode
