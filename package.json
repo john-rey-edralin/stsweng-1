@@ -3,8 +3,9 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "nodemon index.js"
+        "test": "jest tests/* --coverage",
+        "dev": "nodemon index.js",
+        "build": "jest && node index.js"
     },
     "repository": {
         "type": "git",
@@ -18,14 +19,21 @@
     "homepage": "https://github.com/francheska-vicente/stsweng#readme",
     "dependencies": {
         "bcrypt": "^5.0.1",
+        "calendar": "^0.1.1",
+        "chromedriver": "^96.0.0",
+        "concurrently": "^6.4.0",
         "connect-mongo": "^4.6.0",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
         "express-session": "^1.17.2",
         "hbs": "^4.1.2",
         "mongoose": "^6.0.12",
-        "nodemon": "^2.0.15"
+        "nodemon": "^2.0.15",
+        "robotremote": "^1.4.0"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "jest": "^27.3.1",
+        "node-fetch": "^2.6.6"
+    },
     "description": ""
 }
