@@ -6,7 +6,7 @@
                     <a class="nav-link active" href="/event-tracker/home">Home</a>
                 </li>
                 <li class="nav-item me-3">
-                    <a class="nav-link active" href="#">Calendar</a>
+                    <a class="nav-link active" href="/event-tracker/calendar/{{#getToday}}{{/getToday}}">Calendar</a>
                 </li>
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -16,7 +16,7 @@
                         <li><a class="dropdown-item" href="/event-tracker/pencilbookings">Pencil Bookings</a></li>
                         <li><a class="dropdown-item" href="/event-tracker/reservations">Reservations</a></li>
                         <li><a class="dropdown-item" href="/event-tracker/pastevents">Past Events</a></li>
-                        <li><a class="dropdown-item" href="#">Cancelled Events</a></li>
+                        <li><a class="dropdown-item" href="/event-tracker/cancelled">Cancelled Events</a></li>
                     </ul>
                 </li>
             </ul>
@@ -27,7 +27,7 @@
                     Username
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#">Admin Menu</a></li>
+                    <li><a class="dropdown-item" href="/admin">Admin Menu</a></li>
                     <li><a class="dropdown-item" href="/logout">Log Out</a></li>
                 </ul>
             </li>

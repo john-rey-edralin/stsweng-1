@@ -6,32 +6,32 @@ $(document).ready(function () {
     $('[data-toggle="popover"]').popover();
 });
 
-function deleteReservation(id) {
+function giveAccess(username) {
     let json = JSON.stringify({
-        id: id,
+        username: username,
     });
     $.ajax({
         type: 'PUT',
-        url: '/event-tracker/cancel',
+        url: '/admin/give',
         data: json,
         contentType: 'application/json',
         success: function (result) {
-            window.location.href = '/event-tracker/cancelled';
+            window.location.href = '/admin';
         },
     });
 }
 
-function finishEvent(id) {
+function removeAccess(username) {
     let json = JSON.stringify({
-        id: id,
+        username: username,
     });
     $.ajax({
         type: 'PUT',
-        url: '/event-tracker/finish',
+        url: '/admin/remove',
         data: json,
         contentType: 'application/json',
         success: function (result) {
-            window.location.href = '/event-tracker/pastevents';
+            window.location.href = '/admin';
         },
     });
 }
