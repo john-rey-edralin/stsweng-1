@@ -45,9 +45,9 @@ function setRequiredFields() {
 }
 
 
-function initializeRealTimeValidation() {
-    /** TODO: Add validation */
-}
+// function initializeRealTimeValidation() {
+//     /** TODO: Add validation */
+// }
 
 function checkStringInput(input) {
     const blacklist = ["~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")",
@@ -72,46 +72,46 @@ function initializeRealTimeValidation() {
     initializeEmergencyNumberRealTimeValidation();
 }
 
-function checkStringInput(input) {
-    const blacklist = [
-        '~',
-        '`',
-        '!',
-        '@',
-        '#',
-        '$',
-        '%',
-        '^',
-        '&',
-        '*',
-        '(',
-        ')',
-        '_',
-        '=',
-        '+',
-        '{',
-        '}',
-        '[',
-        ']',
-        '|',
-        '\\',
-        ';',
-        ':',
-        "'",
-        '"',
-        '.',
-        ',',
-        '<',
-        '>',
-        '/',
-        '?',
-    ];
-    var flag = false;
+// function checkStringInput(input) {
+//     const blacklist = [
+//         '~',
+//         '`',
+//         '!',
+//         '@',
+//         '#',
+//         '$',
+//         '%',
+//         '^',
+//         '&',
+//         '*',
+//         '(',
+//         ')',
+//         '_',
+//         '=',
+//         '+',
+//         '{',
+//         '}',
+//         '[',
+//         ']',
+//         '|',
+//         '\\',
+//         ';',
+//         ':',
+//         "'",
+//         '"',
+//         '.',
+//         ',',
+//         '<',
+//         '>',
+//         '/',
+//         '?',
+//     ];
+//     var flag = false;
 
-    for (const item of blacklist) if (input.indexOf(item) != -1) flag = true;
+//     for (const item of blacklist) if (input.indexOf(item) != -1) flag = true;
 
-    return flag;
-}
+//     return flag;
+// }
 
 function displayError(inputField, errorField, errorText) {
     errorField.text(errorText);
@@ -125,9 +125,9 @@ function resetField(inputField, errorField) {
     $('#submit').attr("disabled", checkIfFilledEventFields());
 }
 
-function checkUsernameAvailability() {
-    /** TODO: Add ajax call to db */
-}
+// function checkUsernameAvailability() {
+//     /** TODO: Add ajax call to db */
+// }
 
 //#region username validation
 function initializeUsernameRealTimeValidation() {
