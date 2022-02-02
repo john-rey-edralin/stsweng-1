@@ -39,7 +39,7 @@
             </div>
 
             <br>
-            <form method="post">
+            <form id="create">
                 <div class="row">
 
                     {{!-- EMPLOYEE DETAILS --}}
@@ -126,7 +126,7 @@
                                 <div class="form-group my-3">
                                     <label for="password">Password</label>
                                     <input type="password" class="form-control" id="password" name="password" required>
-                                    <div id="password" class="form-text">Must be at least 8 characters long. A
+                                    <div id="password-help" class="form-text">Must be at least 8 characters long. A
                                         combination of letters, numbers, and at least one special character is
                                         recommended.
                                     </div>
@@ -135,20 +135,14 @@
                         </div>
 
                         {{!-- EVENT ERROR MESSAGES --}}
-                        <div id="form-event-errors">
+                        <div id="form-account-errors">
                             <strong>
-                                <div class="text-center text-danger error" id="missing-error"></div>
-                                <div class="text-center text-danger error" id="employee-name-error"></div>
-                                <div class="text-center text-danger error" id="employee-number-error"></div>
-                                <div class="text-center text-danger error" id="ec-name-error"></div>
-                                <div class="text-center text-danger error" id="ec-number-error"></div>
                                 <div class="text-center text-danger error" id="username-error"></div>
                                 <div class="text-center text-danger error" id="password-error"></div>
                             </strong>
                         </div>
                     </div>
                 </div>
-
 
                 <br>
                 {{!-- SUBMIT BUTTON --}}
