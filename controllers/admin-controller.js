@@ -1,16 +1,37 @@
 const bcrypt = require('bcrypt');
 const Employee = require('../models/employee.js');
 const Activity = require('../models/activity.js');
+const employee = require('../models/employee.js');
 const saltRounds = 10;
 
 const controller = {
     getAdminHome: async function (req, res) {
-        const employees = await Employee.find({ role: 'employee' });
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setHours(0, 0, 0, 0); //set to midnight
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        const employees = await Employee.aggregate([
+            { $match: { role: 'employee' } },
+            {
+                $lookup: {
+                    from: 'activities',
+                    localField: 'username',
+                    foreignField: 'username',
+                    as: 'activities',
+                },
+            },
+        ]);
         const formattedEmployees = employees.map((employee) => ({
-            ...employee._doc,
+            ...employee,
             dateRegistered: employee.dateRegistered.toLocaleDateString(
                 'en-US',
                 { year: 'numeric', month: 'long', day: 'numeric' }
+            ),
+            activities: employee.activities.filter(
+                (activity) =>
+                    new Date(activity.timestamp).setHours(0, 0, 0, 0) -
+                        sevenDaysAgo >=
+                    0
             ),
         }));
 
@@ -18,7 +39,8 @@ const controller = {
             employees: formattedEmployees,
         };
 
-        res.render('admin-home', data);
+        res.json(data);
+        // res.render('admin-home', data);
     },
 
     getRegisterEmployee: function (req, res) {
