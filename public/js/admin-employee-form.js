@@ -242,16 +242,17 @@ function submitForm() {
 function submitEditForm() {
     $('.edit').on('submit', function (event) {
         event.preventDefault();
-        const username = $(this).children('p').text();
+        const id = $(this).children('.id').text();
+        const username = $(this).children('.username').text();
 
         // stores all information as an object
         let data = {
-            contactNum: $('#employee-mobile-number-' + username).intlTelInput('getNumber'),
-            emergencyContactName: $('#emergency-contact-name-' + username).val(),
-            emergencyContactNum: $('#emergency-contact-mobile-number-' + username).intlTelInput('getNumber'),
-            oldPassword: $('#current-password-' + username).val(),
-            newPassword: $('#new-password-' + username).val(),
-            reenteredPassword: $('#reenter-password-' + username).val()
+            contactNum: $('#employee-mobile-number-' + id).intlTelInput('getNumber'),
+            emergencyContactName: $('#emergency-contact-name-' + id).val(),
+            emergencyContactNum: $('#emergency-contact-mobile-number-' + id).intlTelInput('getNumber'),
+            oldPassword: $('#current-password-' + id).val(),
+            newPassword: $('#new-password-' + id).val(),
+            reenteredPassword: $('#reenter-password-' + id).val()
         };
 
         $.ajax({
