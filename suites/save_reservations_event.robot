@@ -11,7 +11,7 @@ Save Edited Reservations Event
     Input Client Mobile Number      ${MOBILE NUMBER} 
     Input Type Of Event     ${TYPE EVENT} 
     # Select Time Of Event
-    Input Number Of Pax     ${NUMBER PAX}  
+    # Input Number Of Pax     ${NUMBER PAX}  
     Select Event Package 6 Variants
     Select From List By Value        downpayment-mode         Cash
     Input Text       downpayment-amount          0

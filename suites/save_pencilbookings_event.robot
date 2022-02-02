@@ -11,7 +11,7 @@ Save Edited Pencilbookings Event
     Input Client Mobile Number      ${MOBILE NUMBER} 
     Input Type Of Event     ${TYPE EVENT} 
     # Select Time Of Event
-    Input Number Of Pax     ${NUMBER PAX}  
+    # Input Number Of Pax     ${NUMBER PAX}  
     Select Event Package 6 Variants
     Set Selenium Speed      ${DELAY_0.3}
     Click Button        xpath:/html/body/div[1]/div/form/div[6]/div/a/button

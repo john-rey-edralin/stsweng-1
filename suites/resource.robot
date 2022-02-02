@@ -235,7 +235,9 @@ Go To Pencilbookings
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
     Login Page
+    Set Selenium Speed      ${DELAY_0.3}
     Click Element       css:*[data-bs-toggle="dropdown"]
+    Set Selenium Speed      ${DELAY}
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[1]/a
     Click Element       today-date
 
@@ -244,7 +246,9 @@ Go To Reservations
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
     Login Page
+    Set Selenium Speed      ${DELAY_0.3}
     Click Element       css:*[data-bs-toggle="dropdown"]
+    Set Selenium Speed      ${DELAY}
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[2]/a
     Click Element       css:*[data-bs-toggle="tooltip"]
 
@@ -253,7 +257,9 @@ Go To Past Events
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
     Login Page
+    Set Selenium Speed      ${DELAY_0.3}
     Click Element       css:*[data-bs-toggle="dropdown"]
+    Set Selenium Speed      ${DELAY}
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[3]/a
     Click Element       css:*[data-bs-toggle="tooltip"]
 
@@ -262,7 +268,9 @@ Go To Cancelled Events
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
     Login Page
+    Set Selenium Speed      ${DELAY_0.3}
     Click Element       css:*[data-bs-toggle="dropdown"]
+    Set Selenium Speed      ${DELAY}
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[4]/a
     Click Element       xpath:/html/body/div/div/div[1]/div[2]/h1/a/span
 
@@ -290,7 +298,9 @@ Open Browser To Reservations Event Page
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
     Login Page
+    Set Selenium Speed      ${DELAY_0.3}
     Click Element       css:*[data-bs-toggle="dropdown"]
+    Set Selenium Speed      ${DELAY}
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[2]/a
     Click Element        xpath://*[@id="today-main"]/div/div[1]
     Click Link      xpath://*[@id="edit-btn-61b97f79a092fc0a313d00b3"]
@@ -303,7 +313,9 @@ Open Browser To Pencilbookings Event Page
     Maximize Browser Window
     Set Selenium Speed      ${DELAY}
     Login Page
+    Set Selenium Speed      ${DELAY_0.3}
     Click Element       css:*[data-bs-toggle="dropdown"]
+    Set Selenium Speed      ${DELAY}
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[1]/a
     Click Element        xpath://*[@id="today-main"]/div/div[1]
     Set Selenium Speed      ${DELAY_0.3}
