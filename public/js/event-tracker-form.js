@@ -343,7 +343,9 @@ function initializeEventFields() {
 
     // initialize food quantity amount
     $('.package').on('change', function () {
-        if (getVariantCount() > $('.menu-button-active').length) {
+        if(getVariantCount() == 0) {
+            $('.menu-button').prop('disabled', true);
+        } else if (getVariantCount() > $('.menu-button-active').length) {
             $('.menu-button').prop('disabled', false);
         }
         else if (getVariantCount() == $('.menu-button-active').length) {
@@ -1749,7 +1751,7 @@ function getPackagePrice(code) {
     return packageList[packageList.map((e) => e.packageCode).indexOf(code)].packagePrice;
 }
 
-function getVariantCount(code) {
+function getVariantCount() {
     let gardenIndex = getPackageIndex(
         gardenPackageList,
         $('#garden-options').val()
@@ -1763,12 +1765,12 @@ function getVariantCount(code) {
         $('#terrace-options').val()
     );
 
-    let count = 4;
-    if (gardenIndex != -1 && count == 4)
+    let count = 0;
+    if (gardenIndex != -1)
         count = Math.max(count, gardenPackageList[gardenIndex].variantCount);
-    if (sunroomIndex != -1 && count == 4)
+    if (sunroomIndex != -1)
         count = Math.max(count, sunroomPackageList[sunroomIndex].variantCount);
-    if (terraceIndex != -1 && count == 4)
+    if (terraceIndex != -1)
         count = Math.max(count, terracePackageList[terraceIndex].variantCount);
     return count;
 }
