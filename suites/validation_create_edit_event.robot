@@ -11,7 +11,6 @@ Event Details Validation
     Validate Client Name
     Validate Client Mobile Number
     Validate Client Type Of Event
-    Validate Date Of Event
     Validate Client Time Of Event
     Validate Number Of Pax
     Validate Event Venue
@@ -58,12 +57,12 @@ Transaction Details Validation
     Validate Discounts Quantity
     [Teardown]      Close Browser
 
-# Payment Details Downpayment Validation
-#     Open Browser To Create Event Page
-#     Check Downpayment
-#     [Teardown]      Close Browser
+Payment Details Validation
+    Open Browser To Create Event Page
+    Check Downpayment
+    [Teardown]      Close Browser
 
-# Payment Details Final Payment Validation
-#     Open Browser To Create Event Page
-#     Check Final Payment
-#     [Teardown]      Close Browser
+Payment Details Validation
+    Open Browser To Create Event Page
+    Check Final Payment
+    [Teardown]      Close Browser

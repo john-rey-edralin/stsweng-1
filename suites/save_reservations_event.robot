@@ -9,10 +9,10 @@ Resource        resource.robot
 Save Edited Reservations Event
     Open Browser To Reservations Event Page
     Input Client Mobile Number      ${MOBILE NUMBER} 
-    # Input Type Of Event     ${TYPE EVENT} 
     Input Number Of Pax     ${NUMBER PAX}  
-    Select Time Of Event
+    Input Type Of Event     ${TYPE EVENT} 
     Select Event Package 6 Variants
+    Select Time Of Event
     Select From List By Value        downpayment-mode         Cash
     Input Text       downpayment-amount          0
     Wait Until Element Is Visible       xpath:/html/body/div[1]/div/form/div[6]/div/a/button
