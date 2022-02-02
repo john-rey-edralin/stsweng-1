@@ -185,13 +185,6 @@ let menuPackageHTML =
     '</div>';
 
 $(document).ready(function () {
-    //disable Enter key
-    $(window).keydown(function(event){
-        if(event.keyCode == 13) {
-        event.preventDefault();
-        return false;
-        }
-    });
     retrieveInfoFromDB();
 
     setRequiredFields();
@@ -284,7 +277,7 @@ function retrieveInfoFromDB() {
                 })
             );
         });
-        
+
         addExistingFields();
     });
 }
@@ -330,6 +323,14 @@ function initializeEventFields() {
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(eventTypeTags, request.term);
             response(results.slice(0, 5));
+        },
+        change: function (event, ui) {
+            if (!ui.item) {
+                $(event.target).val("");
+            }
+        },
+        focus: function (event, ui) {
+            return false;
         }
     });
 
@@ -388,14 +389,6 @@ function initializeMenuFields() {
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(foodNameList, request.term);
             response(results.slice(0, 5));
-        },
-        change: function (event, ui) {
-            if (!ui.item) {
-                $(event.target).val("");
-            }
-        },
-        focus: function (event, ui) {
-            return false;
         }
     });
 
@@ -415,7 +408,6 @@ function initializeMenuFields() {
 }
 
 function initializeTransactionFields() {
-    //Extra Charges and Corkage Fees
     $(".extra-charges-autocomplete").autocomplete({
         minLength: 0,
         source: function (request, response) {
@@ -437,8 +429,7 @@ function initializeTransactionFields() {
         resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
         resetField($('#extra-charges-price'), $('#extra-charges-error'));
     });
-    
-    //Discount
+
     $('.discount-add-button').click(function () { addDiscount(); });
 
     $('#discounts-modal').on('hidden.bs.modal', function () {
@@ -579,8 +570,7 @@ function finalPaymentNotChecked() {
 function downpaymentCheckFields() {
     //Checks the downpayment date field value
     $("#downpayment-date").on("change", function () {
-        var downpaydate = document.getElementById("downpayment-date").value;
-        validDate(downpaydate, $('#downpayment-error'), "downpayment-date");
+        validDate($('#downpayment-date'), $('#event-date-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -622,35 +612,6 @@ function downpaymentCheckFields() {
             $('#payment-balance').removeClass('is-invalid');
         }
     });
-
-    $('#downpayment-amount').on('change', function () {
-        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '')
-            displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
-        else
-            resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
-
-        //Updates the total payment amount and the final payment amount 
-        $('#final-payment-amount').on('change', function () {
-            updatePaymentAndBalance();
-            $('#submit').attr("disabled", checkIfFilledEventFields());
-        });
-        updatePaymentAndBalance();
-
-        //Disables/Enables the Submit button
-        $('#submit').attr("disabled", checkIfFilledEventFields());
-
-        //Checks if the customer payment is greater than the needed payment (total amount) 
-        if (parseFloat($('#payment-balance').val()) < 0) {
-            $('#payment-error').text('Customer payment is greater than the total price.');
-            $('#payment-amount-total').addClass('is-invalid');
-            $('#payment-balance').addClass('is-invalid');
-        }
-        else {
-            $('#payment-error').text('');
-            $('#payment-amount-total').removeClass('is-invalid');
-            $('#payment-balance').removeClass('is-invalid');
-        }
-    });
 }
 
 /**
@@ -659,8 +620,7 @@ function downpaymentCheckFields() {
 function finalPaymentCheckFields() {
     //Checks the final payment date field value
     $("#final-payment-date").on("change", function () {
-        var finalpaydate = document.getElementById("final-payment-date").value;
-        validDate(finalpaydate, $('#final-payment-error'), "final-payment-date");
+        validDate($("final-payment-date"), $('#final-payment-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -675,31 +635,7 @@ function finalPaymentCheckFields() {
 
     //Checks the final payment amount value
     $('#final-payment-amount').on('keyup', function () {
-        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '')
-            displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
-        else
-            resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
-
-        $('#downpayment-amount').on('change', function () {
-            updatePaymentAndBalance();
-            $('#submit').attr("disabled", checkIfFilledEventFields());
-        });
-        updatePaymentAndBalance();
-        $('#submit').attr("disabled", checkIfFilledEventFields());
-
-        if (parseFloat($('#payment-balance').val()) < 0) {
-            $('#payment-error').text('Customer payment is greater than the total price.');
-            $('#payment-amount-total').addClass('is-invalid');
-            $('#payment-balance').addClass('is-invalid');
-        }
-        else {
-            $('#payment-error').text('');
-            $('#payment-amount-total').removeClass('is-invalid');
-            $('#payment-balance').removeClass('is-invalid');
-        }
-    });
-    $('#final-payment-amount').on('change', function () {
-        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '')
+        if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '')
             displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
         else
             resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
@@ -735,22 +671,6 @@ function getDateToday() {
     if (dd < 10) dd = '0' + dd;
     if (mm < 10) mm = '0' + mm;
     today = yyyy + '-' + mm + '-' + dd;
-
-    return today;
-}
-
-/**
- *  Returns the date a month ago
- */
-function getDateAMonthAgo() {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth();
-    var yyyy = today.getFullYear();
-    if (dd < 10) dd = '0' + dd;
-    if (mm < 10) mm = '0' + mm;
-    today = yyyy + '-' + mm + '-' + dd;
-
     return today;
 }
 
@@ -789,23 +709,18 @@ function updateFoodQuantity() {
 }
 
 function addAdditionalItem() {
-    $('.additional-add-button').attr("disabled", true);
     if (
         !$('#additional-name').val() ||
         !$('#additional-quantity').val() ||
         !$('#additional-price').val()
     ) {
         $('#additional-items-error').text('Please fill up all fields.');
-        $('.additional-add-button').attr("disabled", true);
     } else if ($('#additional-quantity').val() < 0) {
         $('#additional-items-error').text('Quantity cannot be negative.');
-        $('.additional-add-button').attr("disabled", true);
-    } else if ($('#additional-quantity').val() == 0) {
+    } else if ($('#additional-quantity').val() === 0) {
         $('#additional-items-error').text('Quantity cannot be zero.');
-        $('.additional-add-button').attr("disabled", true);
-    } else if ($('#additional-price').val() < 0) { 
+    } else if ($('#additional-price').val() < 0) {
         $('#additional-items-error').text('Price cannot be negative.');
-        $('.additional-add-button').attr("disabled", true);
     } else {
         let name = $('#additional-name').val();
         let quantity = $('#additional-quantity').val();
@@ -876,26 +791,18 @@ function removeAdditionalItem(elem) {
 }
 
 function addExtraCharge() {
-    $('.extra-charges-add-button').attr("disabled", true);
     if (
         !$('#extra-charges-name').val() ||
         !$('#extra-charges-quantity').val() ||
         !$('#extra-charges-price').val()
     ) {
         $('#extra-charges-error').text('Please fill up all fields.');
-        $('.extra-charges-add-button').attr("disabled", true);
     } else if ($('#extra-charges-quantity').val() < 0) {
         $('#extra-charges-error').text('Quantity cannot be negative.');
-        $('.extra-charges-add-button').attr("disabled", true);
-    } else if ($('#extra-charges-quantity').val() == 0) {
+    } else if ($('#extra-charges-quantity').val() === 0) {
         $('#extra-charges-error').text('Quantity cannot be zero.');
-        $('.extra-charges-add-button').attr("disabled", true);
     } else if ($('#extra-charges-price').val() < 0) {
         $('#extra-charges-error').text('Price cannot be negative.');
-        $('.extra-charges-add-button').attr("disabled", true);
-    } else if ($('#extra-charges-price').val() == 0) {
-        $('#extra-charges-error').text('Price cannot be zero.');
-        $('.extra-charges-add-button').attr("disabled", true);
     } else {
         var name = $('#extra-charges-name').val();
         var quantity = $('#extra-charges-quantity').val();
@@ -969,16 +876,10 @@ function removeExtraCharge(elem) {
 }
 
 function addDiscount() {
-    $('.discount-add-button').attr("disabled", true);
     if (!$('#discount-name').val() || !$('#discount-price').val()) {
         $('#discount-error').text('Please fill up all fields.');
-        $('.discount-add-button').attr("disabled", true);
     } else if ($('#discount-price').val() < 0) {
         $('#discount-error').text('Price cannot be negative.');
-        $('.discount-add-button').attr("disabled", true);
-    } else if ($('#discount-price').val() == 0) {
-        $('#discount-error').text('Price cannot be zero.');
-        $('.discount-add-button').attr("disabled", true);
     } else {
         var name = $('#discount-name').val();
         var price = $('#discount-price').val();
@@ -1278,12 +1179,11 @@ function initializeRealTimeValidation() {
         if (validator.isEmpty(eventtype))
             displayError($(this), $('#event-type-error'), 'Event type should be filled.');
         else resetField($(this), $('#event-type-error'));
-        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $("#event-date").on("change", function () {
         var eventdate = document.getElementById("event-date").value;
-        validDate(eventdate, $('#event-date-error'), "event-date");
+        validDate($('#event-date'), $('#event-date-error'));
         checkEventAvailability();
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
@@ -1353,239 +1253,55 @@ function initializeRealTimeValidation() {
             displayError($('#representative-mobile-number'), $('#rep-number-error'), 'Invalid representative mobile number.');
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
-    
-    //menu details
-    $('#additional-name').change(function () {
-        var foodname = validator.trim($('#additional-name').val());
-        if (validator.isEmpty(foodname)) {
-            $('#additional-price').val('')
-            if(validator.isEmpty($('#additional-quantity').val())) {
-                resetField($('#additional-quantity'), $('#additional-items-error'));
-                resetField($('#additional-price'), $('#additional-items-error'));
-                resetField($('#additional-name'), $('#additional-items-error'));
-            } else {
-                displayError($('#additional-name'), $('#additional-items-error'), 'Food name cannot be empty.');
-                $('.additional-add-button').attr("disabled", true);
-            }
-        } else {
-            resetField($('#additional-name'), $('#additional-items-error'));
-            if ($('#additional-quantity').val() < 0) {
-                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
-                $('.additional-add-button').attr("disabled", true);
-            } else if ($('#additional-quantity').val() == 0) {
-                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-                $('.additional-add-button').attr("disabled", true);
-            } else {
-                resetField($('#additional-quantity'), $('#additional-items-error'));
-                $('.additional-add-button').attr("disabled", false);
-            }
-        }
-    });
 
     $('#additional-quantity').change(function () {
-        var foodname = validator.trim($('#additional-name').val());
-        if (validator.isEmpty($('#additional-quantity').val())) {
-            if(validator.isEmpty(foodname)) {
-                resetField($('#additional-quantity'), $('#additional-items-error'));
-                resetField($('#additional-price'), $('#additional-items-error'));
-                resetField($('#additional-name'), $('#additional-items-error'));
-                $('#additional-price').val('');
-            } else {
-                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-                $('.additional-add-button').attr("disabled", true);
-            }
-        } else if ($('#additional-quantity').val() < 0) {
+        if ($('#additional-quantity').val() < 0) {
             displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
-            $('.additional-add-button').attr("disabled", true);
         } else if ($('#additional-quantity').val() == 0) {
             displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-            $('.additional-add-button').attr("disabled", true);
         } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
-            if (validator.isEmpty(foodname)) {
-                displayError($('#additional-name'), $('#additional-items-error'), 'Food name cannot be empty.');
-                $('.additional-add-button').attr("disabled", true);
-            } else {
-                resetField($('#additional-name'), $('#additional-items-error'));
-                $('.additional-add-button').attr("disabled", false);
-            }            
         }
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
-    
+    //menu details
     $('#additional-price').change(function () {
         if ($('#additional-price').val() < 0) {
             displayError($('#additional-quantity'), $('#additional-items-error'), 'Price cannot be negative.');
         } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
         }
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
-    
     //transactional details
-    $('#extra-charges-name').change(function () {
-        var echargesname = validator.trim($('#extra-charges-name').val())
-        if (validator.isEmpty(echargesname)) {
-            if (validator.isEmpty($('#extra-charges-quantity').val()) &&
-                validator.isEmpty($('#extra-charges-price').val())) {
-                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-            } else {
-                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            }
-        } else {
-            resetField($('#extra-charges-name'), $('#extra-charges-error'));
-            if ($('#extra-charges-price').val() < 0) {
-                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else if ($('#extra-charges-price').val() == 0) {
-                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else {
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                if ($('#extra-charges-quantity').val() < 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else if ($('#extra-charges-quantity').val() == 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else {
-                    resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                    $('.extra-charges-add-button').attr("disabled", false);
-                }
-            }
-        }
-    });
     $('#extra-charges-quantity').change(function () {
-        var echargesname = validator.trim($('#extra-charges-name').val())
-        if (validator.isEmpty($('#extra-charges-quantity').val())) {
-            if (validator.isEmpty(echargesname) &&
-                validator.isEmpty($('#extra-charges-price').val())) {
-                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-            } else {
-                displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            }
-        } else if ($('#extra-charges-quantity').val() < 0) {
-            displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
-            $('.extra-charges-add-button').attr("disabled", true);
+        if ($('#extra-charges-quantity').val() < 0) {
+            $('#extra-charges-error').text('Quantity cannot be negative.');
         } else if ($('#extra-charges-quantity').val() == 0) {
-            displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-            $('.extra-charges-add-button').attr("disabled", true);
+            $('#extra-charges-error').text('Quantity cannot be zero.');
         } else {
-            resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-            if (validator.isEmpty(echargesname)) {
-                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else {
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-                if ($('#extra-charges-price').val() < 0) {
-                    displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else if ($('#extra-charges-price').val() == 0) {
-                    displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else {
-                    resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                    $('.extra-charges-add-button').attr("disabled", false);
-                }
-            }           
+            $('#extra-charges-error').text('');
         }
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#extra-charges-price').change(function () {
-        var echargesname = validator.trim($('#extra-charges-name').val())
-        if (validator.isEmpty($('#extra-charges-price').val())) {
-            if (validator.isEmpty($('#extra-charges-quantity').val()) &&
-                validator.isEmpty(echargesname)) {
-                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-            } else {
-                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            }
-        } else if ($('#extra-charges-price').val() < 0) {
-            displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
-            $('.extra-charges-add-button').attr("disabled", true);
-        } else if ($('#extra-charges-price').val() == 0) {
-            displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-            $('.extra-charges-add-button').attr("disabled", true);
+        if ($('#extra-charges-price').val() < 0) {
+            $('#extra-charges-error').text('Price cannot be negative.');
         } else {
-            resetField($('#extra-charges-price'), $('#extra-charges-error'));
-            if (validator.isEmpty(echargesname)) {
-                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else {
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-                if ($('#extra-charges-quantity').val() < 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else if ($('#extra-charges-quantity').val() == 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else {
-                    resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                    $('.extra-charges-add-button').attr("disabled", false);
-                }
-            } 
+            $('#extra-charges-error').text('');
         }
-    });
-
-    $('#discount-name').change(function () {
-        var discountname = validator.trim($('#discount-name').val())
-        if (validator.isEmpty(discountname)) {
-            if(validator.isEmpty($('#discount-price').val())) {
-                resetField($('#discount-price'), $('#discount-error'));
-                resetField($('#discount-name'), $('#discount-error'));
-            } else {
-                displayError($('#discount-name'), $('#discount-error'), 'Discount name cannot be empty.');
-                $('.discount-add-button').attr("disabled", true);
-            }
-        } else {
-            resetField($('#discount-name'), $('#discount-error'));
-            if ($('#discount-price').val() < 0) {
-                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be negative.');
-                $('.discount-add-button').attr("disabled", true);
-            } else if ($('#discount-price').val() == 0) {
-                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
-                $('.discount-add-button').attr("disabled", true);
-            } else {
-                resetField($('#discount-price'), $('#discount-error'));
-                $('.discount-add-button').attr("disabled", false);
-            }
-        }
+        $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#discount-price').change(function () {
-        var discountname = validator.trim($('#discount-name').val())
-        if (validator.isEmpty($('#discount-price').val())) {
-            if(validator.isEmpty(discountname)) {
-                resetField($('#discount-price'), $('#discount-error'));
-                resetField($('#discount-name'), $('#discount-error'));
-            } else {
-                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
-                $('.discount-add-button').attr("disabled", true);
-            }
-        } else if ($('#discount-price').val() < 0) {
-            displayError($('#discount-price'), $('#discount-error'), 'Price cannot be negative.');
-            $('.discount-add-button').attr("disabled", true);
-        } else if ($('#discount-price').val() == 0) {
-            displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
-            $('.discount-add-button').attr("disabled", true);
+        if ($('#discount-price').val() < 0) {
+            $('#discount-error').text('Price cannot be negative.');
         } else {
-            resetField($('#discount-price'), $('#discount-error'));
-            if (validator.isEmpty(discountname)) {
-                displayError($('#discount-name'), $('#discount-error'), 'Discount name cannot be empty.');
-                $('.discount-add-button').attr("disabled", true);
-            } else {
-                resetField($('#discount-name'), $('#discount-error'));
-                $('.discount-add-button').attr("disabled", false);
-            }  
+            $('#discount-error').text('');
         }
-    });    
+        $('#submit').attr("disabled", checkIfFilledEventFields());
+    });
 
     //Payment Details
     downpaymentCheckFields();
@@ -1626,10 +1342,10 @@ function checkIfFilledEventFields() {
     let sunroom = $('#sunroom-options').val();
     let terrace = $('#terrace-options').val();
     let package = (garden || sunroom || terrace);
-    
+
     var dateMax = getDateTime("2032-01-01");
-    var dateMin = getDateTime(getDateAMonthAgo());
-    //Event Details
+    var dateMin = getDateTime(getDateToday());
+
     if (validator.isEmpty(name)) {
         $('#missing-error').val('Client name should be filled.');
         return true;
@@ -1669,12 +1385,13 @@ function checkIfFilledEventFields() {
     }
     else if (!validator.isEmpty(date)) {
         var eventdate = getDateTime(date);
-        if (date.length > 10) {
+        if ($('#event-date').val().length > 10) {
             $('#missing-error').val('Invalid date.');
             return true;
-        } else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
+        }
+        else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
             if ($('#event-id').text() == '') {
-                $('#missing-error').val('Date should be at least a month ago.');
+                $('#missing-error').val('Date cannot be in the past.');
                 return true;
             }
         }
@@ -1709,9 +1426,8 @@ function checkIfFilledEventFields() {
         $('#missing-error').val('At least 1 package should be selected.');
         return true;
     }
-    //Payment Details
     if (document.getElementById("downpayment").checked) {
-        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '') {
+        if ($('#downpayment-amount').val() < 0 || $('#downpayment-amount').val() == '') {
             $('#downpayment-amount-error').val('Invalid payment.');
             return true;
         }
@@ -1731,7 +1447,7 @@ function checkIfFilledEventFields() {
             }
             else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
                 if ($('#event-id').text() == '') {
-                    $('#downpayment-error').val('Date should be at least a month ago.');
+                    $('#downpayment-error').val('Date cannot be in the past.');
                     return true;
                 }
             }
@@ -1742,7 +1458,7 @@ function checkIfFilledEventFields() {
         }
     }
     if (document.getElementById("final-payment").checked) {
-        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '') {
+        if ($('#final-payment-amount').val() < 0 || $('#final-payment-amount').val() == '') {
             $('#final-payment-amount-error').val('Invalid payment.');
             return true;
         }
@@ -1762,7 +1478,7 @@ function checkIfFilledEventFields() {
             }
             else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
                 if ($('#event-id').text() == '') {
-                    $('#final-payment-error').val('Date should be at least a month ago.');
+                    $('#final-payment-error').val('Date cannot be in the past.');
                     return true;
                 }
             }
@@ -1813,7 +1529,6 @@ function checkStringInput(input) {
         ':',
         "'",
         '"',
-        '.',
         ',',
         '<',
         '>',
@@ -1847,36 +1562,29 @@ function getDateTime(input) {
  * @param {String} errorfield   The ID of the error field in the form to display the errormsg in
  * @param {String} id           The ID of the field in the form with discrepancies
  */
-function validDate(input, errorfield, id) {
-    var idfield = '#' + id;
-    if (input.length > 10)
-        displayError($(idfield), errorfield, 'Invalid date.');
+function validDate(datefield, errorfield) {
+    var dateNow = new Date(datefield.val())
+    if (datefield.val().length > 10)
+        displayError(datefield, errorfield, 'Invalid date.');
     else {
-        var dateInput = getDateTime(input);
-        var dateMax = getDateTime("2032-01-01");
-        var dateMin = getDateTime(getDateAMonthAgo());
-        console.log("yoo "+ input)
-        if (validator.isEmpty(input)) {
-            console.log("rawr "+ input)
-            displayError($(idfield), errorfield, 'Invalid date.');
+        var dateMax = new Date("2032-01-01");
+        var dateMin = new Date();
+
+        console.log(dateNow + ' ' + dateMin + ' ' + dateMax)
+        console.log(isNaN(datefield.val()))
+        if (datefield.val() == '') {
+            displayError(datefield, errorfield, 'Date cannot be empty.');
             return true;
-        } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
+        } else if (dateNow < dateMin) {
             if ($('#event-id').text() == '') {
-                displayError($(idfield), errorfield, 'Date should be at least a month ago.');
+                displayError(datefield, errorfield, 'Date cannot be in the past.');
                 return true;
             }
-            else {
-                resetField($(idfield), errorfield);
-            }
-        } else if (dateInput - dateMax >= 0 || isNaN(dateInput)) {
-            displayError(
-                $(idfield),
-                errorfield,
-                'Date cannot be later than 2031.'
-            );
+        } else if (dateNow >= dateMax) {
+            displayError(datefield, errorfield, 'Date cannot be later than 2031.');
             return true;
         } else {
-            resetField($(idfield), errorfield);
+            resetField(datefield, errorfield);
             return false;
         }
     }
@@ -1897,6 +1605,7 @@ function enableSubmitButton() {
 }
 
 function checkEventAvailability() {
+    
     if (
         $('#event-date').val() != '' &&
         $('#event-time').val() != '' &&
@@ -1918,28 +1627,22 @@ function checkEventAvailability() {
             eventVenues: eventVenues,
         };
 
-        $.get(
-            '/event-tracker/check/event-availability',
-            data,
-            function (result) {
-                if ((result._id != curreventID) && !(typeof result._id == 'undefined') && (result.status != 'cancelled')){
+        console.log(data)
+
+        $.get('/event-tracker/check/event-availability', data, function (result) {
+            if (result) {
+                if (result._id != curreventID) {
                     $('#event-date').addClass('is-invalid');
-                    displayError(
-                        $('#event-time'),
-                        $('#event-time-error'),
-                        'Date and time is unavailable.'
-                    );
-                    $('#submit').attr("disabled", true);
-                }
-                else {
-                    resetField($('#event-date'), $('#event-time-error'));
-                    resetField($('#event-time'), $('#event-time-error'));
-                    if ($('#event-id').text() == '')
-                        validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
-                    $('#submit').attr("disabled", checkIfFilledEventFields());
+                    displayError($('#event-time'), $('#event-time-error'), 'Date and time is unavailable.');
                 }
             }
-        );
+            else {
+                    resetField($('#event-date'), $('#event-time-error'));
+                    resetField($('#event-time'), $('#event-time-error'));
+                    $('#event-date').removeClass('is-invalid');
+                    validDate($('#event-date'), $('#event-date-error'));
+                }
+        });
     }
 }
 
@@ -2255,7 +1958,7 @@ function submitForm() {
             });
 
             let url = (currevent.status === 'booked') ? '/event-tracker/pencilbookings' : getRoute()
-            
+
             // makes a PUT request using AJAX to update the event's details
             $.ajax({
                 type: 'PUT',

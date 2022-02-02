@@ -4,4 +4,10 @@ $(document).ready(function () {
     });
 
     $('[data-toggle="popover"]').popover();
+
+    highlightEventDays();
 });
+
+function highlightEventDays() {
+    $('.done').parent().addClass('withEvent')
+}
