@@ -2,6 +2,7 @@ jobs:
  inlcude:
   - stage: "Tests"
     name: "Unit Tests"
+    if: type = pull_request
     sudo: false
     language: node_js
     node_js:
