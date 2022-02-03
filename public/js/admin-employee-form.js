@@ -226,4 +226,4 @@ function initializeEmergencyNumberRealTimeValidation() {
 
 if (typeof window == 'undefined') {
     module.exports = isPasswordInvalid;
-}
+} //
