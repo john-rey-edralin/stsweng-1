@@ -38,12 +38,12 @@ jobs:
     - npm install
     script:
     - npm test
-    # deploy:
-    #   provider: heroku
-    #   skip_cleanup: true
-    #   keep-history: true
-    #   api-key: 4f1e3948-f585-43df-bfc9-5c19870116c8
-    #   app: balai-yllana
+    deploy:
+      provider: heroku
+      skip_cleanup: true
+      keep-history: true
+      api-key: 4f1e3948-f585-43df-bfc9-5c19870116c8
+      app: balai-yllana
     
   # - name: "Robot Tests"
   #   dist: xenial
