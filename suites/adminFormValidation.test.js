@@ -1,4 +1,4 @@
-const isPasswordInvalid = require('../public/js/admin-employee-formddd.js');
+const isPasswordInvalid = require('../public/js/admin-employee-form.js');
 
 describe('check password validation', () => {
     it('password is less than 8 characters', () => {
