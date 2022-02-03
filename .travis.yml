@@ -1,7 +1,3 @@
-env:
-  - HOSTNAME=localhost
-  - PORT=3000
-  - DB_URL=mongodb+srv://admin:admin@cluster0.mvdgu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 jobs:
  inlcude:
   - stage: "Tests"
