@@ -1,7 +1,26 @@
 jobs:
  inlcude:
   - stage: "Pull Request"
-    if: type IN (pull_request)
+    if: type IN (push)
+    name: "Unit Tests"
+    sudo: false
+    language: node_js
+    node_js:
+    - node
+    branches:
+      only:
+      - develop-new
+    cache:
+      directories:
+      - node_modules
+    before_install:
+    - npm update
+    install:
+    - npm install
+    script:
+    - npm test
+  - stage: "Commit"
+    if: type IN (push)
     name: "Unit Tests"
     sudo: false
     language: node_js
@@ -25,26 +44,6 @@ jobs:
       keep-history: true
       api-key: 4f1e3948-f585-43df-bfc9-5c19870116c8
       app: balai-yllana
-  - stage: "Commit"
-    if: type IN (push)
-    name: "Unit Tests"
-    sudo: false
-    language: node_js
-    node_js:
-    - node
-    branches:
-      only:
-      - develop-new
-    cache:
-      directories:
-      - node_modules
-    before_install:
-    - npm update
-    install:
-    - npm install
-    script:
-    - npm test
-    
     
   # - name: "Robot Tests"
   #   dist: xenial
