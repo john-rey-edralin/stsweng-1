@@ -39,7 +39,7 @@ jobs:
     script:
     - npm test
     after-script:
-    - gem install faraday -v 1.9.3
+    - rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install faraday -v 1.8.0
     deploy:
       provider: heroku
       skip_cleanup: true
