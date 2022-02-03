@@ -107,4 +107,4 @@ function getVenuesAvailability(eventsPerDay) {
     return venueAvailabilityChecker;
 }
 
-module.exports = getEventsInMonth;
+module.exports = {getEventsInMonth, getEventsPerDay, getVenuesAvailability};
