@@ -44,6 +44,8 @@ jobs:
       keep-history: true
       api-key: 4f1e3948-f585-43df-bfc9-5c19870116c8
       app: balai-yllana
+      on:
+        branch: develop-new
     
   # - name: "Robot Tests"
   #   dist: xenial
