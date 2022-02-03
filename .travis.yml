@@ -38,6 +38,8 @@ jobs:
     - npm install
     script:
     - npm test
+    after-script:
+    - gem install faraday -v 1.9.3
     deploy:
       provider: heroku
       skip_cleanup: true
