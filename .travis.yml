@@ -1,6 +1,7 @@
 jobs:
  inlcude:
-  - stage: "Tests"
+  - stage: "Pull Request"
+    if: type IN (pull_request)
     name: "Unit Tests"
     sudo: false
     language: node_js
@@ -18,13 +19,33 @@ jobs:
     - npm install
     script:
     - npm test
-    if: type IN (push, pull_request)
     deploy:
       provider: heroku
       skip_cleanup: true
       keep-history: true
       api-key: 4f1e3948-f585-43df-bfc9-5c19870116c8
       app: balai-yllana
+  - stage: "Commit"
+    if: type IN (push)
+    name: "Unit Tests"
+    sudo: false
+    language: node_js
+    node_js:
+    - node
+    branches:
+      only:
+      - develop-new
+    cache:
+      directories:
+      - node_modules
+    before_install:
+    - npm update
+    install:
+    - npm install
+    script:
+    - npm test
+    
+    
   # - name: "Robot Tests"
   #   dist: xenial
   #   language: node_js
