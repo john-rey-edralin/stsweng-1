@@ -99,13 +99,6 @@
                         </div>
                     </div>
                     <div class="form-group my-3">
-                        <label for="current-password-{{_id}}">Current Password</label>
-                        <input type="password" class="form-control current-password" id="current-password-{{_id}}" name="oldPassword" required>
-                        <div id="current-password-help" class="form-text">
-                            Input the user's current password.
-                        </div>
-                    </div>
-                    <div class="form-group my-3">
                         <label for="new-password-{{_id}}">New Password</label>
                         <input type="password" class="form-control new-password" id="new-password-{{_id}}" name="newPassword">
                         <div id="new-password-help" class="form-text">Must be at least 8 characters long. A
@@ -132,7 +125,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-success">Edit Info</button>
+                <button type="submit" class="btn btn-success" id="edit-btn-{{_id}}">Edit Info</button>
             </div></form>
         </div>
     </div>
