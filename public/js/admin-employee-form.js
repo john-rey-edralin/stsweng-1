@@ -1,5 +1,6 @@
 if (typeof window != 'undefined') {
     $(document).ready(function () {
+        //
         //$('#submit').attr("disabled", true);
         setRequiredFields();
         initializeTooltips();
