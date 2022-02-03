@@ -4,7 +4,7 @@ const Event = require('../models/event.js');
 const Charge = require('../models/charge.js');
 const Package = require('../models/package.js');
 const mongoose = require('mongoose');
-const getEventsInMonth = require('../helpers/eventsInMonth.js');
+const {getEventsInMonth} = require('../helpers/eventsInMonth.js');
 
 const eventController = {
     getHome: async function (req, res) {
