@@ -8,7 +8,7 @@ jobs:
     - node
     branches:
       only:
-      - master
+      - develop-new
     cache:
       directories:
       - node_modules
