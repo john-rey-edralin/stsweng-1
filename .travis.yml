@@ -2,7 +2,6 @@ jobs:
  inlcude:
   - stage: "Tests"
     name: "Unit Tests"
-    if: type = commit
     sudo: false
     language: node_js
     node_js:
