@@ -219,7 +219,6 @@ function initializeEditEmployeeRealTimeValidation() {
             isValidReenterPassword) {
             enableButton($(`#edit-btn-${currentEmployeeId}`));
         } else {
-            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaatdog");
             disableButton($(`#edit-btn-${currentEmployeeId}`));   
         } 
             
