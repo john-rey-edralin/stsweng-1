@@ -55,7 +55,8 @@ const eventController = {
 
         let data = {
             events: events,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-home', data);
@@ -76,7 +77,8 @@ const eventController = {
         db.findOne(Event, { _id: req.params.id }, '', function (result) {
             let data = {
                 event: result,
-                username: req.session.user.username
+                username: req.session.user.username,
+                isAdmin: req.session.isAdmin
             };
             res.render('event-tracker-form', data);
         });
@@ -106,7 +108,8 @@ const eventController = {
 
         let data = {
             event: event,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         }
         console.log(data)
         res.render('event-tracker-receipt', data);
@@ -197,7 +200,8 @@ const eventController = {
 
         let data = {
             bookings: bookings,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-pencilbookings', data);
@@ -259,7 +263,8 @@ const eventController = {
             venue: req.query.venue,
             time: req.query.time,
             date: req.query.date,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-pencilbookings', data);
@@ -295,7 +300,8 @@ const eventController = {
         let data = {
             bookings: bookings,
             search: req.query.name,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-pencilbookings', data);
@@ -325,7 +331,8 @@ const eventController = {
 
         let data = {
             reservations: reservations,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-reservations', data);
@@ -388,7 +395,8 @@ const eventController = {
             venue: req.query.venue,
             time: req.query.time,
             date: req.query.date,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-reservations', data);
@@ -424,7 +432,8 @@ const eventController = {
         let data = {
             reservations: reservations,
             search: req.query.name,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-reservations', data);
@@ -454,7 +463,8 @@ const eventController = {
 
         let data = {
             cancelled: cancelled,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-cancelled', data);
@@ -516,7 +526,8 @@ const eventController = {
             venue: req.query.venue,
             time: req.query.time,
             date: req.query.date,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-cancelled', data);
@@ -552,6 +563,8 @@ const eventController = {
         let data = {
             cancelled: cancelled,
             search: req.query.name,
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-cancelled', data);
@@ -581,7 +594,8 @@ const eventController = {
 
         let data = {
             pastevents: pastevents,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-pastevents', data);
@@ -636,7 +650,8 @@ const eventController = {
             venue: req.query.venue,
             time: req.query.time,
             date: req.query.date,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-pastevents', data);
@@ -672,7 +687,8 @@ const eventController = {
         let data = {
             pastevents: pastevents,
             search: req.query.name,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin
         };
 
         res.render('event-tracker-pastevents', data);
@@ -749,9 +765,12 @@ const eventController = {
             },
         });
 
-        const eventsInMonth = getEventsInMonth(month, year, events);
+        const data = getEventsInMonth(month, year, events);
 
-        res.render('event-tracker-calendar', eventsInMonth);
+        data.username = req.session.user.username;
+        data.isAdmin = req.session.isAdmin;
+
+        res.render('event-tracker-calendar', data);
     },
 };
 
