@@ -375,7 +375,6 @@ function submitEditForm() {
             emergencyContactNum: $(
                 '#emergency-contact-mobile-number-' + id
             ).intlTelInput('getNumber'),
-            oldPassword: $('#current-password-' + id).val(),
             newPassword: $('#new-password-' + id).val(),
             reenteredPassword: $('#reenter-password-' + id).val(),
         };
