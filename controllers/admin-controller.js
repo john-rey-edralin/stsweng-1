@@ -44,7 +44,8 @@ const controller = {
 
         const data = {
             employees: formattedEmployees,
-            activities: activities
+            activities: activities,
+            username: req.session.user.username
         };
 
         res.render('admin-home', data);
