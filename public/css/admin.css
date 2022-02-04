@@ -12,3 +12,7 @@ body > .d-flex.flex-row.justify-content-center {
 .hasaccess > .rounded-list-item {
     background-color: #EEF9F3 !important;
 }
+
+.hasaccess > .rounded-list-item:hover {
+    background-color: #D3EFE0 !important;
+}
