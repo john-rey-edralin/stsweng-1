@@ -8,6 +8,7 @@ const app = express.Router();
 // login
 app.get('/', (req, res) => { res.redirect('/event-tracker/home'); });
 app.get('/login', authController.getLogin);
+app.get('/logout', authController.getLogout);
 
 // authenticate user
 app.post('/authenticate', authController.authenticate);
