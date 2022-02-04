@@ -1,12 +1,5 @@
-const ActivityModel = require('../models/activity.js');
+const Activity = require('../models/activity.js');
 
-module.exports = function activityLogger(activityName) {
-    return (req, res, next) => {
-        ActivityModel.create({
-            name: req.session.username,
-            timestamp: new Date(),
-            activityName: activityName,
-        });
-        next();
-    };
+module.exports = function activityLogger(employee, description) {
+    Activity.create({ username: employee, activityName: description });
 };

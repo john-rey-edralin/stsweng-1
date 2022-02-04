@@ -46,6 +46,20 @@ function setRequiredFields() {
     $('select[required]').siblings('label').addClass('required');
 }
 
+function checkStringInput(input) {
+    const blacklist = ["~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")",
+        "_", "=", "+", "{", "}", "[", "]", "|", "\\", ";", ":", "\'",
+        "\"", ".", ",", "<", ">", "/", "?"];
+    var flag = false;
+
+    for (const item of blacklist)
+        if (input.indexOf(item) != -1)
+            flag = true;
+  
+    $('input[required]').siblings('label').addClass('required');
+    $('select[required]').siblings('label').addClass('required');
+}
+
 function initializeRealTimeValidation() {
     /* TODO: Add validation */
     initializeUsernameRealTimeValidation();

@@ -9,3 +9,6 @@ body > .d-flex.flex-row.justify-content-center {
     text-transform: uppercase;
 }
 
+.hasaccess > .rounded-list-item {
+    background-color: #EEF9F3 !important;
+}

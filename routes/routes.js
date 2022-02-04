@@ -3,7 +3,6 @@ const express = require('express');
 const authController = require('../controllers/auth-controller.js');
 const adminController = require('../controllers/admin-controller.js');
 const eventController = require('../controllers/event-controller.js');
-
 const app = express.Router();
 
 // login
@@ -25,6 +24,7 @@ app.put('/admin/employee/:username', adminController.putEmployeeInfo);
 app.get('/admin/activity/:username', adminController.getEmployeeActivity);
 app.put('/admin/give', adminController.putGiveEmployeeAccess);
 app.put('/admin/remove', adminController.putRemoveEmployeeAccess);
+app.get('/admin/activity/recent', adminController.getRecentActivity);
 
 // event-tracker home
 app.get('/event-tracker/home', eventController.getHome);
@@ -42,7 +42,10 @@ app.get('/event-tracker/get/food', eventController.getFood);
 app.get('/event-tracker/get/event', eventController.getEvent);
 app.get('/event-tracker/get/charges', eventController.getCharges);
 app.get('/event-tracker/get/packages', eventController.getPackages);
-app.get('/event-tracker/check/event-availability', eventController.getCheckEventAvailability);
+app.get(
+    '/event-tracker/check/event-availability',
+    eventController.getCheckEventAvailability
+);
 
 // event-tracker calendar
 app.get('/event-tracker/calendar/:year/:month', eventController.getEventsInMonth);
