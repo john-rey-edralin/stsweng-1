@@ -69,7 +69,7 @@ const eventController = {
     postCreateEvent: async function (req, res) {
         const doc = await Event.create(JSON.parse(req.body.data));
 
-        logActivity(req.user.username || 'Tester', `Created event: ${doc._id}`);
+        logActivity(req.session.user.username || 'Tester', `Created event: ${doc._id}`);
         res.send(doc);
     },
 
@@ -126,7 +126,7 @@ const eventController = {
         );
 
         logActivity(
-            req.user.username || 'Tester',
+            req.session.user.username || 'Tester',
             `Modified reservation: ${doc._id}
             Using information: ${data}`
         );
@@ -157,7 +157,7 @@ const eventController = {
         );
 
         logActivity(
-            req.session.user?.username || 'Tester',
+            req.session.user.username || 'Tester',
             `Cancelled event: ${doc._id}`
         );
         res.json(doc);
