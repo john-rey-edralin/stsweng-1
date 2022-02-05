@@ -44,7 +44,8 @@ const controller = {
 
         const data = {
             employees: formattedEmployees,
-            activities: activities
+            activities: activities,
+            username: req.session.user.username
         };
 
         res.render('admin-home', data);
@@ -157,7 +158,6 @@ const controller = {
             contactNum,
             emergencyContactName,
             emergencyContactNum,
-            oldPassword,
             newPassword,
             reenteredPassword,
         } = req.body;
@@ -167,23 +167,6 @@ const controller = {
                 newPassword,
                 username
             );
-            var isOldPasswordCorrect = await isOldPasswordSameAsPassword(
-                oldPassword,
-                username
-            );
-
-            if (!isValidNewPassword) {
-                res.status(406).json({
-                    message:
-                        'New password should not be the same as old password.',
-                });
-                return;
-            }
-
-            if (!isOldPasswordCorrect) {
-                res.status(406).json({ message: 'Invalid old password.' });
-                return;
-            }
 
             if (reenteredPassword != newPassword) {
                 res.status(406).json({

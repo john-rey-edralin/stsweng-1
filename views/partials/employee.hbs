@@ -111,70 +111,53 @@
             </div>
             <div class="modal-body p-4 ui-front">
                 <form class="edit">
-                    <p id="username" hidden>{{username}}</p>
+                    <p class="id" hidden>{{_id}}</p>
+                    <p class="username" hidden>{{username}}</p>
                     <div class="form-group my-3">
-                        <label for="employee-mobile-number-{{username}}">Employee Mobile Number</label>
-                        <input type="tel" class="form-control w-100 employee-mobile-number"
-                            id="employee-mobile-number-{{username}}" name="contactNum" value="{{contactNum}}">
+                        <label for="employee-mobile-number-{{_id}}">Employee Mobile Number</label>
+                        <input type="tel" class="form-control w-100 employee-mobile-number" id="employee-mobile-number-{{_id}}" name="contactNum" value="{{contactNum}}">
                         <div id="employee-mobile-number-help" class="form-text">Country code can be changed if needed.
                         </div>
                     </div>
                     <div class="form-group my-3">
-                        <label for="emergency-contact-name-{{username}}">Emergency Contact Name</label>
-                        <input type="text" class="form-control emergency-contact-name"
-                            id="emergency-contact-name-{{username}}" name="emergencyContactName"
-                            value="{{emergencyContactName}}">
-                        <div id="emergency-contact-name-help" class="form-text">Person to contact in case of emergency.
+                        <label for="emergency-contact-name-{{_id}}">Emergency Contact Name</label>
+                        <input type="text" class="form-control emergency-contact-name" id="emergency-contact-name-{{_id}}" name="emergencyContactName" value="{{emergencyContactName}}">
+                        <div id="emergency-contact-name-help" class="form-text">Person to contact in case of emergency.</div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="emergency-contact-mobile-number-{{_id}}">Emergency Contact Mobile Number</label>
+                        <input type="tel" class="form-control w-100 emergency-contact-mobile-number" id="emergency-contact-mobile-number-{{_id}}" name="emergencyContactNum">
+                        <div id="emergency-contact-mobile-number-help" class="form-text">Country code can be changed if needed.
                         </div>
                     </div>
                     <div class="form-group my-3">
-                        <label for="emergency-contact-mobile-number-{{username}}">Emergency Contact Mobile
-                            Number</label>
-                        <input type="tel" class="form-control w-100 emergency-contact-mobile-number"
-                            id="emergency-contact-mobile-number-{{username}}" name="emergencyContactNum">
-                        <div id="emergency-contact-mobile-number-help" class="form-text">Country code can be changed if
-                            needed.
-                        </div>
-                    </div>
-                    <div class="form-group my-3">
-                        <label for="current-password-{{username}}">Current Password</label>
-                        <input type="password" class="form-control current-password" id="current-password-{{username}}"
-                            name="oldPassword" required>
-                        <div id="current-password-help" class="form-text">
-                            Input the user's current password.
-                        </div>
-                    </div>
-                    <div class="form-group my-3">
-                        <label for="new-password-{{username}}">New Password</label>
-                        <input type="password" class="form-control new-password" id="new-password-{{username}}"
-                            name="newPassword">
+                        <label for="new-password-{{_id}}">New Password</label>
+                        <input type="password" class="form-control new-password" id="new-password-{{_id}}" name="newPassword">
                         <div id="new-password-help" class="form-text">Must be at least 8 characters long. A
                             combination of letters, numbers, and at least one special character is recommended.
                         </div>
                     </div>
                     <div class="form-group my-3">
-                        <label for="reenter-password-{{username}}">Confirm New Password</label>
-                        <input type="password" class="form-control reenter-password" id="reenter-password-{{username}}"
-                            name="reenteredPassword">
+                        <label for="reenter-password-{{_id}}">Confirm New Password</label>
+                        <input type="password" class="form-control reenter-password" id="reenter-password-{{_id}}" name="reenteredPassword"
+                            >
                         <div id="reenter-password-help" class="form-text">Reenter the user's new password.
                         </div>
                     </div>
 
-
-                    <strong>
-                        <div class="text-center text-danger error" id="missing-error"></div>
-                        <div class="text-center text-danger error" id="employee-number-error"></div>
-                        <div class="text-center text-danger error" id="ec-name-error"></div>
-                        <div class="text-center text-danger error" id="ec-number-error"></div>
-                        <div class="text-center text-danger error" id="username-error"></div>
-                        <div class="text-center text-danger error" id="password-error"></div>
-                    </strong>
+                <strong>
+                    <div class="text-center text-danger error" id="missing-error-{{_id}}"></div>
+                    <div class="text-center text-danger error" id="employee-number-error-{{_id}}"></div>
+                    <div class="text-center text-danger error" id="ec-name-error-{{_id}}"></div>
+                    <div class="text-center text-danger error" id="ec-number-error-{{_id}}"></div>
+                    <div class="text-center text-danger error" id="username-error-{{_id}}"></div>
+                    <div class="text-center text-danger error" id="password-error-{{_id}}"></div>
+                </strong>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-success">Edit Info</button>
-            </div>
-            </form>
+                <button type="submit" class="btn btn-success" id="edit-btn-{{_id}}">Edit Info</button>
+            </div></form>
         </div>
     </div>
 </div>

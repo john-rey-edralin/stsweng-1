@@ -39,7 +39,15 @@ const controller = {
      * @param {express.response} res response object
      */
     getLogin: function (req, res) {
+        if (req.session.user) res.redirect('/')
         res.render('login');
+    },
+
+    getLogout: function (req, res) {
+        req.session.destroy(function (err) {
+            if (err) throw err;
+            res.redirect('/');
+        });
     },
 };
 

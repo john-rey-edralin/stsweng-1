@@ -11,8 +11,7 @@ if (typeof window != 'undefined') {
         submitForm();
         submitEditForm();
     });
-}
-else {
+} else {
     module.exports = isPasswordInvalid;
 }
 
@@ -25,21 +24,26 @@ function initializeTooltips() {
 
 function initializeEmployeeFields() {
     // initialize contact number fields
-    let settings = { autoPlaceholder: "aggressive", preferredCountries: ["ph"], separateDialCode: true, utilsScript: "/js/utils.js" };
-    $("#employee-mobile-number").intlTelInput(settings);
-    $("#emergency-contact-mobile-number").intlTelInput(settings);
-    $(".employee-mobile-number").intlTelInput(settings);
-    $(".emergency-contact-mobile-number").intlTelInput(settings);
+    let settings = {
+        autoPlaceholder: 'aggressive',
+        preferredCountries: ['ph'],
+        separateDialCode: true,
+        utilsScript: '/js/utils.js',
+    };
+    $('#employee-mobile-number').intlTelInput(settings);
+    $('#emergency-contact-mobile-number').intlTelInput(settings);
+    $('.employee-mobile-number').intlTelInput(settings);
+    $('.emergency-contact-mobile-number').intlTelInput(settings);
 }
 
-function initializeAccountFields() { }
+function initializeAccountFields() {}
 
 /**
  * Adds the required class to required fields.
  */
 function setRequiredFields() {
-    $("input[required]").siblings("label").addClass("required");
-    $("select[required]").siblings("label").addClass("required");
+    $('input[required]').siblings('label').addClass('required');
+    $('select[required]').siblings('label').addClass('required');
 }
 
 function checkStringInput(input) {
@@ -63,6 +67,7 @@ function initializeRealTimeValidation() {
     initializeEmployeeNameRealTimeValidation();
     initializeEmployeeNumberRealTimeValidation();
     initializeEmergencyNumberRealTimeValidation();
+    initializeEditEmployeeRealTimeValidation();
 }
 
 function displayError(inputField, errorField, errorText) {
@@ -181,27 +186,7 @@ function initializeEmployeeNumberRealTimeValidation() {
                 'Invalid employee mobile number.'
             );
     });
-    $('.employee-mobile-number').keyup(function () {
-        if (validator.isEmpty($(this).val()))
-            displayError(
-                $('#employee-mobile-number'),
-                $('#employee-number-error'),
-                'Employee mobile number should be filled.'
-            );
-        else if ($(this).intlTelInput('isValidNumber'))
-            resetField(
-                $('#employee-mobile-number'),
-                $('#employee-number-error')
-            );
-        else
-            displayError(
-                $('#employee-mobile-number'),
-                $('#employee-number-error'),
-                'Invalid employee mobile number.'
-            );
-    });
 }
-
 
 function initializeEmergencyNumberRealTimeValidation() {
     $('#emergency-contact-mobile-number').keyup(function () {
@@ -217,19 +202,152 @@ function initializeEmergencyNumberRealTimeValidation() {
                 'Invalid emergency contact mobile number.'
             );
     });
-    $('.emergency-contact-mobile-number').keyup(function () {
-        if ($(this).intlTelInput('isValidNumber'))
-            resetField(
-                $('#emergency-contact-mobile-number'),
-                $('#ec-number-error')
-            );
-        else
+}
+
+function initializeEditEmployeeRealTimeValidation() {
+    let currentEmployeeId = '';
+    const employeeList = $('div[data-bs-toggle="modal"]');
+    const employeeNumberList = $('.employee-mobile-number');
+    const emergencyNumberList = $('.emergency-contact-mobile-number');
+    const newPasswordList = $('.new-password');
+    const confirmNewPasswordList = $('.reenter-password');
+
+    employeeList.each((_, employee) =>
+        employee.addEventListener('click', changeCurrentEmployeeId)
+    );
+
+    employeeNumberList.keyup(validateAllFields);
+    emergencyNumberList.keyup(validateAllFields);
+    newPasswordList.keyup(validateAllFields);
+    confirmNewPasswordList.keyup(validateAllFields);
+
+    function validateAllFields () {
+        const isValidEmployeeNumber = validateEmployeeNumber($(`#employee-mobile-number-${currentEmployeeId}`));
+        const isValidEmergencyNumber = validateEmergencyContactNumber($(`#emergency-contact-mobile-number-${currentEmployeeId}`));
+        const isValidReenterPassword = validateReenterPassword($(`#reenter-password-${currentEmployeeId}`));
+        const isValidNewPassword = validateNewPassword($(`#new-password-${currentEmployeeId}`));
+
+        if (isValidEmployeeNumber && 
+            isValidEmergencyNumber &&
+            isValidNewPassword &&
+            isValidReenterPassword) {
+            enableButton($(`#edit-btn-${currentEmployeeId}`));
+        } else {
+            disableButton($(`#edit-btn-${currentEmployeeId}`));   
+        } 
+            
+    }
+
+    function validateEmployeeNumber(field) {
+        if (validator.isEmpty(field.val())) {
             displayError(
-                $('#emergency-contact-mobile-number'),
-                $('#ec-number-error'),
+                field,
+                $(`#employee-number-error-${currentEmployeeId}`),
+                'Employee mobile number should be filled.'
+            );
+            return false;
+        } else if (field.intlTelInput('isValidNumber')) {
+            resetField(
+                field,
+                $(`#employee-number-error-${currentEmployeeId}`)
+            );
+            return true;
+        } else {
+            displayError(
+                field,
+                $(`#employee-number-error-${currentEmployeeId}`),
+                'Invalid employee mobile number.'
+            );
+            return false;
+        }
+    }
+
+    function validateEmergencyContactNumber (field) {
+        if (
+            field.intlTelInput('isValidNumber') ||
+            validator.isEmpty(field.val())
+        ) {
+            resetField(
+                field,
+                $(`#ec-number-error-${currentEmployeeId}`)
+            );
+            return true;
+        } else {
+            displayError(
+                field,
+                $(`#ec-number-error-${currentEmployeeId}`),
                 'Invalid emergency contact mobile number.'
             );
-    });
+            return false;
+        }
+    }
+
+    function validateNewPassword(field) {
+        const confirmNewPassword = $(
+            `#reenter-password-${currentEmployeeId}`
+        );
+        if (
+            !isPasswordInvalid(field.val()) &&
+            field.val() === confirmNewPassword.val()
+        ) {
+            resetField(
+                confirmNewPassword,
+                $(`#password-error-${currentEmployeeId}`)
+            );
+            resetField(
+                field,
+                $(`#password-error-${currentEmployeeId}`)
+            );
+            return true;
+        } else {
+            displayError(
+                field,
+                $(`#password-error-${currentEmployeeId}`),
+                isPasswordInvalid(field.val())
+                    ? 'Password too short.'
+                    : 'Password does not match.'
+            );
+            return false;
+        }
+    }
+
+    function validateReenterPassword(field) {
+        const newPassword = $(`#new-password-${currentEmployeeId}`);
+            if (field.val() === newPassword.val()) {
+                resetField(
+                    field,
+                    $(`#password-error-${currentEmployeeId}`)
+                );
+                resetField(
+                    newPassword,
+                    $(`#password-error-${currentEmployeeId}`)
+                );
+                return true;
+            } else {
+                displayError(
+                    field,
+                    $(`#password-error-${currentEmployeeId}`),
+                    'Password does not match.'
+                );
+                return false;
+            }
+    }
+
+    function changeCurrentEmployeeId(event) {
+        const employee = event.target;
+        const bs_target = employee.dataset['bsTarget'];
+        const [_, employeeId] = bs_target.split('-');
+
+        currentEmployeeId = employeeId;
+    }
+}
+
+function disableButton(button) {
+    button.prop('disabled', true);
+}
+
+function enableButton(button) {
+    button.prop('disabled', false);
 }
 
 function submitForm() {
@@ -243,11 +361,13 @@ function submitForm() {
             name: $('#employee-name').val(),
             contactNum: $('#employee-mobile-number').intlTelInput('getNumber'),
             emergencyContactName: $('#employee-contact-name').val(),
-            emergencyContactNum: $('#employee-contact-mobile-number').intlTelInput('getNumber')
+            emergencyContactNum: $(
+                '#employee-contact-mobile-number'
+            ).intlTelInput('getNumber'),
         };
 
         // makes a POST request using AJAX to add the event to the database
-        $.post("/admin/register", data, function (result) {
+        $.post('/admin/register', data, function (result) {
             window.location.href = '/admin';
         });
     });
@@ -256,16 +376,20 @@ function submitForm() {
 function submitEditForm() {
     $('.edit').on('submit', function (event) {
         event.preventDefault();
-        const username = $(this).children('p').text();
+        const id = $(this).children('.id').text();
+        const username = $(this).children('.username').text();
 
         // stores all information as an object
         let data = {
-            contactNum: $('#employee-mobile-number-' + username).intlTelInput('getNumber'),
-            emergencyContactName: $('#emergency-contact-name-' + username).val(),
-            emergencyContactNum: $('#emergency-contact-mobile-number-' + username).intlTelInput('getNumber'),
-            oldPassword: $('#current-password-' + username).val(),
-            newPassword: $('#new-password-' + username).val(),
-            reenteredPassword: $('#reenter-password-' + username).val()
+            contactNum: $('#employee-mobile-number-' + id).intlTelInput(
+                'getNumber'
+            ),
+            emergencyContactName: $('#emergency-contact-name-' + id).val(),
+            emergencyContactNum: $(
+                '#emergency-contact-mobile-number-' + id
+            ).intlTelInput('getNumber'),
+            newPassword: $('#new-password-' + id).val(),
+            reenteredPassword: $('#reenter-password-' + id).val(),
         };
 
         $.ajax({
