@@ -118,7 +118,7 @@ Validate Number Of Pax
     Press Keys       event-pax         ENTER
     Element Text Should Be      event-pax-error        Number of pax cannot be zero.
     Input Text       event-pax          -10
-    Press Keys       event-pax         ENTER
+    Click Element       representative-name
     Element Text Should Be      event-pax-error        Number of pax cannot be negative.
 
 Check Event Venue
@@ -291,11 +291,11 @@ Click Filter And Sort Button
 
 Should Not Have
     [Arguments]     ${text}
-    Element Should Not Contain          class:p-4           ${text} 
+    Element Should Not Contain          today-main           ${text} 
 
 Should Have
     [Arguments]     ${text}
-    Element Should Contain          class:p-4           ${text}
+    Element Should Contain          today-main           ${text}
 
 Open Browser To Reservations Event Page
     Open Browser    ${HOME URL}     ${BROWSER}
@@ -324,8 +324,8 @@ Open Browser To Pencilbookings Event Page
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[1]/a
     Wait Until Element Is Visible       xpath://*[@id="today-main"]/div/div[1]
     Click Element        xpath://*[@id="today-main"]/div/div[1]
-    Wait Until Element Is Visible       xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/a[2]
-    Click Link      xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/a[2]
+    Wait Until Element Is Visible       edit-btn-61d28b1d72e622a7e9f278d4
+    Click Link      edit-btn-61d28b1d72e622a7e9f278d4
     Set Selenium Speed      ${DELAY_0.3}
     Edit Event Page Should Be Open
     Set Selenium Speed      ${DELAY}
@@ -347,12 +347,22 @@ Edit Event Page Should Be Open
     Page Should Contain Element     form-breakdown-info
     Page Should Contain Element     form-payment-info
 
-Go To Receipt
+Go To Receipt Pencilbooking
     Input Text      name        DONTMODIFY
     Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
     Should Have           DONTMODIFY
-    Click Element       xpath:/html/body/div/div/div[2]/div/div[1]/h1[2]
-    Click Element       xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/a[1]
+    Click Element       list-61d28b1d72e622a7e9f278d4
+    Click Element       print-btn-61d28b1d72e622a7e9f278d4
+    Element Should Contain      xpath:/html/body/div/div[1]/div/h5      RECEIPT
+    Page Should Contain Element         print-it
+    Page Should Contain Element         save-it
+
+Go To Receipt Reservation
+    Input Text      name        DONTMODIFY
+    Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
+    Should Have           DONTMODIFY
+    Click Element       list-61b97ae995c0838294822466
+    Click Element       print-btn-61b97ae995c0838294822466
     Element Should Contain      xpath:/html/body/div/div[1]/div/h5      RECEIPT
     Page Should Contain Element         print-it
     Page Should Contain Element         save-it
@@ -361,9 +371,9 @@ Cancel Event
     Input Text      name        JR
     Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
     Should Have           JR
-    Click Element       xpath:/html/body/div/div/div[2]/div/div[1]/h1[2]
-    click Button        xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/button
-    Click Button        xpath:/html/body/div[1]/div/div[2]/div/div[3]/div/div/div[3]/button[2]
+    Click Element       xpath:/html/body/div[2]/div/div[2]/div/div[1]
+    click Button        xpath:/html/body/div[2]/div/div[2]/div/div[2]/div/div/div[3]/button
+    Click Button        xpath:/html/body/div[2]/div/div[2]/div/div[3]/div/div/div[3]/button[2]
     Element Should Contain      today-title        CANCELLED
 
 Register Employee Page Should Be Open

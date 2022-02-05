@@ -9,10 +9,10 @@ Resource        resource.robot
 Event Details Validation
     Open Browser To Create Event Page
     Validate Client Name
+    Validate Number Of Pax
     Validate Client Mobile Number
     Validate Client Type Of Event
     Validate Client Time Of Event
-    Validate Number Of Pax
     Validate Event Venue
     Validate Event Package
     [Teardown]      Close Browser
