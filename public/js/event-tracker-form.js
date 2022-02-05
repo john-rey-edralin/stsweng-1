@@ -184,33 +184,38 @@ let menuPackageHTML =
     '</div>' +
     '</div>';
 
-$(document).ready(function () {
-    //disable Enter key
+if (typeof window != 'undefined') {
+    $(document).ready(function () {
+        disableEnterKey(); 
+        retrieveInfoFromDB();
+
+        setRequiredFields();
+        initializeTooltips();
+
+        initializeEventFields();
+        initializeMenuFields();
+        initializeTransactionFields();
+        initializePaymentFields();
+
+        initializeRealTimeValidation();
+
+        submitForm();
+    });
+}
+
+// window.addEventListener('beforeunload', function (e) {
+//     e.preventDefault();
+//     e.returnValue = '';
+// });
+
+function disableEnterKey() {
     $(window).keydown(function(event){
         if(event.keyCode == 13) {
         event.preventDefault();
         return false;
         }
     });
-    retrieveInfoFromDB();
-
-    setRequiredFields();
-    initializeTooltips();
-
-    initializeEventFields();
-    initializeMenuFields();
-    initializeTransactionFields();
-    initializePaymentFields();
-
-    initializeRealTimeValidation();
-
-    submitForm();
-});
-
-// window.addEventListener('beforeunload', function (e) {
-//     e.preventDefault();
-//     e.returnValue = '';
-// });
+}
 
 function retrieveInfoFromDB() {
     $.get('/event-tracker/get/food', function (result) {
@@ -240,46 +245,46 @@ function retrieveInfoFromDB() {
         }
 
         // initialize package options
-        $.each(gardenPackageList, function (i, package) {
+        $.each(gardenPackageList, function (i, eventpackage) {
             $('#garden-options').append(
                 $('<option>', {
-                    value: package.packageCode,
+                    value: eventpackage.packageCode,
                     text:
-                        package.packageName +
+                        eventpackage.packageName +
                         ' - ' +
-                        package.variantCount +
+                        eventpackage.variantCount +
                         ' Variants (Php ' +
-                        package.packagePrice +
+                        eventpackage.packagePrice +
                         ')',
                 })
             );
         });
 
-        $.each(sunroomPackageList, function (i, package) {
+        $.each(sunroomPackageList, function (i, eventpackage) {
             $('#sunroom-options').append(
                 $('<option>', {
-                    value: package.packageCode,
+                    value: eventpackage.packageCode,
                     text:
-                        package.packageName +
+                        eventpackage.packageName +
                         ' - ' +
-                        package.variantCount +
+                        eventpackage.variantCount +
                         ' Variants (Php ' +
-                        package.packagePrice +
+                        eventpackage.packagePrice +
                         ')',
                 })
             );
         });
 
-        $.each(terracePackageList, function (i, package) {
+        $.each(terracePackageList, function (i, eventpackage) {
             $('#terrace-options').append(
                 $('<option>', {
-                    value: package.packageCode,
+                    value: eventpackage.packageCode,
                     text:
-                        package.packageName +
+                        eventpackage.packageName +
                         ' - ' +
-                        package.variantCount +
+                        eventpackage.variantCount +
                         ' Variants (Php ' +
-                        package.packagePrice +
+                        eventpackage.packagePrice +
                         ')',
                 })
             );
@@ -407,8 +412,14 @@ function initializeMenuFields() {
     $('.additional-add-button').click(function () { addAdditionalItem(); });
 
     $('#additional-name').change(function () {
-        if (foodNameList.includes($('#additional-name').val()))
-            $('#additional-price').val(getMenuItemPrice($('#additional-name').val()));
+        var foodname = $('#additional-name').val().trim();
+        var result = isValidAdditionalFoodName(foodname);
+        if (result[0])
+            $('#additional-price').val(result[1]);
+        else {
+            $('#additional-name').val('');
+            $('#additional-price').val('');
+        }
     });
 
     $('#additional-item-modal').on('hidden.bs.modal', function () {
@@ -475,7 +486,8 @@ function initializePaymentFields() {
  */
 function downpaymentChecked() {
     //Sets the default downpayment date to today
-    $('#downpayment-date').val(getDateToday());
+    if($('#downpayment-date').val() == '')
+        $('#downpayment-date').val(getDateToday());
     //Marks the downpayment related fields as required
     $('#downpayment-date').siblings("label").addClass('required');
     $('#downpayment-mode').siblings("label").addClass('required');
@@ -585,51 +597,37 @@ function downpaymentCheckFields() {
     //Checks the downpayment date field value
     $("#downpayment-date").on("change", function () {
         var downpaydate = document.getElementById("downpayment-date").value;
-        validDate(downpaydate, $('#downpayment-error'), "downpayment-date");
+        var result = isValidDate(downpaydate);
+        if(!result[0]) {
+            if(result[1] == 'Date should be at least a month ago.') {
+                if ($('#event-id').text() == '')
+                    displayError($('#downpayment-date'), $('#downpayment-error'), result[1]);
+                else
+                    resetField($('#downpayment-date'), $('#downpayment-error'));    
+            }
+            else
+                displayError($('#downpayment-date'), $('#downpayment-error'), result[1]);
+        }
+        else
+            resetField($('#downpayment-date'), $('#downpayment-error'));
+        
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     //Checks the current chosen downpayment mode option
     $('#downpayment-mode').change(function () {
-        if ($('#downpayment-mode').val() == '')
-            displayError($('#downpayment-mode'), $('#downpayment-mode-error'), 'Select 1 payment mode.');
+        var result = isValidModeOfPayment($('#downpayment-mode').val().trim());
+        if (!result[0])
+            displayError($('#downpayment-mode'), $('#downpayment-mode-error'), result[1]);
         else
             resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     //Checks the downpayment amount value
-    $('#downpayment-amount').on('keyup', function () {
-        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '')
-            displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
-        else
-            resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
-
-        //Updates the total payment amount and the final payment amount 
-        $('#final-payment-amount').on('change', function () {
-            updatePaymentAndBalance();
-            $('#submit').attr("disabled", checkIfFilledEventFields());
-        });
-        updatePaymentAndBalance();
-
-        //Disables/Enables the Submit button
-        $('#submit').attr("disabled", checkIfFilledEventFields());
-
-        //Checks if the customer payment is greater than the needed payment (total amount) 
-        if (parseFloat($('#payment-balance').val()) < 0) {
-            $('#payment-error').text('Customer payment is greater than the total price.');
-            $('#payment-amount-total').addClass('is-invalid');
-            $('#payment-balance').addClass('is-invalid');
-        }
-        else {
-            $('#payment-error').text('');
-            $('#payment-amount-total').removeClass('is-invalid');
-            $('#payment-balance').removeClass('is-invalid');
-        }
-    });
-
     $('#downpayment-amount').on('change', function () {
-        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '')
+        var result = isValidPrice($('#downpayment-amount').val().trim());
+        if (!result[0])
             displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
         else
             resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
@@ -665,46 +663,37 @@ function finalPaymentCheckFields() {
     //Checks the final payment date field value
     $("#final-payment-date").on("change", function () {
         var finalpaydate = document.getElementById("final-payment-date").value;
-        validDate(finalpaydate, $('#final-payment-error'), "final-payment-date");
+        var result = isValidDate(finalpaydate);
+        if(!result[0]) {
+            if(result[1] == 'Date should be at least a month ago.') {
+                if ($('#event-id').text() == '')
+                    displayError($('#final-payment-date'), $('#final-payment-error'), result[1]);
+                else
+                    resetField($('#final-payment-date'), $('#final-payment-error'));    
+            }
+            else
+                displayError($('#final-payment-date'), $('#final-payment-error'), result[1]);
+        }
+        else
+            resetField($('#final-payment-date'), $('#final-payment-error'));
+        
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     //Checks the current chosen final payment mode option
     $('#final-payment-mode').change(function () {
-        if ($('#final-payment-mode').val() == '')
-            displayError($('#final-payment-mode'), $('#final-payment-mode-error'), 'Select 1 payment mode.');
+        var result = isValidModeOfPayment($('#final-payment-mode').val().trim());
+        if (!result[0])
+            displayError($('#final-payment-mode'), $('#final-payment-mode-error'), result[1]);
         else
             resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     //Checks the final payment amount value
-    $('#final-payment-amount').on('keyup', function () {
-        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '')
-            displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
-        else
-            resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
-
-        $('#downpayment-amount').on('change', function () {
-            updatePaymentAndBalance();
-            $('#submit').attr("disabled", checkIfFilledEventFields());
-        });
-        updatePaymentAndBalance();
-        $('#submit').attr("disabled", checkIfFilledEventFields());
-
-        if (parseFloat($('#payment-balance').val()) < 0) {
-            $('#payment-error').text('Customer payment is greater than the total price.');
-            $('#payment-amount-total').addClass('is-invalid');
-            $('#payment-balance').addClass('is-invalid');
-        }
-        else {
-            $('#payment-error').text('');
-            $('#payment-amount-total').removeClass('is-invalid');
-            $('#payment-balance').removeClass('is-invalid');
-        }
-    });
     $('#final-payment-amount').on('change', function () {
-        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '')
+        var result = isValidPrice($('#final-payment-amount').val().trim());
+        if (!result[0])
             displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
         else
             resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
@@ -975,6 +964,7 @@ function removeExtraCharge(elem) {
 
 function addDiscount() {
     $('.discount-add-button').attr("disabled", true);
+    var result = isValidPrice($('#discount-name').val().trim())
     if (!$('#discount-name').val() || !$('#discount-price').val()) {
         $('#discount-error').text('Please fill up all fields.');
         $('.discount-add-button').attr("disabled", true);
@@ -1048,7 +1038,7 @@ function removeDiscount(elem) {
 }
 
 function updateBreakdownTable() {
-    let package = calculatePackageTotal();
+    let eventpackage = calculatePackageTotal();
     let additional = calculateItemTotal($('.additional-item-amt'));
     let charges = calculateItemTotal($('.extra-charges-item-amt'));
     let discounts = calculateItemTotal($('.discount-item-amt'));
@@ -1056,7 +1046,7 @@ function updateBreakdownTable() {
 
     $('#breakdown-list').empty();
 
-    if (package) {
+    if (eventpackage) {
         $('#breakdown-list').append(
             '<div>' +
             '<div class="row px-4 py-2 mx-4">' +
@@ -1064,7 +1054,7 @@ function updateBreakdownTable() {
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
             '<h6 class="col mb-0 mt-1 text-center"></h6>' +
             '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
-            formatAsDecimal(package) +
+            formatAsDecimal(eventpackage) +
             '</strong></h3>' +
             '</div>' +
             '</div>'
@@ -1243,59 +1233,80 @@ function updateBreakdownTable() {
 function initializeRealTimeValidation() {
     //Event Details
     $('#client-name').keyup(function () {
-        var clientname = validator.trim($('#client-name').val());
-        if (validator.isEmpty(clientname))
-            displayError($('#client-name'), $('#client-name-error'), 'Client name should be filled.');
-        else if (checkStringInput(clientname))
-            displayError($('#client-name'), $('#client-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
+        var clientname = $('#client-name').val().trim();
+        result = isValidName(clientname);
+        if(!result[0]) 
+            displayError($('#client-name'), $('#client-name-error'), result[1]);
         else resetField($('#client-name'), $('#client-name-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#client-mobile-number').keyup(function () {
-        if (validator.isEmpty($(this).val()))
-            displayError($('#client-mobile-number'), $('#client-number-error'), 'Client mobile number should be filled.');
-        else if ($(this).intlTelInput('isValidNumber'))
-            resetField($('#client-mobile-number'), $('#client-number-error'));
-        else
-            displayError($('#client-mobile-number'), $('#client-number-error'), 'Invalid client mobile number.');
+        var clientnumber = $('#client-mobile-number').val().trim();
+        var result = isEmptyContactNumber(clientnumber);
+        if (result[0])
+            displayError($('#client-mobile-number'), $('#client-number-error'), 'Client ' + result[1]);
+        else {
+            if ($('#client-mobile-number').intlTelInput('isValidNumber'))
+                resetField($('#client-mobile-number'), $('#client-number-error'));
+            else 
+                displayError($('#client-mobile-number'), $('#client-number-error'), 'Client Mobile Number is invalid.');
+        }
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#event-type').keyup(function () {
-        var eventtype = validator.trim($(this).val());
-        if (validator.isEmpty(eventtype))
-            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
+        var eventtype = $(this).val().trim();
+        var result = isValidEventType(eventtype);
+        if (!result[0])
+            displayError($(this), $('#event-type-error'), result[1]);
         else resetField($(this), $('#event-type-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#event-type').on("change", function () {
-        var eventtype = validator.trim($(this).val());
-        if (validator.isEmpty(eventtype))
-            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
+        var eventtype = $(this).val().trim();
+        var result = isValidEventType(eventtype);
+        if (!result[0])
+            displayError($(this), $('#event-type-error'), result[1]);
         else resetField($(this), $('#event-type-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#event-type').on("autocompletechange", function () {
-        var eventtype = validator.trim($(this).val());
-        if (validator.isEmpty(eventtype))
-            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
+        var eventtype = $(this).val().trim();
+        var result = isValidEventType(eventtype);
+        if (!result[0])
+            displayError($(this), $('#event-type-error'), result[1]);
         else resetField($(this), $('#event-type-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $("#event-date").on("change", function () {
         var eventdate = document.getElementById("event-date").value;
-        validDate(eventdate, $('#event-date-error'), "event-date");
+        var result = isValidDate(eventdate);
+        if(!result[0]) {
+            if(result[1] == 'Date should be at least a month ago.') {
+                if ($('#event-id').text() == '')
+                    displayError($('#event-date'), $('#event-date-error'), result[1]);
+                else
+                    resetField($('#event-date'), $('#event-date-error'));    
+            }
+            else
+                displayError($('#event-date'), $('#event-date-error'), result[1]);
+        }
+        else
+            resetField($('#event-date'), $('#event-date-error'));
         checkEventAvailability();
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#event-time').change(function () {
-        if ($('#event-time').val() == '')
-            displayError($('#event-time'), $('#event-time-error'), 'Event time cannot be empty.');
+        var result = isValidEventTime($('#event-time').val());
+        if (!result[0])
+            displayError($('#event-time'), 
+                        $('#event-time-error'), 
+                        result[1]);
         else
             resetField($('#event-time'), $('#event-time-error'));
         checkEventAvailability();
@@ -1303,16 +1314,13 @@ function initializeRealTimeValidation() {
     });
 
     $('#event-pax').on("change", function () {
-        if ($('#event-pax').val() < 0) {
-            displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be negative.');
-        } else if ($('#event-pax').val() == 0) {
-            displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be zero.');
-        } else if ($('#event-pax').val() > 120) {
-            displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be more than 120.');
-        }
-        else {
+        var result = isValidPaxNum($('#event-pax').val())
+        if(!result[0])
+            displayError($('#event-pax'), 
+                        $('#event-pax-error'), 
+                        result[1]);
+        else 
             resetField($('#event-pax'), $('#event-pax-error'));
-        }
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
@@ -1320,9 +1328,11 @@ function initializeRealTimeValidation() {
         let garden = $('#venue-garden').is(":checked");
         let sunroom = $('#venue-sunroom').is(":checked");
         let terrace = $('#venue-terrace').is(":checked");
-        let venue = (garden || sunroom || terrace);
-        if (!venue)
-            displayError($('.venue-checkbox'), $('#missing-error'), 'At least 1 venue should be checked.');
+        var result = isValidVenue(garden, sunroom, terrace);
+        $('.package:disabled').removeClass('is-invalid');
+        if (!result[0]){ 
+            displayError($('.venue-checkbox'), $('#missing-error'), result[1]);
+        }
         else
             resetField($('.venue-checkbox'), $('#missing-error'));
         checkEventAvailability();
@@ -1333,9 +1343,9 @@ function initializeRealTimeValidation() {
         let garden = $('#garden-options').val();
         let sunroom = $('#sunroom-options').val();
         let terrace = $('#terrace-options').val();
-        let package = (garden || sunroom || terrace);
-        if (package == 0) {
-            displayError($('.package'), $('#missing-error'), 'At least 1 Package should be selected.');
+        var result = isValidPackage(garden, sunroom, terrace);
+        if (!result[0]) {
+            displayError($('.package:enabled'), $('#missing-error'), result[1]);
         }
         else
             resetField($('.package'), $('#missing-error'));
@@ -1344,76 +1354,56 @@ function initializeRealTimeValidation() {
     });
 
     $('#representative-name').keyup(function () {
-        var repname = validator.trim($('#representative-name').val());
-        if (checkStringInput(repname))
-            displayError($('#representative-name'), $('#rep-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
+        var repname = $('#representative-name').val().trim();
+        result = isValidName(repname);
+        if(!result[0]) {
+            if(result[1] == 'Client name should be filled.')
+                resetField($('#representative-name'), $('#rep-name-error'))
+            else displayError($('#representative-name'), $('#rep-name-error'), result[1]);
+        }      
         else resetField($('#representative-name'), $('#rep-name-error'));
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
 
     $('#representative-mobile-number').keyup(function () {
-        if ($(this).intlTelInput('isValidNumber') || validator.isEmpty($(this).val()))
+        if ($(this).intlTelInput('isValidNumber') || !$(this).val().trim())
             resetField($('#representative-mobile-number'), $('#rep-number-error'));
         else
-            displayError($('#representative-mobile-number'), $('#rep-number-error'), 'Invalid representative mobile number.');
+            displayError($('#representative-mobile-number'), 
+                        $('#rep-number-error'), 
+                        'Representative Mobile Number is invalid.');
+            
         $('#submit').attr("disabled", checkIfFilledEventFields());
     });
     
     //menu details
-    $('#additional-name').change(function () {
-        var foodname = validator.trim($('#additional-name').val());
-        if (validator.isEmpty(foodname)) {
-            $('#additional-price').val('')
-            if(validator.isEmpty($('#additional-quantity').val())) {
-                resetField($('#additional-quantity'), $('#additional-items-error'));
-                resetField($('#additional-price'), $('#additional-items-error'));
-                resetField($('#additional-name'), $('#additional-items-error'));
-            } else {
-                displayError($('#additional-name'), $('#additional-items-error'), 'Food name cannot be empty.');
-                $('.additional-add-button').attr("disabled", true);
-            }
+    $('#additional-name, #additional-quantity').change(function () {
+        var foodname = $('#additional-name').val().trim();
+        var foodqty = $('#additional-quantity').val().trim();
+        var result = isValidAdditionalFood(foodname, foodqty);
+        $('.additional-add-button').attr("disabled", !result[0]);
+        if (!result[0]) {
+            if(foodname)
+                displayError($('#additional-quantity'), $('#additional-items-error'), result[1]);
+            else {
+                if(!result[2]){
+                    displayError($('#additional-quantity'), $('#additional-items-error'), result[3]);
+                    $('#additional-name').removeClass('is-invalid');
+                }
+                else {
+                    displayError($('#additional-name'), $('#additional-items-error'), result[1]);
+                    $('#additional-quantity').removeClass('is-invalid');
+                }                
+            }  
         } else {
+            $('#additional-price').val(result[1]);
             resetField($('#additional-name'), $('#additional-items-error'));
-            if ($('#additional-quantity').val() < 0) {
-                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
-                $('.additional-add-button').attr("disabled", true);
-            } else if ($('#additional-quantity').val() == 0) {
-                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-                $('.additional-add-button').attr("disabled", true);
-            } else {
-                resetField($('#additional-quantity'), $('#additional-items-error'));
-                $('.additional-add-button').attr("disabled", false);
-            }
-        }
-    });
-
-    $('#additional-quantity').change(function () {
-        var foodname = validator.trim($('#additional-name').val());
-        if (validator.isEmpty($('#additional-quantity').val())) {
-            if(validator.isEmpty(foodname)) {
-                resetField($('#additional-quantity'), $('#additional-items-error'));
-                resetField($('#additional-price'), $('#additional-items-error'));
-                resetField($('#additional-name'), $('#additional-items-error'));
-                $('#additional-price').val('');
-            } else {
-                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-                $('.additional-add-button').attr("disabled", true);
-            }
-        } else if ($('#additional-quantity').val() < 0) {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
-            $('.additional-add-button').attr("disabled", true);
-        } else if ($('#additional-quantity').val() == 0) {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-            $('.additional-add-button').attr("disabled", true);
-        } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
-            if (validator.isEmpty(foodname)) {
-                displayError($('#additional-name'), $('#additional-items-error'), 'Food name cannot be empty.');
-                $('.additional-add-button').attr("disabled", true);
-            } else {
-                resetField($('#additional-name'), $('#additional-items-error'));
-                $('.additional-add-button').attr("disabled", false);
-            }            
+            resetField($('#additional-price'), $('#additional-items-error'));
+            if(!foodname) {
+                $('#additional-name, #additional-quantity').val('');
+                $('.additional-add-button').attr("disabled", result[0]);
+            }
         }
     });
     
@@ -1426,171 +1416,63 @@ function initializeRealTimeValidation() {
     });
     
     //transactional details
-    $('#extra-charges-name').change(function () {
-        var echargesname = validator.trim($('#extra-charges-name').val())
-        if (validator.isEmpty(echargesname)) {
-            if (validator.isEmpty($('#extra-charges-quantity').val()) &&
-                validator.isEmpty($('#extra-charges-price').val())) {
-                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
+    $('#extra-charges-name, #extra-charges-quantity, #extra-charges-price').change(function () {
+        var ecname = $('#extra-charges-name').val().trim();
+        var ecqty = $('#extra-charges-quantity').val().trim();
+        var ecprice = $('#extra-charges-price').val().trim();
+        var result = isValidExtraCharge(ecname, ecqty, ecprice);
+        $('.extra-charges-add-button').attr("disabled", !result[0]);
+
+        if (!result[0]){
+            if(result[1] == 'Charge name cannot be empty.') {   
+                displayError($('#extra-charges-name'), $('#extra-charges-error'), result[1]);
+                $('#extra-charges-price').removeClass('is-invalid');
+                $('#extra-charges-quantity').removeClass('is-invalid');
+            } else if (result[1] == 'Invalid quantity.') {
+                displayError($('#extra-charges-quantity'), $('#extra-charges-error'), result[3]);
+                $('#extra-charges-name').removeClass('is-invalid');
+                $('#extra-charges-price').removeClass('is-invalid');
+
             } else {
-                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
-                $('.extra-charges-add-button').attr("disabled", true);
+                displayError($('#extra-charges-price'), $('#extra-charges-error'), result[5]);
+                $('#extra-charges-name').removeClass('is-invalid');
+                $('#extra-charges-quantity').removeClass('is-invalid');
             }
-        } else {
-            resetField($('#extra-charges-name'), $('#extra-charges-error'));
-            if ($('#extra-charges-price').val() < 0) {
-                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else if ($('#extra-charges-price').val() == 0) {
-                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else {
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                if ($('#extra-charges-quantity').val() < 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else if ($('#extra-charges-quantity').val() == 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else {
-                    resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                    $('.extra-charges-add-button').attr("disabled", false);
-                }
-            }
-        }
-    });
-    $('#extra-charges-quantity').change(function () {
-        var echargesname = validator.trim($('#extra-charges-name').val())
-        if (validator.isEmpty($('#extra-charges-quantity').val())) {
-            if (validator.isEmpty(echargesname) &&
-                validator.isEmpty($('#extra-charges-price').val())) {
-                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-            } else {
-                displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            }
-        } else if ($('#extra-charges-quantity').val() < 0) {
-            displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
-            $('.extra-charges-add-button').attr("disabled", true);
-        } else if ($('#extra-charges-quantity').val() == 0) {
-            displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-            $('.extra-charges-add-button').attr("disabled", true);
+    
         } else {
             resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-            if (validator.isEmpty(echargesname)) {
-                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else {
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-                if ($('#extra-charges-price').val() < 0) {
-                    displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else if ($('#extra-charges-price').val() == 0) {
-                    displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else {
-                    resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                    $('.extra-charges-add-button').attr("disabled", false);
-                }
-            }           
-        }
-    });
-
-    $('#extra-charges-price').change(function () {
-        var echargesname = validator.trim($('#extra-charges-name').val())
-        if (validator.isEmpty($('#extra-charges-price').val())) {
-            if (validator.isEmpty($('#extra-charges-quantity').val()) &&
-                validator.isEmpty(echargesname)) {
-                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-            } else {
-                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            }
-        } else if ($('#extra-charges-price').val() < 0) {
-            displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
-            $('.extra-charges-add-button').attr("disabled", true);
-        } else if ($('#extra-charges-price').val() == 0) {
-            displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-            $('.extra-charges-add-button').attr("disabled", true);
-        } else {
             resetField($('#extra-charges-price'), $('#extra-charges-error'));
-            if (validator.isEmpty(echargesname)) {
-                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else {
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-                if ($('#extra-charges-quantity').val() < 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else if ($('#extra-charges-quantity').val() == 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else {
-                    resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                    $('.extra-charges-add-button').attr("disabled", false);
-                }
-            } 
-        }
+            resetField($('#extra-charges-name'), $('#extra-charges-error'));
+            if(!ecname)
+                $('.extra-charges-add-button').attr("disabled", result[0]);
+        }        
     });
 
-    $('#discount-name').change(function () {
-        var discountname = validator.trim($('#discount-name').val())
-        if (validator.isEmpty(discountname)) {
-            if(validator.isEmpty($('#discount-price').val())) {
-                resetField($('#discount-price'), $('#discount-error'));
-                resetField($('#discount-name'), $('#discount-error'));
-            } else {
-                displayError($('#discount-name'), $('#discount-error'), 'Discount name cannot be empty.');
-                $('.discount-add-button').attr("disabled", true);
-            }
+    $('#discount-name, #discount-price').change(function () {
+        var dname = $('#discount-name').val().trim();
+        var dprice = $('#discount-price').val().trim();
+        var result = isValidDiscount(dname, dprice);
+        $('.discount-add-button').attr("disabled", !result[0]);
+        if (!result[0]){
+            if(dname)
+                displayError($('#discount-price'), $('#discount-error'), result[1]);
+            else {
+                if(!result[2]){
+                    displayError($('#discount-price'), $('#discount-error'), result[3]);
+                    $('#discount-name').removeClass('is-invalid');
+                }
+                else {
+                    displayError($('#discount-name'), $('#discount-error'), result[1]);
+                    $('#discount-price').removeClass('is-invalid');
+                }
+            }     
         } else {
             resetField($('#discount-name'), $('#discount-error'));
-            if ($('#discount-price').val() < 0) {
-                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be negative.');
-                $('.discount-add-button').attr("disabled", true);
-            } else if ($('#discount-price').val() == 0) {
-                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
-                $('.discount-add-button').attr("disabled", true);
-            } else {
-                resetField($('#discount-price'), $('#discount-error'));
-                $('.discount-add-button').attr("disabled", false);
-            }
+            resetField($('#discount-price'), $('#discount-error'));
+            if(!dname)
+                $('.discount-add-button').attr("disabled", result[0]);
         }
     });
-
-    $('#discount-price').change(function () {
-        var discountname = validator.trim($('#discount-name').val())
-        if (validator.isEmpty($('#discount-price').val())) {
-            if(validator.isEmpty(discountname)) {
-                resetField($('#discount-price'), $('#discount-error'));
-                resetField($('#discount-name'), $('#discount-error'));
-            } else {
-                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
-                $('.discount-add-button').attr("disabled", true);
-            }
-        } else if ($('#discount-price').val() < 0) {
-            displayError($('#discount-price'), $('#discount-error'), 'Price cannot be negative.');
-            $('.discount-add-button').attr("disabled", true);
-        } else if ($('#discount-price').val() == 0) {
-            displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
-            $('.discount-add-button').attr("disabled", true);
-        } else {
-            resetField($('#discount-price'), $('#discount-error'));
-            if (validator.isEmpty(discountname)) {
-                displayError($('#discount-name'), $('#discount-error'), 'Discount name cannot be empty.');
-                $('.discount-add-button').attr("disabled", true);
-            } else {
-                resetField($('#discount-name'), $('#discount-error'));
-                $('.discount-add-button').attr("disabled", false);
-            }  
-        }
-    });    
 
     //Payment Details
     downpaymentCheckFields();
@@ -1630,7 +1512,7 @@ function checkIfFilledEventFields() {
     let garden = $('#garden-options').val();
     let sunroom = $('#sunroom-options').val();
     let terrace = $('#terrace-options').val();
-    let package = (garden || sunroom || terrace);
+    let eventpackage = (garden || sunroom || terrace);
     
     var dateMax = getDateTime("2032-01-01");
     var dateMin = getDateTime(getDateAMonthAgo());
@@ -1710,7 +1592,7 @@ function checkIfFilledEventFields() {
         $('#missing-error').val('At least 1 venue should be selected.');
         return true;
     }
-    else if (package == 0) {
+    else if (eventpackage == 0) {
         $('#missing-error').val('At least 1 package should be selected.');
         return true;
     }
@@ -1845,48 +1727,6 @@ function getDateTime(input) {
     return new Date(year, month, day).getTime();
 }
 
-/**
- * Checks date fields if they are not set at most today (YYYY-MM-DD)
- *
- * @param {String} input        The user input for a specific field in the form
- * @param {String} errorfield   The ID of the error field in the form to display the errormsg in
- * @param {String} id           The ID of the field in the form with discrepancies
- */
-function validDate(input, errorfield, id) {
-    var idfield = '#' + id;
-    if (input.length > 10)
-        displayError($(idfield), errorfield, 'Invalid date.');
-    else {
-        var dateInput = getDateTime(input);
-        var dateMax = getDateTime("2032-01-01");
-        var dateMin = getDateTime(getDateAMonthAgo());
-        console.log("yoo "+ input)
-        if (validator.isEmpty(input)) {
-            console.log("rawr "+ input)
-            displayError($(idfield), errorfield, 'Invalid date.');
-            return true;
-        } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
-            if ($('#event-id').text() == '') {
-                displayError($(idfield), errorfield, 'Date should be at least a month ago.');
-                return true;
-            }
-            else {
-                resetField($(idfield), errorfield);
-            }
-        } else if (dateInput - dateMax >= 0 || isNaN(dateInput)) {
-            displayError(
-                $(idfield),
-                errorfield,
-                'Date cannot be later than 2031.'
-            );
-            return true;
-        } else {
-            resetField($(idfield), errorfield);
-            return false;
-        }
-    }
-}
-
 function displayError(inputField, errorField, errorText) {
     errorField.text(errorText);
     inputField.addClass('is-invalid');
@@ -1939,8 +1779,6 @@ function checkEventAvailability() {
                 else {
                     resetField($('#event-date'), $('#event-time-error'));
                     resetField($('#event-time'), $('#event-time-error'));
-                    if ($('#event-id').text() == '')
-                        validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
                     $('#submit').attr("disabled", checkIfFilledEventFields());
                 }
             }
@@ -2570,3 +2408,245 @@ function addExistingFields() {
 
 }
 
+// Validations
+
+// Additional Food Modal
+function isValidAdditionalFood(foodname, quantity) {
+    resultqty = isValidQuantity(quantity);
+    if((foodname && resultqty[2]) || (foodname == quantity))
+        return isValidAdditionalFoodName(foodname);
+    else {
+        if(!foodname) {
+            return [false, 'Food name cannot be empty.', 
+                    resultqty[0], resultqty[1]];
+        } else {
+            return [resultqty[0], resultqty[1]];
+        }
+    }
+}
+
+// Discount Modal
+function isValidDiscount(discountname, price) {
+    var resultprice = isValidPrice(price);
+    if((discountname && resultprice[2]) || (discountname == price))
+        return [true, ''];
+    else {
+        if(!discountname) {
+            return [false, 'Discount name cannot be empty.', 
+                    resultprice[0], resultprice[1]]
+        }
+        else {
+            return [resultprice[0], resultprice[1]];
+        }
+    }
+}
+
+// Extra Charges Modal
+function isValidExtraCharge(chargename, quantity, price) {
+    console.log(chargename + " " + quantity +" "+ price)
+    var resultqty = isValidQuantity(quantity);
+    var resultprice = isValidPrice(price);
+    console.log((chargename == quantity) && (quantity == price));
+    if((chargename && resultqty[0] && resultprice[0]) || ((chargename == quantity) && (quantity == price)))
+        return [true, ''];
+    else {
+        if(!chargename) {
+            if(!resultprice[0]) {
+                if(!resultqty[0]) {
+                    if(resultprice[1] == 'Price cannot be negative.' || price != '')                         
+                        return [false, 'Invalid price.',
+                                resultqty[0], resultqty[1], 
+                                resultprice[0], resultprice[1]];  
+                    else    
+                        return [false, 'Invalid quantity.',
+                                resultqty[0], resultqty[1], 
+                                resultprice[0], resultprice[1]];                
+                }
+                else {
+                    if(price == '')
+                        return [false, 'Charge name cannot be empty.',
+                                resultqty[0], resultqty[1], 
+                                resultprice[0], resultprice[1]]; 
+                    else                         
+                        return [false, 'Invalid price.',
+                                resultqty[0], resultqty[1], 
+                                resultprice[0], resultprice[1]];  
+                }
+            } else {
+                return [false, 'Charge name cannot be empty.',
+                        resultqty[0], resultqty[1], 
+                        resultprice[0], resultprice[1]];  
+            }        
+        }
+        else {
+            if(!resultqty[0])
+                return [false, 'Invalid quantity.',
+                        resultqty[0], resultqty[1], 
+                        resultprice[0], resultprice[1]];
+            else
+                return [false, 'Invalid price.',
+                        resultqty[0], resultqty[1], 
+                        resultprice[0], resultprice[1]];
+        }
+    }
+}
+
+// Per Field
+// Date
+function isValidDate(input) {
+    if (input.length > 10)
+        return [false, 'Invalid date.'];
+    else {
+        var dateInput = getDateTime(input);
+        var dateMax = getDateTime("2032-01-01");
+        var dateMin = getDateTime(getDateAMonthAgo());
+        
+        if (!input.trim())
+            return [false, 'Invalid date.'];
+        else if (dateInput - dateMin < 0 || isNaN(dateInput))
+            return [false, 'Date should be at least a month ago.'];
+        else if (dateInput - dateMax >= 0 || isNaN(dateInput))
+            return [false, 'Date cannot be later than 2031.'];
+        else
+            return [true, ''];
+    }
+}
+
+// Name
+function isValidName(input) {
+    if (!input.trim())
+        return [false, 'Client name should be filled.'];
+    else if (checkStringInput(input))
+        return [false, 'Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.'];
+    else 
+        return [true, ''];
+}
+
+// Quantity
+function isValidQuantity(input) {
+    if (typeof input === 'undefined' || input == 0)
+        return [false, 'Quantity cannot be zero.', '']
+    else if (input < 0)
+        return [false, 'Quantity cannot be negative.', ''];
+    else
+        return [true, '', input];
+}
+
+// Price 
+function isValidPrice(input) {
+    if (typeof input === 'undefined' || input == 0)
+        return [false, 'Price cannot be zero.', '']
+    else if (input < 0)
+        return [false, 'Price cannot be negative.', ''];
+    else
+        return [true, '', input];
+}
+
+// Contact Number
+function isEmptyContactNumber(input) {
+    if (!input.trim())
+        return [true, 'Mobile Number should be filled.'];
+    else
+        return [false, ''];   
+}
+
+// Event Type
+function isValidEventType(input) {
+    if (!input.trim())
+        return [false, 'Event type should be filled.'];
+    else
+        return [true, ''];   
+}
+
+// Event Time
+function isValidEventTime(input) {
+    if (!input.trim())
+        return [false, 'Event time cannot be empty.'];
+    else
+        return [true, input];
+}
+
+// Number of Pax
+function isValidPaxNum(input) {
+    if (input < 0)
+        return [false, 'Number of pax cannot be negative.'];
+    else if (input == 0)
+        return [false, 'Number of pax cannot be zero.'];
+    else if (input > 120)
+        return [false, 'Number of pax cannot be more than 120.'];
+    else
+        return [true, ''];
+}
+
+// Venue
+function isValidVenue(garden, sunroom, terrace) {
+    let venue = (garden || sunroom || terrace);
+    if (!venue)
+        return [false, 'At least 1 venue should be checked.'];
+    else
+        return [true, garden+sunroom+terrace];
+}
+
+// Package
+function isValidPackage(garden, sunroom, terrace) {
+    let eventpackage = (garden || sunroom || terrace);
+    if (!eventpackage)
+        return [false, 'At least 1 Package should be selected.'];
+    else
+        return [true, garden + ' ' + sunroom + ' ' + terrace];
+}
+
+// Additional Food Name
+function isValidAdditionalFoodName(foodname) {
+    if (foodNameList.includes(foodname))
+        return [true, getMenuItemPrice(foodname), foodname + ' is in the list.'];
+    else {
+        if(!foodname)
+            return [true, '', 'Empty input.']; 
+        else return [false, '', foodname + ' is not in the list.']; 
+    }
+}
+
+// Additional Food Name - UT
+function isAddFoodNameinList(foodname) {
+    let foodNameList = ['Barbeque Chicken Salad', 'Chicken Caesar Salad', 'Balai Yllana Garden Salad'];
+    let foodList = [{name: 'Barbeque Chicken Salad', price: 235}, 
+                    {name: 'Chicken Caesar Salad', price: 215},
+                    {name: 'Balai Yllana Garden Salad', price: 235}]
+    if (foodNameList.includes(foodname))
+        return [true, foodList[foodNameList.indexOf(foodname)].price, foodname + ' is in the list.'];
+    else {
+        if(!foodname)
+            return [true, '', 'Empty input.']; 
+        else return [false, '', foodname + ' is not in the list.']; 
+    }
+}
+
+// Mode Of Payment
+function isValidModeOfPayment(input) {
+    if(!input.trim()) 
+        return [false, 'Select 1 payment mode.']
+    else
+        return [true, input]
+}
+
+// Total Amount Paid Calculation
+function isValidTotalAmountPaid(downpayment, finalpayment, total) {
+    let balance = total - (downpayment + finalpayment);
+    if(balance < 0)
+        return [false, 'Customer payment is greater than the total price.'];
+    else if (balance > 0)
+        return [true, 'Remaining Balance: P' + balance] 
+    else return [true, 'Event is fully paid.']      
+}
+
+
+if (typeof window == 'undefined') {
+    module.exports = { isValidDate, isValidName, 
+                        isEmptyContactNumber, isValidEventType,
+                        isValidEventTime, isValidPaxNum,
+                        isValidVenue, isValidPackage,
+                        isAddFoodNameinList, isValidQuantity,
+                        isValidModeOfPayment, isValidPrice,
+                        isValidTotalAmountPaid };
+}
