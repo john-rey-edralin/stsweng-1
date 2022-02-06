@@ -2000,6 +2000,14 @@ function calculateTotal() {
     );
 }
 
+function calculateNoDiscountTotal() {
+    return (
+        calculatePackageTotal() +
+        calculateItemTotal($('.additional-item-amt')) +
+        calculateItemTotal($('.extra-charges-item-amt'))
+    );
+}
+
 function calculateTotalAmountPaid() {
     var dpay = 0;
     var fpay = 0;
@@ -2704,9 +2712,9 @@ function checkPaxDiscount (input) {
     var paxDiscount = 'No discount';
     var discount = -1;
     let discountList = [
-        { name: 'PAXDISCOUNT50', pax: 50, price: 1000 },
-        { name: 'PAXDISCOUNT100', pax: 100, price: 2000 },
-        { name: 'PAXDISCOUNT120', pax: 120, price: 3000 },
+        { name: '10%PAXDISCOUNT50', pax: 50, discount: 10 },
+        { name: '20%PAXDISCOUNT100', pax: 100, discount: 20 },
+        { name: '30%PAXDISCOUNT120', pax: 120, discount: 30 },
     ];
 
     for(i = discountList.length -1; i >= 0; i--) {
@@ -2718,8 +2726,9 @@ function checkPaxDiscount (input) {
 
     if(discount >= 0) {
         paxDiscount = discountList[discount];
+        var discountprice = calculateNoDiscountTotal() * (paxDiscount.discount / 100);
         $('#discount-name').val(paxDiscount.name);
-        $('#discount-price').val(paxDiscount.price);        
+        $('#discount-price').val(discountprice);        
         addPaxDiscount();
     } 
 
@@ -2927,14 +2936,14 @@ function isValidPaxNum(input) {
 }
 
 // Checking Number of Pax for Pax Discount
-function checkPaxDiscountTest (input) {
+function checkPaxDiscountTest (input, total) {
     var paxresult = isValidPaxNum(input);
     var paxDiscount = 'No discount';
     var discount = -1;
     let discountList = [
-        { name: 'PAXDISCOUNT50', pax: 50, price: 1000 },
-        { name: 'PAXDISCOUNT100', pax: 100, price: 2000 },
-        { name: 'PAXDISCOUNT120', pax: 120, price: 3000 },
+        { name: '10%PAXDISCOUNT50', pax: 50, discount: 10 },
+        { name: '20%PAXDISCOUNT100', pax: 100, discount: 20 },
+        { name: '30%PAXDISCOUNT120', pax: 120, discount: 30 },
     ];
 
     for(i = discountList.length -1; i >= 0; i--) {
