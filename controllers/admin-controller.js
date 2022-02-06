@@ -7,6 +7,7 @@ const {
     isOldPasswordSameAsPassword,
 } = require('../helpers/newPasswordValidator.js');
 const saltRounds = 10;
+const mongoose = require('mongoose');
 
 const controller = {
     getAdminHome: async function (req, res) {
@@ -243,6 +244,19 @@ const controller = {
         const { description, rate, minimumPax } = req.body;
         const result = await Discount.create({ description, rate, minimumPax });
         res.json(result);
+    },
+
+    putDiscountByID: async function (req, res) {
+        const { id, description, rate, minimumPax } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Discount.findOneAndUpdate(
+            { _id },
+            { description, rate, minimumPax },
+            { returnDocument: 'after' }
+        );
+
+        res.json(doc);
     },
 };
 
