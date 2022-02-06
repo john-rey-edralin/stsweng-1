@@ -60,7 +60,6 @@ let menuPackageHTML =
     'FISH' +
     '</button> ' +
     '</div> ' +
-
     '<div id="menu-salad-contents" class="menu-item-content collapse">' +
     '<hr>' +
     '<div class="d-flex flex-row justify-content-start">' +
@@ -78,7 +77,6 @@ let menuPackageHTML =
     '</div>' +
     '</div>' +
     '</div>' +
-
     '<div id="menu-pasta-contents" class="menu-item-content collapse">' +
     '<hr>' +
     '<div class="d-flex flex-row justify-content-start">' +
@@ -101,7 +99,6 @@ let menuPackageHTML =
     '</div>' +
     '</div>' +
     '</div>' +
-
     '<div id="menu-beef-contents" class="menu-item-content collapse">' +
     '<hr>' +
     '<div class="d-flex flex-row justify-content-start">' +
@@ -124,7 +121,6 @@ let menuPackageHTML =
     '</div>' +
     '</div>' +
     '</div>' +
-
     '<div id="menu-pork-contents" class="menu-item-content collapse">' +
     '<hr>' +
     '<div class="d-flex flex-row justify-content-start">' +
@@ -142,7 +138,6 @@ let menuPackageHTML =
     '</div>' +
     '</div>' +
     '</div>' +
-
     '<div id="menu-chicken-contents" class="menu-item-content collapse">' +
     '<hr>' +
     '<div class="d-flex flex-row justify-content-start">' +
@@ -165,7 +160,6 @@ let menuPackageHTML =
     '</div>' +
     '</div>' +
     '</div>' +
-
     '<div id="menu-fish-contents" class="menu-item-content collapse">' +
     '<hr>' +
     '<div class="d-flex flex-row justify-content-start">' +
@@ -184,33 +178,38 @@ let menuPackageHTML =
     '</div>' +
     '</div>';
 
-$(document).ready(function () {
-    //disable Enter key
-    $(window).keydown(function(event){
-        if(event.keyCode == 13) {
-        event.preventDefault();
-        return false;
-        }
+if (typeof window != 'undefined') {
+    $(document).ready(function () {
+        disableEnterKey();
+        retrieveInfoFromDB();
+
+        setRequiredFields();
+        initializeTooltips();
+
+        initializeEventFields();
+        initializeMenuFields();
+        initializeTransactionFields();
+        initializePaymentFields();
+
+        initializeRealTimeValidation();
+
+        submitForm();
     });
-    retrieveInfoFromDB();
-
-    setRequiredFields();
-    initializeTooltips();
-
-    initializeEventFields();
-    initializeMenuFields();
-    initializeTransactionFields();
-    initializePaymentFields();
-
-    initializeRealTimeValidation();
-
-    submitForm();
-});
+}
 
 // window.addEventListener('beforeunload', function (e) {
 //     e.preventDefault();
 //     e.returnValue = '';
 // });
+
+function disableEnterKey() {
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+}
 
 function retrieveInfoFromDB() {
     $.get('/event-tracker/get/food', function (result) {
@@ -240,51 +239,51 @@ function retrieveInfoFromDB() {
         }
 
         // initialize package options
-        $.each(gardenPackageList, function (i, package) {
+        $.each(gardenPackageList, function (i, eventpackage) {
             $('#garden-options').append(
                 $('<option>', {
-                    value: package.packageCode,
+                    value: eventpackage.packageCode,
                     text:
-                        package.packageName +
+                        eventpackage.packageName +
                         ' - ' +
-                        package.variantCount +
+                        eventpackage.variantCount +
                         ' Variants (Php ' +
-                        package.packagePrice +
+                        eventpackage.packagePrice +
                         ')',
                 })
             );
         });
 
-        $.each(sunroomPackageList, function (i, package) {
+        $.each(sunroomPackageList, function (i, eventpackage) {
             $('#sunroom-options').append(
                 $('<option>', {
-                    value: package.packageCode,
+                    value: eventpackage.packageCode,
                     text:
-                        package.packageName +
+                        eventpackage.packageName +
                         ' - ' +
-                        package.variantCount +
+                        eventpackage.variantCount +
                         ' Variants (Php ' +
-                        package.packagePrice +
+                        eventpackage.packagePrice +
                         ')',
                 })
             );
         });
 
-        $.each(terracePackageList, function (i, package) {
+        $.each(terracePackageList, function (i, eventpackage) {
             $('#terrace-options').append(
                 $('<option>', {
-                    value: package.packageCode,
+                    value: eventpackage.packageCode,
                     text:
-                        package.packageName +
+                        eventpackage.packageName +
                         ' - ' +
-                        package.variantCount +
+                        eventpackage.variantCount +
                         ' Variants (Php ' +
-                        package.packagePrice +
+                        eventpackage.packagePrice +
                         ')',
                 })
             );
         });
-        
+
         addExistingFields();
     });
 }
@@ -300,44 +299,48 @@ function initializeEventFields() {
     //initialize event date
     $('#event-date').val(getDateToday());
     // initialize contact number fields
-    let settings = { autoPlaceholder: "aggressive", preferredCountries: ["ph"], separateDialCode: true, utilsScript: "/js/utils.js" };
-    $("#client-mobile-number").intlTelInput(settings);
-    $("#representative-mobile-number").intlTelInput(settings);
+    let settings = {
+        autoPlaceholder: 'aggressive',
+        preferredCountries: ['ph'],
+        separateDialCode: true,
+        utilsScript: '/js/utils.js',
+    };
+    $('#client-mobile-number').intlTelInput(settings);
+    $('#representative-mobile-number').intlTelInput(settings);
 
     // initialize event type autocomplete options
     let eventTypeTags = [
-        "Birthday",
-        "1st Birthday",
-        "7th Birthday",
-        "Debut",
-        "Wedding",
-        "Anniversary",
-        "10th Anniversary",
-        "25th Anniversary",
-        "50th Anniversary",
-        "Baptism",
-        "Dedication",
-        "Proposal",
-        "Baby Shower",
-        "Bridal Shower",
-        "Bachelor Party",
-        "Bachelorette Party",
-        "Christmas Party",
-        "Reunion"
+        'Birthday',
+        '1st Birthday',
+        '7th Birthday',
+        'Debut',
+        'Wedding',
+        'Anniversary',
+        '10th Anniversary',
+        '25th Anniversary',
+        '50th Anniversary',
+        'Baptism',
+        'Dedication',
+        'Proposal',
+        'Baby Shower',
+        'Bridal Shower',
+        'Bachelor Party',
+        'Bachelorette Party',
+        'Christmas Party',
+        'Reunion',
     ];
-    $("#event-type").autocomplete({
+    $('#event-type').autocomplete({
         minLength: 0,
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(eventTypeTags, request.term);
             response(results.slice(0, 5));
-        }
+        },
     });
 
     // initialize venue + package fields
     $('.venue-checkbox').on('change', function () {
         if ($(this).is(':checked')) {
             $(this).parent().siblings('select').prop('disabled', false);
-
         } else {
             $(this).parent().siblings('select').prop('disabled', true);
             $(this).parent().siblings('select').val('');
@@ -347,18 +350,16 @@ function initializeEventFields() {
 
     // initialize food quantity amount
     $('.package').on('change', function () {
-        if(getVariantCount() == 0) {
+        if (getVariantCount() == 0) {
             $('#menu-package').empty();
             $('#menu-package').append(menuPackageHTML);
             initializeMenuFields();
             $('.menu-button').prop('disabled', true);
         } else if (getVariantCount() > $('.menu-button-active').length) {
             $('.menu-button').prop('disabled', false);
-        }
-        else if (getVariantCount() == $('.menu-button-active').length) {
+        } else if (getVariantCount() == $('.menu-button-active').length) {
             $('.menu-button:not(.menu-button-active)').prop('disabled', true);
-        }
-        else if (getVariantCount() < $('.menu-button-active').length) {
+        } else if (getVariantCount() < $('.menu-button-active').length) {
             $('#menu-package').empty();
             $('#menu-package').append(menuPackageHTML);
             initializeMenuFields();
@@ -366,12 +367,19 @@ function initializeEventFields() {
         updateFoodQuantity();
         updateBreakdownTable();
     });
-    $('#additional-pax').on('change', function () { updateFoodQuantity(); updateBreakdownTable(); });
+    $('#additional-pax').on('change', function () {
+        updateFoodQuantity();
+        updateBreakdownTable();
+    });
 }
 
 function initializeMenuFields() {
-    $('.menu-item-content').on('hidden.bs.collapse', function () { hideMenuItemInfo($(this)) });
-    $('.menu-item-content').on('show.bs.collapse', function () { showMenuItemInfo($(this)) });
+    $('.menu-item-content').on('hidden.bs.collapse', function () {
+        hideMenuItemInfo($(this));
+    });
+    $('.menu-item-content').on('show.bs.collapse', function () {
+        showMenuItemInfo($(this));
+    });
 
     $('.menu-button').on('click', function () {
         if ($(this).hasClass('menu-button-active')) {
@@ -382,13 +390,15 @@ function initializeMenuFields() {
             $(this).addClass('menu-button-active');
             variantCount++;
             if (getVariantCount() <= $('.menu-button-active').length) {
-                $('.menu-button:not(.menu-button-active)').prop('disabled', true);
+                $('.menu-button:not(.menu-button-active)').prop(
+                    'disabled',
+                    true
+                );
             }
         }
-
     });
 
-    $(".menu-item-autocomplete").autocomplete({
+    $('.menu-item-autocomplete').autocomplete({
         minLength: 0,
         source: function (request, response) {
             var results = $.ui.autocomplete.filter(foodNameList, request.term);
@@ -396,19 +406,26 @@ function initializeMenuFields() {
         },
         change: function (event, ui) {
             if (!ui.item) {
-                $(event.target).val("");
+                $(event.target).val('');
             }
         },
         focus: function (event, ui) {
             return false;
-        }
+        },
     });
 
-    $('.additional-add-button').click(function () { addAdditionalItem(); });
+    $('.additional-add-button').click(function () {
+        addAdditionalItem();
+    });
 
     $('#additional-name').change(function () {
-        if (foodNameList.includes($('#additional-name').val()))
-            $('#additional-price').val(getMenuItemPrice($('#additional-name').val()));
+        var foodname = $('#additional-name').val().trim();
+        var result = isValidAdditionalFoodName(foodname);
+        if (result[0]) $('#additional-price').val(result[1]);
+        else {
+            $('#additional-name').val('');
+            $('#additional-price').val('');
+        }
     });
 
     $('#additional-item-modal').on('hidden.bs.modal', function () {
@@ -421,30 +438,41 @@ function initializeMenuFields() {
 
 function initializeTransactionFields() {
     //Extra Charges and Corkage Fees
-    $(".extra-charges-autocomplete").autocomplete({
+    $('.extra-charges-autocomplete').autocomplete({
         minLength: 0,
         source: function (request, response) {
-            var results = $.ui.autocomplete.filter(chargeNameList, request.term);
+            var results = $.ui.autocomplete.filter(
+                chargeNameList,
+                request.term
+            );
             response(results.slice(0, 5));
-        }
+        },
     });
 
-    $('.extra-charges-add-button').click(function () { addExtraCharge(); });
+    $('.extra-charges-add-button').click(function () {
+        addExtraCharge();
+    });
 
     $('#extra-charges-name').change(function () {
         if (chargeNameList.indexOf($('#extra-charges-name').val()) != -1)
-            $('#extra-charges-price').val(getExtraChargePrice($('#extra-charges-name').val()));
+            $('#extra-charges-price').val(
+                getExtraChargePrice($('#extra-charges-name').val())
+            );
     });
 
     $('#extra-charges-modal').on('hidden.bs.modal', function () {
-        $('#extra-charges-name, #extra-charges-quantity, #extra-charges-price').val('');
+        $(
+            '#extra-charges-name, #extra-charges-quantity, #extra-charges-price'
+        ).val('');
         resetField($('#extra-charges-name'), $('#extra-charges-error'));
         resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
         resetField($('#extra-charges-price'), $('#extra-charges-error'));
     });
-    
+
     //Discount
-    $('.discount-add-button').click(function () { addDiscount(); });
+    $('.discount-add-button').click(function () {
+        addDiscount();
+    });
 
     $('#discounts-modal').on('hidden.bs.modal', function () {
         $('#discount-name, #discount-quantity, #discount-price').val('');
@@ -459,15 +487,12 @@ function initializeTransactionFields() {
  */
 function initializePaymentFields() {
     //Sets the downpayment and final payment related fields
-    if (document.getElementById("downpayment").checked) {
+    if (document.getElementById('downpayment').checked) {
         downpaymentChecked();
-        if (document.getElementById("final-payment").checked)
+        if (document.getElementById('final-payment').checked)
             finalPaymentChecked();
-        else
-            finalPaymentNotChecked();
-    }
-    else
-        downpaymentNotChecked()
+        else finalPaymentNotChecked();
+    } else downpaymentNotChecked();
 }
 
 /**
@@ -475,27 +500,28 @@ function initializePaymentFields() {
  */
 function downpaymentChecked() {
     //Sets the default downpayment date to today
-    $('#downpayment-date').val(getDateToday());
+    if ($('#downpayment-date').val() == '')
+        $('#downpayment-date').val(getDateToday());
     //Marks the downpayment related fields as required
-    $('#downpayment-date').siblings("label").addClass('required');
-    $('#downpayment-mode').siblings("label").addClass('required');
-    $('#downpayment-amount').siblings("label").addClass('required');
+    $('#downpayment-date').siblings('label').addClass('required');
+    $('#downpayment-mode').siblings('label').addClass('required');
+    $('#downpayment-amount').siblings('label').addClass('required');
 
     //Enables the Final Payment Section
-    document.getElementById("final-payment").disabled = false;
+    document.getElementById('final-payment').disabled = false;
 }
 
 /**
- * Sets the value and status of final-payment-related fields 
+ * Sets the value and status of final-payment-related fields
  * when final-payment is checked
  */
 function finalPaymentChecked() {
     //Sets the default final payment date to today
     $('#final-payment-date').val(getDateToday());
     //Marks the final payment related fields as required
-    $('#final-payment-date').siblings("label").addClass('required');
-    $('#final-payment-mode').siblings("label").addClass('required');
-    $('#final-payment-amount').siblings("label").addClass('required');
+    $('#final-payment-date').siblings('label').addClass('required');
+    $('#final-payment-mode').siblings('label').addClass('required');
+    $('#final-payment-amount').siblings('label').addClass('required');
 }
 
 /**
@@ -506,9 +532,9 @@ function downpaymentNotChecked() {
     updatePaymentAndBalance();
 
     //Disables downpayment-related fields
-    $('#downpayment-date').siblings("label").removeClass('required');
-    $('#downpayment-mode').siblings("label").removeClass('required');
-    $('#downpayment-amount').siblings("label").removeClass('required');
+    $('#downpayment-date').siblings('label').removeClass('required');
+    $('#downpayment-mode').siblings('label').removeClass('required');
+    $('#downpayment-amount').siblings('label').removeClass('required');
     $('#downpayment')
         .parent()
         .siblings()
@@ -517,9 +543,9 @@ function downpaymentNotChecked() {
         .prop('disabled', true);
 
     //Empties the downpayment-related fields
-    $('#downpayment-date').val("");
-    $('#downpayment-mode').val("");
-    $('#downpayment-amount').val("");
+    $('#downpayment-date').val('');
+    $('#downpayment-mode').val('');
+    $('#downpayment-amount').val('');
 
     //Removes the Error CSS in the downpayment-related fields
     resetField($('#downpayment-date'), $('#downpayment-error'));
@@ -527,8 +553,8 @@ function downpaymentNotChecked() {
     resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
 
     //Disables the whole final payment section
-    document.getElementById("final-payment").checked = false;
-    document.getElementById("final-payment").disabled = true;
+    document.getElementById('final-payment').checked = false;
+    document.getElementById('final-payment').disabled = true;
     $('#final-payment')
         .parent()
         .siblings()
@@ -538,10 +564,10 @@ function downpaymentNotChecked() {
 
     //Empties the final-payment-related fields
     finalPaymentNotChecked();
-    $('#final-payment-amount').attr("placeholder", "");
+    $('#final-payment-amount').attr('placeholder', '');
 
     //Sets the status of the submit button
-    $('#submit').attr("disabled", checkIfFilledEventFields());
+    $('#submit').attr('disabled', checkIfFilledEventFields());
 }
 
 /**
@@ -550,10 +576,10 @@ function downpaymentNotChecked() {
  */
 function finalPaymentNotChecked() {
     //Disables final-payment-related fields
-    $('#final-payment-date').siblings("label").removeClass('required');
-    $('#final-payment-mode').siblings("label").removeClass('required');
-    $('#final-payment-amount').siblings("label").removeClass('required');
-    $("#final-payment")
+    $('#final-payment-date').siblings('label').removeClass('required');
+    $('#final-payment-mode').siblings('label').removeClass('required');
+    $('#final-payment-amount').siblings('label').removeClass('required');
+    $('#final-payment')
         .parent()
         .siblings()
         .children()
@@ -561,9 +587,9 @@ function finalPaymentNotChecked() {
         .prop('disabled', true);
 
     //Empties the final-payment-related fields
-    $('#final-payment-mode').val("");
-    $('#final-payment-amount').val("");
-    $('#final-payment-date').val("");
+    $('#final-payment-mode').val('');
+    $('#final-payment-amount').val('');
+    $('#final-payment-date').val('');
 
     //Removes the Error CSS in the downpayment-related fields
     resetField($('#final-payment-date'), $('#final-payment-error'));
@@ -572,10 +598,10 @@ function finalPaymentNotChecked() {
 
     //Updates other payment details fields
     updatePaymentAndBalance();
-    $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+    $('#final-payment-amount').attr('placeholder', $('#payment-balance').val());
 
     //Sets the status of the submit button
-    $('#submit').attr("disabled", checkIfFilledEventFields());
+    $('#submit').attr('disabled', checkIfFilledEventFields());
 }
 
 /**
@@ -583,74 +609,76 @@ function finalPaymentNotChecked() {
  */
 function downpaymentCheckFields() {
     //Checks the downpayment date field value
-    $("#downpayment-date").on("change", function () {
-        var downpaydate = document.getElementById("downpayment-date").value;
-        validDate(downpaydate, $('#downpayment-error'), "downpayment-date");
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+    $('#downpayment-date').on('change', function () {
+        var downpaydate = document.getElementById('downpayment-date').value;
+        var result = isValidDate(downpaydate);
+        if (!result[0]) {
+            if (result[1] == 'Date should be at least a month ago.') {
+                if ($('#event-id').text() == '')
+                    displayError(
+                        $('#downpayment-date'),
+                        $('#downpayment-error'),
+                        result[1]
+                    );
+                else
+                    resetField($('#downpayment-date'), $('#downpayment-error'));
+            } else
+                displayError(
+                    $('#downpayment-date'),
+                    $('#downpayment-error'),
+                    result[1]
+                );
+        } else resetField($('#downpayment-date'), $('#downpayment-error'));
+
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     //Checks the current chosen downpayment mode option
     $('#downpayment-mode').change(function () {
-        if ($('#downpayment-mode').val() == '')
-            displayError($('#downpayment-mode'), $('#downpayment-mode-error'), 'Select 1 payment mode.');
-        else
-            resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        var result = isValidModeOfPayment($('#downpayment-mode').val().trim());
+        if (!result[0])
+            displayError(
+                $('#downpayment-mode'),
+                $('#downpayment-mode-error'),
+                result[1]
+            );
+        else resetField($('#downpayment-mode'), $('#downpayment-mode-error'));
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     //Checks the downpayment amount value
-    $('#downpayment-amount').on('keyup', function () {
-        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '')
-            displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
-        else
-            resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
-
-        //Updates the total payment amount and the final payment amount 
-        $('#final-payment-amount').on('change', function () {
-            updatePaymentAndBalance();
-            $('#submit').attr("disabled", checkIfFilledEventFields());
-        });
-        updatePaymentAndBalance();
-
-        //Disables/Enables the Submit button
-        $('#submit').attr("disabled", checkIfFilledEventFields());
-
-        //Checks if the customer payment is greater than the needed payment (total amount) 
-        if (parseFloat($('#payment-balance').val()) < 0) {
-            $('#payment-error').text('Customer payment is greater than the total price.');
-            $('#payment-amount-total').addClass('is-invalid');
-            $('#payment-balance').addClass('is-invalid');
-        }
-        else {
-            $('#payment-error').text('');
-            $('#payment-amount-total').removeClass('is-invalid');
-            $('#payment-balance').removeClass('is-invalid');
-        }
-    });
-
     $('#downpayment-amount').on('change', function () {
-        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '')
-            displayError($('#downpayment-amount'), $('#downpayment-amount-error'), 'Invalid payment.');
+        var result = isValidPrice($('#downpayment-amount').val().trim());
+        if (!result[0])
+            displayError(
+                $('#downpayment-amount'),
+                $('#downpayment-amount-error'),
+                'Invalid payment.'
+            );
         else
-            resetField($('#downpayment-amount'), $('#downpayment-amount-error'));
+            resetField(
+                $('#downpayment-amount'),
+                $('#downpayment-amount-error')
+            );
 
-        //Updates the total payment amount and the final payment amount 
+        //Updates the total payment amount and the final payment amount
         $('#final-payment-amount').on('change', function () {
             updatePaymentAndBalance();
-            $('#submit').attr("disabled", checkIfFilledEventFields());
+            $('#submit').attr('disabled', checkIfFilledEventFields());
         });
         updatePaymentAndBalance();
 
         //Disables/Enables the Submit button
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
 
-        //Checks if the customer payment is greater than the needed payment (total amount) 
+        //Checks if the customer payment is greater than the needed payment (total amount)
         if (parseFloat($('#payment-balance').val()) < 0) {
-            $('#payment-error').text('Customer payment is greater than the total price.');
+            $('#payment-error').text(
+                'Customer payment is greater than the total price.'
+            );
             $('#payment-amount-total').addClass('is-invalid');
             $('#payment-balance').addClass('is-invalid');
-        }
-        else {
+        } else {
             $('#payment-error').text('');
             $('#payment-amount-total').removeClass('is-invalid');
             $('#payment-balance').removeClass('is-invalid');
@@ -663,65 +691,81 @@ function downpaymentCheckFields() {
  */
 function finalPaymentCheckFields() {
     //Checks the final payment date field value
-    $("#final-payment-date").on("change", function () {
-        var finalpaydate = document.getElementById("final-payment-date").value;
-        validDate(finalpaydate, $('#final-payment-error'), "final-payment-date");
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+    $('#final-payment-date').on('change', function () {
+        var finalpaydate = document.getElementById('final-payment-date').value;
+        var result = isValidDate(finalpaydate);
+        if (!result[0]) {
+            if (result[1] == 'Date should be at least a month ago.') {
+                if ($('#event-id').text() == '')
+                    displayError(
+                        $('#final-payment-date'),
+                        $('#final-payment-error'),
+                        result[1]
+                    );
+                else
+                    resetField(
+                        $('#final-payment-date'),
+                        $('#final-payment-error')
+                    );
+            } else
+                displayError(
+                    $('#final-payment-date'),
+                    $('#final-payment-error'),
+                    result[1]
+                );
+        } else resetField($('#final-payment-date'), $('#final-payment-error'));
+
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     //Checks the current chosen final payment mode option
     $('#final-payment-mode').change(function () {
-        if ($('#final-payment-mode').val() == '')
-            displayError($('#final-payment-mode'), $('#final-payment-mode-error'), 'Select 1 payment mode.');
+        var result = isValidModeOfPayment(
+            $('#final-payment-mode').val().trim()
+        );
+        if (!result[0])
+            displayError(
+                $('#final-payment-mode'),
+                $('#final-payment-mode-error'),
+                result[1]
+            );
         else
-            resetField($('#final-payment-mode'), $('#final-payment-mode-error'));
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+            resetField(
+                $('#final-payment-mode'),
+                $('#final-payment-mode-error')
+            );
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     //Checks the final payment amount value
-    $('#final-payment-amount').on('keyup', function () {
-        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '')
-            displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
-        else
-            resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
-
-        $('#downpayment-amount').on('change', function () {
-            updatePaymentAndBalance();
-            $('#submit').attr("disabled", checkIfFilledEventFields());
-        });
-        updatePaymentAndBalance();
-        $('#submit').attr("disabled", checkIfFilledEventFields());
-
-        if (parseFloat($('#payment-balance').val()) < 0) {
-            $('#payment-error').text('Customer payment is greater than the total price.');
-            $('#payment-amount-total').addClass('is-invalid');
-            $('#payment-balance').addClass('is-invalid');
-        }
-        else {
-            $('#payment-error').text('');
-            $('#payment-amount-total').removeClass('is-invalid');
-            $('#payment-balance').removeClass('is-invalid');
-        }
-    });
     $('#final-payment-amount').on('change', function () {
-        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '')
-            displayError($('#final-payment-amount'), $('#final-payment-amount-error'), 'Invalid payment.');
+        var result = isValidPrice($('#final-payment-amount').val().trim());
+        if (!result[0])
+            displayError(
+                $('#final-payment-amount'),
+                $('#final-payment-amount-error'),
+                'Invalid payment.'
+            );
         else
-            resetField($('#final-payment-amount'), $('#final-payment-amount-error'));
+            resetField(
+                $('#final-payment-amount'),
+                $('#final-payment-amount-error')
+            );
 
         $('#downpayment-amount').on('change', function () {
             updatePaymentAndBalance();
-            $('#submit').attr("disabled", checkIfFilledEventFields());
+            $('#submit').attr('disabled', checkIfFilledEventFields());
         });
         updatePaymentAndBalance();
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
 
         if (parseFloat($('#payment-balance').val()) < 0) {
-            $('#payment-error').text('Customer payment is greater than the total price.');
+            $('#payment-error').text(
+                'Customer payment is greater than the total price.'
+            );
             $('#payment-amount-total').addClass('is-invalid');
             $('#payment-balance').addClass('is-invalid');
-        }
-        else {
+        } else {
             $('#payment-error').text('');
             $('#payment-amount-total').removeClass('is-invalid');
             $('#payment-balance').removeClass('is-invalid');
@@ -794,23 +838,23 @@ function updateFoodQuantity() {
 }
 
 function addAdditionalItem() {
-    $('.additional-add-button').attr("disabled", true);
+    $('.additional-add-button').attr('disabled', true);
     if (
         !$('#additional-name').val() ||
         !$('#additional-quantity').val() ||
         !$('#additional-price').val()
     ) {
         $('#additional-items-error').text('Please fill up all fields.');
-        $('.additional-add-button').attr("disabled", true);
+        $('.additional-add-button').attr('disabled', true);
     } else if ($('#additional-quantity').val() < 0) {
         $('#additional-items-error').text('Quantity cannot be negative.');
-        $('.additional-add-button').attr("disabled", true);
+        $('.additional-add-button').attr('disabled', true);
     } else if ($('#additional-quantity').val() == 0) {
         $('#additional-items-error').text('Quantity cannot be zero.');
-        $('.additional-add-button').attr("disabled", true);
-    } else if ($('#additional-price').val() < 0) { 
+        $('.additional-add-button').attr('disabled', true);
+    } else if ($('#additional-price').val() < 0) {
         $('#additional-items-error').text('Price cannot be negative.');
-        $('.additional-add-button').attr("disabled", true);
+        $('.additional-add-button').attr('disabled', true);
     } else {
         let name = $('#additional-name').val();
         let quantity = $('#additional-quantity').val();
@@ -818,24 +862,24 @@ function addAdditionalItem() {
 
         $('#additional-items-list').append(
             '<div>' +
-            '<hr class="mx-5">' +
-            '<div class="row px-4 py-2 mx-5 additional-item">' +
-            '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
-            name +
-            '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
-            quantity +
-            '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
-            formatAsDecimal(price) +
-            '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
-            formatAsDecimal(quantity * price) +
-            '</h6>' +
-            '<span class="col material-icons-two-tone text-end md-btn"' +
-            'onclick="removeAdditionalItem(this)">close</span>' +
-            '</div>' +
-            '</div>'
+                '<hr class="mx-5">' +
+                '<div class="row px-4 py-2 mx-5 additional-item">' +
+                '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
+                name +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
+                quantity +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
+                formatAsDecimal(price) +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
+                formatAsDecimal(quantity * price) +
+                '</h6>' +
+                '<span class="col material-icons-two-tone text-end md-btn"' +
+                'onclick="removeAdditionalItem(this)">close</span>' +
+                '</div>' +
+                '</div>'
         );
 
         // reset all fields and error message
@@ -853,8 +897,8 @@ function addAdditionalItem() {
         $('#additional-items-total').empty();
         $('#additional-items-total').append(
             '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
-            formatAsDecimal(calculateItemTotal($('.additional-item-amt'))) +
-            '</h4>'
+                formatAsDecimal(calculateItemTotal($('.additional-item-amt'))) +
+                '</h4>'
         );
         updateBreakdownTable();
     }
@@ -875,32 +919,32 @@ function removeAdditionalItem(elem) {
         .children('h4')
         .text(
             'Php ' +
-            formatAsDecimal(calculateItemTotal($('.additional-item-amt')))
+                formatAsDecimal(calculateItemTotal($('.additional-item-amt')))
         );
     updateBreakdownTable();
 }
 
 function addExtraCharge() {
-    $('.extra-charges-add-button').attr("disabled", true);
+    $('.extra-charges-add-button').attr('disabled', true);
     if (
         !$('#extra-charges-name').val() ||
         !$('#extra-charges-quantity').val() ||
         !$('#extra-charges-price').val()
     ) {
         $('#extra-charges-error').text('Please fill up all fields.');
-        $('.extra-charges-add-button').attr("disabled", true);
+        $('.extra-charges-add-button').attr('disabled', true);
     } else if ($('#extra-charges-quantity').val() < 0) {
         $('#extra-charges-error').text('Quantity cannot be negative.');
-        $('.extra-charges-add-button').attr("disabled", true);
+        $('.extra-charges-add-button').attr('disabled', true);
     } else if ($('#extra-charges-quantity').val() == 0) {
         $('#extra-charges-error').text('Quantity cannot be zero.');
-        $('.extra-charges-add-button').attr("disabled", true);
+        $('.extra-charges-add-button').attr('disabled', true);
     } else if ($('#extra-charges-price').val() < 0) {
         $('#extra-charges-error').text('Price cannot be negative.');
-        $('.extra-charges-add-button').attr("disabled", true);
+        $('.extra-charges-add-button').attr('disabled', true);
     } else if ($('#extra-charges-price').val() == 0) {
         $('#extra-charges-error').text('Price cannot be zero.');
-        $('.extra-charges-add-button').attr("disabled", true);
+        $('.extra-charges-add-button').attr('disabled', true);
     } else {
         var name = $('#extra-charges-name').val();
         var quantity = $('#extra-charges-quantity').val();
@@ -908,24 +952,24 @@ function addExtraCharge() {
 
         $('#extra-charges-list').append(
             '<div>' +
-            '<hr class="mx-5">' +
-            '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
-            '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
-            name +
-            '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
-            quantity +
-            '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
-            formatAsDecimal(price) +
-            '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
-            formatAsDecimal(quantity * price) +
-            '</h6>' +
-            '<span class="col material-icons-two-tone text-end md-btn"' +
-            'onclick="removeExtraCharge(this)">close</span>' +
-            '</div>' +
-            '</div>'
+                '<hr class="mx-5">' +
+                '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
+                '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
+                name +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
+                quantity +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
+                formatAsDecimal(price) +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
+                formatAsDecimal(quantity * price) +
+                '</h6>' +
+                '<span class="col material-icons-two-tone text-end md-btn"' +
+                'onclick="removeExtraCharge(this)">close</span>' +
+                '</div>' +
+                '</div>'
         );
 
         // reset all fields and error message
@@ -942,10 +986,10 @@ function addExtraCharge() {
         $('#extra-charges-total').empty();
         $('#extra-charges-total').append(
             '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
-            formatAsDecimal(
-                calculateItemTotal($('.extra-charges-item-amt'))
-            ) +
-            '</h4>'
+                formatAsDecimal(
+                    calculateItemTotal($('.extra-charges-item-amt'))
+                ) +
+                '</h4>'
         );
         updateBreakdownTable();
     }
@@ -966,44 +1010,44 @@ function removeExtraCharge(elem) {
         .children('h4')
         .text(
             'Php ' +
-            formatAsDecimal(
-                calculateItemTotal($('.extra-charges-item-amt'))
-            )
+                formatAsDecimal(
+                    calculateItemTotal($('.extra-charges-item-amt'))
+                )
         );
     updateBreakdownTable();
 }
 
 function addDiscount() {
-    $('.discount-add-button').attr("disabled", true);
+    $('.discount-add-button').attr('disabled', true);
     if (!$('#discount-name').val() || !$('#discount-price').val()) {
         $('#discount-error').text('Please fill up all fields.');
-        $('.discount-add-button').attr("disabled", true);
+        $('.discount-add-button').attr('disabled', true);
     } else if ($('#discount-price').val() < 0) {
         $('#discount-error').text('Price cannot be negative.');
-        $('.discount-add-button').attr("disabled", true);
+        $('.discount-add-button').attr('disabled', true);
     } else if ($('#discount-price').val() == 0) {
         $('#discount-error').text('Price cannot be zero.');
-        $('.discount-add-button').attr("disabled", true);
+        $('.discount-add-button').attr('disabled', true);
     } else {
         var name = $('#discount-name').val();
         var price = $('#discount-price').val();
 
         $('#discounts-list').append(
             '<div>' +
-            '<hr class="mx-5">' +
-            '<div class="row px-4 py-2 mx-5 discount-item">' +
-            '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
-            name +
-            '</h6>' +
-            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
-            formatAsDecimal(price) +
-            '</h6>' +
-            '<span class="col material-icons-two-tone text-end md-btn"' +
-            'onclick="removeDiscount(this)">close</span>' +
-            '</div>' +
-            '</div>'
+                '<hr class="mx-5">' +
+                '<div class="row px-4 py-2 mx-5 discount-item">' +
+                '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
+                name +
+                '</h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
+                formatAsDecimal(price) +
+                '</h6>' +
+                '<span class="col material-icons-two-tone text-end md-btn"' +
+                'onclick="removeDiscount(this)">close</span>' +
+                '</div>' +
+                '</div>'
         );
 
         // reset all fields and error message
@@ -1021,11 +1065,52 @@ function addDiscount() {
         $('#discounts-total').empty();
         $('#discounts-total').append(
             '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
-            formatAsDecimal(calculateItemTotal($('.discount-item-amt'))) +
-            '</h4>'
+                formatAsDecimal(calculateItemTotal($('.discount-item-amt'))) +
+                '</h4>'
         );
         updateBreakdownTable();
     }
+}
+
+function addPaxDiscount() {
+    var name = $('#discount-name').val();
+    var price = $('#discount-price').val();
+
+    $('#discounts-list').append(
+        '<div">' +
+            '<hr class="mx-5">' +
+            '<div class="row px-4 py-2 mx-5 discount-item paxdiscount">' +
+            '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
+            name +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
+            formatAsDecimal(price) +
+            '</h6>' +
+            '<span class="col material-icons-two-tone text-end md-btn cancel-pax-discount"' +
+            'onclick="removeDiscount(this)">close</span>' +
+            '</div>' +
+            '</div>'
+    );
+
+    // reset all fields and error message
+    $('#discount-name').val('');
+    $('#discount-price').val('');
+
+    // initializes table header
+    if ($('.discount-item-amt').length === 1) {
+        $('#discounts-header').empty();
+        $('#discounts-header').append(discountsTableHeader);
+    }
+
+    $('#discounts-total').empty();
+    $('#discounts-total').append(
+        '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
+            formatAsDecimal(calculateItemTotal($('.discount-item-amt'))) +
+            '</h4>'
+    );
+    updateBreakdownTable();
 }
 
 function removeDiscount(elem) {
@@ -1042,13 +1127,13 @@ function removeDiscount(elem) {
         .children('h4')
         .text(
             'Php ' +
-            formatAsDecimal(calculateItemTotal($('.discount-item-amt')))
+                formatAsDecimal(calculateItemTotal($('.discount-item-amt')))
         );
     updateBreakdownTable();
 }
 
 function updateBreakdownTable() {
-    let package = calculatePackageTotal();
+    let eventpackage = calculatePackageTotal();
     let additional = calculateItemTotal($('.additional-item-amt'));
     let charges = calculateItemTotal($('.extra-charges-item-amt'));
     let discounts = calculateItemTotal($('.discount-item-amt'));
@@ -1056,67 +1141,67 @@ function updateBreakdownTable() {
 
     $('#breakdown-list').empty();
 
-    if (package) {
+    if (eventpackage) {
         $('#breakdown-list').append(
             '<div>' +
-            '<div class="row px-4 py-2 mx-4">' +
-            '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Package/s</strong></h3>' +
-            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
-            formatAsDecimal(package) +
-            '</strong></h3>' +
-            '</div>' +
-            '</div>'
+                '<div class="row px-4 py-2 mx-4">' +
+                '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Package/s</strong></h3>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
+                formatAsDecimal(eventpackage) +
+                '</strong></h3>' +
+                '</div>' +
+                '</div>'
         );
 
         $('.package').each(function () {
             if ($(this).val())
                 $('#breakdown-list').append(
                     '<div class="ms-4">' +
-                    '<div class="row px-4 py-2 mx-4">' +
-                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
-                    getPackageName($(this).val()) +
-                    '</h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                    '<h6 class="col mb-0 mt-1 text-end number">' +
-                    formatAsDecimal(getPackagePrice($(this).val())) +
-                    '</h6>' +
-                    '</div>' +
-                    '</div>'
+                        '<div class="row px-4 py-2 mx-4">' +
+                        '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                        getPackageName($(this).val()) +
+                        '</h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                        '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                        '<h6 class="col mb-0 mt-1 text-end number">' +
+                        formatAsDecimal(getPackagePrice($(this).val())) +
+                        '</h6>' +
+                        '</div>' +
+                        '</div>'
                 );
         });
 
         if ($('#additional-pax').is(':checked'))
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
-                '<div class="row px-4 py-2 mx-4">' +
-                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
-                'Additional 5 Pax' +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-end number">' +
-                formatAsDecimal(getPackagePrice('add5')) +
-                '</h6>' +
-                '</div>' +
-                '</div>'
+                    '<div class="row px-4 py-2 mx-4">' +
+                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                    'Additional 5 Pax' +
+                    '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-end number">' +
+                    formatAsDecimal(getPackagePrice('add5')) +
+                    '</h6>' +
+                    '</div>' +
+                    '</div>'
             );
     }
 
     if (additional) {
         $('#breakdown-list').append(
             '<div>' +
-            '<div class="row px-4 py-2 mx-4">' +
-            '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Additional Food</strong></h3>' +
-            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
-            formatAsDecimal(additional) +
-            '</strong></h3>' +
-            '</div>' +
-            '</div>'
+                '<div class="row px-4 py-2 mx-4">' +
+                '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Additional Food</strong></h3>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
+                formatAsDecimal(additional) +
+                '</strong></h3>' +
+                '</div>' +
+                '</div>'
         );
 
         $('.additional-item').each(function () {
@@ -1128,19 +1213,19 @@ function updateBreakdownTable() {
 
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
-                '<div class="row px-4 py-2 mx-4">' +
-                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
-                name +
-                ' (' +
-                qty +
-                ' Serving/s)</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-end number">' +
-                formatAsDecimal(amt) +
-                '</h6>' +
-                '</div>' +
-                '</div>'
+                    '<div class="row px-4 py-2 mx-4">' +
+                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                    name +
+                    ' (' +
+                    qty +
+                    ' Serving/s)</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-end number">' +
+                    formatAsDecimal(amt) +
+                    '</h6>' +
+                    '</div>' +
+                    '</div>'
             );
         });
     }
@@ -1148,15 +1233,15 @@ function updateBreakdownTable() {
     if (charges) {
         $('#breakdown-list').append(
             '<div>' +
-            '<div class="row px-4 py-2 mx-4">' +
-            '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Extra Charges</strong></h3>' +
-            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
-            formatAsDecimal(charges) +
-            '</strong></h3>' +
-            '</div>' +
-            '</div>'
+                '<div class="row px-4 py-2 mx-4">' +
+                '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Extra Charges</strong></h3>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h3 class="col mb-0 mt-1 text-end number"><strong>' +
+                formatAsDecimal(charges) +
+                '</strong></h3>' +
+                '</div>' +
+                '</div>'
         );
 
         $('.extra-charges-item').each(function () {
@@ -1168,19 +1253,19 @@ function updateBreakdownTable() {
 
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
-                '<div class="row px-4 py-2 mx-4">' +
-                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
-                name +
-                ' (x' +
-                qty +
-                ')</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-end number">' +
-                formatAsDecimal(amt) +
-                '</h6>' +
-                '</div>' +
-                '</div>'
+                    '<div class="row px-4 py-2 mx-4">' +
+                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                    name +
+                    ' (x' +
+                    qty +
+                    ')</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-end number">' +
+                    formatAsDecimal(amt) +
+                    '</h6>' +
+                    '</div>' +
+                    '</div>'
             );
         });
     }
@@ -1188,15 +1273,15 @@ function updateBreakdownTable() {
     if (discounts) {
         $('#breakdown-list').append(
             '<div>' +
-            '<div class="row px-4 py-2 mx-4">' +
-            '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Discount/s</strong></h3>' +
-            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-            '<h3 class="col mb-0 mt-1 text-end number"><strong>-' +
-            formatAsDecimal(discounts) +
-            '</strong></h3>' +
-            '</div>' +
-            '</div>'
+                '<div class="row px-4 py-2 mx-4">' +
+                '<h3 class="col-5 mb-0 mt-1 text-start"><strong>Discount/s</strong></h3>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                '<h3 class="col mb-0 mt-1 text-end number"><strong>-' +
+                formatAsDecimal(discounts) +
+                '</strong></h3>' +
+                '</div>' +
+                '</div>'
         );
 
         $('.discount-item').each(function () {
@@ -1207,17 +1292,17 @@ function updateBreakdownTable() {
 
             $('#breakdown-list').append(
                 '<div class="ms-4">' +
-                '<div class="row px-4 py-2 mx-4">' +
-                '<h6 class="col-5 mb-0 mt-1 text-start number">' +
-                name +
-                '</h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                '<h6 class="col mb-0 mt-1 text-end number">-' +
-                formatAsDecimal(amt) +
-                '</h6>' +
-                '</div>' +
-                '</div>'
+                    '<div class="row px-4 py-2 mx-4">' +
+                    '<h6 class="col-5 mb-0 mt-1 text-start number">' +
+                    name +
+                    '</h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                    '<h6 class="col mb-0 mt-1 text-end number">-' +
+                    formatAsDecimal(amt) +
+                    '</h6>' +
+                    '</div>' +
+                    '</div>'
             );
         });
     }
@@ -1227,8 +1312,8 @@ function updateBreakdownTable() {
     if (total) {
         $('#breakdown-total').append(
             '<h2 class="mb-0 mt-5 text-end me-5 number"><strong>Total: </strong>Php ' +
-            formatAsDecimal(total) +
-            '</h2>'
+                formatAsDecimal(total) +
+                '</h2>'
         );
     } else {
         $('#breakdown-list').append(
@@ -1238,359 +1323,308 @@ function updateBreakdownTable() {
 
     //Updates values of Total Amount Paid field and Balance field
     updatePaymentAndBalance();
+    checkIfFilledEventFields();
 }
 
 function initializeRealTimeValidation() {
     //Event Details
     $('#client-name').keyup(function () {
-        var clientname = validator.trim($('#client-name').val());
-        if (validator.isEmpty(clientname))
-            displayError($('#client-name'), $('#client-name-error'), 'Client name should be filled.');
-        else if (checkStringInput(clientname))
-            displayError($('#client-name'), $('#client-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
+        var clientname = $('#client-name').val().trim();
+        result = isValidName(clientname);
+        if (!result[0])
+            displayError($('#client-name'), $('#client-name-error'), result[1]);
         else resetField($('#client-name'), $('#client-name-error'));
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     $('#client-mobile-number').keyup(function () {
-        if (validator.isEmpty($(this).val()))
-            displayError($('#client-mobile-number'), $('#client-number-error'), 'Client mobile number should be filled.');
-        else if ($(this).intlTelInput('isValidNumber'))
-            resetField($('#client-mobile-number'), $('#client-number-error'));
-        else
-            displayError($('#client-mobile-number'), $('#client-number-error'), 'Invalid client mobile number.');
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        var clientnumber = $('#client-mobile-number').val().trim();
+        var result = isEmptyContactNumber(clientnumber);
+        if (result[0])
+            displayError(
+                $('#client-mobile-number'),
+                $('#client-number-error'),
+                'Client ' + result[1]
+            );
+        else {
+            if ($('#client-mobile-number').intlTelInput('isValidNumber'))
+                resetField(
+                    $('#client-mobile-number'),
+                    $('#client-number-error')
+                );
+            else
+                displayError(
+                    $('#client-mobile-number'),
+                    $('#client-number-error'),
+                    'Client Mobile Number is invalid.'
+                );
+        }
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     $('#event-type').keyup(function () {
-        var eventtype = validator.trim($(this).val());
-        if (validator.isEmpty(eventtype))
-            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
+        var eventtype = $(this).val().trim();
+        var result = isValidEventType(eventtype);
+        if (!result[0])
+            displayError($(this), $('#event-type-error'), result[1]);
         else resetField($(this), $('#event-type-error'));
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
-    $('#event-type').on("change", function () {
-        var eventtype = validator.trim($(this).val());
-        if (validator.isEmpty(eventtype))
-            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
+    $('#event-type').on('change', function () {
+        var eventtype = $(this).val().trim();
+        var result = isValidEventType(eventtype);
+        if (!result[0])
+            displayError($(this), $('#event-type-error'), result[1]);
         else resetField($(this), $('#event-type-error'));
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
-    $('#event-type').on("autocompletechange", function () {
-        var eventtype = validator.trim($(this).val());
-        if (validator.isEmpty(eventtype))
-            displayError($(this), $('#event-type-error'), 'Event type should be filled.');
+    $('#event-type').on('autocompletechange', function () {
+        var eventtype = $(this).val().trim();
+        var result = isValidEventType(eventtype);
+        if (!result[0])
+            displayError($(this), $('#event-type-error'), result[1]);
         else resetField($(this), $('#event-type-error'));
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
-    $("#event-date").on("change", function () {
-        var eventdate = document.getElementById("event-date").value;
-        validDate(eventdate, $('#event-date-error'), "event-date");
+    $('#event-date').on('change', function () {
+        var eventdate = document.getElementById('event-date').value;
+        var result = isValidDate(eventdate);
+        if (!result[0]) {
+            if (result[1] == 'Date should be at least a month ago.') {
+                if ($('#event-id').text() == '')
+                    displayError(
+                        $('#event-date'),
+                        $('#event-date-error'),
+                        result[1]
+                    );
+                else resetField($('#event-date'), $('#event-date-error'));
+            } else
+                displayError(
+                    $('#event-date'),
+                    $('#event-date-error'),
+                    result[1]
+                );
+        } else resetField($('#event-date'), $('#event-date-error'));
         checkEventAvailability();
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     $('#event-time').change(function () {
-        if ($('#event-time').val() == '')
-            displayError($('#event-time'), $('#event-time-error'), 'Event time cannot be empty.');
-        else
-            resetField($('#event-time'), $('#event-time-error'));
+        var result = isValidEventTime($('#event-time').val());
+        if (!result[0])
+            displayError($('#event-time'), $('#event-time-error'), result[1]);
+        else resetField($('#event-time'), $('#event-time-error'));
         checkEventAvailability();
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
-    $('#event-pax').on("change", function () {
-        if ($('#event-pax').val() < 0) {
-            displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be negative.');
-        } else if ($('#event-pax').val() == 0) {
-            displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be zero.');
-        } else if ($('#event-pax').val() > 120) {
-            displayError($('#event-pax'), $('#event-pax-error'), 'Number of pax cannot be more than 120.');
-        }
-        else {
+    $('#event-pax').on('change', function () {
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        var result = isValidPaxNum($('#event-pax').val());
+        if (!result[0])
+            displayError($('#event-pax'), $('#event-pax-error'), result[1]);
+        else { 
             resetField($('#event-pax'), $('#event-pax-error'));
-        }
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+            checkPaxDiscount($('#event-pax').val()); 
+        }            
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     $('.venue-checkbox').change(function () {
-        let garden = $('#venue-garden').is(":checked");
-        let sunroom = $('#venue-sunroom').is(":checked");
-        let terrace = $('#venue-terrace').is(":checked");
-        let venue = (garden || sunroom || terrace);
-        if (!venue)
-            displayError($('.venue-checkbox'), $('#missing-error'), 'At least 1 venue should be checked.');
-        else
-            resetField($('.venue-checkbox'), $('#missing-error'));
+        let garden = $('#venue-garden').is(':checked');
+        let sunroom = $('#venue-sunroom').is(':checked');
+        let terrace = $('#venue-terrace').is(':checked');
+        var result = isValidVenue(garden, sunroom, terrace);
+        $('.package:disabled').removeClass('is-invalid');
+        if (!result[0]) {
+            displayError($('.venue-checkbox'), $('#missing-error'), result[1]);
+        } else resetField($('.venue-checkbox'), $('#missing-error'));
         checkEventAvailability();
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     $('.package').change(function () {
         let garden = $('#garden-options').val();
         let sunroom = $('#sunroom-options').val();
         let terrace = $('#terrace-options').val();
-        let package = (garden || sunroom || terrace);
-        if (package == 0) {
-            displayError($('.package'), $('#missing-error'), 'At least 1 Package should be selected.');
-        }
-        else
-            resetField($('.package'), $('#missing-error'));
+        var result = isValidPackage(garden, sunroom, terrace);
+        if (!result[0]) {
+            displayError($('.package:enabled'), $('#missing-error'), result[1]);
+        } else resetField($('.package'), $('#missing-error'));
         checkEventAvailability();
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     $('#representative-name').keyup(function () {
-        var repname = validator.trim($('#representative-name').val());
-        if (checkStringInput(repname))
-            displayError($('#representative-name'), $('#rep-name-error'), "Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
-        else resetField($('#representative-name'), $('#rep-name-error'));
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        var repname = $('#representative-name').val().trim();
+        result = isValidName(repname);
+        if (!result[0]) {
+            if (result[1] == 'Client name should be filled.')
+                resetField($('#representative-name'), $('#rep-name-error'));
+            else
+                displayError(
+                    $('#representative-name'),
+                    $('#rep-name-error'),
+                    result[1]
+                );
+        } else resetField($('#representative-name'), $('#rep-name-error'));
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
     $('#representative-mobile-number').keyup(function () {
-        if ($(this).intlTelInput('isValidNumber') || validator.isEmpty($(this).val()))
-            resetField($('#representative-mobile-number'), $('#rep-number-error'));
+        if ($(this).intlTelInput('isValidNumber') || !$(this).val().trim())
+            resetField(
+                $('#representative-mobile-number'),
+                $('#rep-number-error')
+            );
         else
-            displayError($('#representative-mobile-number'), $('#rep-number-error'), 'Invalid representative mobile number.');
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+            displayError(
+                $('#representative-mobile-number'),
+                $('#rep-number-error'),
+                'Representative Mobile Number is invalid.'
+            );
+
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
-    
+
     //menu details
-    $('#additional-name').change(function () {
-        var foodname = validator.trim($('#additional-name').val());
-        if (validator.isEmpty(foodname)) {
-            $('#additional-price').val('')
-            if(validator.isEmpty($('#additional-quantity').val())) {
-                resetField($('#additional-quantity'), $('#additional-items-error'));
-                resetField($('#additional-price'), $('#additional-items-error'));
-                resetField($('#additional-name'), $('#additional-items-error'));
-            } else {
-                displayError($('#additional-name'), $('#additional-items-error'), 'Food name cannot be empty.');
-                $('.additional-add-button').attr("disabled", true);
+    $('#additional-name, #additional-quantity').change(function () {
+        var foodname = $('#additional-name').val().trim();
+        var foodqty = $('#additional-quantity').val().trim();
+        var result = isValidAdditionalFood(foodname, foodqty);
+        $('.additional-add-button').attr('disabled', !result[0]);
+        if (!result[0]) {
+            if (foodname)
+                displayError(
+                    $('#additional-quantity'),
+                    $('#additional-items-error'),
+                    result[1]
+                );
+            else {
+                if (!result[2]) {
+                    displayError(
+                        $('#additional-quantity'),
+                        $('#additional-items-error'),
+                        result[3]
+                    );
+                    $('#additional-name').removeClass('is-invalid');
+                } else {
+                    displayError(
+                        $('#additional-name'),
+                        $('#additional-items-error'),
+                        result[1]
+                    );
+                    $('#additional-quantity').removeClass('is-invalid');
+                }
             }
         } else {
+            $('#additional-price').val(result[1]);
             resetField($('#additional-name'), $('#additional-items-error'));
-            if ($('#additional-quantity').val() < 0) {
-                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
-                $('.additional-add-button').attr("disabled", true);
-            } else if ($('#additional-quantity').val() == 0) {
-                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-                $('.additional-add-button').attr("disabled", true);
-            } else {
-                resetField($('#additional-quantity'), $('#additional-items-error'));
-                $('.additional-add-button').attr("disabled", false);
+            resetField($('#additional-quantity'), $('#additional-items-error'));
+            resetField($('#additional-price'), $('#additional-items-error'));
+            if (!foodname) {
+                $('#additional-name, #additional-quantity').val('');
+                $('.additional-add-button').attr('disabled', result[0]);
             }
         }
     });
 
-    $('#additional-quantity').change(function () {
-        var foodname = validator.trim($('#additional-name').val());
-        if (validator.isEmpty($('#additional-quantity').val())) {
-            if(validator.isEmpty(foodname)) {
-                resetField($('#additional-quantity'), $('#additional-items-error'));
-                resetField($('#additional-price'), $('#additional-items-error'));
-                resetField($('#additional-name'), $('#additional-items-error'));
-                $('#additional-price').val('');
-            } else {
-                displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-                $('.additional-add-button').attr("disabled", true);
-            }
-        } else if ($('#additional-quantity').val() < 0) {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be negative.');
-            $('.additional-add-button').attr("disabled", true);
-        } else if ($('#additional-quantity').val() == 0) {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Quantity cannot be zero.');
-            $('.additional-add-button').attr("disabled", true);
-        } else {
-            resetField($('#additional-quantity'), $('#additional-items-error'));
-            if (validator.isEmpty(foodname)) {
-                displayError($('#additional-name'), $('#additional-items-error'), 'Food name cannot be empty.');
-                $('.additional-add-button').attr("disabled", true);
-            } else {
-                resetField($('#additional-name'), $('#additional-items-error'));
-                $('.additional-add-button').attr("disabled", false);
-            }            
-        }
-    });
-    
     $('#additional-price').change(function () {
         if ($('#additional-price').val() < 0) {
-            displayError($('#additional-quantity'), $('#additional-items-error'), 'Price cannot be negative.');
+            displayError(
+                $('#additional-quantity'),
+                $('#additional-items-error'),
+                'Price cannot be negative.'
+            );
         } else {
             resetField($('#additional-quantity'), $('#additional-items-error'));
         }
     });
-    
+
     //transactional details
-    $('#extra-charges-name').change(function () {
-        var echargesname = validator.trim($('#extra-charges-name').val())
-        if (validator.isEmpty(echargesname)) {
-            if (validator.isEmpty($('#extra-charges-quantity').val()) &&
-                validator.isEmpty($('#extra-charges-price').val())) {
-                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
+    $(
+        '#extra-charges-name, #extra-charges-quantity, #extra-charges-price'
+    ).change(function () {
+        var ecname = $('#extra-charges-name').val().trim();
+        var ecqty = $('#extra-charges-quantity').val().trim();
+        var ecprice = $('#extra-charges-price').val().trim();
+        var result = isValidExtraCharge(ecname, ecqty, ecprice);
+        $('.extra-charges-add-button').attr('disabled', !result[0]);
+
+        if (!result[0]) {
+            if (result[1] == 'Charge name cannot be empty.') {
+                displayError(
+                    $('#extra-charges-name'),
+                    $('#extra-charges-error'),
+                    result[1]
+                );
+                $('#extra-charges-price').removeClass('is-invalid');
+                $('#extra-charges-quantity').removeClass('is-invalid');
+            } else if (result[1] == 'Invalid quantity.') {
+                displayError(
+                    $('#extra-charges-quantity'),
+                    $('#extra-charges-error'),
+                    result[3]
+                );
+                $('#extra-charges-name').removeClass('is-invalid');
+                $('#extra-charges-price').removeClass('is-invalid');
             } else {
-                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
-                $('.extra-charges-add-button').attr("disabled", true);
+                displayError(
+                    $('#extra-charges-price'),
+                    $('#extra-charges-error'),
+                    result[5]
+                );
+                $('#extra-charges-name').removeClass('is-invalid');
+                $('#extra-charges-quantity').removeClass('is-invalid');
             }
-        } else {
-            resetField($('#extra-charges-name'), $('#extra-charges-error'));
-            if ($('#extra-charges-price').val() < 0) {
-                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else if ($('#extra-charges-price').val() == 0) {
-                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else {
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                if ($('#extra-charges-quantity').val() < 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else if ($('#extra-charges-quantity').val() == 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else {
-                    resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                    $('.extra-charges-add-button').attr("disabled", false);
-                }
-            }
-        }
-    });
-    $('#extra-charges-quantity').change(function () {
-        var echargesname = validator.trim($('#extra-charges-name').val())
-        if (validator.isEmpty($('#extra-charges-quantity').val())) {
-            if (validator.isEmpty(echargesname) &&
-                validator.isEmpty($('#extra-charges-price').val())) {
-                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-            } else {
-                displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            }
-        } else if ($('#extra-charges-quantity').val() < 0) {
-            displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
-            $('.extra-charges-add-button').attr("disabled", true);
-        } else if ($('#extra-charges-quantity').val() == 0) {
-            displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-            $('.extra-charges-add-button').attr("disabled", true);
         } else {
             resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-            if (validator.isEmpty(echargesname)) {
-                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else {
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-                if ($('#extra-charges-price').val() < 0) {
-                    displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else if ($('#extra-charges-price').val() == 0) {
-                    displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else {
-                    resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                    $('.extra-charges-add-button').attr("disabled", false);
-                }
-            }           
-        }
-    });
-
-    $('#extra-charges-price').change(function () {
-        var echargesname = validator.trim($('#extra-charges-name').val())
-        if (validator.isEmpty($('#extra-charges-price').val())) {
-            if (validator.isEmpty($('#extra-charges-quantity').val()) &&
-                validator.isEmpty(echargesname)) {
-                resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                resetField($('#extra-charges-price'), $('#extra-charges-error'));
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-            } else {
-                displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            }
-        } else if ($('#extra-charges-price').val() < 0) {
-            displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be negative.');
-            $('.extra-charges-add-button').attr("disabled", true);
-        } else if ($('#extra-charges-price').val() == 0) {
-            displayError($('#extra-charges-price'), $('#extra-charges-error'), 'Price cannot be zero.');
-            $('.extra-charges-add-button').attr("disabled", true);
-        } else {
             resetField($('#extra-charges-price'), $('#extra-charges-error'));
-            if (validator.isEmpty(echargesname)) {
-                displayError($('#extra-charges-name'), $('#extra-charges-error'), 'Charge name cannot be empty.');
-                $('.extra-charges-add-button').attr("disabled", true);
-            } else {
-                resetField($('#extra-charges-name'), $('#extra-charges-error'));
-                if ($('#extra-charges-quantity').val() < 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be negative.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else if ($('#extra-charges-quantity').val() == 0) {
-                    displayError($('#extra-charges-quantity'), $('#extra-charges-error'), 'Quantity cannot be zero.');
-                    $('.extra-charges-add-button').attr("disabled", true);
-                } else {
-                    resetField($('#extra-charges-quantity'), $('#extra-charges-error'));
-                    $('.extra-charges-add-button').attr("disabled", false);
-                }
-            } 
+            resetField($('#extra-charges-name'), $('#extra-charges-error'));
+            if (!ecname)
+                $('.extra-charges-add-button').attr('disabled', result[0]);
         }
     });
 
-    $('#discount-name').change(function () {
-        var discountname = validator.trim($('#discount-name').val())
-        if (validator.isEmpty(discountname)) {
-            if(validator.isEmpty($('#discount-price').val())) {
-                resetField($('#discount-price'), $('#discount-error'));
-                resetField($('#discount-name'), $('#discount-error'));
-            } else {
-                displayError($('#discount-name'), $('#discount-error'), 'Discount name cannot be empty.');
-                $('.discount-add-button').attr("disabled", true);
+    $('#discount-name, #discount-price').change(function () {
+        var dname = $('#discount-name').val().trim();
+        var dprice = $('#discount-price').val().trim();
+        var result = isValidDiscount(dname, dprice);
+        $('.discount-add-button').attr('disabled', !result[0]);
+        if (!result[0]) {
+            if (dname)
+                displayError(
+                    $('#discount-price'),
+                    $('#discount-error'),
+                    result[1]
+                );
+            else {
+                if (!result[2]) {
+                    displayError(
+                        $('#discount-price'),
+                        $('#discount-error'),
+                        result[3]
+                    );
+                    $('#discount-name').removeClass('is-invalid');
+                } else {
+                    displayError(
+                        $('#discount-name'),
+                        $('#discount-error'),
+                        result[1]
+                    );
+                    $('#discount-price').removeClass('is-invalid');
+                }
             }
         } else {
             resetField($('#discount-name'), $('#discount-error'));
-            if ($('#discount-price').val() < 0) {
-                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be negative.');
-                $('.discount-add-button').attr("disabled", true);
-            } else if ($('#discount-price').val() == 0) {
-                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
-                $('.discount-add-button').attr("disabled", true);
-            } else {
-                resetField($('#discount-price'), $('#discount-error'));
-                $('.discount-add-button').attr("disabled", false);
-            }
+            resetField($('#discount-price'), $('#discount-error'));
+            if (!dname) $('.discount-add-button').attr('disabled', result[0]);
         }
     });
-
-    $('#discount-price').change(function () {
-        var discountname = validator.trim($('#discount-name').val())
-        if (validator.isEmpty($('#discount-price').val())) {
-            if(validator.isEmpty(discountname)) {
-                resetField($('#discount-price'), $('#discount-error'));
-                resetField($('#discount-name'), $('#discount-error'));
-            } else {
-                displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
-                $('.discount-add-button').attr("disabled", true);
-            }
-        } else if ($('#discount-price').val() < 0) {
-            displayError($('#discount-price'), $('#discount-error'), 'Price cannot be negative.');
-            $('.discount-add-button').attr("disabled", true);
-        } else if ($('#discount-price').val() == 0) {
-            displayError($('#discount-price'), $('#discount-error'), 'Price cannot be zero.');
-            $('.discount-add-button').attr("disabled", true);
-        } else {
-            resetField($('#discount-price'), $('#discount-error'));
-            if (validator.isEmpty(discountname)) {
-                displayError($('#discount-name'), $('#discount-error'), 'Discount name cannot be empty.');
-                $('.discount-add-button').attr("disabled", true);
-            } else {
-                resetField($('#discount-name'), $('#discount-error'));
-                $('.discount-add-button').attr("disabled", false);
-            }  
-        }
-    });    
 
     //Payment Details
     downpaymentCheckFields();
@@ -1598,25 +1632,29 @@ function initializeRealTimeValidation() {
 
     $('.payment-checkbox').on('change', function () {
         if ($(this).is(':checked')) {
-            $(this).parent().siblings().children().children('input:not(.static), select').prop('disabled', false);
-            if (document.getElementById("downpayment").checked) {
+            $(this)
+                .parent()
+                .siblings()
+                .children()
+                .children('input:not(.static), select')
+                .prop('disabled', false);
+            if (document.getElementById('downpayment').checked) {
                 downpaymentChecked();
                 downpaymentCheckFields();
             }
-            if (document.getElementById("final-payment").checked) {
+            if (document.getElementById('final-payment').checked) {
                 finalPaymentChecked();
                 finalPaymentCheckFields();
             }
-        }
-        else {
-            if (!document.getElementById("final-payment").checked) {
+        } else {
+            if (!document.getElementById('final-payment').checked) {
                 finalPaymentNotChecked();
             }
-            if (!document.getElementById("downpayment").checked) {
+            if (!document.getElementById('downpayment').checked) {
                 downpaymentNotChecked();
             }
         }
-        $('#submit').attr("disabled", checkIfFilledEventFields());
+        $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 }
 
@@ -1630,60 +1668,52 @@ function checkIfFilledEventFields() {
     let garden = $('#garden-options').val();
     let sunroom = $('#sunroom-options').val();
     let terrace = $('#terrace-options').val();
-    let package = (garden || sunroom || terrace);
-    
-    var dateMax = getDateTime("2032-01-01");
+    let eventpackage = garden || sunroom || terrace;
+
+    var dateMax = getDateTime('2032-01-01');
     var dateMin = getDateTime(getDateAMonthAgo());
     //Event Details
     if (validator.isEmpty(name)) {
         $('#missing-error').val('Client name should be filled.');
         return true;
-    }
-    else if (checkStringInput(name)) {
-        $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
+    } else if (checkStringInput(name)) {
+        $('#missing-error').val(
+            'Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.'
+        );
         return true;
-    }
-
-    else if (checkStringInput($('#representative-name').val())) {
-        $('#missing-error').val("Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.");
+    } else if (checkStringInput($('#representative-name').val())) {
+        $('#missing-error').val(
+            'Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.'
+        );
         return true;
-    }
-
-    else if (validator.isEmpty(cp)) {
+    } else if (validator.isEmpty(cp)) {
         $('#missing-error').val('Client mobile number should be filled.');
         return true;
-    }
-    else if (!($('#client-mobile-number').intlTelInput('isValidNumber'))) {
+    } else if (!$('#client-mobile-number').intlTelInput('isValidNumber')) {
         $('#missing-error').val('Invalid cellphone number.');
         return true;
-    }
-    else if (!validator.isEmpty($('#representative-mobile-number').val())) {
-        if (!($('#representative-mobile-number').intlTelInput('isValidNumber'))) {
+    } else if (!validator.isEmpty($('#representative-mobile-number').val())) {
+        if (!$('#representative-mobile-number').intlTelInput('isValidNumber')) {
             $('#missing-error').val('Invalid cellphone number.');
             return true;
         }
-    }
-    else if (validator.isEmpty(type)) {
+    } else if (validator.isEmpty(type)) {
         $('#missing-error').val('Event type should be filled.');
         return true;
-    }
-
-    else if (validator.isEmpty(date)) {
+    } else if (validator.isEmpty(date)) {
         $('#missing-error').val('Event date should be filled.');
         return true;
-    }
-    else if (!validator.isEmpty(date)) {
+    } else if (!validator.isEmpty(date)) {
         var eventdate = getDateTime(date);
         if (date.length > 10) {
             $('#missing-error').val('Invalid date.');
             return true;
-        } else if ((eventdate - dateMin < 0) || isNaN(eventdate)) {
+        } else if (eventdate - dateMin < 0 || isNaN(eventdate)) {
             if ($('#event-id').text() == '') {
                 $('#missing-error').val('Date should be at least a month ago.');
                 return true;
             }
-        }
-        else if ((eventdate - dateMax >= 0) || isNaN(eventdate)) {
+        } else if (eventdate - dateMax >= 0 || isNaN(eventdate)) {
             $('#missing-error').val('Date cannot be later than 2031.');
             return true;
         }
@@ -1692,93 +1722,93 @@ function checkIfFilledEventFields() {
     if (validator.isEmpty(time)) {
         $('#missing-error').val('Event time should be filled.');
         return true;
-    }
-
-    else if (validator.isEmpty(pax)) {
+    } else if (validator.isEmpty(pax)) {
         $('#missing-error').val('Number of pax should be filled.');
         return true;
-    }
-    else if (pax <= 0) {
-        $('#missing-error').val('Number of pax should not be less than or equal to zero.');
+    } else if (pax <= 0) {
+        $('#missing-error').val(
+            'Number of pax should not be less than or equal to zero.'
+        );
         return true;
-    }
-    else if (pax > 120) {
+    } else if (pax > 120) {
         $('#missing-error').val('Number of pax should not be more than 120.');
         return true;
-    }
-    else if ($("input[type=checkbox]:checked").length <= 0) {
+    } else if ($('input[type=checkbox]:checked').length <= 0) {
         $('#missing-error').val('At least 1 venue should be selected.');
         return true;
-    }
-    else if (package == 0) {
+    } else if (eventpackage == 0) {
         $('#missing-error').val('At least 1 package should be selected.');
         return true;
     }
     //Payment Details
-    if (document.getElementById("downpayment").checked) {
-        if ($('#downpayment-amount').val() <= 0 || $('#downpayment-amount').val() == '') {
+    if (document.getElementById('downpayment').checked) {
+        if (
+            $('#downpayment-amount').val() <= 0 ||
+            $('#downpayment-amount').val() == ''
+        ) {
             $('#downpayment-amount-error').val('Invalid payment.');
             return true;
-        }
-        else if (validator.isEmpty($('#downpayment-mode').val())) {
+        } else if (validator.isEmpty($('#downpayment-mode').val())) {
             $('#downpayment-mode-error').val('Select 1 payment mode.');
             return true;
-        }
-        else if (validator.isEmpty($('#downpayment-date').val())) {
+        } else if (validator.isEmpty($('#downpayment-date').val())) {
             $('#downpayment-error').val('Date should be filled.');
             return true;
-        }
-        else if (!validator.isEmpty($('#downpayment-date').val())) {
+        } else if (!validator.isEmpty($('#downpayment-date').val())) {
             var dpaydate = getDateTime($('#downpayment-date').val());
             if ($('#downpayment-date').val().length > 10) {
                 $('#downpayment-error').val('Invalid date.');
                 return true;
-            }
-            else if ((dpaydate - dateMin < 0) || isNaN(dpaydate)) {
+            } else if (dpaydate - dateMin < 0 || isNaN(dpaydate)) {
                 if ($('#event-id').text() == '') {
-                    $('#downpayment-error').val('Date should be at least a month ago.');
+                    $('#downpayment-error').val(
+                        'Date should be at least a month ago.'
+                    );
                     return true;
                 }
-            }
-            else if ((dpaydate - dateMax >= 0) || isNaN(dpaydate)) {
+            } else if (dpaydate - dateMax >= 0 || isNaN(dpaydate)) {
                 $('#downpayment-error').val('Date cannot be later than 2031.');
                 return true;
             }
         }
     }
-    if (document.getElementById("final-payment").checked) {
-        if ($('#final-payment-amount').val() <= 0 || $('#final-payment-amount').val() == '') {
+    if (document.getElementById('final-payment').checked) {
+        if (
+            $('#final-payment-amount').val() <= 0 ||
+            $('#final-payment-amount').val() == ''
+        ) {
             $('#final-payment-amount-error').val('Invalid payment.');
             return true;
-        }
-        else if (validator.isEmpty($('#final-payment-mode').val())) {
+        } else if (validator.isEmpty($('#final-payment-mode').val())) {
             $('#final-payment-mode-error').val('Select 1 payment mode.');
             return true;
-        }
-        else if (validator.isEmpty($('#final-payment-date').val())) {
+        } else if (validator.isEmpty($('#final-payment-date').val())) {
             $('#final-payment-error').val('Date should be filled.');
             return true;
-        }
-        else if (!validator.isEmpty($('#final-payment-date').val())) {
+        } else if (!validator.isEmpty($('#final-payment-date').val())) {
             var fpaydate = getDateTime($('#final-payment-date').val());
             if ($('#final-payment-date').val().length > 10) {
                 $('#final-payment-error').val('Invalid date.');
                 return true;
-            }
-            else if ((fpaydate - dateMin < 0) || isNaN(fpaydate)) {
+            } else if (fpaydate - dateMin < 0 || isNaN(fpaydate)) {
                 if ($('#event-id').text() == '') {
-                    $('#final-payment-error').val('Date should be at least a month ago.');
+                    $('#final-payment-error').val(
+                        'Date should be at least a month ago.'
+                    );
                     return true;
                 }
-            }
-            else if ((fpaydate - dateMax >= 0) || isNaN(fpaydate)) {
-                $('#final-payment-error').val('Date cannot be later than 2031.');
+            } else if (fpaydate - dateMax >= 0 || isNaN(fpaydate)) {
+                $('#final-payment-error').val(
+                    'Date cannot be later than 2031.'
+                );
                 return true;
             }
         }
     }
     if (parseFloat($('#payment-balance').val()) < 0) {
-        $('#payment-error').text('Customer payment is greater than the total price.');
+        $('#payment-error').text(
+            'Customer payment is greater than the total price.'
+        );
         $('#payment-amount-total').addClass('is-invalid');
         $('#payment-balance').addClass('is-invalid');
         return true;
@@ -1845,48 +1875,6 @@ function getDateTime(input) {
     return new Date(year, month, day).getTime();
 }
 
-/**
- * Checks date fields if they are not set at most today (YYYY-MM-DD)
- *
- * @param {String} input        The user input for a specific field in the form
- * @param {String} errorfield   The ID of the error field in the form to display the errormsg in
- * @param {String} id           The ID of the field in the form with discrepancies
- */
-function validDate(input, errorfield, id) {
-    var idfield = '#' + id;
-    if (input.length > 10)
-        displayError($(idfield), errorfield, 'Invalid date.');
-    else {
-        var dateInput = getDateTime(input);
-        var dateMax = getDateTime("2032-01-01");
-        var dateMin = getDateTime(getDateAMonthAgo());
-        console.log("yoo "+ input)
-        if (validator.isEmpty(input)) {
-            console.log("rawr "+ input)
-            displayError($(idfield), errorfield, 'Invalid date.');
-            return true;
-        } else if (dateInput - dateMin < 0 || isNaN(dateInput)) {
-            if ($('#event-id').text() == '') {
-                displayError($(idfield), errorfield, 'Date should be at least a month ago.');
-                return true;
-            }
-            else {
-                resetField($(idfield), errorfield);
-            }
-        } else if (dateInput - dateMax >= 0 || isNaN(dateInput)) {
-            displayError(
-                $(idfield),
-                errorfield,
-                'Date cannot be later than 2031.'
-            );
-            return true;
-        } else {
-            resetField($(idfield), errorfield);
-            return false;
-        }
-    }
-}
-
 function displayError(inputField, errorField, errorText) {
     errorField.text(errorText);
     inputField.addClass('is-invalid');
@@ -1927,21 +1915,22 @@ function checkEventAvailability() {
             '/event-tracker/check/event-availability',
             data,
             function (result) {
-                if ((result._id != curreventID) && !(typeof result._id == 'undefined') && (result.status != 'cancelled')){
+                if (
+                    result._id != curreventID &&
+                    !(typeof result._id == 'undefined') &&
+                    result.status != 'cancelled'
+                ) {
                     $('#event-date').addClass('is-invalid');
                     displayError(
                         $('#event-time'),
                         $('#event-time-error'),
                         'Date and time is unavailable.'
                     );
-                    $('#submit').attr("disabled", true);
-                }
-                else {
+                    $('#submit').attr('disabled', true);
+                } else {
                     resetField($('#event-date'), $('#event-time-error'));
                     resetField($('#event-time'), $('#event-time-error'));
-                    if ($('#event-id').text() == '')
-                        validDate(document.getElementById("event-date").value, $('#event-date-error'), "event-date");
-                    $('#submit').attr("disabled", checkIfFilledEventFields());
+                    $('#submit').attr('disabled', checkIfFilledEventFields());
                 }
             }
         );
@@ -1964,11 +1953,20 @@ function calculatePackageTotal() {
         terraceIndex = -1;
 
     if ($('#garden-options').val() != '')
-        gardenIndex = getPackageIndex(gardenPackageList, $('#garden-options').val());
+        gardenIndex = getPackageIndex(
+            gardenPackageList,
+            $('#garden-options').val()
+        );
     if ($('#sunroom-options').val() != '')
-        sunroomIndex = getPackageIndex(sunroomPackageList, $('#sunroom-options').val());
+        sunroomIndex = getPackageIndex(
+            sunroomPackageList,
+            $('#sunroom-options').val()
+        );
     if ($('#terrace-options').val() != '')
-        terraceIndex = getPackageIndex(terracePackageList, $('#terrace-options').val());
+        terraceIndex = getPackageIndex(
+            terracePackageList,
+            $('#terrace-options').val()
+        );
 
     let add5paxIndex = getPackageIndex(additionalPackageList, 'add5');
 
@@ -2005,10 +2003,10 @@ function calculateTotal() {
 function calculateTotalAmountPaid() {
     var dpay = 0;
     var fpay = 0;
-    if ($("#downpayment-amount").val() != '')
-        dpay = parseFloat($("#downpayment-amount").val());
-    if ($("#final-payment-amount").val() != '')
-        fpay = parseFloat($("#final-payment-amount").val());
+    if ($('#downpayment-amount').val() != '')
+        dpay = parseFloat($('#downpayment-amount').val());
+    if ($('#final-payment-amount').val() != '')
+        fpay = parseFloat($('#final-payment-amount').val());
 
     var paid = dpay + fpay;
     return paid;
@@ -2020,11 +2018,12 @@ function calculateBalance() {
 }
 
 function updatePaymentAndBalance() {
-    var paid = "" + calculateTotalAmountPaid();
+    var paid = '' + calculateTotalAmountPaid();
     $('#payment-amount-total').val(paid);
-    var balance = "" + calculateBalance();
+    var balance = '' + calculateBalance();
     $('#payment-balance').val(balance);
-    $('#final-payment-amount').attr("placeholder", $('#payment-balance').val());
+    $('#final-payment-amount').attr('placeholder', $('#payment-balance').val());
+    $('#submit').attr('disabled', checkIfFilledEventFields());
 }
 
 function getPackageIndex(list, code) {
@@ -2049,11 +2048,13 @@ function getPackageID(code) {
 }
 
 function getPackageName(code) {
-    return packageList[packageList.map((e) => e.packageCode).indexOf(code)].packageName;
+    return packageList[packageList.map((e) => e.packageCode).indexOf(code)]
+        .packageName;
 }
 
 function getPackagePrice(code) {
-    return packageList[packageList.map((e) => e.packageCode).indexOf(code)].packagePrice;
+    return packageList[packageList.map((e) => e.packageCode).indexOf(code)]
+        .packagePrice;
 }
 
 function getVariantCount() {
@@ -2113,9 +2114,8 @@ function getEventStatus() {
 }
 
 function getRoute() {
-    if (getEventStatus() == 'reserved')
-        return '/event-tracker/reservations'
-    else return '/event-tracker/pencilbookings'
+    if (getEventStatus() == 'reserved') return '/event-tracker/reservations';
+    else return '/event-tracker/pencilbookings';
 }
 
 /**
@@ -2142,9 +2142,19 @@ function submitForm() {
         let menuAdditional = [];
         $('.additional-item').each(function () {
             menuAdditional.push({
-                foodItem: getFoodID($(this).children('.additional-item-name').text()),
-                foodQuantity: Number($(this).children('.additional-item-quantity').text()),
-                foodCost: parseFloat($(this).children('.additional-item-quantity').text()) * getMenuItemPrice($(this).children('.additional-item-name').text())
+                foodItem: getFoodID(
+                    $(this).children('.additional-item-name').text()
+                ),
+                foodQuantity: Number(
+                    $(this).children('.additional-item-quantity').text()
+                ),
+                foodCost:
+                    parseFloat(
+                        $(this).children('.additional-item-quantity').text()
+                    ) *
+                    getMenuItemPrice(
+                        $(this).children('.additional-item-name').text()
+                    ),
             });
         });
 
@@ -2153,8 +2163,12 @@ function submitForm() {
         $('.extra-charges-item').each(function () {
             transactionCharges.push({
                 chargeName: $(this).children('.extra-charges-item-name').text(),
-                chargeQuantity: Number($(this).children('.extra-charges-item-quantity').text()),
-                chargePrice: formatAsNumber($(this).children('.extra-charges-item-price').text())
+                chargeQuantity: Number(
+                    $(this).children('.extra-charges-item-quantity').text()
+                ),
+                chargePrice: formatAsNumber(
+                    $(this).children('.extra-charges-item-price').text()
+                ),
             });
         });
 
@@ -2163,7 +2177,9 @@ function submitForm() {
         $('.discount-item').each(function () {
             transactionDiscounts.push({
                 discountName: $(this).children('.discount-item-name').text(),
-                discountPrice: formatAsNumber($(this).children('.discount-item-amt').text())
+                discountPrice: formatAsNumber(
+                    $(this).children('.discount-item-amt').text()
+                ),
             });
         });
 
@@ -2256,11 +2272,14 @@ function submitForm() {
             let json = JSON.stringify({
                 id: curreventID,
                 data: data,
-                modified: getModifiedFields(data)
+                modified: getModifiedFields(data),
             });
 
-            let url = (currevent.status === 'booked') ? '/event-tracker/pencilbookings' : getRoute()
-            
+            let url =
+                currevent.status === 'booked'
+                    ? '/event-tracker/pencilbookings'
+                    : getRoute();
+
             // makes a PUT request using AJAX to update the event's details
             $.ajax({
                 type: 'PUT',
@@ -2271,15 +2290,13 @@ function submitForm() {
                     window.location.href = getRoute();
                 },
             });
-        }
-
-        else {
+        } else {
             let json = {
-                data: JSON.stringify(data)
+                data: JSON.stringify(data),
             };
 
             // makes a POST request using AJAX to add the event to the database
-            $.post("/event-tracker/submit", json, function (result) {
+            $.post('/event-tracker/submit', json, function (result) {
                 window.location.href = getRoute();
             });
         }
@@ -2287,11 +2304,13 @@ function submitForm() {
 }
 
 function getModifiedFields(data) {
-    let modified = []
+    let modified = [];
     if (currevent.clientName != data.clientName) modified.push('Client Name');
-    if (currevent.clientMobileNumber != data.clientMobileNumber) modified.push('Client Mobile Number');
+    if (currevent.clientMobileNumber != data.clientMobileNumber)
+        modified.push('Client Mobile Number');
     if (currevent.repName != data.repName) modified.push('Representative Name');
-    if (currevent.repMobileNumber != data.repMobileNumber) modified.push('Representative Mobile Number');
+    if (currevent.repMobileNumber != data.repMobileNumber)
+        modified.push('Representative Mobile Number');
     if (currevent.eventType != data.eventType) modified.push('Event Type');
 
     let newDate = new Date(data.eventDate);
@@ -2300,44 +2319,98 @@ function getModifiedFields(data) {
     if (currevent.eventTime != data.eventTime) modified.push('Event Time');
     if (currevent.numOfPax != data.numOfPax) modified.push('Number of Pax');
     if (currevent.eventNotes != data.eventNotes) modified.push('Event Notes');
-    if (JSON.stringify(currevent.eventVenues) != JSON.stringify(data.eventVenues)) modified.push('Event Venues');
-    if (JSON.stringify(currevent.eventPackages) != JSON.stringify(data.eventPackages)) modified.push('Event Packages');
-    if (currevent.packageAdditionalPax != data.packageAdditionalPax) modified.push('Additional Pax');
+    if (
+        JSON.stringify(currevent.eventVenues) !=
+        JSON.stringify(data.eventVenues)
+    )
+        modified.push('Event Venues');
+    if (
+        JSON.stringify(currevent.eventPackages) !=
+        JSON.stringify(data.eventPackages)
+    )
+        modified.push('Event Packages');
+    if (currevent.packageAdditionalPax != data.packageAdditionalPax)
+        modified.push('Additional Pax');
 
     if (currevent.saladName != data.saladName) modified.push('Salad Name');
-    if (currevent.saladQuantity != data.saladQuantity) modified.push('Salad Quantity');
+    if (currevent.saladQuantity != data.saladQuantity)
+        modified.push('Salad Quantity');
     if (currevent.pastaName != data.pastaName) modified.push('Pasta Name');
-    if (currevent.pastaQuantity != data.pastaQuantity) modified.push('Pasta Quantity');
+    if (currevent.pastaQuantity != data.pastaQuantity)
+        modified.push('Pasta Quantity');
     if (currevent.beefName != data.beefName) modified.push('Beef Name');
-    if (currevent.beefQuantity != data.beefQuantity) modified.push('Beef Quantity');
+    if (currevent.beefQuantity != data.beefQuantity)
+        modified.push('Beef Quantity');
     if (currevent.porkName != data.porkName) modified.push('Pork Name');
-    if (currevent.porkQuantity != data.saladQuantity) modified.push('Pork Quantity');
-    if (currevent.chickenName != data.chickenName) modified.push('Chicken Name');
-    if (currevent.chickenQuantity != data.chickenQuantity) modified.push('Chicken Quantity');
+    if (currevent.porkQuantity != data.saladQuantity)
+        modified.push('Pork Quantity');
+    if (currevent.chickenName != data.chickenName)
+        modified.push('Chicken Name');
+    if (currevent.chickenQuantity != data.chickenQuantity)
+        modified.push('Chicken Quantity');
     if (currevent.fishName != data.fishName) modified.push('Fish Name');
-    if (currevent.fishQuantity != data.fishQuantity) modified.push('Fish Quantity');
-    if (currevent.icedTeaQuantity != data.icedTeaQuantity) modified.push('Iced Tea Quantity');
-    if (currevent.riceQuantity != data.riceQuantity) modified.push('Rice Quantity');
+    if (currevent.fishQuantity != data.fishQuantity)
+        modified.push('Fish Quantity');
+    if (currevent.icedTeaQuantity != data.icedTeaQuantity)
+        modified.push('Iced Tea Quantity');
+    if (currevent.riceQuantity != data.riceQuantity)
+        modified.push('Rice Quantity');
 
-    if (JSON.stringify(currevent.menuAdditional, ['foodItem', 'foodQuantity', 'foodCost'])
-        != JSON.stringify(data.menuAdditional, ['foodItem', 'foodQuantity', 'foodCost'])) modified.push('Additional Food');
-    if (JSON.stringify(currevent.transactionCharges, ['chargeName', 'chargeQuantity', 'chargePrice'])
-        != JSON.stringify(data.transactionCharges, ['chargeName', 'chargeQuantity', 'chargePrice'])) modified.push('Charges');
-    if (JSON.stringify(currevent.transactionDiscounts, ['discountName', 'discountPrice'])
-        != JSON.stringify(data.transactionDiscounts, ['discountName', 'discountPrice'])) modified.push('Discounts');
+    if (
+        JSON.stringify(currevent.menuAdditional, [
+            'foodItem',
+            'foodQuantity',
+            'foodCost',
+        ]) !=
+        JSON.stringify(data.menuAdditional, [
+            'foodItem',
+            'foodQuantity',
+            'foodCost',
+        ])
+    )
+        modified.push('Additional Food');
+    if (
+        JSON.stringify(currevent.transactionCharges, [
+            'chargeName',
+            'chargeQuantity',
+            'chargePrice',
+        ]) !=
+        JSON.stringify(data.transactionCharges, [
+            'chargeName',
+            'chargeQuantity',
+            'chargePrice',
+        ])
+    )
+        modified.push('Charges');
+    if (
+        JSON.stringify(currevent.transactionDiscounts, [
+            'discountName',
+            'discountPrice',
+        ]) !=
+        JSON.stringify(data.transactionDiscounts, [
+            'discountName',
+            'discountPrice',
+        ])
+    )
+        modified.push('Discounts');
 
     newDate = new Date(data.downpaymentDate);
     oldDate = new Date(currevent.downpaymentDate);
     if (Number(newDate) != Number(oldDate)) modified.push('Downpayment Date');
-    if (currevent.downpaymentMode != data.downpaymentMode) modified.push('Downpayment Mode');
-    if (currevent.downpaymentAmount != data.downpaymentAmount) modified.push('Downpayment Amount');
+    if (currevent.downpaymentMode != data.downpaymentMode)
+        modified.push('Downpayment Mode');
+    if (currevent.downpaymentAmount != data.downpaymentAmount)
+        modified.push('Downpayment Amount');
 
     if (currevent.finalPaymentDate != null) {
         newDate = new Date(data.finalPaymentDate);
         oldDate = new Date(currevent.finalPaymentDate);
-        if (Number(newDate) != Number(oldDate)) modified.push('Final Payment Date');
-        if (currevent.finalPaymentMode != data.finalPaymentMode) modified.push('Final Payment Mode');
-        if (currevent.finalPaymentAmount != data.finalPaymentAmount) modified.push('Final Payment Amount');
+        if (Number(newDate) != Number(oldDate))
+            modified.push('Final Payment Date');
+        if (currevent.finalPaymentMode != data.finalPaymentMode)
+            modified.push('Final Payment Mode');
+        if (currevent.finalPaymentAmount != data.finalPaymentAmount)
+            modified.push('Final Payment Amount');
     }
 
     return modified;
@@ -2352,13 +2425,19 @@ function addExistingFields() {
                 currevent = result[0];
                 curreventID = currevent._id;
 
-                $('#form-title').children('h1').html('<span class="material-icons-two-tone mb-1 md-48">class</span> EDIT EVENT');
+                $('#form-title')
+                    .children('h1')
+                    .html(
+                        '<span class="material-icons-two-tone mb-1 md-48">class</span> EDIT EVENT'
+                    );
 
                 // set event time
                 $('#event-time').val(currevent.eventTime);
 
                 // set event date
-                $('#event-date').val(new Date(currevent.eventDate).toISOString().substr(0, 10));
+                $('#event-date').val(
+                    new Date(currevent.eventDate).toISOString().substr(0, 10)
+                );
 
                 // set event venue checkboxes
                 $('#venue-garden').prop(
@@ -2376,23 +2455,30 @@ function addExistingFields() {
 
                 $('.venue-checkbox').each(function () {
                     if ($(this).is(':checked'))
-                        $(this).parent().siblings('select').prop('disabled', false);
+                        $(this)
+                            .parent()
+                            .siblings('select')
+                            .prop('disabled', false);
                 });
 
                 // set event packages dropdowns
                 for (let j = 0; j < currevent.packageList.length; j++) {
                     if (currevent.packageList[j].packageVenue === 'Garden')
-                        $('#garden-options').val(
-                            currevent.packageList[j].packageCode
-                        ).change();
-                    else if (currevent.packageList[j].packageVenue === 'Sunroom')
-                        $('#sunroom-options').val(
-                            currevent.packageList[j].packageCode
-                        ).change();
-                    else if (currevent.packageList[j].packageVenue === 'Terrace')
-                        $('#terrace-options').val(
-                            currevent.packageList[j].packageCode
-                        ).change();
+                        $('#garden-options')
+                            .val(currevent.packageList[j].packageCode)
+                            .change();
+                    else if (
+                        currevent.packageList[j].packageVenue === 'Sunroom'
+                    )
+                        $('#sunroom-options')
+                            .val(currevent.packageList[j].packageCode)
+                            .change();
+                    else if (
+                        currevent.packageList[j].packageVenue === 'Terrace'
+                    )
+                        $('#terrace-options')
+                            .val(currevent.packageList[j].packageCode)
+                            .change();
                 }
 
                 // set additional pax checkbox
@@ -2405,38 +2491,64 @@ function addExistingFields() {
                 if (currevent.menuPackage.saladName) {
                     $('#menu-salad-button').trigger('click');
                     //$('#menu-salad-contents').collapse('toggle');
-                    $('input[name="salad-options"][value="' + currevent.menuPackage.saladName + '"]').prop('checked', true);
+                    $(
+                        'input[name="salad-options"][value="' +
+                            currevent.menuPackage.saladName +
+                            '"]'
+                    ).prop('checked', true);
                 }
 
                 if (currevent.menuPackage.pastaName) {
                     $('#menu-pasta-button').trigger('click');
-                    $('input[name="pasta-options"][value="' + currevent.menuPackage.pastaName + '"]').prop('checked', true);
+                    $(
+                        'input[name="pasta-options"][value="' +
+                            currevent.menuPackage.pastaName +
+                            '"]'
+                    ).prop('checked', true);
                 }
 
                 if (currevent.menuPackage.beefName) {
                     $('#menu-beef-button').trigger('click');
-                    $('input[name="beef-options"][value="' + currevent.menuPackage.beefName + '"]').prop('checked', true);
+                    $(
+                        'input[name="beef-options"][value="' +
+                            currevent.menuPackage.beefName +
+                            '"]'
+                    ).prop('checked', true);
                 }
 
                 if (currevent.menuPackage.porkName) {
                     $('#menu-pork-button').trigger('click');
-                    $('input[name="pork-options"][value="' + currevent.menuPackage.porkName + '"]').prop('checked', true);
+                    $(
+                        'input[name="pork-options"][value="' +
+                            currevent.menuPackage.porkName +
+                            '"]'
+                    ).prop('checked', true);
                 }
 
                 if (currevent.menuPackage.chickenName) {
                     $('#menu-chicken-button').trigger('click');
-                    $('input[name="chicken-options"][value="' + currevent.menuPackage.chickenName + '"]').prop('checked', true);
+                    $(
+                        'input[name="chicken-options"][value="' +
+                            currevent.menuPackage.chickenName +
+                            '"]'
+                    ).prop('checked', true);
                 }
 
                 if (currevent.menuPackage.fishName) {
                     $('#menu-fish-button').trigger('click');
-                    $('input[name="fish-options"][value="' + currevent.menuPackage.fishName + '"]').prop('checked', true);
+                    $(
+                        'input[name="fish-options"][value="' +
+                            currevent.menuPackage.fishName +
+                            '"]'
+                    ).prop('checked', true);
                 }
 
                 // set additional items table
                 if (currevent.foodList.length != 0) {
                     $('#additional-items-header').empty();
-                    $('#additional-items-header').append(additionalFoodTableHeader);
+                    $('#additional-items-header').append(
+                        additionalFoodTableHeader
+                    );
                 }
                 for (let j = 0; j < currevent.foodList.length; j++) {
                     let name = currevent.foodList[j].name;
@@ -2446,24 +2558,24 @@ function addExistingFields() {
 
                     $('#additional-items-list').append(
                         '<div>' +
-                        '<hr class="mx-5">' +
-                        '<div class="row px-4 py-2 mx-5 additional-item">' +
-                        '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
-                        name +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
-                        quantity +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
-                        formatAsDecimal(price) +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
-                        formatAsDecimal(cost) +
-                        '</h6>' +
-                        '<span class="col material-icons-two-tone text-end md-btn"' +
-                        'onclick="removeAdditionalItem(this)">close</span>' +
-                        '</div>' +
-                        '</div>'
+                            '<hr class="mx-5">' +
+                            '<div class="row px-4 py-2 mx-5 additional-item">' +
+                            '<h6 class="col-5 mb-0 mt-1 additional-item-name number">' +
+                            name +
+                            '</h6>' +
+                            '<h6 class="col mb-0 mt-1 text-center additional-item-quantity number">' +
+                            quantity +
+                            '</h6>' +
+                            '<h6 class="col mb-0 mt-1 text-center additional-item-price number">' +
+                            formatAsDecimal(price) +
+                            '</h6>' +
+                            '<h6 class="col mb-0 mt-1 text-center additional-item-amt number">' +
+                            formatAsDecimal(cost) +
+                            '</h6>' +
+                            '<span class="col material-icons-two-tone text-end md-btn"' +
+                            'onclick="removeAdditionalItem(this)">close</span>' +
+                            '</div>' +
+                            '</div>'
                     );
                 }
 
@@ -2475,29 +2587,30 @@ function addExistingFields() {
 
                 for (let j = 0; j < currevent.transactionCharges.length; j++) {
                     let name = currevent.transactionCharges[j].chargeName;
-                    let quantity = currevent.transactionCharges[j].chargeQuantity;
+                    let quantity =
+                        currevent.transactionCharges[j].chargeQuantity;
                     let price = currevent.transactionCharges[j].chargePrice;
 
                     $('#extra-charges-list').append(
                         '<div>' +
-                        '<hr class="mx-5">' +
-                        '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
-                        '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
-                        name +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
-                        quantity +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
-                        formatAsDecimal(price) +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
-                        formatAsDecimal(quantity * price) +
-                        '</h6>' +
-                        '<span class="col material-icons-two-tone text-end md-btn"' +
-                        'onclick="removeExtraCharge(this)">close</span>' +
-                        '</div>' +
-                        '</div>'
+                            '<hr class="mx-5">' +
+                            '<div class="row px-4 py-2 mx-5 extra-charges-item">' +
+                            '<h6 class="col-5 mb-0 mt-1 extra-charges-item-name number">' +
+                            name +
+                            '</h6>' +
+                            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-quantity number">' +
+                            quantity +
+                            '</h6>' +
+                            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-price number">' +
+                            formatAsDecimal(price) +
+                            '</h6>' +
+                            '<h6 class="col mb-0 mt-1 text-center extra-charges-item-amt number">' +
+                            formatAsDecimal(quantity * price) +
+                            '</h6>' +
+                            '<span class="col material-icons-two-tone text-end md-btn"' +
+                            'onclick="removeExtraCharge(this)">close</span>' +
+                            '</div>' +
+                            '</div>'
                     );
                 }
 
@@ -2506,26 +2619,30 @@ function addExistingFields() {
                     $('#discounts-header').empty();
                     $('#discounts-header').append(discountsTableHeader);
                 }
-                for (let j = 0; j < currevent.transactionDiscounts.length; j++) {
+                for (
+                    let j = 0;
+                    j < currevent.transactionDiscounts.length;
+                    j++
+                ) {
                     let name = currevent.transactionDiscounts[j].discountName;
                     let price = currevent.transactionDiscounts[j].discountPrice;
 
                     $('#discounts-list').append(
                         '<div>' +
-                        '<hr class="mx-5">' +
-                        '<div class="row px-4 py-2 mx-5 discount-item">' +
-                        '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
-                        name +
-                        '</h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center"></h6>' +
-                        '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
-                        formatAsDecimal(price) +
-                        '</h6>' +
-                        '<span class="col material-icons-two-tone text-end md-btn"' +
-                        'onclick="removeDiscount(this)">close</span>' +
-                        '</div>' +
-                        '</div>'
+                            '<hr class="mx-5">' +
+                            '<div class="row px-4 py-2 mx-5 discount-item">' +
+                            '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
+                            name +
+                            '</h6>' +
+                            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+                            '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
+                            formatAsDecimal(price) +
+                            '</h6>' +
+                            '<span class="col material-icons-two-tone text-end md-btn"' +
+                            'onclick="removeDiscount(this)">close</span>' +
+                            '</div>' +
+                            '</div>'
                     );
                 }
 
@@ -2534,12 +2651,18 @@ function addExistingFields() {
 
                 // set payment details
                 if (currevent.downpaymentDate) {
-                    downpaymentChecked()
-                    $('#downpayment-date').val(new Date(currevent.downpaymentDate).toISOString().substr(0, 10));
-                    $('#downpayment-mode').val(currevent.downpaymentMode).change();
+                    downpaymentChecked();
+                    $('#downpayment-date').val(
+                        new Date(currevent.downpaymentDate)
+                            .toISOString()
+                            .substr(0, 10)
+                    );
+                    $('#downpayment-mode')
+                        .val(currevent.downpaymentMode)
+                        .change();
                     $('#downpayment-amount').val(currevent.downpaymentAmount);
                     $('#downpayment').prop('checked', true);
-                    document.getElementById("final-payment").disabled = false;
+                    document.getElementById('final-payment').disabled = false;
                     $('#downpayment')
                         .parent()
                         .siblings()
@@ -2549,10 +2672,18 @@ function addExistingFields() {
                 }
 
                 if (currevent.finalPaymentDate) {
-                    finalPaymentChecked()
-                    $('#final-payment-date').val(new Date(currevent.finalPaymentDate).toISOString().substr(0, 10));
-                    $('#final-payment-mode').val(currevent.finalPaymentMode).change();
-                    $('#final-payment-amount').val(currevent.finalPaymentAmount);
+                    finalPaymentChecked();
+                    $('#final-payment-date').val(
+                        new Date(currevent.finalPaymentDate)
+                            .toISOString()
+                            .substr(0, 10)
+                    );
+                    $('#final-payment-mode')
+                        .val(currevent.finalPaymentMode)
+                        .change();
+                    $('#final-payment-amount').val(
+                        currevent.finalPaymentAmount
+                    );
                     $('#final-payment').prop('checked', true);
                     $('#final-payment')
                         .parent()
@@ -2567,6 +2698,346 @@ function addExistingFields() {
             }
         });
     }
-
 }
 
+function checkPaxDiscount (input) {
+    var paxDiscount = 'No discount';
+    var discount = -1;
+    let discountList = [
+        { name: 'PAXDISCOUNT50', pax: 50, price: 1000 },
+        { name: 'PAXDISCOUNT100', pax: 100, price: 2000 },
+        { name: 'PAXDISCOUNT120', pax: 120, price: 3000 },
+    ];
+
+    for(i = discountList.length -1; i >= 0; i--) {
+        if(input >= discountList[i].pax) {
+            discount = i;
+            i = -1;
+        }
+    }
+
+    if(discount >= 0) {
+        paxDiscount = discountList[discount];
+        $('#discount-name').val(paxDiscount.name);
+        $('#discount-price').val(paxDiscount.price);        
+        addPaxDiscount();
+    } 
+
+    return paxDiscount;
+}
+
+// Validations
+
+// Additional Food Modal
+function isValidAdditionalFood(foodname, quantity) {
+    resultqty = isValidQuantity(quantity);
+    if ((foodname && resultqty[2]) || foodname == quantity)
+        return isValidAdditionalFoodName(foodname);
+    else {
+        if (!foodname) {
+            return [
+                false,
+                'Food name cannot be empty.',
+                resultqty[0],
+                resultqty[1],
+            ];
+        } else {
+            return [resultqty[0], resultqty[1]];
+        }
+    }
+}
+
+// Discount Modal
+function isValidDiscount(discountname, price) {
+    var resultprice = isValidPrice(price);
+    if ((discountname && resultprice[2]) || discountname == price)
+        return [true, ''];
+    else {
+        if (!discountname) {
+            return [
+                false,
+                'Discount name cannot be empty.',
+                resultprice[0],
+                resultprice[1],
+            ];
+        } else {
+            return [resultprice[0], resultprice[1]];
+        }
+    }
+}
+
+// Extra Charges Modal
+function isValidExtraCharge(chargename, quantity, price) {
+    var resultqty = isValidQuantity(quantity);
+    var resultprice = isValidPrice(price);
+
+    if (
+        (chargename && resultqty[0] && resultprice[0]) ||
+        (chargename == quantity && quantity == price)
+    )
+        return [true, ''];
+    else {
+        if (!chargename) {
+            if (!resultprice[0]) {
+                if (!resultqty[0]) {
+                    if (
+                        resultprice[1] == 'Price cannot be negative.' ||
+                        price != ''
+                    )
+                        return [
+                            false,
+                            'Invalid price.',
+                            resultqty[0],
+                            resultqty[1],
+                            resultprice[0],
+                            resultprice[1],
+                        ];
+                    else
+                        return [
+                            false,
+                            'Invalid quantity.',
+                            resultqty[0],
+                            resultqty[1],
+                            resultprice[0],
+                            resultprice[1],
+                        ];
+                } else {
+                    if (price == '')
+                        return [
+                            false,
+                            'Charge name cannot be empty.',
+                            resultqty[0],
+                            resultqty[1],
+                            resultprice[0],
+                            resultprice[1],
+                        ];
+                    else
+                        return [
+                            false,
+                            'Invalid price.',
+                            resultqty[0],
+                            resultqty[1],
+                            resultprice[0],
+                            resultprice[1],
+                        ];
+                }
+            } else {
+                return [
+                    false,
+                    'Charge name cannot be empty.',
+                    resultqty[0],
+                    resultqty[1],
+                    resultprice[0],
+                    resultprice[1],
+                ];
+            }
+        } else {
+            if (!resultqty[0])
+                return [
+                    false,
+                    'Invalid quantity.',
+                    resultqty[0],
+                    resultqty[1],
+                    resultprice[0],
+                    resultprice[1],
+                ];
+            else
+                return [
+                    false,
+                    'Invalid price.',
+                    resultqty[0],
+                    resultqty[1],
+                    resultprice[0],
+                    resultprice[1],
+                ];
+        }
+    }
+}
+
+// Per Field
+// Date
+function isValidDate(input) {
+    if (input.length > 10) return [false, 'Invalid date.'];
+    else {
+        var dateInput = getDateTime(input);
+        var dateMax = getDateTime('2032-01-01');
+        var dateMin = getDateTime(getDateAMonthAgo());
+
+        if (!input.trim()) return [false, 'Invalid date.'];
+        else if (dateInput - dateMin < 0 || isNaN(dateInput))
+            return [false, 'Date should be at least a month ago.'];
+        else if (dateInput - dateMax >= 0 || isNaN(dateInput))
+            return [false, 'Date cannot be later than 2031.'];
+        else return [true, ''];
+    }
+}
+
+// Name
+function isValidName(input) {
+    if (!input.trim()) return [false, 'Client name should be filled.'];
+    else if (checkStringInput(input))
+        return [
+            false,
+            'Invalid name. Use Alpha characters (A-Z, a-z, 0-9), period (.), and hyphens (-) only.',
+        ];
+    else return [true, ''];
+}
+
+// Quantity
+function isValidQuantity(input) {
+    if (input == undefined || input == 0 || Number.isNaN(Number(input)))
+        return [false, 'Quantity cannot be zero.', ''];
+    else if (input < 0) return [false, 'Quantity cannot be negative.', ''];
+    else return [true, '', input];
+}
+
+// Price
+function isValidPrice(input) {
+    if (input == undefined || input == 0 || Number.isNaN(Number(input)))
+        return [false, 'Price cannot be zero.', ''];
+    else if (input < 0) return [false, 'Price cannot be negative.', ''];
+    else return [true, '', input];
+}
+
+// Contact Number
+function isEmptyContactNumber(input) {
+    if (!input.trim()) return [true, 'Mobile Number should be filled.'];
+    else return [false, ''];
+}
+
+// Event Type
+function isValidEventType(input) {
+    if (!input.trim()) return [false, 'Event type should be filled.'];
+    else return [true, ''];
+}
+
+// Event Time
+function isValidEventTime(input) {
+    if (!input.trim()) return [false, 'Event time cannot be empty.'];
+    else return [true, input];
+}
+
+// Number of Pax
+function isValidPaxNum(input) {
+    if (input < 0) return [false, 'Number of pax cannot be negative.'];
+    else if (input == 0) return [false, 'Number of pax cannot be zero.'];
+    else if (input > 120)
+        return [false, 'Number of pax cannot be more than 120.'];
+    else return [true, ''];
+}
+
+// Checking Number of Pax for Pax Discount
+function checkPaxDiscountTest (input) {
+    var paxresult = isValidPaxNum(input);
+    var paxDiscount = 'No discount';
+    var discount = -1;
+    let discountList = [
+        { name: 'PAXDISCOUNT50', pax: 50, price: 1000 },
+        { name: 'PAXDISCOUNT100', pax: 100, price: 2000 },
+        { name: 'PAXDISCOUNT120', pax: 120, price: 3000 },
+    ];
+
+    for(i = discountList.length -1; i >= 0; i--) {
+        if(input >= discountList[i].pax) {
+            discount = i;
+            i = -1;
+        }
+    }
+    
+    if(paxresult[0]) {
+        if(discount >= 0) {
+            paxDiscount = discountList[discount];     
+            return paxDiscount;
+        }   
+        return paxDiscount;
+    } else return paxresult[1];
+}
+
+// Venue
+function isValidVenue(garden, sunroom, terrace) {
+    let venue = garden || sunroom || terrace;
+    if (!venue) return [false, 'At least 1 venue should be checked.'];
+    else return [true, garden + sunroom + terrace];
+}
+
+// Package
+function isValidPackage(garden, sunroom, terrace) {
+    let eventpackage = garden || sunroom || terrace;
+    if (!eventpackage) return [false, 'At least 1 Package should be selected.'];
+    else return [true, garden + ' ' + sunroom + ' ' + terrace];
+}
+
+// Additional Food Name
+function isValidAdditionalFoodName(foodname) {
+    if (foodNameList.includes(foodname))
+        return [
+            true,
+            getMenuItemPrice(foodname),
+            foodname + ' is in the list.',
+        ];
+    else {
+        if (!foodname) return [true, '', 'Empty input.'];
+        else return [false, '', foodname + ' is not in the list.'];
+    }
+}
+
+// Additional Food Name - UT
+function isAddFoodNameinList(foodname) {
+    let foodNameList = [
+        'Barbeque Chicken Salad',
+        'Chicken Caesar Salad',
+        'Balai Yllana Garden Salad',
+    ];
+    let foodList = [
+        { name: 'Barbeque Chicken Salad', price: 235 },
+        { name: 'Chicken Caesar Salad', price: 215 },
+        { name: 'Balai Yllana Garden Salad', price: 235 },
+    ];
+    if (foodNameList.includes(foodname))
+        return [
+            true,
+            foodList[foodNameList.indexOf(foodname)].price,
+            foodname + ' is in the list.',
+        ];
+    else {
+        if (!foodname) return [true, '', 'Empty input.'];
+        else return [false, '', foodname + ' is not in the list.'];
+    }
+}
+
+// Mode Of Payment
+function isValidModeOfPayment(input) {
+    if (!input.trim()) return [false, 'Select 1 payment mode.'];
+    else return [true, input];
+}
+
+// Total Amount Paid Calculation
+function isValidTotalAmountPaid(downpayment, finalpayment, total) {
+    let balance = total - (downpayment + finalpayment);
+    if (balance < 0)
+        return [false, 'Customer payment is greater than the total price.'];
+    else if (balance > 0) return [true, 'Remaining Balance: P' + balance];
+    else return [true, 'Event is fully paid.'];
+}
+
+if (typeof window == 'undefined') {
+    module.exports = {
+        isValidDate,
+        isValidName,
+        isEmptyContactNumber,
+        isValidEventType,
+        isValidEventTime,
+        isValidPaxNum,
+        isValidVenue,
+        isValidPackage,
+        isAddFoodNameinList,
+        isValidQuantity,
+        isValidModeOfPayment,
+        isValidPrice,
+        isValidTotalAmountPaid,
+        checkStringInput,
+        formatAsDecimal,
+        formatAsNumber,
+        checkPaxDiscountTest
+    };
+}
