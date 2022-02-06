@@ -25,8 +25,11 @@ Login Page
     Login Page Should Be Open
     Input Text      username    admin
     Input Text      password    admin
+    Set Selenium Speed      ${DELAY_0.3}
+    Wait Until Element Is Visible       xpath:/html/body/div/div/form/div[3]/button
     Wait Until Element Is Enabled       xpath:/html/body/div/div/form/div[3]/button
     Click Button        xpath:/html/body/div/div/form/div[3]/button
+    Set Selenium Speed      ${DELAY}
 
 Login Page Should Be Open
     Page Should Contain Element     username
@@ -76,9 +79,9 @@ Input Client Mobile Number
 Validate Client Mobile Number
     Clear Element Text      client-mobile-number  
     Press Keys       client-mobile-number          BACK_SPACE
-    Element Text Should Be      client-number-error        Client mobile number should be filled.
+    Element Text Should Be      client-number-error        Client Mobile Number should be filled.
     Input Text       client-mobile-number          asd
-    Element Text Should Be      client-number-error        Invalid client mobile number.
+    Element Text Should Be      client-number-error        Client Mobile Number is invalid.
 
 Input Type Of Event
     [Arguments]     ${type}
@@ -102,6 +105,9 @@ Validate Date Of Event
 
 Select Time Of Event
     Select From List By Value        event-time          Afternoon
+
+Select Time Of Event 2
+    Select From List By Value        event-time          Evening    
 
 Validate Client Time Of Event
     Select From List By Value        event-time          Afternoon
@@ -196,9 +202,11 @@ Check Downpayment
     Select From List By Value        downpayment-mode         Cash
     Input Text       downpayment-amount         -10
     Press Keys       downpayment-amount          ENTER
+    Double Click Element        downpayment-mode
     Element Text Should Be      downpayment-amount-error        Invalid payment.
     Input Text       downpayment-amount           9999999
     Press Keys       downpayment-amount           ENTER
+    Double Click Element        downpayment-mode
     Element Text Should Be      payment-error        Customer payment is greater than the total price.
     Input Text       downpayment-amount          0
 
@@ -209,6 +217,7 @@ Check Final Payment
     Press Keys       downpayment-date         ENTER
     Select From List By Value        downpayment-mode         Cash
     Input Text       downpayment-amount          0
+    Select Checkbox     final-payment
     Select Checkbox     final-payment
     Click Element    final-payment-date 
     Press Keys       final-payment-date         ARROW_DOWN+ARROW_RIGHT+ARROW_DOWN+ARROW_RIGHT+ARROW_DOWN
@@ -221,9 +230,11 @@ Check Final Payment
     Select From List By Value        final-payment-mode         Cash
     Input Text       final-payment-amount         -10
     Press Keys       final-payment-amount          ENTER
+    Double Click Element        downpayment-mode
     Element Text Should Be      final-payment-amount-error        Invalid payment.
     Input Text       final-payment-amount           9999999
     Press Keys       final-payment-amount           ENTER
+    Double Click Element        downpayment-mode
     Element Text Should Be      payment-error        Customer payment is greater than the total price.
     Input Text       final-payment-amount          0
 Submit Event

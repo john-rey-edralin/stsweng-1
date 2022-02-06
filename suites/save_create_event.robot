@@ -27,7 +27,7 @@ Save Create Event With Payment
     Input Client Name       ${CLIENT NAME} 
     Input Client Mobile Number      ${MOBILE NUMBER} 
     Input Type Of Event     ${TYPE EVENT} 
-    Select Time Of Event
+    Select Time Of Event 2
     Input Number Of Pax     ${NUMBER PAX}  
     Check Event Venue
     Select Event Package 4 Variants
@@ -36,7 +36,8 @@ Save Create Event With Payment
     Press Keys       downpayment-date         ARROW_UP+ARROW_RIGHT+ARROW_UP+ARROW_RIGHT+ARROW_UP
     Press Keys       downpayment-date         ENTER
     Select From List By Value        downpayment-mode         Cash
-    Input Text       downpayment-amount          0
+    Input Text       downpayment-amount          1
+    Double Click Element        downpayment-mode  
     Submit Event
     Set Selenium Speed      ${DELAY_0.3}
     Click Element       xpath://*[@id="confirm-submit-modal"]/div/div/div[3]/button[2]

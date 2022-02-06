@@ -13,8 +13,9 @@ Save Edited Reservations Event
     Input Type Of Event     ${TYPE EVENT} 
     Select Event Package 6 Variants
     Select Time Of Event
-    Select From List By Value        downpayment-mode         Cash
     Input Text       downpayment-amount          1
+    Select From List By Value        downpayment-mode         Cash
+    Double Click Element        downpayment-mode
     Wait Until Element Is Visible       xpath:/html/body/div[1]/div/form/div[6]/div/a/button
     Wait Until Element Is Enabled       xpath:/html/body/div[1]/div/form/div[6]/div/a/button
     Click Button        xpath:/html/body/div[1]/div/form/div[6]/div/a/button
@@ -22,4 +23,4 @@ Save Edited Reservations Event
     Wait Until Element Is Enabled       xpath:/html/body/div[1]/div/form/div[7]/div/div/div[3]/button[2]
     Click Button        xpath:/html/body/div[1]/div/form/div[7]/div/div/div[3]/button[2]
     Element Should Contain      today-title        RESERVATIONS
-    # [Teardown]      Close Browser
+    [Teardown]      Close Browser
