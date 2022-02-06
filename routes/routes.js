@@ -30,6 +30,7 @@ app.put('/admin/remove', adminController.putRemoveEmployeeAccess);
 app.get('/admin/activity/recent', adminController.getRecentActivity);
 app.get('/admin/discount', adminController.getDiscounts);
 app.post('/admin/discount', adminController.postRegisterDiscount);
+app.put('/admin/discount', adminController.putDiscountByID);
 
 // event-tracker home
 app.get('/event-tracker/home', eventController.getHome);
