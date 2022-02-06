@@ -56,7 +56,7 @@ const eventController = {
         let data = {
             events: events,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-home', data);
@@ -69,7 +69,11 @@ const eventController = {
     postCreateEvent: async function (req, res) {
         const doc = await Event.create(JSON.parse(req.body.data));
 
-        logActivity(req.user.username || 'Tester', `Created event: ${doc._id}`);
+        logActivity(
+            req.session.user.username || 'Tester',
+            `Created event: ${doc._id}`
+        );
+
         res.send(doc);
     },
 
@@ -78,7 +82,7 @@ const eventController = {
             let data = {
                 event: result,
                 username: req.session.user.username,
-                isAdmin: req.session.isAdmin
+                isAdmin: req.session.isAdmin,
             };
             res.render('event-tracker-form', data);
         });
@@ -87,7 +91,7 @@ const eventController = {
     getPrintEvent: async function (req, res) {
         const _id = mongoose.Types.ObjectId(req.params.id);
         const event = await Event.aggregate([
-            { $match: { _id} },
+            { $match: { _id } },
             {
                 $lookup: {
                     from: 'packages',
@@ -109,14 +113,13 @@ const eventController = {
         let data = {
             event: event,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
-        }
-        console.log(data)
+            isAdmin: req.session.isAdmin,
+        };
         res.render('event-tracker-receipt', data);
     },
 
     putReservations: async function (req, res) {
-        const { id, data } = req.body;
+        const { id, data, modified } = req.body;
         const _id = mongoose.Types.ObjectId(id);
 
         const doc = await Event.findOneAndUpdate(
@@ -126,15 +129,15 @@ const eventController = {
         );
 
         logActivity(
-            req.user.username || 'Tester',
+            req.session.user.username || 'Tester',
             `Modified reservation: ${doc._id}
-            Using information: ${data}`
+            Modified Fields: ${modified}`
         );
         res.send(doc);
     },
 
     putPencilbookings: async function (req, res) {
-        const { id, data } = req.body;
+        const { id, data, modified } = req.body;
         const _id = mongoose.Types.ObjectId(id);
 
         const doc = await Event.findOneAndUpdate(
@@ -143,6 +146,11 @@ const eventController = {
             { returnDocument: 'after' }
         );
 
+        logActivity(
+            req.session.user.username || 'Tester',
+            `Modified pencil booking: ${doc._id}
+            Modified Fields: ${modified}`
+        );
         res.send(doc);
     },
 
@@ -157,7 +165,7 @@ const eventController = {
         );
 
         logActivity(
-            req.session.user?.username || 'Tester',
+            req.session.user.username || 'Tester',
             `Cancelled event: ${doc._id}`
         );
         res.json(doc);
@@ -173,6 +181,10 @@ const eventController = {
             { returnDocument: 'after' }
         );
 
+        logActivity(
+            req.session.user.username || 'Tester',
+            `Finished event: ${doc._id}`
+        );
         res.json(doc);
     },
 
@@ -201,7 +213,7 @@ const eventController = {
         let data = {
             bookings: bookings,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-pencilbookings', data);
@@ -264,7 +276,7 @@ const eventController = {
             time: req.query.time,
             date: req.query.date,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-pencilbookings', data);
@@ -301,7 +313,7 @@ const eventController = {
             bookings: bookings,
             search: req.query.name,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-pencilbookings', data);
@@ -332,7 +344,7 @@ const eventController = {
         let data = {
             reservations: reservations,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-reservations', data);
@@ -396,7 +408,7 @@ const eventController = {
             time: req.query.time,
             date: req.query.date,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-reservations', data);
@@ -433,7 +445,7 @@ const eventController = {
             reservations: reservations,
             search: req.query.name,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-reservations', data);
@@ -464,7 +476,7 @@ const eventController = {
         let data = {
             cancelled: cancelled,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-cancelled', data);
@@ -527,7 +539,7 @@ const eventController = {
             time: req.query.time,
             date: req.query.date,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-cancelled', data);
@@ -564,7 +576,7 @@ const eventController = {
             cancelled: cancelled,
             search: req.query.name,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-cancelled', data);
@@ -595,7 +607,7 @@ const eventController = {
         let data = {
             pastevents: pastevents,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-pastevents', data);
@@ -613,16 +625,23 @@ const eventController = {
         if (req.query.time) query.eventTime = req.query.time;
         if (req.query.date) {
             let date = new Date();
-            let today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            let tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+            let today = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate()
+            );
+            let tomorrow = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate() + 1
+            );
             query.eventDate = {
                 $gte: today,
                 $lt: tomorrow,
             };
         }
         let sort = { eventDate: 1 };
-        if (req.query.sort == "date-dsc")
-            sort = { eventDate: -1 };
+        if (req.query.sort == 'date-dsc') sort = { eventDate: -1 };
 
         const pastevents = await Event.aggregate([
             { $match: query },
@@ -651,7 +670,7 @@ const eventController = {
             time: req.query.time,
             date: req.query.date,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-pastevents', data);
@@ -688,11 +707,11 @@ const eventController = {
             pastevents: pastevents,
             search: req.query.name,
             username: req.session.user.username,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('event-tracker-pastevents', data);
-    },  
+    },
 
     getFood: function (req, res) {
         let projection = 'name price';
