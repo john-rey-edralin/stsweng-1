@@ -1,6 +1,6 @@
 require('dotenv').config();
-hostname = process.env.HOSTNAME;
-port = process.env.PORT;
+hostname = process.env.HOSTNAME
+port = process.env.PORT
 
 //import the necessary modules
 const path = require('path');
@@ -34,26 +34,25 @@ app.set('view engine', 'hbs');
 //set the file path containing the hbs files
 app.set('views', path.join(__dirname, 'views'));
 //check if current user has logged in
+app.use('/', (req, res, next) => {
+    if (
+        req.session.loggedIn ||
+        req.path === '/login' ||
+        req.path === '/authenticate'
+    ) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+});
 
-// app.use('/', (req, res, next) => {
-//     if (
-//         req.session.loggedIn ||
-//         req.path === '/login' ||
-//         req.path === '/authenticate'
-//     ) {
-//         next();
-//     } else {
-//         res.redirect('/login');
-//     }
-// });
-
-// app.use('/admin', (req, res, next) => {
-//     if (req.session.isAdmin) {
-//         next();
-//     } else {
-//         res.redirect('/event-tracker/home');
-//     }
-// });
+app.use('/admin', (req, res, next) => {
+    if (req.session.isAdmin) {
+        next();
+    } else {
+        res.redirect('/event-tracker/home');
+    }
+});
 
 //set the file path of the paths defined in './routes/routes.js'
 app.use('/', routes);
