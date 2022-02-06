@@ -258,6 +258,17 @@ const controller = {
 
         res.json(doc);
     },
+
+    deleteDiscountByID: async function (req, res) {
+        const { id } = req.body;
+        const _id = mongoose.Types.ObjectId(id);
+
+        const doc = await Discount.deleteOne(
+            { _id }
+        );
+
+        res.json(doc); // returns {deletedCount: 1}
+    }
 };
 
 module.exports = controller;
