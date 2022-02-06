@@ -2702,6 +2702,17 @@ function checkPaxDiscount (input) {
     var discount = -1;
     let discountList = [
         { name: 'PAXDISCOUNT50', pax: 50, price: 1000 },
+        { name: 'PAXDISCOUNT100', pax: 100, price: 2000 },
+        { name: 'PAXDISCOUNT120', pax: 120, price: 3000 },
+    ];
+
+    for(i = discountList.length -1; i >= 0; i--) {
+        if(input >= discountList[i].pax) {
+            discount = i;
+            i = -1;
+        }
+    }
+
     if($('.paxdiscount').html())
         removeDiscount('.cancel-pax-discount');  
     if(discount >= 0) {
