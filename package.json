@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "test": "jest tests/* --coverage",
-        "dev": "nodemon index.js",
+        "test": "jest tests/*",
+        "start": "nodemon index.js",
         "build": "jest && node index.js"
     },
     "repository": {

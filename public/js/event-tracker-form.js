@@ -1019,7 +1019,6 @@ function removeExtraCharge(elem) {
 
 function addDiscount() {
     $('.discount-add-button').attr('disabled', true);
-    var result = isValidPrice($('#discount-name').val().trim());
     if (!$('#discount-name').val() || !$('#discount-price').val()) {
         $('#discount-error').text('Please fill up all fields.');
         $('.discount-add-button').attr('disabled', true);
@@ -1071,6 +1070,47 @@ function addDiscount() {
         );
         updateBreakdownTable();
     }
+}
+
+function addPaxDiscount() {
+    var name = $('#discount-name').val();
+    var price = $('#discount-price').val();
+
+    $('#discounts-list').append(
+        '<div">' +
+            '<hr class="mx-5">' +
+            '<div class="row px-4 py-2 mx-5 discount-item paxdiscount">' +
+            '<h6 class="col-5 mb-0 mt-1 discount-item-name number">' +
+            name +
+            '</h6>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h6 class="col mb-0 mt-1 text-center"></h6>' +
+            '<h6 class="col mb-0 mt-1 text-center discount-item-amt number">' +
+            formatAsDecimal(price) +
+            '</h6>' +
+            '<span class="col material-icons-two-tone text-end md-btn cancel-pax-discount"' +
+            'onclick="removeDiscount(this)">close</span>' +
+            '</div>' +
+            '</div>'
+    );
+
+    // reset all fields and error message
+    $('#discount-name').val('');
+    $('#discount-price').val('');
+
+    // initializes table header
+    if ($('.discount-item-amt').length === 1) {
+        $('#discounts-header').empty();
+        $('#discounts-header').append(discountsTableHeader);
+    }
+
+    $('#discounts-total').empty();
+    $('#discounts-total').append(
+        '<h4 class="mb-0 mt-1 text-end me-5 number"><strong>Total: </strong>Php ' +
+            formatAsDecimal(calculateItemTotal($('.discount-item-amt'))) +
+            '</h4>'
+    );
+    updateBreakdownTable();
 }
 
 function removeDiscount(elem) {
@@ -1283,6 +1323,7 @@ function updateBreakdownTable() {
 
     //Updates values of Total Amount Paid field and Balance field
     updatePaymentAndBalance();
+    checkIfFilledEventFields();
 }
 
 function initializeRealTimeValidation() {
@@ -1384,7 +1425,9 @@ function initializeRealTimeValidation() {
         var result = isValidPaxNum($('#event-pax').val());
         if (!result[0])
             displayError($('#event-pax'), $('#event-pax-error'), result[1]);
-        else resetField($('#event-pax'), $('#event-pax-error'));
+        else
+            resetField($('#event-pax'), $('#event-pax-error'));
+        checkPaxDiscount($('#event-pax').val());             
         $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
@@ -1977,6 +2020,7 @@ function updatePaymentAndBalance() {
     var balance = '' + calculateBalance();
     $('#payment-balance').val(balance);
     $('#final-payment-amount').attr('placeholder', $('#payment-balance').val());
+    $('#submit').attr('disabled', checkIfFilledEventFields());
 }
 
 function getPackageIndex(list, code) {
@@ -2653,6 +2697,23 @@ function addExistingFields() {
     }
 }
 
+function checkPaxDiscount (input) {
+    var paxDiscount = 'No discount';
+    var discount = -1;
+    let discountList = [
+        { name: 'PAXDISCOUNT50', pax: 50, price: 1000 },
+    if($('.paxdiscount').html())
+        removeDiscount('.cancel-pax-discount');  
+    if(discount >= 0) {
+        paxDiscount = discountList[discount];
+        $('#discount-name').val(paxDiscount.name);
+        $('#discount-price').val(paxDiscount.price);        
+        addPaxDiscount();
+    }      
+
+    return paxDiscount;
+}
+
 // Validations
 
 // Additional Food Modal
@@ -2695,10 +2756,9 @@ function isValidDiscount(discountname, price) {
 
 // Extra Charges Modal
 function isValidExtraCharge(chargename, quantity, price) {
-    console.log(chargename + ' ' + quantity + ' ' + price);
     var resultqty = isValidQuantity(quantity);
     var resultprice = isValidPrice(price);
-    console.log(chargename == quantity && quantity == price);
+
     if (
         (chargename && resultqty[0] && resultprice[0]) ||
         (chargename == quantity && quantity == price)
@@ -2854,6 +2914,33 @@ function isValidPaxNum(input) {
     else return [true, ''];
 }
 
+// Checking Number of Pax for Pax Discount
+function checkPaxDiscountTest (input) {
+    var paxresult = isValidPaxNum(input);
+    var paxDiscount = 'No discount';
+    var discount = -1;
+    let discountList = [
+        { name: 'PAXDISCOUNT50', pax: 50, price: 1000 },
+        { name: 'PAXDISCOUNT100', pax: 100, price: 2000 },
+        { name: 'PAXDISCOUNT120', pax: 120, price: 3000 },
+    ];
+
+    for(i = discountList.length -1; i >= 0; i--) {
+        if(input >= discountList[i].pax) {
+            discount = i;
+            i = -1;
+        }
+    }
+    
+    if(paxresult[0]) {
+        if(discount >= 0) {
+            paxDiscount = discountList[discount];     
+            return paxDiscount;
+        }   
+        return paxDiscount;
+    } else return paxresult[1];
+}
+
 // Venue
 function isValidVenue(garden, sunroom, terrace) {
     let venue = garden || sunroom || terrace;
@@ -2939,5 +3026,6 @@ if (typeof window == 'undefined') {
         checkStringInput,
         formatAsDecimal,
         formatAsNumber,
+        checkPaxDiscountTest
     };
 }

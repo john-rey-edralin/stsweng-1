@@ -4,7 +4,7 @@ const { isValidDate, isValidName,
 		isValidVenue, isValidPackage, 
 		isAddFoodNameinList, isValidQuantity,
 		isValidModeOfPayment, isValidPrice,
-		isValidTotalAmountPaid } 
+		isValidTotalAmountPaid, checkPaxDiscountTest } 
         = require('../public/js/event-tracker-form.js');
 
 
@@ -528,9 +528,92 @@ describe('Event Package', () => {
 	}); 
 });
 
+//Test Suite #11
+describe('Adding Pax Discount', () => {
+	// Unit Test #1
+	it('Input (49) did not meet the least pax (50) for the discount.', () => {
+		const testVal = 49;
+
+		const resVal = checkPaxDiscountTest(testVal);
+
+		expect(resVal).toEqual('No discount');
+	}); 
+
+	// Unit Test #2
+	it ('Input (50) is included and the least pax in the pax discount list', () => {
+		const testVal = 50;
+
+		const resVal = checkPaxDiscountTest(testVal);
+
+		expect(resVal).toEqual({ name: 'PAXDISCOUNT50', pax: 50, price: 1000 });
+	});	
+
+	// Unit Test #3
+	it ('Input (60) is not in the pax discount list but greater than the least pax (50) in the list', () => {
+		const testVal = 60;
+
+		const resVal = checkPaxDiscountTest(testVal);
+
+		expect(resVal).toEqual({ name: 'PAXDISCOUNT50', pax: 50, price: 1000 });
+	});	
+
+	// Unit Test #4
+	it ('Input (119) is not in the pax discount list but greater than one of the pax (100) in the list', () => {
+		const testVal = 119;
+
+		const resVal = checkPaxDiscountTest(testVal);
+
+		expect(resVal).toEqual({ name: 'PAXDISCOUNT100', pax: 100, price: 2000 });
+	});	
+
+	// Unit Test #5
+	it ('Input (120) is included and the highest pax in the pax discount list', () => {
+		const testVal = 120;
+
+		const resVal = checkPaxDiscountTest(testVal);
+
+		expect(resVal).toEqual({ name: 'PAXDISCOUNT120', pax: 120, price: 3000 });
+	}); 
+
+	// Unit Test #6
+	it('Invalid pax input (zero) - no discount', () => {
+		const testVal = 0;
+
+		const resVal = checkPaxDiscountTest(testVal);
+
+		expect(resVal).toEqual('Number of pax cannot be zero.');
+	}); 
+
+	// Unit Test #7
+	it ('Invalid pax input (negative number) - no discount', () => {
+		const testVal = -1;
+
+		const resVal = checkPaxDiscountTest(testVal);
+
+		expect(resVal).toEqual('Number of pax cannot be negative.');
+	});	
+    
+	// Unit Test #8
+	it ('Invalid pax input (exceeded maximum pax: >120)- no discount', () => {
+		const testVal = 121;
+
+		const resVal = checkPaxDiscountTest(testVal);
+
+		expect(resVal).toEqual('Number of pax cannot be more than 120.');
+	});
+
+    // Unit Test #9
+	it ('Invalid pax input(empty) - no discount', () => {
+		const testVal = '';
+
+		const resVal = checkPaxDiscountTest(testVal);
+
+		expect(resVal).toEqual('Number of pax cannot be zero.');
+	});	
+});
 
 // ------------------ MENU DETAILS ------------------ //
-// Test Suite #11
+// Test Suite #12
 describe('Additional Food Name', () => {
 	// Unit Test #1
 	it('No input', () => {
@@ -564,7 +647,7 @@ describe('Additional Food Name', () => {
 
 
 // ------------------ PAYMENT DETAILS ------------------ //
-// Test Suite #12
+// Test Suite #13
 describe('Mode of Payment', () => {
 	// Unit Test #1
 	it('Selected none', () => {
@@ -612,7 +695,7 @@ describe('Mode of Payment', () => {
 	});	
 });
 
-// Test Suite #13
+// Test Suite #14
 describe('Total Amount Paid', () => {
 	// Unit Test #1
 	it('No payment yet.', () => {
