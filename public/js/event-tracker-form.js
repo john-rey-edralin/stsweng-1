@@ -1422,12 +1422,15 @@ function initializeRealTimeValidation() {
     });
 
     $('#event-pax').on('change', function () {
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
         var result = isValidPaxNum($('#event-pax').val());
         if (!result[0])
             displayError($('#event-pax'), $('#event-pax-error'), result[1]);
-        else
+        else { 
             resetField($('#event-pax'), $('#event-pax-error'));
-        checkPaxDiscount($('#event-pax').val());             
+            checkPaxDiscount($('#event-pax').val()); 
+        }            
         $('#submit').attr('disabled', checkIfFilledEventFields());
     });
 
@@ -2713,14 +2716,12 @@ function checkPaxDiscount (input) {
         }
     }
 
-    if($('.paxdiscount').html())
-        removeDiscount('.cancel-pax-discount');  
     if(discount >= 0) {
         paxDiscount = discountList[discount];
         $('#discount-name').val(paxDiscount.name);
         $('#discount-price').val(paxDiscount.price);        
         addPaxDiscount();
-    }      
+    } 
 
     return paxDiscount;
 }
