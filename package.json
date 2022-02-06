@@ -3,9 +3,9 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "test": "jest tests/*",
-        "start": "nodemon index.js",
-        "build": "jest && node index.js"
+        "test": "jest suites/*",
+        "dev": "nodemon index.js",
+        "start": "node index.js"
     },
     "repository": {
         "type": "git",

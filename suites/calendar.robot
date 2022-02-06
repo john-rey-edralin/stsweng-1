@@ -16,7 +16,8 @@ Check Calendar
     Element Should Contain      xpath:/html/body/div/div/div/div[1]/h2      January 2022
     Click Element        xpath:/html/body/div/div/div/div[1]/span[2]
     Click Element       xpath:/html/body/div/div/div/div[3]/div[1]/div[3]
-    Element Should Contain      xpath:/html/body/div[1]/div/div/div[3]/div[1]/div[4]/div/div/div[2]     JR
+    click Element       xpath://*[@id="list-61d28b1c72e622a7e9f278b4"]
+    Wait Until Page Contains        View Event
     [Teardown]      Close Browser
 
 

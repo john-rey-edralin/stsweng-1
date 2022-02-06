@@ -9,8 +9,8 @@ Resource        resource.robot
 Save Edited Pencilbookings Event
     Open Browser To Pencilbookings Event Page
     Input Client Mobile Number      ${MOBILE NUMBER} 
-    # Input Type Of Event     ${TYPE EVENT} 
     Input Number Of Pax     ${NUMBER PAX}  
+    Input Type Of Event     ${TYPE EVENT} 
     Select Time Of Event
     Select Event Package 6 Variants
     Wait Until Element Is Visible       xpath:/html/body/div[1]/div/form/div[6]/div/a/button
