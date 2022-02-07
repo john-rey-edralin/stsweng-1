@@ -9,7 +9,7 @@ jobs:
     - node
     branches:
       only:
-      - develop-new
+        - develop-new
     cache:
       directories:
       - node_modules
@@ -28,7 +28,7 @@ jobs:
     - node
     branches:
       only:
-      - develop-new
+        - develop-new
     cache:
       directories:
       - node_modules
