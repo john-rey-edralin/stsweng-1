@@ -47,6 +47,7 @@ const controller = {
             employees: formattedEmployees,
             activities: activities,
             username: req.session.user.username,
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('admin-home', data);
@@ -249,7 +250,8 @@ const controller = {
         const discounts = await Discount.find();
         let data = {
             discounts: discounts,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin,
         };
         res.render('event-tracker-settings', data);
     },
