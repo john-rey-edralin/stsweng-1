@@ -8,12 +8,12 @@ Resource        resource.robot
 *** Test Cases ***
 Print Pencilbooking Event
     Go To Pencilbookings
-    Go To Receipt
+    Go To Receipt Pencilbooking
     [Teardown]      Close Browser
 
 Print Reservation Event
     Go To Reservations
-    Go To Receipt
+    Go To Receipt Reservation
     [Teardown]      Close Browser
 
 

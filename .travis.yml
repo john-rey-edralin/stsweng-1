@@ -1,0 +1,77 @@
+jobs:
+ inlcude:
+  - stage: "Pull Request"
+    if: type IN (pull_request) AND branch = develop-new
+    name: "Unit Tests"
+    sudo: false
+    language: node_js
+    node_js:
+    - node
+    branches:
+      only:
+        - develop-new
+    cache:
+      directories:
+      - node_modules
+    before_install:
+    - npm update
+    install:
+    - npm install
+    script:
+    - npm test
+  - stage: "Commit"
+    if: type IN (push) AND branch = develop-new
+    name: "Unit Tests"
+    sudo: false
+    language: node_js
+    node_js:
+    - node
+    branches:
+      only:
+        - develop-new
+    cache:
+      directories:
+      - node_modules
+    before_install:
+    - npm update
+    install:
+    - npm install
+    script:
+    - npm test
+    before_deploy:
+    - rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install faraday -v 1.8.0
+    deploy:
+      provider: heroku
+      skip_cleanup: true
+      keep-history: true
+      api-key: 4f1e3948-f585-43df-bfc9-5c19870116c8
+      app: balai-yllana
+      on:
+        branch: develop-new
+    
+  # - name: "Robot Tests"
+  #   dist: xenial
+  #   language: node_js
+  #   node_js:
+  #   - node
+  #   cache: npm
+  #   branches:
+  #    only: develop-new
+  #   global:
+  #    - MOZ_HEADLESS=1
+  #   addons:
+  #    firefox: latest
+  #   before-install:
+  #   - wget -N https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz -P ~/
+  #   - tar -xzf ~/geckodriver-v0.26.0-linux64.tar.gz -C ~/
+  #   - rm ~/geckodriver-v0.26.0-linux64.tar.gz
+  #   - sudo mv -f ~/geckodriver /usr/local/share
+  #   - sudo chmod +x /usr/local/share/geckodriver
+  #   - sudo ln -s /usr/local/share/geckodriver /usr/local/bin/geckodriver
+  #   install:
+  #   - pip install robotframework
+  #   - pip install --upgrade robotframework-seleniumlibrary
+  #   script:
+  #   - npm install
+  #   - node index.js &
+  #   - robot suites

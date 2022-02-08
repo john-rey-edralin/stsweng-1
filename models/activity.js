@@ -1,11 +1,12 @@
 var mongoose = require('mongoose');
 
 var ActivitySchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
     },
     timestamp: {
         type: Date,
+        default: new Date(),
     },
     activityName: {
         type: String,

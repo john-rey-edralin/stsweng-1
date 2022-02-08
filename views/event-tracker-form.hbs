@@ -238,37 +238,37 @@
                         <div class="mx-5 p-3 text-center">Choose the food to be served at the event by clicking the
                             respective button. Clicking again will deselect the option. Additional food
                             options may also be added below.</div>
-
+<div id="menu-package">
                         {{!-- MENU BUTTONS --}}
                         <div class="d-flex flex-row flex-wrap justify-content-center">
                             <button id="menu-salad-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
                                 type="button" data-bs-toggle="collapse" data-bs-target="#menu-salad-contents"
-                                aria-expanded="false" aria-controls="menu-salad-contents">
+                                aria-expanded="false" aria-controls="menu-salad-contents" disabled>
                                 SALAD
                             </button>
                             <button id="menu-pasta-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
                                 type="button" data-bs-toggle="collapse" data-bs-target="#menu-pasta-contents"
-                                aria-expanded="false" aria-controls="menu-pasta-contents">
+                                aria-expanded="false" aria-controls="menu-pasta-contents" disabled>
                                 PASTA
                             </button>
                             <button id="menu-beef-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
                                 type="button" data-bs-toggle="collapse" data-bs-target="#menu-beef-contents"
-                                aria-expanded="false" aria-controls="menu-beef-contents">
+                                aria-expanded="false" aria-controls="menu-beef-contents" disabled>
                                 BEEF
                             </button>
                             <button id="menu-pork-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
                                 type="button" data-bs-toggle="collapse" data-bs-target="#menu-pork-contents"
-                                aria-expanded="false" aria-controls="menu-pork-contents">
+                                aria-expanded="false" aria-controls="menu-pork-contents" disabled>
                                 PORK
                             </button>
                             <button id="menu-chicken-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
                                 type="button" data-bs-toggle="collapse" data-bs-target="#menu-chicken-contents"
-                                aria-expanded="false" aria-controls="menu-chicken-contents">
+                                aria-expanded="false" aria-controls="menu-chicken-contents" disabled>
                                 CHICKEN
                             </button>
                             <button id="menu-fish-button" class="btn menu-button border rounded-pill mx-2 px-4 py-2"
                                 type="button" data-bs-toggle="collapse" data-bs-target="#menu-fish-contents"
-                                aria-expanded="false" aria-controls="menu-fish-contents">
+                                aria-expanded="false" aria-controls="menu-fish-contents" disabled>
                                 FISH
                             </button>
                         </div>
@@ -401,7 +401,7 @@
                                 </div>
                             </div>
                         </div>
-
+</div>
                         {{!-- RICE AND ICED TEA --}}
                         <div id="menu-ricedtea-contents" class="menu-item-content">
                             <hr>
@@ -477,7 +477,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn additional-add-button">Add
+                                            <button type="button" class="btn additional-add-button" disabled>Add
                                                 Item</button>
                                         </div>
                                     </div>
@@ -554,7 +554,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn extra-charges-add-button">Add
+                                        <button type="button" class="btn extra-charges-add-button" disabled>Add
                                             Item</button>
                                     </div>
                                 </div>
@@ -614,7 +614,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn discount-add-button">Add
+                                        <button type="button" class="btn discount-add-button" disabled>Add
                                             Item</button>
                                     </div>
                                 </div>

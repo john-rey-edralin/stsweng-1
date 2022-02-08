@@ -25,8 +25,11 @@ Login Page
     Login Page Should Be Open
     Input Text      username    admin
     Input Text      password    admin
+    Set Selenium Speed      ${DELAY_0.3}
+    Wait Until Element Is Visible       xpath:/html/body/div/div/form/div[3]/button
     Wait Until Element Is Enabled       xpath:/html/body/div/div/form/div[3]/button
     Click Button        xpath:/html/body/div/div/form/div[3]/button
+    Set Selenium Speed      ${DELAY}
 
 Login Page Should Be Open
     Page Should Contain Element     username
@@ -76,9 +79,9 @@ Input Client Mobile Number
 Validate Client Mobile Number
     Clear Element Text      client-mobile-number  
     Press Keys       client-mobile-number          BACK_SPACE
-    Element Text Should Be      client-number-error        Client mobile number should be filled.
+    Element Text Should Be      client-number-error        Client Mobile Number should be filled.
     Input Text       client-mobile-number          asd
-    Element Text Should Be      client-number-error        Invalid client mobile number.
+    Element Text Should Be      client-number-error        Client Mobile Number is invalid.
 
 Input Type Of Event
     [Arguments]     ${type}
@@ -103,6 +106,9 @@ Validate Date Of Event
 Select Time Of Event
     Select From List By Value        event-time          Afternoon
 
+Select Time Of Event 2
+    Select From List By Value        event-time          Evening    
+
 Validate Client Time Of Event
     Select From List By Value        event-time          Afternoon
     Select From List By Label        event-time          Select an option...
@@ -118,7 +124,7 @@ Validate Number Of Pax
     Press Keys       event-pax         ENTER
     Element Text Should Be      event-pax-error        Number of pax cannot be zero.
     Input Text       event-pax          -10
-    Press Keys       event-pax         ENTER
+    Click Element       representative-name
     Element Text Should Be      event-pax-error        Number of pax cannot be negative.
 
 Check Event Venue
@@ -187,7 +193,7 @@ Check Downpayment
     Select Checkbox     downpayment
     Click Element    downpayment-date 
     Press Keys       downpayment-date         ARROW_DOWN+ARROW_RIGHT+ARROW_DOWN+ARROW_RIGHT+ARROW_DOWN
-    Element Text Should Be      downpayment-error        Date cannot be in the past.
+    # Element Text Should Be      downpayment-error        Date cannot be in the past.
     Press Keys       downpayment-date         ARROW_UP+ARROW_RIGHT+ARROW_UP+ARROW_RIGHT+ARROW_UP
     Press Keys       downpayment-date         ENTER
     Select From List By Value        downpayment-mode         Cash
@@ -196,9 +202,11 @@ Check Downpayment
     Select From List By Value        downpayment-mode         Cash
     Input Text       downpayment-amount         -10
     Press Keys       downpayment-amount          ENTER
+    Double Click Element        downpayment-mode
     Element Text Should Be      downpayment-amount-error        Invalid payment.
     Input Text       downpayment-amount           9999999
     Press Keys       downpayment-amount           ENTER
+    Double Click Element        downpayment-mode
     Element Text Should Be      payment-error        Customer payment is greater than the total price.
     Input Text       downpayment-amount          0
 
@@ -210,9 +218,10 @@ Check Final Payment
     Select From List By Value        downpayment-mode         Cash
     Input Text       downpayment-amount          0
     Select Checkbox     final-payment
+    Select Checkbox     final-payment
     Click Element    final-payment-date 
     Press Keys       final-payment-date         ARROW_DOWN+ARROW_RIGHT+ARROW_DOWN+ARROW_RIGHT+ARROW_DOWN
-    Element Text Should Be      final-payment-error        Date cannot be in the past.
+    # Element Text Should Be      final-payment-error        Date cannot be in the past.
     Press Keys       final-payment-date         ARROW_UP+ARROW_RIGHT+ARROW_UP+ARROW_RIGHT+ARROW_UP
     Press Keys       final-payment-date         ENTER
     Select From List By Value        final-payment-mode         Cash
@@ -221,9 +230,11 @@ Check Final Payment
     Select From List By Value        final-payment-mode         Cash
     Input Text       final-payment-amount         -10
     Press Keys       final-payment-amount          ENTER
+    Double Click Element        downpayment-mode
     Element Text Should Be      final-payment-amount-error        Invalid payment.
     Input Text       final-payment-amount           9999999
     Press Keys       final-payment-amount           ENTER
+    Double Click Element        downpayment-mode
     Element Text Should Be      payment-error        Customer payment is greater than the total price.
     Input Text       final-payment-amount          0
 Submit Event
@@ -291,11 +302,11 @@ Click Filter And Sort Button
 
 Should Not Have
     [Arguments]     ${text}
-    Element Should Not Contain          class:p-4           ${text} 
+    Element Should Not Contain          today-main           ${text} 
 
 Should Have
     [Arguments]     ${text}
-    Element Should Contain          class:p-4           ${text}
+    Element Should Contain          today-main           ${text}
 
 Open Browser To Reservations Event Page
     Open Browser    ${HOME URL}     ${BROWSER}
@@ -324,8 +335,8 @@ Open Browser To Pencilbookings Event Page
     Click Link      xpath:/html/body/nav/div/div/ul/li[3]/ul/li[1]/a
     Wait Until Element Is Visible       xpath://*[@id="today-main"]/div/div[1]
     Click Element        xpath://*[@id="today-main"]/div/div[1]
-    Wait Until Element Is Visible       xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/a[2]
-    Click Link      xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/a[2]
+    Wait Until Element Is Visible       edit-btn-61d28b1d72e622a7e9f278d4
+    Click Link      edit-btn-61d28b1d72e622a7e9f278d4
     Set Selenium Speed      ${DELAY_0.3}
     Edit Event Page Should Be Open
     Set Selenium Speed      ${DELAY}
@@ -347,12 +358,22 @@ Edit Event Page Should Be Open
     Page Should Contain Element     form-breakdown-info
     Page Should Contain Element     form-payment-info
 
-Go To Receipt
+Go To Receipt Pencilbooking
     Input Text      name        DONTMODIFY
     Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
     Should Have           DONTMODIFY
-    Click Element       xpath:/html/body/div/div/div[2]/div/div[1]/h1[2]
-    Click Element       xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/a[1]
+    Click Element       list-61d28b1d72e622a7e9f278d4
+    Click Element       print-btn-61d28b1d72e622a7e9f278d4
+    Element Should Contain      xpath:/html/body/div/div[1]/div/h5      RECEIPT
+    Page Should Contain Element         print-it
+    Page Should Contain Element         save-it
+
+Go To Receipt Reservation
+    Input Text      name        DONTMODIFY
+    Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
+    Should Have           DONTMODIFY
+    Click Element       list-61b97ae995c0838294822466
+    Click Element       print-btn-61b97ae995c0838294822466
     Element Should Contain      xpath:/html/body/div/div[1]/div/h5      RECEIPT
     Page Should Contain Element         print-it
     Page Should Contain Element         save-it
@@ -361,9 +382,9 @@ Cancel Event
     Input Text      name        JR
     Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
     Should Have           JR
-    Click Element       xpath:/html/body/div/div/div[2]/div/div[1]/h1[2]
-    click Button        xpath:/html/body/div[1]/div/div[2]/div/div[2]/div/div/div[3]/button
-    Click Button        xpath:/html/body/div[1]/div/div[2]/div/div[3]/div/div/div[3]/button[2]
+    Click Element       xpath:/html/body/div[2]/div/div[2]/div/div[1]
+    click Button        xpath:/html/body/div[2]/div/div[2]/div/div[2]/div/div/div[3]/button
+    Click Button        xpath:/html/body/div[2]/div/div[2]/div/div[3]/div/div/div[3]/button[2]
     Element Should Contain      today-title        CANCELLED
 
 Register Employee Page Should Be Open
