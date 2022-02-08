@@ -7,6 +7,8 @@ let gardenPackageList = [];
 let sunroomPackageList = [];
 let terracePackageList = [];
 let additionalPackageList = [];
+let discountList = [];
+let discountDescList = [];
 let variantCount = 0;
 
 let curreventID;
@@ -282,6 +284,13 @@ function retrieveInfoFromDB() {
                         ')',
                 })
             );
+        });
+
+        $.get('/admin/discount', function (result) {
+            for (let j = 0; j < result.length; j++) {
+                discountList.push(result[j]);
+                discountDescList.push(result[j].description);
+            }
         });
 
         addExistingFields();
@@ -2711,14 +2720,9 @@ function addExistingFields() {
 function checkPaxDiscount (input) {
     var paxDiscount = 'No discount';
     var discount = -1;
-    let discountList = [
-        { name: '10%PAXDISCOUNT50', pax: 50, discount: 10 },
-        { name: '20%PAXDISCOUNT100', pax: 100, discount: 20 },
-        { name: '30%PAXDISCOUNT120', pax: 120, discount: 30 },
-    ];
 
     for(i = discountList.length -1; i >= 0; i--) {
-        if(input >= discountList[i].pax) {
+        if(input >= discountList[i].minimumPax) {
             discount = i;
             i = -1;
         }
@@ -2726,8 +2730,8 @@ function checkPaxDiscount (input) {
 
     if(discount >= 0) {
         paxDiscount = discountList[discount];
-        var discountprice = calculateNoDiscountTotal() * (paxDiscount.discount / 100);
-        $('#discount-name').val(paxDiscount.name);
+        var discountprice = calculateNoDiscountTotal() * (paxDiscount.rate / 100);
+        $('#discount-name').val(paxDiscount.description);
         $('#discount-price').val(discountprice);        
         addPaxDiscount();
     } 
@@ -2936,18 +2940,18 @@ function isValidPaxNum(input) {
 }
 
 // Checking Number of Pax for Pax Discount
-function checkPaxDiscountTest (input, total) {
+function checkPaxDiscountTest (input) {
     var paxresult = isValidPaxNum(input);
     var paxDiscount = 'No discount';
     var discount = -1;
     let discountList = [
-        { name: '10%PAXDISCOUNT50', pax: 50, discount: 10 },
-        { name: '20%PAXDISCOUNT100', pax: 100, discount: 20 },
-        { name: '30%PAXDISCOUNT120', pax: 120, discount: 30 },
+        { description: '10%PAXDISCOUNT50', rate: 10, minimumPax: 50 },
+        { description: '20%PAXDISCOUNT100', rate: 20, minimumPax: 100 },
+        { description: '30%PAXDISCOUNT120', rate: 30, minimumPax: 120 },
     ];
 
     for(i = discountList.length -1; i >= 0; i--) {
-        if(input >= discountList[i].pax) {
+        if(input >= discountList[i].minimumPax) {
             discount = i;
             i = -1;
         }
