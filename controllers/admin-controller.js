@@ -45,7 +45,7 @@ const controller = {
         const data = {
             employees: formattedEmployees,
             activities: activities,
-            username: req.session.user.username
+            username: req.session.user.username,
         };
 
         res.render('admin-home', data);
@@ -72,7 +72,11 @@ const controller = {
             emergencyContactName,
             emergencyContactNum,
         } = req.body;
-        
+
+        if (typeof emergencyContactNum === 'object') {
+            emergencyContactNum.toString = () => '';
+        }
+
         const hash = await bcrypt.hash(password, saltRounds);
         const isExistingEmployee = await Employee.findOne({ username });
 
@@ -208,10 +212,10 @@ const controller = {
         });
         res.json(activity);
     },
-    
+
     putGiveEmployeeAccess: async function (req, res) {
         const username = req.body.username;
-        console.log(username)
+        console.log(username);
         const doc = await Employee.findOneAndUpdate(
             { username: username },
             { hasAccess: true },
@@ -223,7 +227,7 @@ const controller = {
 
     putRemoveEmployeeAccess: async function (req, res) {
         const username = req.body.username;
-        console.log(username)
+        console.log(username);
         const doc = await Employee.findOneAndUpdate(
             { username: username },
             { hasAccess: false },
@@ -231,7 +235,7 @@ const controller = {
         );
 
         res.json(doc);
-    }
+    },
 };
 
 module.exports = controller;
