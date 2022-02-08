@@ -246,7 +246,9 @@ const controller = {
     },
 
     getEventSettings: async function (req, res) {
+        const discounts = await Discount.find();
         let data = {
+            discounts: discounts,
             username: req.session.user.username
         };
         res.render('event-tracker-settings', data);

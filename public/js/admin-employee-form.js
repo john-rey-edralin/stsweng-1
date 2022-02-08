@@ -367,8 +367,8 @@ function submitForm() {
         };
 
         // makes a POST request using AJAX to add the event to the database
-        $.post('/admin/register', data, function (result) {
-            window.location.href = '/admin';
+        $.post('/settings/event/discount', data, function (result) {
+            window.location.href = '/settings/event';
         });
     });
 }

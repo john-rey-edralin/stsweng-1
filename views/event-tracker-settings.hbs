@@ -16,7 +16,7 @@
     <script type="text/javascript" src="/js/intlTelInput-jquery.min.js"></script>
     <script type="text/javascript" src="/js/validator.min.js"></script>
     <script type="text/javascript" src="/js/admin.js"></script>
-    <script type="text/javascript" src="/js/admin-employee-form.js"></script>
+    <script type="text/javascript" src="/js/event-tracker-settings.js"></script>
 </head>
 
 <body class="d-flex flex-column">
@@ -58,7 +58,8 @@
                 <div class="d-flex flex-row">
                     <h4 class="fw-bolder mt-1 ms-2 text-black-50">Discounts List</h4>
 
-                    <button class="ms-auto" data-bs-target="#discount-add" data-bs-toggle="modal" data-bs-dismiss="modal">
+                    <button class="ms-auto" data-bs-target="#discount-add" data-bs-toggle="modal"
+                        data-bs-dismiss="modal">
                         <span class="material-icons-two-tone md-36">add</span>
                     </button>
                 </div>
@@ -74,23 +75,23 @@
                         <div class="modal-header">
                             <h5 class="modal-title"><strong>Add Discount</strong></h5>
                         </div>
-                        <div class="modal-body p-4 ui-front">
+                        <form id="add-discount">
+                            <div class="modal-body p-4 ui-front">
                                 <div class="form-group my-3">
                                     <label for="discount-name">Discount Name</label>
-                                    <input type="text" class="form-control w-100"
-                                        id="discount-name" name="description">
+                                    <input type="text" class="form-control w-100" id="discount-name">
                                     <div id="discount-name-help" class="form-text">Short name or description.
                                     </div>
                                 </div>
                                 <div class="form-group my-3">
                                     <label for="pax">Number of Pax</label>
-                                    <input type="number" class="form-control w-100" id="pax" name="minimumPax">
+                                    <input type="number" class="form-control w-100" id="pax">
                                     <div id="pax-help" class="form-text">Minimum number of pax to apply discount.
                                     </div>
                                 </div>
                                 <div class="form-group my-3">
                                     <label for="percentage">Percentage of Discount</label>
-                                    <input type="number" class="form-control w-100" id="percentage" name="rate">
+                                    <input type="number" class="form-control w-100" id="percentage">
                                     <div id="percentage" class="form-text">Percent discounted.
                                     </div>
                                 </div>
@@ -100,11 +101,14 @@
                                     <div class="text-center text-danger error" id="pax-error"></div>
                                     <div class="text-center text-danger error" id="percentage-error"></div>
                                 </strong>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" id="discount-create-btn">Create Discount</button>
-                        </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success" id="discount-create-btn">Create
+                                    Discount</button>
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
