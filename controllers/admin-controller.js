@@ -244,6 +244,13 @@ const controller = {
         const result = await Discount.create({ description, rate, minimumPax });
         res.json(result);
     },
+
+    getEventSettings: async function (req, res) {
+        let data = {
+            username: req.session.user.username
+        };
+        res.render('event-tracker-settings', data);
+    },
 };
 
 module.exports = controller;

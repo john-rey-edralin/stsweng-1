@@ -28,6 +28,8 @@ app.get('/admin/activity/:username', adminController.getEmployeeActivity);
 app.put('/admin/give', adminController.putGiveEmployeeAccess);
 app.put('/admin/remove', adminController.putRemoveEmployeeAccess);
 app.get('/admin/activity/recent', adminController.getRecentActivity);
+
+app.get('/settings/event', adminController.getEventSettings);
 app.get('/admin/discount', adminController.getDiscounts);
 app.post('/admin/discount', adminController.postRegisterDiscount);
 
