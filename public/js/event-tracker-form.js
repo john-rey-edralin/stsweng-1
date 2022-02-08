@@ -286,7 +286,7 @@ function retrieveInfoFromDB() {
             );
         });
 
-        $.get('/admin/discount', function (result) {
+        $.get('/settings/event/discount', function (result) {
             for (let j = 0; j < result.length; j++) {
                 discountList.push(result[j]);
                 discountDescList.push(result[j].description);
