@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const Employee = require('../models/employee.js');
 const Activity = require('../models/activity.js');
+const Discount = require('../models/discount.js');
 const {
     isValidPassword,
     isOldPasswordSameAsPassword,
@@ -45,7 +46,8 @@ const controller = {
         const data = {
             employees: formattedEmployees,
             activities: activities,
-            username: req.session.user.username
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin,
         };
 
         res.render('admin-home', data);
@@ -72,7 +74,7 @@ const controller = {
             emergencyContactName,
             emergencyContactNum,
         } = req.body;
-        
+
         const hash = await bcrypt.hash(password, saltRounds);
         const isExistingEmployee = await Employee.findOne({ username });
 
@@ -208,10 +210,10 @@ const controller = {
         });
         res.json(activity);
     },
-    
+
     putGiveEmployeeAccess: async function (req, res) {
         const username = req.body.username;
-        console.log(username)
+        console.log(username);
         const doc = await Employee.findOneAndUpdate(
             { username: username },
             { hasAccess: true },
@@ -223,7 +225,7 @@ const controller = {
 
     putRemoveEmployeeAccess: async function (req, res) {
         const username = req.body.username;
-        console.log(username)
+        console.log(username);
         const doc = await Employee.findOneAndUpdate(
             { username: username },
             { hasAccess: false },
@@ -231,7 +233,28 @@ const controller = {
         );
 
         res.json(doc);
-    }
+    },
+
+    getDiscounts: async function (req, res) {
+        const discounts = await Discount.find();
+        res.json(discounts);
+    },
+
+    postRegisterDiscount: async function (req, res) {
+        const { description, rate, minimumPax } = req.body;
+        const result = await Discount.create({ description, rate, minimumPax });
+        res.json(result);
+    },
+
+    getEventSettings: async function (req, res) {
+        const discounts = await Discount.find();
+        let data = {
+            discounts: discounts,
+            username: req.session.user.username,
+            isAdmin: req.session.isAdmin,
+        };
+        res.render('event-tracker-settings', data);
+    },
 };
 
 module.exports = controller;
