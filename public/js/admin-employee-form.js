@@ -47,15 +47,43 @@ function setRequiredFields() {
 }
 
 function checkStringInput(input) {
-    const blacklist = ["~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")",
-        "_", "=", "+", "{", "}", "[", "]", "|", "\\", ";", ":", "\'",
-        "\"", ".", ",", "<", ">", "/", "?"];
+    const blacklist = [
+        '~',
+        '`',
+        '!',
+        '@',
+        '#',
+        '$',
+        '%',
+        '^',
+        '&',
+        '*',
+        '(',
+        ')',
+        '_',
+        '=',
+        '+',
+        '{',
+        '}',
+        '[',
+        ']',
+        '|',
+        '\\',
+        ';',
+        ':',
+        "'",
+        '"',
+        '.',
+        ',',
+        '<',
+        '>',
+        '/',
+        '?',
+    ];
     var flag = false;
 
-    for (const item of blacklist)
-        if (input.indexOf(item) != -1)
-            flag = true;
-  
+    for (const item of blacklist) if (input.indexOf(item) != -1) flag = true;
+
     $('input[required]').siblings('label').addClass('required');
     $('select[required]').siblings('label').addClass('required');
 }
@@ -221,21 +249,30 @@ function initializeEditEmployeeRealTimeValidation() {
     newPasswordList.keyup(validateAllFields);
     confirmNewPasswordList.keyup(validateAllFields);
 
-    function validateAllFields () {
-        const isValidEmployeeNumber = validateEmployeeNumber($(`#employee-mobile-number-${currentEmployeeId}`));
-        const isValidEmergencyNumber = validateEmergencyContactNumber($(`#emergency-contact-mobile-number-${currentEmployeeId}`));
-        const isValidReenterPassword = validateReenterPassword($(`#reenter-password-${currentEmployeeId}`));
-        const isValidNewPassword = validateNewPassword($(`#new-password-${currentEmployeeId}`));
+    function validateAllFields() {
+        const isValidEmployeeNumber = validateEmployeeNumber(
+            $(`#employee-mobile-number-${currentEmployeeId}`)
+        );
+        const isValidEmergencyNumber = validateEmergencyContactNumber(
+            $(`#emergency-contact-mobile-number-${currentEmployeeId}`)
+        );
+        const isValidReenterPassword = validateReenterPassword(
+            $(`#reenter-password-${currentEmployeeId}`)
+        );
+        const isValidNewPassword = validateNewPassword(
+            $(`#new-password-${currentEmployeeId}`)
+        );
 
-        if (isValidEmployeeNumber && 
+        if (
+            isValidEmployeeNumber &&
             isValidEmergencyNumber &&
             isValidNewPassword &&
-            isValidReenterPassword) {
+            isValidReenterPassword
+        ) {
             enableButton($(`#edit-btn-${currentEmployeeId}`));
         } else {
-            disableButton($(`#edit-btn-${currentEmployeeId}`));   
-        } 
-            
+            disableButton($(`#edit-btn-${currentEmployeeId}`));
+        }
     }
 
     function validateEmployeeNumber(field) {
@@ -247,10 +284,7 @@ function initializeEditEmployeeRealTimeValidation() {
             );
             return false;
         } else if (field.intlTelInput('isValidNumber')) {
-            resetField(
-                field,
-                $(`#employee-number-error-${currentEmployeeId}`)
-            );
+            resetField(field, $(`#employee-number-error-${currentEmployeeId}`));
             return true;
         } else {
             displayError(
@@ -262,15 +296,12 @@ function initializeEditEmployeeRealTimeValidation() {
         }
     }
 
-    function validateEmergencyContactNumber (field) {
+    function validateEmergencyContactNumber(field) {
         if (
             field.intlTelInput('isValidNumber') ||
             validator.isEmpty(field.val())
         ) {
-            resetField(
-                field,
-                $(`#ec-number-error-${currentEmployeeId}`)
-            );
+            resetField(field, $(`#ec-number-error-${currentEmployeeId}`));
             return true;
         } else {
             displayError(
@@ -283,9 +314,7 @@ function initializeEditEmployeeRealTimeValidation() {
     }
 
     function validateNewPassword(field) {
-        const confirmNewPassword = $(
-            `#reenter-password-${currentEmployeeId}`
-        );
+        const confirmNewPassword = $(`#reenter-password-${currentEmployeeId}`);
         if (
             !isPasswordInvalid(field.val()) &&
             field.val() === confirmNewPassword.val()
@@ -294,10 +323,7 @@ function initializeEditEmployeeRealTimeValidation() {
                 confirmNewPassword,
                 $(`#password-error-${currentEmployeeId}`)
             );
-            resetField(
-                field,
-                $(`#password-error-${currentEmployeeId}`)
-            );
+            resetField(field, $(`#password-error-${currentEmployeeId}`));
             return true;
         } else {
             displayError(
@@ -313,24 +339,18 @@ function initializeEditEmployeeRealTimeValidation() {
 
     function validateReenterPassword(field) {
         const newPassword = $(`#new-password-${currentEmployeeId}`);
-            if (field.val() === newPassword.val()) {
-                resetField(
-                    field,
-                    $(`#password-error-${currentEmployeeId}`)
-                );
-                resetField(
-                    newPassword,
-                    $(`#password-error-${currentEmployeeId}`)
-                );
-                return true;
-            } else {
-                displayError(
-                    field,
-                    $(`#password-error-${currentEmployeeId}`),
-                    'Password does not match.'
-                );
-                return false;
-            }
+        if (field.val() === newPassword.val()) {
+            resetField(field, $(`#password-error-${currentEmployeeId}`));
+            resetField(newPassword, $(`#password-error-${currentEmployeeId}`));
+            return true;
+        } else {
+            displayError(
+                field,
+                $(`#password-error-${currentEmployeeId}`),
+                'Password does not match.'
+            );
+            return false;
+        }
     }
 
     function changeCurrentEmployeeId(event) {
@@ -360,14 +380,24 @@ function submitForm() {
             password: $('#password').val(),
             name: $('#employee-name').val(),
             contactNum: $('#employee-mobile-number').intlTelInput('getNumber'),
-            emergencyContactName: $('#employee-contact-name').val(),
+            emergencyContactName: $('#employee-contact-name').val() || '',
             emergencyContactNum: $(
                 '#employee-contact-mobile-number'
             ).intlTelInput('getNumber'),
         };
 
         // makes a POST request using AJAX to add the event to the database
-        $.post('/admin/register', data, function (result) {
+        // $.post('/admin/register', data, function (result) {
+        //     window.location.href = '/admin';
+        // });
+
+        fetch('/admin/register', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(() => {
             window.location.href = '/admin';
         });
     });
