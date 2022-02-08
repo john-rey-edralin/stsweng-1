@@ -75,6 +75,10 @@ const controller = {
             emergencyContactNum,
         } = req.body;
 
+        if (typeof emergencyContactNum === 'object') {
+            emergencyContactNum.toString = () => '';
+        }
+
         const hash = await bcrypt.hash(password, saltRounds);
         const isExistingEmployee = await Employee.findOne({ username });
 
