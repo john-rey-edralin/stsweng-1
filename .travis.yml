@@ -21,7 +21,7 @@ jobs:
     - npm test
   - stage: "Commit"
     if: type IN (push) AND branch = develop-new
-    name: "Unit Tests"
+    name: "Tests"
     sudo: false
     language: node_js
     node_js:
@@ -38,6 +38,7 @@ jobs:
     - npm install
     script:
     - npm test
+    - npm int-test
     before_deploy:
     - rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install faraday -v 1.8.0
     deploy:

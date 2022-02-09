@@ -4,6 +4,7 @@
     "main": "index.js",
     "scripts": {
         "test": "jest tests/*",
+        "int-test": "jest int-tests/*",
         "dev": "nodemon index.js",
         "start": "node index.js"
     },
