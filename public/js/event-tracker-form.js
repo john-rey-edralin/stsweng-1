@@ -7,6 +7,8 @@ let gardenPackageList = [];
 let sunroomPackageList = [];
 let terracePackageList = [];
 let additionalPackageList = [];
+let discountList = [];
+let discountPaxList = [];
 let variantCount = 0;
 
 let curreventID;
@@ -284,6 +286,15 @@ function retrieveInfoFromDB() {
             );
         });
 
+        $.get('/settings/event/discount', function (result) {
+            for (let j = 0; j < result.length; j++) {
+                discountList.push(result[j]);
+                discountPaxList.push(result[j].minimumPax);
+            }
+            discountPaxList.sort(function(a, b){return b - a});
+            discountList.sort((a, b) => {return b.minimumPax - a.minimumPax;});
+        });
+
         addExistingFields();
     });
 }
@@ -368,6 +379,10 @@ function initializeEventFields() {
         updateBreakdownTable();
     });
     $('#additional-pax').on('change', function () {
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        if(isValidPaxNum($('#event-pax').val())[0]) 
+            checkPaxDiscount($('#event-pax').val());
         updateFoodQuantity();
         updateBreakdownTable();
     });
@@ -416,6 +431,10 @@ function initializeMenuFields() {
 
     $('.additional-add-button').click(function () {
         addAdditionalItem();
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        if(isValidPaxNum($('#event-pax').val())[0]) 
+            checkPaxDiscount($('#event-pax').val());
     });
 
     $('#additional-name').change(function () {
@@ -451,6 +470,10 @@ function initializeTransactionFields() {
 
     $('.extra-charges-add-button').click(function () {
         addExtraCharge();
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        if(isValidPaxNum($('#event-pax').val())[0]) 
+            checkPaxDiscount($('#event-pax').val());
     });
 
     $('#extra-charges-name').change(function () {
@@ -1435,6 +1458,10 @@ function initializeRealTimeValidation() {
     });
 
     $('.venue-checkbox').change(function () {
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        if(isValidPaxNum($('#event-pax').val())[0]) 
+            checkPaxDiscount($('#event-pax').val());
         let garden = $('#venue-garden').is(':checked');
         let sunroom = $('#venue-sunroom').is(':checked');
         let terrace = $('#venue-terrace').is(':checked');
@@ -1448,6 +1475,10 @@ function initializeRealTimeValidation() {
     });
 
     $('.package').change(function () {
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        if(isValidPaxNum($('#event-pax').val())[0]) 
+            checkPaxDiscount($('#event-pax').val());
         let garden = $('#garden-options').val();
         let sunroom = $('#sunroom-options').val();
         let terrace = $('#terrace-options').val();
@@ -1997,6 +2028,14 @@ function calculateTotal() {
         calculateItemTotal($('.additional-item-amt')) +
         calculateItemTotal($('.extra-charges-item-amt')) -
         calculateItemTotal($('.discount-item-amt'))
+    );
+}
+
+function calculateNoDiscountTotal() {
+    return (
+        calculatePackageTotal() +
+        calculateItemTotal($('.additional-item-amt')) +
+        calculateItemTotal($('.extra-charges-item-amt'))
     );
 }
 
@@ -2698,14 +2737,9 @@ function addExistingFields() {
 function checkPaxDiscount (input) {
     var paxDiscount = 'No discount';
     var discount = -1;
-    let discountList = [
-        { name: 'PAXDISCOUNT50', pax: 50, price: 1000 },
-        { name: 'PAXDISCOUNT100', pax: 100, price: 2000 },
-        { name: 'PAXDISCOUNT120', pax: 120, price: 3000 },
-    ];
-
+    
     for(i = discountList.length -1; i >= 0; i--) {
-        if(input >= discountList[i].pax) {
+        if(input >= discountList[i].minimumPax) {
             discount = i;
             i = -1;
         }
@@ -2713,8 +2747,9 @@ function checkPaxDiscount (input) {
 
     if(discount >= 0) {
         paxDiscount = discountList[discount];
-        $('#discount-name').val(paxDiscount.name);
-        $('#discount-price').val(paxDiscount.price);        
+        var discountprice = calculateNoDiscountTotal() * (paxDiscount.rate / 100);
+        $('#discount-name').val(paxDiscount.description);
+        $('#discount-price').val(discountprice);        
         addPaxDiscount();
     } 
 
@@ -2927,13 +2962,13 @@ function checkPaxDiscountTest (input) {
     var paxDiscount = 'No discount';
     var discount = -1;
     let discountList = [
-        { name: 'PAXDISCOUNT50', pax: 50, price: 1000 },
-        { name: 'PAXDISCOUNT100', pax: 100, price: 2000 },
-        { name: 'PAXDISCOUNT120', pax: 120, price: 3000 },
+        { description: '10%PAXDISCOUNT50', rate: 10, minimumPax: 50 },
+        { description: '20%PAXDISCOUNT100', rate: 20, minimumPax: 100 },
+        { description: '30%PAXDISCOUNT120', rate: 30, minimumPax: 120 },
     ];
 
     for(i = discountList.length -1; i >= 0; i--) {
-        if(input >= discountList[i].pax) {
+        if(input >= discountList[i].minimumPax) {
             discount = i;
             i = -1;
         }
