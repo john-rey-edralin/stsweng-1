@@ -766,7 +766,7 @@ const eventController = {
             },
         });
 
-        const data = getEventsInMonth(month, year, events);
+        const data = getEventsInMonth.getEventsInMonth(month, year, events);
 
         data.username = req.session.user.username;
         data.isAdmin = req.session.isAdmin;
