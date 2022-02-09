@@ -1,7 +1,22 @@
+let discountList = [];
+let discountPaxList = [];
+
 if (typeof window != 'undefined') {
     $(document).ready(function () {
+        retrieveInfoFromDB();
         validateDiscountModal();
         submitAddDiscount();
+    });
+}
+
+function retrieveInfoFromDB() {
+    $.get('/settings/event/discount', function (result) {
+        for (let j = 0; j < result.length; j++) {
+            discountList.push(result[j]);
+            discountPaxList.push(result[j].minimumPax);
+        }
+        discountPaxList.sort(function(a, b){return b - a});
+        discountList.sort((a, b) => {return b.minimumPax - a.minimumPax;});
     });
 }
 
@@ -152,8 +167,12 @@ function isValidPaxNum(input) {
     if (input < 0) return [false, 'Number of pax cannot be negative.'];
     else if (input == 0) return [false, 'Number of pax cannot be zero.'];
     else if (input > 120)
-        return [false, 'Number of pax cannot be more than 120.'];
-    else return [true, ''];
+        return [false, 'Number of pax cannot be more than 120.'];     
+    else {
+        if (discountPaxList.includes(parseInt(input)))
+            return [false, 'A discount already exists for the stated number of pax.']
+        else return [true, ''];
+    }
 }
 
 // Percentage
