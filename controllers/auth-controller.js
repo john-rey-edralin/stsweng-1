@@ -14,8 +14,10 @@ const controller = {
      */
     authenticate: async function (req, res) {
         const { username, password } = req.body;
-        const user = await Employee.findOne({ username });
+        const uname = username?.trim();
+        const user = uname ? await Employee.findOne({ uname }) : null;
 
+        console.log(username, password);
         const result = user
             ? await bcrypt.compare(password, user.password)
             : false;
@@ -24,10 +26,14 @@ const controller = {
             req.session.user = user;
             req.session.loggedIn = true;
             req.session.isAdmin = user.role === 'admin';
-
-            res.redirect('/event-tracker/home');
+            res.json({ isError: false });
         } else {
-            res.redirect('/');
+            var errordetails = {
+                isError: true,
+                error: `Incorrect username and/or password.`,
+            };
+
+            res.json(errordetails);
         }
     },
 
@@ -39,7 +45,7 @@ const controller = {
      * @param {express.response} res response object
      */
     getLogin: function (req, res) {
-        if (req.session.user) res.redirect('/')
+        if (req.session.user) res.redirect('/');
         res.render('login');
     },
 
