@@ -118,37 +118,19 @@ const eventController = {
         res.render('event-tracker-receipt', data);
     },
 
-    putReservations: async function (req, res) {
+    putEditEvent: async function (req, res) {
         const { id, data, modified } = req.body;
         const _id = mongoose.Types.ObjectId(id);
 
         const doc = await Event.findOneAndUpdate(
-            { _id, status: 'reserved' },
+            { _id},
             data,
             { returnDocument: 'after' }
         );
 
         logActivity(
             req.session.user.username || 'Tester',
-            `Modified reservation: ${doc._id}
-            Modified Fields: ${modified}`
-        );
-        res.send(doc);
-    },
-
-    putPencilbookings: async function (req, res) {
-        const { id, data, modified } = req.body;
-        const _id = mongoose.Types.ObjectId(id);
-
-        const doc = await Event.findOneAndUpdate(
-            { _id, status: 'booked' },
-            data,
-            { returnDocument: 'after' }
-        );
-
-        logActivity(
-            req.session.user.username || 'Tester',
-            `Modified pencil booking: ${doc._id}
+            `Modified event: ${doc._id}
             Modified Fields: ${modified}`
         );
         res.send(doc);

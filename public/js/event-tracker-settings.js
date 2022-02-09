@@ -30,10 +30,8 @@ function validateDiscountModal () {
             } else if (result[1] == 'Invalid pax.') {
                 displayError($('#pax'), $('#pax-error'), result[3]);
                 resetField($('#percentage'), $('#percentage-error'));
-                //resetField($('#discount-name'), $('#discount-error'));
             } else {
                 displayError($('#percentage'),$('#percentage-error'), result[5]);
-                //resetField($('#discount-name'), $('#discount-error'));
                 resetField($('#pax'), $('#pax-error'));
             }
         } else {
@@ -144,7 +142,6 @@ function isValidDiscount(discountname, pax, percentage) {
 
 // Discount Name
 function isValidDiscountName(input) {
-    console.log(input.length)
     if (input == '') return [false, 'Discount name cannot be empty.'];
     else if (input.length > 30) return [false, 'Discount name is only up to 30 characters.'];
     else return [true, ''];
