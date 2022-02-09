@@ -49,17 +49,58 @@
 
             {{!-- NO EMPLOYEES --}}
             {{else}}
-            <div id="today-main"
+            <div id="admin-main"
                 class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
                 <div class="d-flex flex-row">
                     <h4 class="fw-bolder mt-1 ms-2 text-black-50">Employees List</h4>
-                    
-                    <a class="ms-auto" href="/admin/create" data-bs-toggle="tooltip" data-bs-placement="left" title="Create a employee account!">
+
+                    <a class="ms-auto" href="/admin/register" data-bs-toggle="tooltip" data-bs-placement="left"
+                        title="Create a new employee account!">
                         <span class="material-icons-two-tone md-36">add</span>
                     </a>
                 </div>
                 <hr>
                 <h1 class="no-content text-center p-5">No Employees</h1>
+            </div>
+            {{/if}}
+
+            <br>
+            {{!-- WITH ACTIVITIES --}}
+            {{#if activities}}
+            <div id="admin-main"
+                class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
+                <div class="d-flex flex-row">
+                    <h4 class="fw-bolder mt-1 ms-2 text-black-50">Recent Activities</h4>
+                </div>
+                <hr>
+                <div class="p-4">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Activity</th>
+                                <th>Employee Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each activities}}
+                            {{>activity}}
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            {{!-- NO ACTIVITIES --}}
+            {{else}}
+            <div id="admin-main"
+                class="container-fluid shadow-sm bg-light rounded-sm p-4 d-flex flex-column align-self-center">
+                <div class="d-flex flex-row">
+                    <h4 class="fw-bolder mt-1 ms-2 text-black-50">Recent Activities</h4>
+                </div>
+                <hr>
+                <h1 class="no-content text-center p-5">No Recent Activities</h1>
             </div>
             {{/if}}
         </div>
