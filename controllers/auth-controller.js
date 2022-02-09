@@ -14,7 +14,8 @@ const controller = {
      */
     authenticate: async function (req, res) {
         const { username, password } = req.body;
-        const user = await Employee.findOne({ username });
+        const uname = username.trim();
+        const user = await Employee.findOne({ uname });
 
         const result = user
             ? await bcrypt.compare(password, user.password)
@@ -27,7 +28,8 @@ const controller = {
 
             res.redirect('/event-tracker/home');
         } else {
-            res.redirect('/');
+            var errordetails = { flag: false, error: `Incorrect username and/or password.`};
+            res.render('login', errordetails);
         }
     },
 
