@@ -531,7 +531,7 @@ describe('Event Package', () => {
 //Test Suite #11
 describe('Adding Pax Discount', () => {
 	// Unit Test #1
-	it('Input (49) did not meet the least pax (50) for the discount.', () => {
+	it('Valid input (49) did not meet the least pax (50) for the discount.', () => {
 		const testVal = 49;
 
 		const resVal = checkPaxDiscountTest(testVal);
@@ -540,7 +540,7 @@ describe('Adding Pax Discount', () => {
 	}); 
 
 	// Unit Test #2
-	it ('Input (50) is included and the least pax in the pax discount list', () => {
+	it ('Valid input (50) is included and the least pax in the pax discount list', () => {
 		const testVal = 50;
 
 		const resVal = checkPaxDiscountTest(testVal);
@@ -549,7 +549,7 @@ describe('Adding Pax Discount', () => {
 	});	
 
 	// Unit Test #3
-	it ('Input (60) is not in the pax discount list but greater than the least pax (50) in the list', () => {
+	it ('Valid input (60) is not in the pax discount list but greater than the least pax (50) in the list', () => {
 		const testVal = 60;
 
 		const resVal = checkPaxDiscountTest(testVal);
@@ -558,7 +558,7 @@ describe('Adding Pax Discount', () => {
 	});	
 
 	// Unit Test #4
-	it ('Input (119) is not in the pax discount list but greater than one of the pax (100) in the list', () => {
+	it ('Valid input (119) is not in the pax discount list but greater than one of the pax (100) in the list', () => {
 		const testVal = 119;
 
 		const resVal = checkPaxDiscountTest(testVal);
@@ -567,7 +567,7 @@ describe('Adding Pax Discount', () => {
 	});	
 
 	// Unit Test #5
-	it ('Input (120) is included and the highest pax in the pax discount list', () => {
+	it ('Valid input (120) is included and the highest pax in the pax discount list', () => {
 		const testVal = 120;
 
 		const resVal = checkPaxDiscountTest(testVal);
@@ -576,7 +576,7 @@ describe('Adding Pax Discount', () => {
 	}); 
 
 	// Unit Test #6
-	it('Invalid pax input (zero) - no discount', () => {
+	it('Invalid input (zero) - no discount', () => {
 		const testVal = 0;
 
 		const resVal = checkPaxDiscountTest(testVal);
@@ -585,7 +585,7 @@ describe('Adding Pax Discount', () => {
 	}); 
 
 	// Unit Test #7
-	it ('Invalid pax input (negative number) - no discount', () => {
+	it ('Invalid input (negative number) - no discount', () => {
 		const testVal = -1;
 
 		const resVal = checkPaxDiscountTest(testVal);
@@ -594,7 +594,7 @@ describe('Adding Pax Discount', () => {
 	});	
     
 	// Unit Test #8
-	it ('Invalid pax input (exceeded maximum pax: >120)- no discount', () => {
+	it ('Invalid input (exceeded maximum pax: >120)- no discount', () => {
 		const testVal = 121;
 
 		const resVal = checkPaxDiscountTest(testVal);
@@ -603,7 +603,7 @@ describe('Adding Pax Discount', () => {
 	});
 
     // Unit Test #9
-	it ('Invalid pax input(empty) - no discount', () => {
+	it ('Invalid input (empty) - no discount', () => {
 		const testVal = '';
 
 		const resVal = checkPaxDiscountTest(testVal);

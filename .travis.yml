@@ -1,7 +1,7 @@
 jobs:
  inlcude:
   - stage: "Pull Request"
-    if: type IN (pull_request)
+    if: type IN (pull_request) AND branch = develop-new
     name: "Unit Tests"
     sudo: false
     language: node_js
@@ -9,7 +9,7 @@ jobs:
     - node
     branches:
       only:
-      - develop-new
+        - develop-new
     cache:
       directories:
       - node_modules
@@ -20,7 +20,7 @@ jobs:
     script:
     - npm test
   - stage: "Commit"
-    if: type IN (push)
+    if: type IN (push) AND branch = develop-new
     name: "Unit Tests"
     sudo: false
     language: node_js
@@ -28,7 +28,7 @@ jobs:
     - node
     branches:
       only:
-      - develop-new
+        - develop-new
     cache:
       directories:
       - node_modules

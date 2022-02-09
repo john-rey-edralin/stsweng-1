@@ -9,6 +9,7 @@ let terracePackageList = [];
 let additionalPackageList = [];
 let discountList = [];
 let discountPaxList = [];
+let discountDescList = [];
 let variantCount = 0;
 
 let curreventID;
@@ -2737,7 +2738,7 @@ function addExistingFields() {
 function checkPaxDiscount (input) {
     var paxDiscount = 'No discount';
     var discount = -1;
-    
+
     for(i = discountList.length -1; i >= 0; i--) {
         if(input >= discountList[i].minimumPax) {
             discount = i;
