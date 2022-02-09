@@ -8,6 +8,7 @@ let sunroomPackageList = [];
 let terracePackageList = [];
 let additionalPackageList = [];
 let discountList = [];
+let discountPaxList = [];
 let discountDescList = [];
 let variantCount = 0;
 
@@ -289,8 +290,10 @@ function retrieveInfoFromDB() {
         $.get('/settings/event/discount', function (result) {
             for (let j = 0; j < result.length; j++) {
                 discountList.push(result[j]);
-                discountDescList.push(result[j].description);
+                discountPaxList.push(result[j].minimumPax);
             }
+            discountPaxList.sort(function(a, b){return b - a});
+            discountList.sort((a, b) => {return b.minimumPax - a.minimumPax;});
         });
 
         addExistingFields();
@@ -377,6 +380,10 @@ function initializeEventFields() {
         updateBreakdownTable();
     });
     $('#additional-pax').on('change', function () {
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        if(isValidPaxNum($('#event-pax').val())[0]) 
+            checkPaxDiscount($('#event-pax').val());
         updateFoodQuantity();
         updateBreakdownTable();
     });
@@ -425,6 +432,10 @@ function initializeMenuFields() {
 
     $('.additional-add-button').click(function () {
         addAdditionalItem();
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        if(isValidPaxNum($('#event-pax').val())[0]) 
+            checkPaxDiscount($('#event-pax').val());
     });
 
     $('#additional-name').change(function () {
@@ -460,6 +471,10 @@ function initializeTransactionFields() {
 
     $('.extra-charges-add-button').click(function () {
         addExtraCharge();
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        if(isValidPaxNum($('#event-pax').val())[0]) 
+            checkPaxDiscount($('#event-pax').val());
     });
 
     $('#extra-charges-name').change(function () {
@@ -1444,6 +1459,10 @@ function initializeRealTimeValidation() {
     });
 
     $('.venue-checkbox').change(function () {
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        if(isValidPaxNum($('#event-pax').val())[0]) 
+            checkPaxDiscount($('#event-pax').val());
         let garden = $('#venue-garden').is(':checked');
         let sunroom = $('#venue-sunroom').is(':checked');
         let terrace = $('#venue-terrace').is(':checked');
@@ -1457,6 +1476,10 @@ function initializeRealTimeValidation() {
     });
 
     $('.package').change(function () {
+        if($('.paxdiscount').html())
+            removeDiscount('.cancel-pax-discount'); 
+        if(isValidPaxNum($('#event-pax').val())[0]) 
+            checkPaxDiscount($('#event-pax').val());
         let garden = $('#garden-options').val();
         let sunroom = $('#sunroom-options').val();
         let terrace = $('#terrace-options').val();

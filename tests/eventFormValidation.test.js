@@ -545,7 +545,7 @@ describe('Adding Pax Discount', () => {
 
 		const resVal = checkPaxDiscountTest(testVal);
 
-		expect(resVal).toEqual( { description: '10%PAXDISCOUNT50', rate: 10, minimumPax: 50 });
+		expect(resVal).toEqual({ description: '10%PAXDISCOUNT50', minimumPax: 50, rate: 10 });
 	});	
 
 	// Unit Test #3
@@ -554,7 +554,7 @@ describe('Adding Pax Discount', () => {
 
 		const resVal = checkPaxDiscountTest(testVal);
 
-		expect(resVal).toEqual( { description: '10%PAXDISCOUNT50', rate: 10, minimumPax: 50 });
+		expect(resVal).toEqual({ description: '10%PAXDISCOUNT50', minimumPax: 50, rate: 10 });
 	});	
 
 	// Unit Test #4
@@ -563,7 +563,7 @@ describe('Adding Pax Discount', () => {
 
 		const resVal = checkPaxDiscountTest(testVal);
 
-		expect(resVal).toEqual({ description: '20%PAXDISCOUNT100', rate: 20, minimumPax: 100 });
+		expect(resVal).toEqual({ description: '20%PAXDISCOUNT100', minimumPax: 100, rate: 20 });
 	});	
 
 	// Unit Test #5
@@ -572,7 +572,7 @@ describe('Adding Pax Discount', () => {
 
 		const resVal = checkPaxDiscountTest(testVal);
 
-		expect(resVal).toEqual({ description: '30%PAXDISCOUNT120', rate: 30, minimumPax: 120 });
+		expect(resVal).toEqual({ description: '30%PAXDISCOUNT120', minimumPax: 120, rate: 30 });
 	}); 
 
 	// Unit Test #6
