@@ -38,7 +38,7 @@ jobs:
     - npm install
     script:
     - npm test
-    - npm int-test
+    - npm run int-test
     before_deploy:
     - rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install faraday -v 1.8.0
     deploy:
