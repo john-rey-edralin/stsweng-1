@@ -5,22 +5,6 @@ body > .d-flex.flex-row.justify-content-center {
     background-size: cover;
 }
 
-/* LIST ITEM CONTAINERS */
-.rounded-list-item {
-    background-color: #EAEAEA;
-    transition: 0.3s;
-    cursor: pointer;
-}
-
-.rounded-list-item:hover {
-    background-color: #DADADA;
-}
-
-.rounded-list-item>h1 {
-    font-weight: 700;
-    font-size: 24px;
-}
-
 #today-title>h1,
 #today-date>h1,
 #reservations-title>h1,
@@ -66,6 +50,14 @@ body > .d-flex.flex-row.justify-content-center {
     background-color: #EEF9F3 !important;
 }
 
+.booked:hover {
+    background-color: #D3EFE0 !important;
+}
+
 .reserved {
     background-color: #F9EEF0 !important;
+}
+
+.reserved:hover {
+    background-color: #EFD3D8 !important;
 }

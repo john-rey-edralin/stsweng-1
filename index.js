@@ -1,4 +1,6 @@
 require('dotenv').config();
+hostname = process.env.HOSTNAME
+port = process.env.PORT
 
 //import the necessary modules
 const path = require('path');
@@ -31,6 +33,27 @@ app.use(
 app.set('view engine', 'hbs');
 //set the file path containing the hbs files
 app.set('views', path.join(__dirname, 'views'));
+//check if current user has logged in
+app.use('/', (req, res, next) => {
+    if (
+        req.session.loggedIn ||
+        req.path === '/login' ||
+        req.path === '/authenticate'
+    ) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.use('/admin', (req, res, next) => {
+    if (req.session.isAdmin) {
+        next();
+    } else {
+        res.redirect('/event-tracker/home');
+    }
+});
+
 //set the file path of the paths defined in './routes/routes.js'
 app.use('/', routes);
 //set the file path containing the partial hbs files
@@ -40,10 +63,9 @@ hbs.registerPartials(path.join(__dirname, 'views/partials'));
 db.connect();
 
 //bind the server to a port and a host
-app.listen(process.env.PORT, process.env.HOSTNAME, function () {
-    console.log(
-        `Server is running at http://${process.env.HOSTNAME}:${process.env.PORT}`
-    );
+app.listen(port, function () {
+    console.log('Server is running at: ');
+    console.log('http://' + hostname + ':' + port);
 });
 
 module.exports = app;

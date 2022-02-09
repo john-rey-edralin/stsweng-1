@@ -5,7 +5,7 @@
     "scripts": {
         "test": "jest tests/*",
         "dev": "nodemon index.js",
-        "build": "jest && node index.js"
+        "start": "node index.js"
     },
     "repository": {
         "type": "git",
@@ -32,7 +32,8 @@
         "robotremote": "^1.4.0"
     },
     "devDependencies": {
-        "jest": "^27.3.1"
+        "jest": "^27.3.1",
+        "node-fetch": "^2.6.6"
     },
     "description": ""
 }
