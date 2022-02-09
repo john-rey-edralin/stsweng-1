@@ -11,6 +11,6 @@ Filter Client Name
     Input Text      name        jiji
     Click Button        xpath://*[@id="search-filter-sort"]/div[2]/form[1]/div[2]/button
     Should Have           jiji
-    # [Teardown]      Close Browser
+    [Teardown]      Close Browser
 
 

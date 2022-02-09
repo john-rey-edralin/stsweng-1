@@ -25,6 +25,19 @@ hbs.registerHelper('formatDateShort', function (date) {
     }
 });
 
+hbs.registerHelper('formatTimestamp', function (date) {
+    if (date) {
+        date = new Date(date);
+        let timestamp = new Intl.DateTimeFormat("en", {
+            timeStyle: "medium",
+            dateStyle: "short"
+        });
+        return timestamp.format(date);
+    } else {
+        return '';
+    }
+});
+
 hbs.registerHelper('formatMoney', function (money) {
     return Number(parseFloat(money).toFixed(2)).toLocaleString('en', {
         minimumFractionDigits: 2

@@ -50,6 +50,14 @@ body > .d-flex.flex-row.justify-content-center {
     background-color: #EEF9F3 !important;
 }
 
+.booked:hover {
+    background-color: #D3EFE0 !important;
+}
+
 .reserved {
     background-color: #F9EEF0 !important;
+}
+
+.reserved:hover {
+    background-color: #EFD3D8 !important;
 }

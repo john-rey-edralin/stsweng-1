@@ -8,7 +8,11 @@ if (typeof window != 'undefined') {
         initializeAccountFields();
 
         initializeRealTimeValidation();
+        submitForm();
+        submitEditForm();
     });
+} else {
+    module.exports = isPasswordInvalid;
 }
 
 function initializeTooltips() {
@@ -28,6 +32,8 @@ function initializeEmployeeFields() {
     };
     $('#employee-mobile-number').intlTelInput(settings);
     $('#emergency-contact-mobile-number').intlTelInput(settings);
+    $('.employee-mobile-number').intlTelInput(settings);
+    $('.emergency-contact-mobile-number').intlTelInput(settings);
 }
 
 function initializeAccountFields() {}
@@ -38,15 +44,6 @@ function initializeAccountFields() {}
 function setRequiredFields() {
     $('input[required]').siblings('label').addClass('required');
     $('select[required]').siblings('label').addClass('required');
-}
-
-function initializeRealTimeValidation() {
-    /* TODO: Add validation */
-    initializeUsernameRealTimeValidation();
-    initializePasswordRealTimeValidation();
-    initializeEmployeeNameRealTimeValidation();
-    initializeEmployeeNumberRealTimeValidation();
-    initializeEmergencyNumberRealTimeValidation();
 }
 
 function checkStringInput(input) {
@@ -87,28 +84,38 @@ function checkStringInput(input) {
 
     for (const item of blacklist) if (input.indexOf(item) != -1) flag = true;
 
-    return flag;
+    $('input[required]').siblings('label').addClass('required');
+    $('select[required]').siblings('label').addClass('required');
+}
+
+function initializeRealTimeValidation() {
+    /* TODO: Add validation */
+    initializeUsernameRealTimeValidation();
+    initializePasswordRealTimeValidation();
+    initializeEmployeeNameRealTimeValidation();
+    initializeEmployeeNumberRealTimeValidation();
+    initializeEmergencyNumberRealTimeValidation();
+    initializeEditEmployeeRealTimeValidation();
 }
 
 function displayError(inputField, errorField, errorText) {
     errorField.text(errorText);
     inputField.addClass('is-invalid');
-    // $('#submit').attr('disabled', checkIfFilledEventFields());
 }
 
 function resetField(inputField, errorField) {
     errorField.text('');
     inputField.removeClass('is-invalid');
-    // $('#submit').attr('disabled', checkIfFilledEventFields());
 }
 
-//#region username validation
 function initializeUsernameRealTimeValidation() {
-    const usernameField = $('#username');
-    console.log(usernameField);
-    usernameField.keyup(() => {
+    $('#username').keyup(() => {
         console.log('keyup');
-        checkUsernameAvailability(usernameField);
+        checkUsernameAvailability($('#username'));
+    });
+    $('.username').keyup(() => {
+        console.log('keyup');
+        checkUsernameAvailability($('.username'));
     });
 }
 
@@ -138,32 +145,38 @@ async function checkUsernameAvailability(usernameField) {
         resetField(usernameField, $('#username-error'));
     }
 }
-//#endregion
 
-//#region password validation
 function isPasswordInvalid(password) {
     return password.length < 8;
 }
 
 function initializePasswordRealTimeValidation() {
-    const passwordField = $('#password');
-
-    passwordField.keyup(() => {
-        const password = passwordField.val();
+    $('#password').keyup(() => {
+        const password = $('#password').val();
         if (isPasswordInvalid(password)) {
             displayError(
-                passwordField,
+                $('#password'),
                 $('#password-error'),
                 'Password must be at least 8 characters long. '
             );
         } else {
-            resetField(passwordField, $('#password-error'));
+            resetField($('#password'), $('#password-error'));
+        }
+    });
+    $('.password').keyup(() => {
+        const password = $('.password').val();
+        if (isPasswordInvalid(password)) {
+            displayError(
+                $('.password'),
+                $('#password-error'),
+                'Password must be at least 8 characters long. '
+            );
+        } else {
+            resetField($('.password'), $('#password-error'));
         }
     });
 }
-//#endregion
 
-//#region employee name validation
 function initializeEmployeeNameRealTimeValidation() {
     const employeeNameField = $('#employee-name');
 
@@ -180,9 +193,7 @@ function initializeEmployeeNameRealTimeValidation() {
         }
     });
 }
-//#endregion
 
-//#region employee number validation
 function initializeEmployeeNumberRealTimeValidation() {
     $('#employee-mobile-number').keyup(function () {
         if (validator.isEmpty($(this).val()))
@@ -204,9 +215,7 @@ function initializeEmployeeNumberRealTimeValidation() {
             );
     });
 }
-//#endregion
 
-//#region emergency number validation
 function initializeEmergencyNumberRealTimeValidation() {
     $('#emergency-contact-mobile-number').keyup(function () {
         if ($(this).intlTelInput('isValidNumber'))
@@ -222,8 +231,205 @@ function initializeEmergencyNumberRealTimeValidation() {
             );
     });
 }
-//#endregion
 
-if (typeof window == 'undefined') {
-    module.exports = isPasswordInvalid;
+function initializeEditEmployeeRealTimeValidation() {
+    let currentEmployeeId = '';
+    const employeeList = $('div[data-bs-toggle="modal"]');
+    const employeeNumberList = $('.employee-mobile-number');
+    const emergencyNumberList = $('.emergency-contact-mobile-number');
+    const newPasswordList = $('.new-password');
+    const confirmNewPasswordList = $('.reenter-password');
+
+    employeeList.each((_, employee) =>
+        employee.addEventListener('click', changeCurrentEmployeeId)
+    );
+
+    employeeNumberList.keyup(validateAllFields);
+    emergencyNumberList.keyup(validateAllFields);
+    newPasswordList.keyup(validateAllFields);
+    confirmNewPasswordList.keyup(validateAllFields);
+
+    function validateAllFields() {
+        const isValidEmployeeNumber = validateEmployeeNumber(
+            $(`#employee-mobile-number-${currentEmployeeId}`)
+        );
+        const isValidEmergencyNumber = validateEmergencyContactNumber(
+            $(`#emergency-contact-mobile-number-${currentEmployeeId}`)
+        );
+        const isValidReenterPassword = validateReenterPassword(
+            $(`#reenter-password-${currentEmployeeId}`)
+        );
+        const isValidNewPassword = validateNewPassword(
+            $(`#new-password-${currentEmployeeId}`)
+        );
+
+        if (
+            isValidEmployeeNumber &&
+            isValidEmergencyNumber &&
+            isValidNewPassword &&
+            isValidReenterPassword
+        ) {
+            enableButton($(`#edit-btn-${currentEmployeeId}`));
+        } else {
+            disableButton($(`#edit-btn-${currentEmployeeId}`));
+        }
+    }
+
+    function validateEmployeeNumber(field) {
+        if (validator.isEmpty(field.val())) {
+            displayError(
+                field,
+                $(`#employee-number-error-${currentEmployeeId}`),
+                'Employee mobile number should be filled.'
+            );
+            return false;
+        } else if (field.intlTelInput('isValidNumber')) {
+            resetField(field, $(`#employee-number-error-${currentEmployeeId}`));
+            return true;
+        } else {
+            displayError(
+                field,
+                $(`#employee-number-error-${currentEmployeeId}`),
+                'Invalid employee mobile number.'
+            );
+            return false;
+        }
+    }
+
+    function validateEmergencyContactNumber(field) {
+        if (
+            field.intlTelInput('isValidNumber') ||
+            validator.isEmpty(field.val())
+        ) {
+            resetField(field, $(`#ec-number-error-${currentEmployeeId}`));
+            return true;
+        } else {
+            displayError(
+                field,
+                $(`#ec-number-error-${currentEmployeeId}`),
+                'Invalid emergency contact mobile number.'
+            );
+            return false;
+        }
+    }
+
+    function validateNewPassword(field) {
+        const confirmNewPassword = $(`#reenter-password-${currentEmployeeId}`);
+        if (
+            !isPasswordInvalid(field.val()) &&
+            field.val() === confirmNewPassword.val()
+        ) {
+            resetField(
+                confirmNewPassword,
+                $(`#password-error-${currentEmployeeId}`)
+            );
+            resetField(field, $(`#password-error-${currentEmployeeId}`));
+            return true;
+        } else {
+            displayError(
+                field,
+                $(`#password-error-${currentEmployeeId}`),
+                isPasswordInvalid(field.val())
+                    ? 'Password too short.'
+                    : 'Password does not match.'
+            );
+            return false;
+        }
+    }
+
+    function validateReenterPassword(field) {
+        const newPassword = $(`#new-password-${currentEmployeeId}`);
+        if (field.val() === newPassword.val()) {
+            resetField(field, $(`#password-error-${currentEmployeeId}`));
+            resetField(newPassword, $(`#password-error-${currentEmployeeId}`));
+            return true;
+        } else {
+            displayError(
+                field,
+                $(`#password-error-${currentEmployeeId}`),
+                'Password does not match.'
+            );
+            return false;
+        }
+    }
+
+    function changeCurrentEmployeeId(event) {
+        const employee = event.target;
+        const bs_target = employee.dataset['bsTarget'];
+        const [_, employeeId] = bs_target.split('-');
+
+        currentEmployeeId = employeeId;
+    }
+}
+
+function disableButton(button) {
+    button.prop('disabled', true);
+}
+
+function enableButton(button) {
+    button.prop('disabled', false);
+}
+
+function submitForm() {
+    $('#create').on('submit', function (event) {
+        event.preventDefault();
+
+        // stores all information as an object
+        let data = {
+            username: $('#username').val(),
+            password: $('#password').val(),
+            name: $('#employee-name').val(),
+            contactNum: $('#employee-mobile-number').intlTelInput('getNumber'),
+            emergencyContactName: $('#employee-contact-name').val(),
+            emergencyContactNum: $(
+                '#employee-contact-mobile-number'
+            ).intlTelInput('getNumber'),
+        };
+
+        // makes a POST request using AJAX to add the event to the database
+        // $.post('/settings/event/discount', data, function (result) {
+        //     window.location.href = '/settings/event';
+        // });
+
+        fetch('/admin/register', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(() => {
+            window.location.href = '/admin';
+        });
+    });
+}
+
+function submitEditForm() {
+    $('.edit').on('submit', function (event) {
+        event.preventDefault();
+        const id = $(this).children('.id').text();
+        const username = $(this).children('.username').text();
+
+        // stores all information as an object
+        let data = {
+            contactNum: $('#employee-mobile-number-' + id).intlTelInput(
+                'getNumber'
+            ),
+            emergencyContactName: $('#emergency-contact-name-' + id).val(),
+            emergencyContactNum: $(
+                '#emergency-contact-mobile-number-' + id
+            ).intlTelInput('getNumber'),
+            newPassword: $('#new-password-' + id).val(),
+            reenteredPassword: $('#reenter-password-' + id).val(),
+        };
+
+        $.ajax({
+            type: 'PUT',
+            url: '/admin/employee/' + username,
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (result) {
+                window.location.href = '/admin';
+            },
+        });
+    });
 }

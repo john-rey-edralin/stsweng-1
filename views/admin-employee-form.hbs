@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/material-icons.css">
     <link rel="stylesheet" type="text/css" href="/css/intlTelInput.min.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone">
 
     <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/js/intlTelInput-jquery.min.js"></script>
     <script type="text/javascript" src="/js/validator.min.js"></script>
@@ -39,7 +39,7 @@
             </div>
 
             <br>
-            <form method="post">
+            <form id="create">
                 <div class="row">
 
                     {{!-- EMPLOYEE DETAILS --}}
@@ -126,7 +126,7 @@
                                 <div class="form-group my-3">
                                     <label for="password">Password</label>
                                     <input type="password" class="form-control" id="password" name="password" required>
-                                    <div id="password" class="form-text">Must be at least 8 characters long. A
+                                    <div id="password-help" class="form-text">Must be at least 8 characters long. A
                                         combination of letters, numbers, and at least one special character is
                                         recommended.
                                     </div>
@@ -135,16 +135,14 @@
                         </div>
 
                         {{!-- EVENT ERROR MESSAGES --}}
-                        <div id="form-event-errors">
+                        <div id="form-account-errors">
                             <strong>
-                                <div class="text-center text-danger error" id="missing-error"></div>
                                 <div class="text-center text-danger error" id="username-error"></div>
                                 <div class="text-center text-danger error" id="password-error"></div>
                             </strong>
                         </div>
                     </div>
                 </div>
-
 
                 <br>
                 {{!-- SUBMIT BUTTON --}}
